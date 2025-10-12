@@ -4,17 +4,17 @@
     'subtitle' => null,
 ])
 
-<div class="section text-center space-y-2">
+<div class="section text-center">
     @if($kicker)
-        <p class="kicker">{{ $kicker }}</p>
+        <p class="kicker mb-2">{{ $kicker }}</p>
     @endif
 
     @if($title)
-        <h2 class="h2">{{ $title }}</h2>
+        <h2 class="h2 mb-3">{{ $title }}</h2>
     @endif
 
     @if($subtitle)
-        <p class="p max-w-prose mx-auto">{{ $subtitle }}</p>
+        <p class="p max-w-prose mx-auto text-left md:text-center">{{ $subtitle }}</p>
     @endif
 </div>
 

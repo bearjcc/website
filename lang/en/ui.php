@@ -18,6 +18,12 @@ return [
     'studio_kicker' => 'From the studio',
     'studio_title' => 'Latest notes',
     'studio_sub' => 'Short updates as we build.',
+    'latest_notes' => 'Latest notes',
+    'latest_notes_sub' => 'Short updates as we build.',
+
+    // Placeholders
+    'coming_soon_placeholder' => 'Coming soon',
+    'coming_soon_placeholder_sub' => 'New games are in the works.',
 
     // Footer
     'footer_note' => 'Building games under the Southern Cross.',

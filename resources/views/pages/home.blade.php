@@ -1,94 +1,108 @@
-<x-layout>
-    <section class="hero-section">
-        <article>
-            <h1>Welcome to Ursa Minor</h1>
-            <p class="tagline">Where games are born under the stars</p>
-            
-            <p class="intro">
-                Ursa Minor is a game development brand focused on creating memorable gaming experiences—from classic 
-                browser games to innovative board games and beyond. We believe great games start with great ideas, 
-                careful planning, and a community of passionate players.
-            </p>
-        </article>
+<x-layouts.app>
+    <x-slot:title>{{ __('ui.tagline') }} — Ursa Minor</x-slot:title>
+
+    {{-- Hero Section --}}
+    <section class="py-12 md:py-16">
+        <div class="section">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+                {{-- Left column: Full lockup and messaging --}}
+                <div class="text-center md:text-left space-y-6">
+                    <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto md:mx-0" />
+                    
+                    <h1 class="h1 mt-6">{{ __('ui.tagline') }}</h1>
+                    
+                    <p class="text-lg text-[color:var(--ink-muted)] leading-relaxed max-w-prose mx-auto md:mx-0">
+                        {{ __('ui.hero_body') }}
+                    </p>
+
+                    <div class="pt-4">
+                        <x-ui.cta-row
+                            :primaryHref="route('games.index')"
+                            :primaryLabel="__('ui.cta_play')"
+                            :secondaryHref="route('blog.index')"
+                            :secondaryLabel="__('ui.cta_browse')"
+                        />
+                    </div>
+                </div>
+
+                {{-- Right column: Decorative starfield only (CSS) --}}
+                <div class="hidden md:block relative h-80" aria-hidden="true">
+                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[color:var(--space-800)] to-[color:var(--space-900)] opacity-50"></div>
+                </div>
+            </div>
+        </div>
     </section>
 
-    <section class="mission-section">
-        <article>
-            <h2>Our Vision</h2>
-            <p>
-                One day, we dream of opening a board game café in New Zealand—a place where friends gather, 
-                strategies unfold, and new adventures begin. But every great journey starts with a single step.
-            </p>
-            <p>
-                Before that dream becomes reality, we're building something special: a platform where we can 
-                test game mechanics, explore world-building, share original board game designs, and create a 
-                community around the love of gaming.
-            </p>
-        </article>
+    {{-- Available Now Section --}}
+    <section class="py-12 md:py-16">
+        <x-ui.section-header
+            :kicker="__('ui.available_kicker')"
+            :title="__('ui.available_title')"
+            :subtitle="__('ui.available_sub')"
+        />
+
+        <div class="section mt-12">
+            <div class="grid md:grid-cols-3 gap-6">
+                @php
+                    $publishedGames = \App\Models\Game::where('status', 'published')->get();
+                    $gameCount = $publishedGames->count();
+                    $placeholdersNeeded = max(0, 3 - $gameCount);
+                @endphp
+
+                {{-- Published games --}}
+                @foreach($publishedGames as $game)
+                    <x-ui.card
+                        :title="$game->title"
+                        :subtitle="$game->short_description"
+                        :href="route('games.play', $game->slug)"
+                        icon="puzzle-piece"
+                    />
+                @endforeach
+
+                {{-- Placeholders if fewer than 3 games --}}
+                @for($i = 0; $i < $placeholdersNeeded; $i++)
+                    <x-ui.card
+                        :title="__('ui.coming_soon_placeholder')"
+                        :subtitle="__('ui.coming_soon_placeholder_sub')"
+                        :disabled="true"
+                    />
+                @endfor
+            </div>
+        </div>
     </section>
 
-    <section class="coming-soon">
-        <article>
-            <h2>Available Now</h2>
-            
-            <div class="feature">
-                <h3>Browser Games</h3>
-                <p>
-                    Play 5 classic games now: Tic-Tac-Toe, Sudoku, 2048, Minesweeper, and Snake! 
-                    All free to play with AI opponents, difficulty levels, and mobile support.
-                </p>
-                <p>
-                    <a href="{{ route('games.index') }}" style="color: var(--color-star-yellow, #fff89a); font-weight: bold; text-decoration: none;">
-                        Play Games Now →
-                    </a>
-                </p>
-            </div>
+    {{-- Latest Notes Section --}}
+    <section class="py-12 md:py-16">
+        <x-ui.section-header
+            :kicker="__('ui.studio_kicker')"
+            :title="__('ui.latest_notes')"
+            :subtitle="__('ui.latest_notes_sub')"
+        />
 
-            <div class="feature">
-                <h3>F1 Predictions</h3>
-                <p>
-                    Join our community to predict race outcomes, earn points, and climb the seasonal leaderboard. 
-                    Perfect for Formula 1 fans who want to add an extra layer of excitement to race weekends.
-                </p>
-            </div>
+        <div class="section mt-12">
+            @php
+                $latestPosts = \App\Models\Post::where('status', 'published')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(3)
+                    ->get();
+            @endphp
 
-            <div class="feature">
-                <h3>Board Games</h3>
-                <p>
-                    Original board game designs available digitally and as print-and-play downloads. 
-                    Playtest new mechanics, provide feedback, and be part of the creative process.
-                </p>
-            </div>
-
-            <div class="feature">
-                <h3>World Building</h3>
-                <p>
-                    Explore the lore, maps, and stories behind our ambitious video game project. 
-                    A collaborative space for writers, artists, and world-builders to contribute to something epic.
-                </p>
-            </div>
-        </article>
+            @if($latestPosts->count() > 0)
+                <div class="space-y-4">
+                    @foreach($latestPosts as $post)
+                        <x-ui.card
+                            :title="$post->title"
+                            :href="route('blog.show', $post->slug)"
+                            :meta="$post->created_at->diffForHumans()"
+                            icon="document-text"
+                        />
+                    @endforeach
+                </div>
+            @else
+                <div class="text-center text-[color:var(--ink-muted)] py-8">
+                    <p>{{ __('ui.coming_soon_sub') }}</p>
+                </div>
+            @endif
+        </div>
     </section>
-
-    <section class="cta-section">
-        <article>
-            <h2>Start Playing Now!</h2>
-            <p>
-                We've just launched 5 browser games and we're adding more every week. 
-                No registration required, completely free to play, works on mobile and desktop.
-            </p>
-            <p>
-                <a href="{{ route('games.index') }}" class="cta-button" 
-                   style="display: inline-block; background: var(--color-star-yellow, #fff89a); color: #000; 
-                          padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; 
-                          font-size: 1.2rem; margin: 1rem 0; transition: all 0.3s ease;">
-                    🎮 Play Games
-                </a>
-            </p>
-            <p class="disclaimer">
-                <em>5 games live now, more coming soon!</em>
-            </p>
-        </article>
-    </section>
-</x-layout>
-
+</x-layouts.app>

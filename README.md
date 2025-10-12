@@ -119,7 +119,7 @@ The project follows **humility protocol** - no changes should be merged without 
 
 ## Deployment
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed Railway deployment instructions.
+See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed Railway deployment instructions.
 
 Quick deploy:
 1. Push to `main` branch
@@ -128,23 +128,31 @@ Quick deploy:
 
 ## Documentation
 
-**📚 Complete documentation is now available in the `docs/` folder:**
+For complete documentation, see the **[docs/](docs/)** folder or visit the **[Documentation Index](docs/README.md)**.
 
-- **[Master Roadmap](docs/MASTER_ROADMAP.md)** - Complete project vision and plan
-- **[Documentation Index](docs/INDEX.md)** - All documentation organized
-- **[Feature Extraction Guide](docs/FEATURE_EXTRACTION_GUIDE.md)** - How to integrate features
-- **[TODO List](TODO.md)** - Current tasks and priorities
+### Quick Links
 
-### Quick Phase Overview
+**Essential:**
+- **[README](README.md)** (this file) - Project overview
+- **[CONTRIBUTING](CONTRIBUTING.md)** - Development workflow
+- **[docs/](docs/)** - All documentation
 
-**Phase 0 (Current)**: Emergency fixes - Railway deployment ✅
-**Phase 1 (Weeks 1-2)**: Foundation & Infrastructure - TALL stack, components
-**Phase 2 (Weeks 3-10)**: Browser Games - 5-10 classic games
-**Phase 3 (Weeks 11-18)**: F1 Predictions - Full system from formula1predictions repo
-**Phase 4 (Weeks 19-30)**: Board Game Platform - Digital prototyping system
-**Phase 5 (Weeks 31-40)**: World-Building Wiki - Collaborative lore system
+**Planning:**
+- **[ROADMAP](docs/ROADMAP.md)** - Development phases
+- **[TODO](docs/TODO.md)** - Current tasks
 
-See [Master Roadmap](docs/MASTER_ROADMAP.md) for complete details.
+**Technical:**
+- **[DEPLOYMENT_GUIDE](docs/DEPLOYMENT_GUIDE.md)** - Railway deployment
+- **[PROJECT_STRUCTURE](docs/PROJECT_STRUCTURE.md)** - Codebase organization
+
+**Design:**
+- **[BRAND_GUIDELINES](docs/BRAND_GUIDELINES.md)** - Design system
+- **[DESIGN_FOUNDATIONS](docs/DESIGN_FOUNDATIONS.md)** - Design philosophy
+
+### Current Phase
+
+**Phase 1 ✅**: Foundation & Infrastructure (Complete)
+**Phase 2 🎯**: Browser Games (Next - See [ROADMAP](docs/ROADMAP.md))
 
 ## Contributing
 

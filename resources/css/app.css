@@ -104,8 +104,8 @@
 
     .h2 {
         font-size: 3.052rem; /* 48.8px */
-        line-height: 1.1;
-        letter-spacing: -0.02em;
+        line-height: 1.15;
+        letter-spacing: -0.03125em; /* -0.5px at 16px base */
         font-weight: 700;
         color: var(--ink);
     }

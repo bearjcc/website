@@ -312,8 +312,9 @@ git commit -m "chore: add package-name dependency"
 
 - Open an issue for bugs or feature requests
 - Start a discussion for ideas or questions
-- Check ROADMAP.md for planned features
+- Check [docs/ROADMAP.md](docs/ROADMAP.md) for planned features
 - Review existing code for patterns
+- See [docs/](docs/) for all documentation
 
 ## Recognition
 
