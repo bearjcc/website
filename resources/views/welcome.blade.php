@@ -23,7 +23,7 @@
 	<script src="{{ asset('scroll.js') }}?v={{ time() }}"></script>
 </head>
 
-	<body onload="stars();" style="background: #000; color: #fff;">
+	<body onload="stars();">
 	<header>
 		<nav aria-label="Main navigation" class="header-nav">
 			<a class="nav left" href="/games">Games</a>

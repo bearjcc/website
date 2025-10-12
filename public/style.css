@@ -3,9 +3,9 @@
 
 :root {
     /* Layout */
-    --header-height: 35vh;
+    --header-height: 40vh;
     --nav-spacing: 6rem;
-    --header-min-height: 100px;
+    --header-min-height: 120px;
     
     /* Night Sky Color Palette */
     --color-night-black: #000000;
@@ -82,8 +82,8 @@ header {
     top: 0;
     z-index: 1000;
     background: transparent;
-    padding: 3rem 0;
-    margin-top: 2rem;
+    padding: 4rem 0;
+    margin-top: 3rem;
     transition: height var(--transition-duration) var(--transition-timing), flex-direction var(--transition-duration) var(--transition-timing), padding var(--transition-duration) var(--transition-timing), margin-top var(--transition-duration) var(--transition-timing);
 }
 
