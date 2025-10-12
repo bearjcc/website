@@ -29,13 +29,18 @@
 
     <section class="coming-soon">
         <article>
-            <h2>What's Coming</h2>
+            <h2>Available Now</h2>
             
             <div class="feature">
                 <h3>Browser Games</h3>
                 <p>
-                    Classic games like Sudoku, Chess, and more—reimagined for the web. Play for free, 
-                    challenge yourself, and compete on leaderboards. Coming soon!
+                    Play 5 classic games now: Tic-Tac-Toe, Sudoku, 2048, Minesweeper, and Snake! 
+                    All free to play with AI opponents, difficulty levels, and mobile support.
+                </p>
+                <p>
+                    <a href="{{ route('games.index') }}" style="color: var(--color-star-yellow, #fff89a); font-weight: bold; text-decoration: none;">
+                        Play Games Now →
+                    </a>
                 </p>
             </div>
 
@@ -67,13 +72,21 @@
 
     <section class="cta-section">
         <article>
-            <h2>Join the Journey</h2>
+            <h2>Start Playing Now!</h2>
             <p>
-                We're building this platform incrementally, adding features and games step by step. 
-                Follow our progress, play our games, and become part of the Ursa Minor community.
+                We've just launched 5 browser games and we're adding more every week. 
+                No registration required, completely free to play, works on mobile and desktop.
+            </p>
+            <p>
+                <a href="{{ route('games.index') }}" class="cta-button" 
+                   style="display: inline-block; background: var(--color-star-yellow, #fff89a); color: #000; 
+                          padding: 1rem 2rem; border-radius: 8px; text-decoration: none; font-weight: bold; 
+                          font-size: 1.2rem; margin: 1rem 0; transition: all 0.3s ease;">
+                    🎮 Play Games
+                </a>
             </p>
             <p class="disclaimer">
-                <em>Currently in active development. First games coming soon!</em>
+                <em>5 games live now, more coming soon!</em>
             </p>
         </article>
     </section>

@@ -19,13 +19,13 @@
     <meta property="og:url" content="{{ config('app.url') }}">
     
     <!-- Styles -->
-    <link rel="stylesheet" href="{{ asset('style.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     
     {{ $head ?? '' }}
 </head>
 
-<body onload="stars();">
+<body>
     <!-- Starfield Background -->
     <div id="stars">
         <div class="circle blink" id="circle-animate"></div>
@@ -44,8 +44,14 @@
     <x-footer />
 
     <!-- Scripts -->
-    <script src="{{ asset('script.js') }}?v={{ time() }}"></script>
-    <script src="{{ asset('scroll.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('script.js') }}"></script>
+    <script src="{{ asset('scroll.js') }}"></script>
+    <script>
+        // Initialize starfield on page load
+        if (typeof stars === 'function') {
+            stars();
+        }
+    </script>
     
     {{ $scripts ?? '' }}
 </body>
