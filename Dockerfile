@@ -1,68 +1,73 @@
-# Alternative Dockerfile for Railway deployment
-# This is optional - Railway will use nixpacks.toml by default
-
-FROM php:8.3-fpm-alpine
-
-# Install system dependencies
-RUN apk add --no-cache \
-    nginx \
-    nodejs \
-    npm \
-    postgresql-dev \
-    oniguruma-dev \
-    libzip-dev \
-    git \
-    curl
-
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql pgsql mbstring zip
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Set working directory
+# ---------- Build Stage: Node Assets ----------
+FROM node:20-bullseye AS nodebuild
 WORKDIR /app
 
+# Copy only asset sources first for better caching
+COPY package*.json vite.config.* postcss.config.* tailwind.config.* ./
+RUN npm ci
+
+# Bring in the rest to build assets
+COPY resources ./resources
+COPY public ./public
+RUN npm run build
+
+# ---------- Build Stage: Composer Dependencies ----------
+FROM composer:2 AS composerbuild
+WORKDIR /app
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist --optimize-autoloader
+
+# ---------- Runtime Stage: PHP-FPM + Nginx ----------
+FROM php:8.3-fpm-bullseye AS app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    nginx supervisor curl git unzip \
+    libonig-dev libzip-dev libpng-dev libxml2-dev \
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_pgsql pgsql opcache zip \
+    && rm -rf /var/lib/apt/lists/*
+
+# PHP production config
+RUN { \
+  echo "log_errors=On"; \
+  echo "error_reporting=E_ALL"; \
+  echo "display_errors=Off"; \
+  echo "memory_limit=512M"; \
+  echo "opcache.enable=1"; \
+  echo "opcache.validate_timestamps=0"; \
+  echo "opcache.memory_consumption=128"; \
+  echo "opcache.interned_strings_buffer=8"; \
+  echo "opcache.max_accelerated_files=4000"; \
+} > /usr/local/etc/php/conf.d/prod.ini
+
+# Set working directory
+WORKDIR /var/www/html
+
 # Copy application files
-COPY . .
+COPY . /var/www/html
 
-# Install dependencies
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-RUN npm install && npm run build
+# Bring in vendor from composer stage
+COPY --from=composerbuild /app/vendor /var/www/html/vendor
 
-# Configure nginx
-RUN echo 'server { \
-    listen 8080; \
-    root /app/public; \
-    index index.php; \
-    location / { \
-        try_files $uri $uri/ /index.php?$query_string; \
-    } \
-    location ~ \.php$ { \
-        fastcgi_pass 127.0.0.1:9000; \
-        fastcgi_index index.php; \
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \
-        include fastcgi_params; \
-    } \
-}' > /etc/nginx/http.d/default.conf
-
-# Laravel optimization
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
+# Bring in built assets from node stage (Vite creates public/build)
+COPY --from=nodebuild /app/public/build /var/www/html/public/build
 
 # Set permissions
-RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache \
+ && chmod -R ug+rwx storage bootstrap/cache
 
-# Expose port
+# Nginx config
+RUN rm -f /etc/nginx/sites-enabled/default
+COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Supervisor config (to run php-fpm + nginx)
+COPY deploy/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Startup script: prep Laravel, then start supervisord
+COPY deploy/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 8080
 
-# Start script
-RUN echo '#!/bin/sh' > /start.sh && \
-    echo 'php artisan migrate --force' >> /start.sh && \
-    echo 'php-fpm -D' >> /start.sh && \
-    echo 'nginx -g "daemon off;"' >> /start.sh && \
-    chmod +x /start.sh
-
-CMD ["/start.sh"]
-
+CMD ["/entrypoint.sh"]

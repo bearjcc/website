@@ -119,12 +119,66 @@ The project follows **humility protocol** - no changes should be merged without 
 
 ## Deployment
 
-See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed Railway deployment instructions.
+### Deploying to Railway with Docker
 
-Quick deploy:
+This project uses a production-ready multi-stage Docker build for Railway deployments.
+
+**Prerequisites:**
+- Railway project linked to this GitHub repository
+- Railway configured to use Dockerfile (not nixpacks)
+
+**Required Railway Environment Variables:**
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=<generated-on-first-deploy>
+APP_URL=https://your-app.up.railway.app
+LOG_CHANNEL=stderr
+LOG_LEVEL=info
+
+# Database (if using Railway Postgres)
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+# Or use individual variables:
+DB_CONNECTION=pgsql
+DB_HOST=${{Postgres.PGHOST}}
+DB_PORT=${{Postgres.PGPORT}}
+DB_DATABASE=${{Postgres.PGDATABASE}}
+DB_USERNAME=${{Postgres.PGUSER}}
+DB_PASSWORD=${{Postgres.PGPASSWORD}}
+
+# Optional: Auto-run migrations
+RUN_MIGRATIONS=1
+```
+
+**Deployment Process:**
 1. Push to `main` branch
-2. Railway auto-deploys via webhook
-3. Site goes live automatically
+2. GitHub Actions runs smoke test (Docker build validation)
+3. Railway detects Dockerfile and builds multi-stage image
+4. App starts with nginx + php-fpm via supervisord
+5. Site goes live on port 8080
+
+**Railway Configuration:**
+- **Builder**: Dockerfile
+- **Port**: 8080 (automatically detected)
+- **Health Check**: `/up` (optional)
+- **Start Command**: Handled by Dockerfile CMD
+
+**What the Docker Build Does:**
+1. **Stage 1**: Builds frontend assets with npm (Vite)
+2. **Stage 2**: Installs PHP dependencies with Composer (--no-dev)
+3. **Stage 3**: Combines everything into PHP-FPM + Nginx runtime
+4. **On Start**: Generates APP_KEY if missing, caches config/routes/views, runs migrations if enabled
+
+**Logs:**
+All logs go to stderr/stdout for Railway dashboard visibility. Set `LOG_CHANNEL=stderr` in Railway env vars.
+
+**Troubleshooting:**
+- Build fails? Check GitHub Actions smoke test results
+- 500 errors? Check Railway logs for missing APP_KEY or DB issues
+- Assets missing? Verify `public/build/` exists in built image
+- DB errors? Ensure Postgres plugin is added and variables are set
+
+See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed instructions and advanced configuration.
 
 ## Documentation
 

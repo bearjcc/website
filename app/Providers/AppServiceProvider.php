@@ -16,7 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Ensure debugbar is disabled in production
+        // (It's in require-dev so won't be installed, but this is extra safety)
+        if ($this->app->environment('production')) {
+            $this->app['config']->set('debugbar.enabled', false);
+        }
     }
 
     /**
