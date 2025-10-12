@@ -30,7 +30,7 @@
 /* ===== Scrollbar Styles ===== */
 body {
     min-height: 100vh;
-    background: url("GRADIENT\ BG.svg") center / 100% 100% no-repeat;
+    background: url("/GRADIENT BG.svg") center / 100% 100% no-repeat;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
