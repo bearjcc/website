@@ -1,43 +1,11 @@
 <div>
-    {{-- Skip to content for accessibility --}}
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 btn-primary">
-        {{ __('ui.skip_to_content') }}
-    </a>
-
-    {{-- Navigation --}}
-    <nav class="sticky top-0 z-50 glass border-b border-white/10">
-        <div class="section py-4 flex justify-between items-center">
-            <a href="{{ route('home') }}" class="text-2xl font-bold text-[color:var(--star)] hover:opacity-80 transition-opacity">
-                <x-ui.logo-lockup :class="'w-[200px] md:w-[240px]'" />
-            </a>
-            
-            <div class="flex gap-6 items-center">
-                <a href="{{ route('games.index') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_games') }}</a>
-                <a href="{{ route('blog.index') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_blog') }}</a>
-                <a href="{{ route('about') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_about') }}</a>
-                
-                @auth
-                    @can('access-lore')
-                        <a href="{{ route('lore.index') }}" class="hover:text-[color:var(--star)] transition">Lore</a>
-                    @endcan
-                    
-                    @can('admin')
-                        <a href="{{ route('admin.features') }}" class="hover:text-[color:var(--star)] transition">Admin</a>
-                    @endcan
-                    
-                    <livewire:auth.logout />
-                @else
-                    <a href="{{ route('login') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_login') }}</a>
-                @endauth
-            </div>
-        </div>
-    </nav>
-
     {{-- Hero Section --}}
-    <section class="section pt-12 md:pt-20" id="main-content">
-        <div class="grid md:grid-cols-2 gap-8 items-center">
+    <section class="section pt-16 md:pt-24" id="main-content">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
             <div class="space-y-6">
                 <x-ui.logo-lockup />
+                
+                <p class="kicker">A small game studio</p>
 
                 <h1 class="h1">{{ __('ui.tagline') }}</h1>
                 <p class="p max-w-prose">
@@ -80,14 +48,14 @@
     </section>
 
     {{-- Available Now Section --}}
-    <section class="mt-20 md:mt-24">
+    <section class="mt-24 md:mt-32">
         <x-ui.section-header
             :kicker="__('ui.available_kicker')"
             :title="__('ui.available_title')"
             :subtitle="__('ui.available_sub')"
         />
 
-        <div class="section mt-8 grid gap-5 sm:grid-cols-2 md:grid-cols-3">
+        <div class="section mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
             @forelse($games as $game)
                 <x-ui.card
                     :title="$game->title"
@@ -125,14 +93,14 @@
 
     {{-- From the Studio Section (only if posts exist) --}}
     @if($posts->isNotEmpty())
-        <section class="mt-20 md:mt-24">
+        <section class="mt-24 md:mt-32 mb-24">
             <x-ui.section-header
                 :kicker="__('ui.studio_kicker')"
                 :title="__('ui.studio_title')"
                 :subtitle="__('ui.studio_sub')"
             />
 
-            <div class="section mt-8 space-y-5">
+            <div class="section mt-8 space-y-6">
                 @foreach($posts as $post)
                     <x-ui.card
                         :title="$post->title"
@@ -143,18 +111,8 @@
                 @endforeach
             </div>
         </section>
+    @else
+        {{-- Add bottom margin when no posts section --}}
+        <div class="mb-24"></div>
     @endif
-
-    {{-- Footer --}}
-    <footer class="section mt-24 mb-12 text-center">
-        <p class="text-sm text-white/60 mb-4">{{ __('ui.footer_note') }}</p>
-        <div class="flex justify-center gap-6 text-sm">
-            <a href="https://github.com/bearjcc/website" target="_blank" rel="noopener" class="text-white/70 hover:text-[color:var(--star)] transition-colors font-medium">
-                GitHub
-            </a>
-            <a href="{{ route('about') }}" class="text-white/70 hover:text-[color:var(--star)] transition-colors font-medium">
-                About
-            </a>
-        </div>
-    </footer>
 </div>

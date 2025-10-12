@@ -1,9 +1,11 @@
 ---
-description: "Ursa Minor Games - Development Workflow and Best Practices"
+description: "Development workflow and best practices for Ursa Minor Games"
 globs: "app/**/*.php,resources/views/**/*.blade.php,tests/**/*.php"
 ---
 
 # Development Workflow
+
+Project workflow and best practices for the Ursa Minor Games Laravel + TALL stack website.
 
 ## Project Context
 
@@ -327,18 +329,14 @@ Route::get('/new-page', function () {
 
 ```blade
 {{-- resources/views/new-page.blade.php --}}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Title - Ursa Minor Games</title>
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
-</head>
-<body>
-    {{-- Content here --}}
-</body>
-</html>
+<x-layout>
+    <x-slot:title>Page Title - Ursa Minor Games</x-slot:title>
+    
+    <section class="section">
+        <h1>Page Title</h1>
+        <p>Content goes here...</p>
+    </section>
+</x-layout>
 ```
 
 ### Adding CSS Styles

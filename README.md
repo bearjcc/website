@@ -71,8 +71,51 @@ website/
 │       └── welcome.blade.php  # Homepage
 ├── routes/
 │   └── web.php        # Application routes
+├── tests/              # Test suite
+│   ├── Feature/       # Feature/integration tests
+│   └── Unit/          # Unit tests
 └── nixpacks.toml      # Railway deployment config
 ```
+
+## Testing
+
+### Running Tests
+
+Run all tests:
+```powershell
+php artisan test
+```
+
+Run specific test file:
+```powershell
+php artisan test --filter=HomePageTest
+```
+
+Run tests with coverage:
+```powershell
+php artisan test --coverage
+```
+
+### Test Coverage
+
+The project follows **humility protocol** - no changes should be merged without verification through tests.
+
+**Homepage Tests** (`tests/Feature/HomePageTest.php`):
+- ✅ Core sections render correctly
+- ✅ No banned future-facing terms (café, storefront, etc.)
+- ✅ Game cards limited to three
+- ✅ Hero section with primary CTA
+- ✅ Footer and navigation present
+
+### Future Testing Goals
+
+**Planned enhancements:**
+- Browser testing with Laravel Dusk or Cypress for visual regression detection
+- Static analysis to detect inline hex colors in views
+- Performance testing for page load times
+- Accessibility testing (WCAG AA compliance)
+
+**Target:** 80%+ code coverage for all new features
 
 ## Deployment
 

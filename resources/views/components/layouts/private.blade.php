@@ -37,7 +37,6 @@
     </main>
     
     @livewireScripts
-    <script src="{{ asset('script.js') }}"></script>
 </body>
 </html>
 

@@ -1,9 +1,11 @@
 ---
-description: "Ursa Minor Games - Code Quality Standards"
+description: "Code quality and style standards for Ursa Minor Games"
 globs: "app/**/*.php,resources/views/**/*.blade.php,public/**/*.{js,css}"
 ---
 
 # Code Quality Standards
+
+Code quality, style, and documentation standards for Ursa Minor Games.
 
 ## PHP Standards
 
@@ -339,59 +341,6 @@ public function calculateScore(Game $game): int
 }
 ```
 
-## Error Handling
-
-### Exceptions
-
-```php
-<?php
-
-namespace App\Exceptions;
-
-use Exception;
-
-class GameNotFoundException extends Exception
-{
-    public function __construct(int $gameId)
-    {
-        parent::__construct("Game with ID {$gameId} not found");
-    }
-}
-```
-
-### Try-Catch Blocks
-
-```php
-public function processGame(int $id): void
-{
-    try {
-        $game = Game::findOrFail($id);
-        $this->executeGameLogic($game);
-    } catch (ModelNotFoundException $e) {
-        Log::error("Game not found", ['id' => $id]);
-        throw new GameNotFoundException($id);
-    } catch (Exception $e) {
-        Log::error("Game processing failed", [
-            'id' => $id,
-            'error' => $e->getMessage()
-        ]);
-        throw $e;
-    }
-}
-```
-
-### Logging
-
-```php
-use Illuminate\Support\Facades\Log;
-
-// Different log levels
-Log::debug('Debug information', ['data' => $debugData]);
-Log::info('User created game', ['user_id' => $user->id]);
-Log::warning('Game approaching time limit', ['game_id' => $game->id]);
-Log::error('Game processing failed', ['error' => $e->getMessage()]);
-```
-
 ## SOLID Principles
 
 ### Single Responsibility
@@ -425,57 +374,6 @@ class GameNotificationService
 class GameReportGenerator
 {
     public function generate(Game $game): Report {}
-}
-```
-
-### Open/Closed Principle
-
-```php
-// ✅ DO - Open for extension, closed for modification
-interface ScoreCalculator
-{
-    public function calculate(Game $game): int;
-}
-
-class StandardScoreCalculator implements ScoreCalculator
-{
-    public function calculate(Game $game): int
-    {
-        return $game->points;
-    }
-}
-
-class BonusScoreCalculator implements ScoreCalculator
-{
-    public function calculate(Game $game): int
-    {
-        return $game->points * 2;
-    }
-}
-```
-
-### Dependency Inversion
-
-```php
-// ✅ DO - Depend on abstractions, not concretions
-interface GameRepository
-{
-    public function find(int $id): ?Game;
-}
-
-class EloquentGameRepository implements GameRepository
-{
-    public function find(int $id): ?Game
-    {
-        return Game::find($id);
-    }
-}
-
-class GameService
-{
-    public function __construct(
-        private readonly GameRepository $repository
-    ) {}
 }
 ```
 
@@ -558,16 +456,6 @@ function initStarfield() {
         }
     }
     
-    // Create individual star
-    function createStar() {
-        return {
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius: Math.random() * 2 + 1,
-            blinking: Math.random() < 0.6
-        };
-    }
-    
     // Initialize
     resizeCanvas();
     createStars();
@@ -576,149 +464,6 @@ function initStarfield() {
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', initStarfield);
-```
-
-## Security Standards
-
-### Input Validation
-
-```php
-// ✅ DO - Always validate input
-public function store(StoreGameRequest $request)
-{
-    $validated = $request->validated();
-    $game = Game::create($validated);
-}
-
-// ❌ DON'T - Trust user input
-public function store(Request $request)
-{
-    $game = Game::create($request->all());
-}
-```
-
-### Output Escaping
-
-```blade
-{{-- ✅ DO - Auto-escape (default) --}}
-<p>{{ $game->name }}</p>
-
-{{-- ❌ DON'T - Raw output unless necessary --}}
-<p>{!! $game->name !!}</p>
-
-{{-- ✅ OK - When HTML is needed and trusted --}}
-<div>{!! $game->sanitized_html_description !!}</div>
-```
-
-### SQL Injection Prevention
-
-```php
-// ✅ DO - Use Eloquent or query builder
-Game::where('name', $name)->get();
-DB::table('games')->where('name', $name)->get();
-
-// ✅ DO - Use parameter binding
-DB::select('SELECT * FROM games WHERE name = ?', [$name]);
-
-// ❌ DON'T - Concatenate strings
-DB::select("SELECT * FROM games WHERE name = '{$name}'");
-```
-
-## Performance Standards
-
-### Database Queries
-
-```php
-// ✅ DO - Eager load relationships
-$games = Game::with('user', 'scores')->get();
-
-// ✅ DO - Select only needed columns
-$games = Game::select('id', 'name', 'status')->get();
-
-// ✅ DO - Use chunk for large datasets
-Game::chunk(100, function ($games) {
-    foreach ($games as $game) {
-        // Process
-    }
-});
-
-// ❌ DON'T - N+1 queries
-$games = Game::all();
-foreach ($games as $game) {
-    echo $game->user->name; // N+1 query
-}
-```
-
-### Caching
-
-```php
-use Illuminate\Support\Facades\Cache;
-
-// ✅ DO - Cache expensive operations
-$activeGames = Cache::remember('active_games', 3600, function () {
-    return Game::with('user')
-        ->where('status', 'active')
-        ->get();
-});
-
-// ✅ DO - Clear cache when data changes
-Game::saved(function ($game) {
-    Cache::forget('active_games');
-});
-```
-
-## Testing Standards
-
-### Test Coverage
-
-- Aim for 80%+ code coverage
-- Test critical business logic
-- Test all public methods
-- Test edge cases and error conditions
-
-### Test Organization
-
-```php
-<?php
-
-namespace Tests\Feature;
-
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Game;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-class GameManagementTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    /** @test */
-    public function user_can_create_game(): void
-    {
-        $user = User::factory()->create();
-        
-        $response = $this->actingAs($user)
-            ->post(route('games.store'), [
-                'name' => 'Test Game',
-                'description' => 'A test game',
-            ]);
-        
-        $response->assertRedirect();
-        $this->assertDatabaseHas('games', [
-            'name' => 'Test Game',
-        ]);
-    }
-    
-    /** @test */
-    public function guest_cannot_create_game(): void
-    {
-        $response = $this->post(route('games.store'), [
-            'name' => 'Test Game',
-        ]);
-        
-        $response->assertRedirect(route('login'));
-    }
-}
 ```
 
 ## Code Review Checklist
@@ -815,16 +560,6 @@ php artisan test --filter=GameManagementTest
 
 # Run with coverage
 php artisan test --coverage
-```
-
-### Static Analysis (Future)
-
-```powershell
-# PHPStan
-./vendor/bin/phpstan analyse
-
-# Psalm
-./vendor/bin/psalm
 ```
 
 ## Best Practices Summary

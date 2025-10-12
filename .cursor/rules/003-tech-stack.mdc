@@ -1,9 +1,11 @@
 ---
-description: "Ursa Minor Games - Technology Stack and Dependencies"
+description: "Technology stack and dependencies for Ursa Minor Games"
 globs: "composer.json,package.json,vite.config.js"
 ---
 
 # Technology Stack
+
+Technology stack, dependencies, and tooling for Ursa Minor Games.
 
 ## Backend Stack
 

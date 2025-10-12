@@ -15,32 +15,63 @@ class Home extends Component
 {
     public function render()
     {
-        // Get featured blocks (up to 3 games)
-        $featured = FeatureBlock::query()
-            ->where('kind', 'game')
-            ->orderBy('order')
-            ->limit(3)
-            ->get()
-            ->map(fn ($block) => $block->getReference())
-            ->filter();
+        // Get featured blocks (up to 3 games) - handle case where table doesn't exist
+        $featured = collect();
+        try {
+            $featured = FeatureBlock::query()
+                ->where('kind', 'game')
+                ->orderBy('order')
+                ->limit(3)
+                ->get()
+                ->map(fn ($block) => $block->getReference())
+                ->filter();
+        } catch (\Exception $e) {
+            // Feature blocks table doesn't exist or is empty, use games directly
+            $featured = collect();
+        }
 
         // If we have featured games, use them; otherwise, get latest published games
         $games = $featured->isNotEmpty()
             ? $featured
-            : Game::published()->latest()->limit(3)->get();
+            : $this->getGamesSafely();
 
         // Get first published game for hero CTA
-        $firstPublishedGameSlug = Game::published()
-            ->orderBy('id')
-            ->value('slug');
+        $firstPublishedGameSlug = $this->getFirstGameSlugSafely();
 
         // Get latest posts for studio section
-        $posts = Post::published()->latest()->limit(2)->get();
+        $posts = $this->getPostsSafely();
 
         return view('livewire.pages.home', [
             'games' => $games,
             'firstPublishedGameSlug' => $firstPublishedGameSlug,
             'posts' => $posts,
         ]);
+    }
+
+    private function getGamesSafely()
+    {
+        try {
+            return Game::published()->latest()->limit(3)->get();
+        } catch (\Exception $e) {
+            return collect();
+        }
+    }
+
+    private function getFirstGameSlugSafely()
+    {
+        try {
+            return Game::published()->orderBy('id')->value('slug');
+        } catch (\Exception $e) {
+            return;
+        }
+    }
+
+    private function getPostsSafely()
+    {
+        try {
+            return Post::published()->latest()->limit(2)->get();
+        } catch (\Exception $e) {
+            return collect();
+        }
     }
 }

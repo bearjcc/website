@@ -16,7 +16,23 @@
     @livewireStyles
 </head>
 <body class="font-sans text-[color:var(--ink)] bg-[color:var(--space-900)]">
-    {{ $slot }}
+    {{-- Sticky top navigation --}}
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-[color:var(--space-900)]/80 border-b border-[color:var(--border)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <x-ui.logo-lockup class="w-[200px] md:w-[240px]" />
+                @include('partials.nav')
+            </div>
+        </div>
+    </header>
+
+    {{-- Main content area --}}
+    <main class="flex-1">
+        {{ $slot }}
+    </main>
+
+    {{-- Footer --}}
+    @include('partials.footer')
 
     @livewireScripts
 </body>

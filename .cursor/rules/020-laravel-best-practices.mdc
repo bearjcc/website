@@ -1,9 +1,11 @@
 ---
-description: "Ursa Minor Games - Laravel Best Practices and Architecture"
+description: "Laravel best practices and architecture patterns for Ursa Minor Games"
 globs: "app/**/*.php,config/**/*.php,routes/**/*.php"
 ---
 
 # Laravel Best Practices
+
+Laravel-specific patterns and best practices for Ursa Minor Games.
 
 ## Core Principles
 
@@ -124,34 +126,22 @@ class Game extends Model
 {
     use HasFactory;
     
-    /**
-     * The attributes that are mass assignable.
-     */
     protected $fillable = [
         'name',
         'description',
         'status',
     ];
     
-    /**
-     * The attributes that should be cast.
-     */
     protected $casts = [
         'published_at' => 'datetime',
         'is_active' => 'boolean',
     ];
     
-    /**
-     * Get the user that owns the game.
-     */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
     
-    /**
-     * Scope a query to only include active games.
-     */
     public function scopeActive($query)
     {
         return $query->where('is_active', true);
@@ -211,17 +201,11 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreGameRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true; // Or use policy check
     }
     
-    /**
-     * Get the validation rules that apply to the request.
-     */
     public function rules(): array
     {
         return [
@@ -231,9 +215,6 @@ class StoreGameRequest extends FormRequest
         ];
     }
     
-    /**
-     * Get custom messages for validator errors.
-     */
     public function messages(): array
     {
         return [
@@ -469,9 +450,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('games', function (Blueprint $table) {
@@ -490,9 +468,6 @@ return new class extends Migration
         });
     }
     
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('games');
@@ -507,103 +482,6 @@ return new class extends Migration
 - Add indexes for frequently queried columns
 - Use foreign key constraints
 - Never modify existing migrations in production
-
-## Testing
-
-### Feature Tests
-
-```php
-<?php
-
-namespace Tests\Feature;
-
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Game;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-
-class GameControllerTest extends TestCase
-{
-    use RefreshDatabase;
-    
-    public function test_user_can_create_game(): void
-    {
-        $user = User::factory()->create();
-        
-        $response = $this->actingAs($user)
-            ->post(route('games.store'), [
-                'name' => 'Test Game',
-                'description' => 'A test game',
-                'status' => 'draft',
-            ]);
-        
-        $response->assertRedirect();
-        $this->assertDatabaseHas('games', [
-            'name' => 'Test Game',
-        ]);
-    }
-}
-```
-
-### Unit Tests
-
-```php
-<?php
-
-namespace Tests\Unit;
-
-use Tests\TestCase;
-use App\Models\Game;
-
-class GameTest extends TestCase
-{
-    public function test_game_is_live(): void
-    {
-        $game = Game::factory()->create([
-            'status' => 'published',
-            'is_active' => true,
-            'published_at' => now()->subDay(),
-        ]);
-        
-        $this->assertTrue($game->isLive());
-    }
-}
-```
-
-## Code Style
-
-### PSR-12 Standards
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Services;
-
-use App\Models\Game;
-use Illuminate\Support\Collection;
-
-class GameService
-{
-    public function __construct(
-        private readonly GameRepository $repository
-    ) {}
-    
-    public function getActiveGames(): Collection
-    {
-        return $this->repository->findActive();
-    }
-}
-```
-
-### Laravel Pint
-
-Run before committing:
-
-```powershell
-./vendor/bin/pint
-```
 
 ## Performance Optimization
 
@@ -744,24 +622,6 @@ php artisan view:cache
 
 # Optimize autoloader
 composer install --optimize-autoloader --no-dev
-```
-
-## Documentation
-
-### PHPDoc Comments
-
-```php
-/**
- * Create a new game.
- *
- * @param  array  $data
- * @return Game
- * @throws GameCreationException
- */
-public function createGame(array $data): Game
-{
-    // Implementation
-}
 ```
 
 ## Common Mistakes to Avoid

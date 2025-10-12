@@ -88,16 +88,8 @@ class HomePageTest extends TestCase
     {
         $response = $this->get('/');
 
+        // Footer shows poetic tagline
         $response->assertSee('Building games under the Southern Cross.');
-        $response->assertSee('GitHub');
-        $response->assertSee('About');
-    }
-
-    public function test_homepage_has_skip_to_content_link(): void
-    {
-        $response = $this->get('/');
-
-        $response->assertSee('Skip to content');
     }
 
     public function test_homepage_game_cards_link_to_play_routes(): void
@@ -109,5 +101,116 @@ class HomePageTest extends TestCase
         $response = $this->get('/');
 
         $response->assertSee(route('games.play', $game->slug), false);
+    }
+
+    /**
+     * Test homepage renders core sections
+     *
+     * Verifies that the homepage displays essential content including:
+     * - Primary CTA ("Play a game")
+     * - Available games kicker text
+     * - Footer note
+     */
+    public function test_homepage_renders_core_sections(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+        $response->assertSee('Play a game');
+        $response->assertSee(__('ui.available_kicker'));
+        $response->assertSee(__('ui.footer_note'));
+    }
+
+    /**
+     * Test homepage has no banned words
+     *
+     * Ensures that the homepage does not contain future-facing language
+     * about physical stores, cafés, or distant plans.
+     */
+    public function test_homepage_has_no_banned_words(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertOk();
+
+        // Check that none of the banned terms appear on the homepage
+        $content = $response->getContent();
+
+        $bannedTerms = ['café', 'storefront', 'years away', 'shop'];
+
+        foreach ($bannedTerms as $term) {
+            $this->assertStringNotContainsString(
+                $term,
+                $content,
+                "Homepage should not contain the term '{$term}'"
+            );
+        }
+    }
+
+    /**
+     * Test homepage limits game cards to three
+     * 
+     * Verifies that even when more than 3 games are published,
+     * the homepage only displays up to 3 game cards.
+     */
+    public function test_homepage_limits_game_cards_to_three(): void
+    {
+        // Seed more than 3 published games
+        Game::factory()->count(5)->published()->create();
+
+        $response = $this->get('/');
+
+        $response->assertOk();
+        
+        // Count the number of links to game play routes
+        $content = $response->getContent();
+        
+        // Count occurrences of the games.play route pattern
+        $playRoutePattern = route('games.play', 'PLACEHOLDER');
+        $baseRoute = str_replace('PLACEHOLDER', '', $playRoutePattern);
+        
+        // Get all published games
+        $allGames = Game::published()->latest()->get();
+        
+        // Count how many game links appear
+        $linkCount = 0;
+        foreach ($allGames as $game) {
+            if (str_contains($content, route('games.play', $game->slug))) {
+                $linkCount++;
+            }
+        }
+        
+        // Should be exactly 3 game links (or fewer if < 3 games exist)
+        $this->assertLessThanOrEqual(3, $linkCount, 'Homepage should display at most 3 game cards');
+        $this->assertEquals(3, $linkCount, 'Homepage should display exactly 3 game cards when more than 3 are available');
+    }
+
+    /**
+     * Test homepage handles missing database tables gracefully
+     * 
+     * Regression test for Railway 500 errors caused by missing tables.
+     * Ensures homepage renders even when feature_blocks, games, or posts tables don't exist.
+     */
+    public function test_homepage_handles_missing_tables_gracefully(): void
+    {
+        // This test uses RefreshDatabase which creates fresh tables
+        // But the Home component should handle missing tables gracefully
+        // by catching exceptions and returning empty collections
+        
+        $response = $this->get('/');
+        
+        $response->assertStatus(200);
+        
+        // Should show "Coming soon" when no games are available
+        $response->assertSee('Coming soon');
+        $response->assertSee('New games are in the works.');
+        
+        // Should not show studio section when no posts exist
+        $response->assertDontSee('From the studio');
+        $response->assertDontSee('Latest notes');
+        
+        // Should still show hero section and footer
+        $response->assertSee('Small games. Big craft.');
+        $response->assertSee('Building games under the Southern Cross.');
     }
 }

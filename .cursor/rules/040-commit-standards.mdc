@@ -1,9 +1,11 @@
 ---
-description: "Ursa Minor Games - Commit and Release Standards"
+description: "Commit and release standards using Conventional Commits for Ursa Minor Games"
 globs: "**/*"
 ---
 
 # Commit and Release Standards
+
+Version control, commit standards, and release process for Ursa Minor Games.
 
 ## Conventional Commits
 
@@ -117,18 +119,6 @@ chore(config): update phpunit configuration
 - **docs**: Documentation
 - **deps**: Dependencies
 
-### Scope Usage
-
-```
-feat(games): add chess game
-fix(header): correct scroll behavior
-docs(brand): update color guidelines
-style(auth): format authentication service
-refactor(games): simplify game logic
-test(games): add integration tests
-chore(deps): update composer packages
-```
-
 ## Commit Message Guidelines
 
 ### Description
@@ -157,112 +147,6 @@ chore(deps): update composer packages
 ❌ fix: Fixed bug
 ❌ Update things.
 ❌ Feat(games): Add game
-```
-
-### Body
-
-Use the body to explain:
-- **Why** the change was made
-- **What** problem it solves
-- **How** it works (if complex)
-
-```
-feat(games): add chess game implementation
-
-Implements a basic chess game using vanilla JavaScript.
-Includes piece movement validation and checkmate detection.
-This addresses user requests for classic board games.
-
-The game state is managed client-side with future plans
-for server-side persistence and multiplayer support.
-```
-
-### Footer
-
-Use footer for:
-- Breaking changes
-- Issue references
-- Reviewer notes
-
-```
-feat(api): change game response structure
-
-Update API to return more detailed game information.
-
-BREAKING CHANGE: Game API response structure has changed.
-Previous: { game: {...} }
-New: { data: { game: {...}, metadata: {...} } }
-
-Closes #123
-```
-
-## Examples
-
-### Feature Addition
-
-```
-feat(games): add sudoku game
-
-Implements a playable sudoku game with:
-- Random puzzle generation
-- Input validation
-- Hint system
-- Timer and scoring
-
-This is the first browser game for the site and provides
-a foundation for future game implementations.
-```
-
-### Bug Fix
-
-```
-fix(header): correct sticky positioning on scroll
-
-The header was not staying fixed at the top when scrolling
-due to incorrect CSS positioning. Changed from relative to
-fixed positioning and adjusted z-index to ensure header
-stays above content.
-
-Fixes #45
-```
-
-### Documentation
-
-```
-docs(brand): add night sky color palette
-
-Documents the official color palette for the Ursa Minor
-Games brand, including primary and secondary colors with
-hex codes and usage guidelines.
-```
-
-### Refactoring
-
-```
-refactor(games): extract game logic to service
-
-Moved game business logic from GameController to
-GameService to follow single responsibility principle
-and make code more testable.
-
-No functional changes.
-```
-
-### Breaking Change
-
-```
-feat(auth)!: implement new authentication system
-
-Replace custom auth with Laravel Breeze for better
-security and maintainability.
-
-BREAKING CHANGE: All existing user sessions will be
-invalidated. Users will need to log in again.
-
-Migration path:
-1. Backup user data
-2. Run migration
-3. Users re-authenticate
 ```
 
 ## Branch Strategy
@@ -462,54 +346,6 @@ Before merging to main:
 ❌ fix: various things
 ```
 
-## Commit Message Templates
-
-### Feature
-
-```
-feat(<scope>): <short description>
-
-<detailed explanation of what was added>
-
-<why it was added>
-
-<how it works (if complex)>
-```
-
-### Bug Fix
-
-```
-fix(<scope>): <short description>
-
-<explanation of the bug>
-
-<how it was fixed>
-
-Fixes #<issue number>
-```
-
-### Documentation
-
-```
-docs(<scope>): <short description>
-
-<what documentation was added/updated>
-
-<why it was needed>
-```
-
-### Refactoring
-
-```
-refactor(<scope>): <short description>
-
-<what was refactored>
-
-<why it was refactored>
-
-No functional changes.
-```
-
 ## Version Control Best Practices
 
 ### General Principles
@@ -519,75 +355,6 @@ No functional changes.
 3. **Frequent Commits**: Commit early and often
 4. **Test Before Commit**: Always run tests first
 5. **One Feature Per Branch**: Keep branches focused
-
-### Git Workflow
-
-```powershell
-# Start new feature
-git checkout -b feature/new-game
-
-# Make changes and commit
-git add .
-git commit -m "feat(games): add new game"
-
-# Keep branch updated
-git checkout main
-git pull
-git checkout feature/new-game
-git merge main
-
-# Test everything
-php artisan test
-# Manual testing...
-
-# Merge when ready
-git checkout main
-git merge feature/new-game
-git push
-
-# Clean up
-git branch -d feature/new-game
-```
-
-## Release Process
-
-### Semantic Versioning
-
-- **Major**: Breaking changes (X.0.0)
-- **Minor**: New features (0.X.0)
-- **Patch**: Bug fixes (0.0.X)
-
-### Release Workflow
-
-1. **Ensure All Tests Pass**
-   ```powershell
-   php artisan test
-   ```
-
-2. **Update Version** (if using versioning)
-   - Update version in relevant files
-   - Update CHANGELOG
-
-3. **Create Release Commit**
-   ```powershell
-   git commit -m "chore(release): bump version to 1.2.0"
-   ```
-
-4. **Tag Release**
-   ```powershell
-   git tag -a v1.2.0 -m "Release version 1.2.0"
-   git push --tags
-   ```
-
-5. **Deploy to Railway**
-   ```powershell
-   git push origin main
-   ```
-
-6. **Monitor Deployment**
-   - Check Railway logs
-   - Test production site
-   - Verify functionality
 
 ## Common Mistakes to Avoid
 
@@ -613,29 +380,6 @@ git branch -d feature/new-game
 - ✅ Reference issues when applicable
 - ✅ Review changes before committing
 
-## Code Review Checklist
-
-If working with team:
-
-### Review Focus
-
-- [ ] Code quality and standards
-- [ ] Test coverage
-- [ ] Security considerations
-- [ ] Performance implications
-- [ ] Documentation completeness
-- [ ] Brand compliance
-- [ ] Railway compatibility
-
-### Review Comments
-
-```
-✅ Good: "Consider extracting this logic to a service class for better testability"
-✅ Good: "This needs a test to cover the edge case when user is null"
-❌ Bad: "This is wrong"
-❌ Bad: "Change it"
-```
-
 ## Summary
 
 ### Key Principles
@@ -651,19 +395,6 @@ If working with team:
 - Document breaking changes
 - Never commit secrets
 - Maintain Railway compatibility
-
-### Commit Workflow
-
-1. Create feature branch
-2. Make changes
-3. Write tests
-4. Test locally
-5. Commit with conventional format
-6. Push to remote
-7. Test before merge
-8. Merge to main
-9. Automatic Railway deployment
-10. Monitor production
 
 ### Remember
 

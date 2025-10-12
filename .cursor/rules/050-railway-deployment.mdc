@@ -1,0 +1,288 @@
+---
+description: "Railway deployment and configuration for Ursa Minor Games"
+globs: "nixpacks.toml,.env.example"
+---
+
+# Railway Deployment
+
+Railway deployment configuration and best practices for Ursa Minor Games.
+
+## About Railway
+
+Railway is a modern platform for deploying applications with:
+- **Auto-Deploy**: Automatic deployment from Git
+- **Zero Config**: Intelligent build detection
+- **Managed Services**: Databases, Redis, etc.
+- **Environment Variables**: Secure config management
+- **Automatic HTTPS**: SSL certificates included
+- **Custom Domains**: Easy domain configuration
+
+## Deployment Flow
+
+### Automatic Deployment
+
+```
+1. Developer commits to main branch
+   ↓
+2. Git push to GitHub/GitLab
+   ↓
+3. Railway detects push to main
+   ↓
+4. Railway pulls latest code
+   ↓
+5. Railway runs build process (Nixpacks)
+   ↓
+6. Railway runs migrations
+   ↓
+7. Railway deploys to production
+   ↓
+8. Site is live with new changes
+```
+
+### Build Process
+
+Railway uses Nixpacks to build Laravel applications:
+
+1. **Detect Laravel**: Identifies Laravel via `composer.json`
+2. **Install Dependencies**: Runs `composer install --optimize-autoloader --no-dev`
+3. **Build Assets**: Runs `npm install && npm run build`
+4. **Cache Config**: Runs `php artisan config:cache`
+5. **Cache Routes**: Runs `php artisan route:cache`
+6. **Cache Views**: Runs `php artisan view:cache`
+7. **Start Server**: Runs PHP server
+
+## Configuration
+
+### Nixpacks Configuration
+
+File: `nixpacks.toml`
+
+```toml
+[phases.setup]
+nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_sqlite"]
+
+[phases.install]
+cmds = [
+    "composer install --optimize-autoloader --no-dev",
+    "npm install",
+    "npm run build"
+]
+
+[phases.build]
+cmds = [
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache"
+]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
+```
+
+### Environment Variables
+
+#### Required Variables
+
+Configure in Railway dashboard:
+
+```env
+# Application
+APP_NAME="Ursa Minor Games"
+APP_ENV=production
+APP_KEY=<generated-key>
+APP_DEBUG=false
+APP_URL=https://ursaminorgames.com
+
+# Database (Railway provides)
+DATABASE_URL=<railway-provided>
+
+# Logging
+LOG_CHANNEL=stack
+LOG_LEVEL=error
+
+# Session
+SESSION_DRIVER=database
+SESSION_LIFETIME=120
+
+# Cache
+CACHE_DRIVER=database
+```
+
+## Deployment Checklist
+
+### Before Deploying
+
+- [ ] All tests passing locally
+- [ ] Tested at http://website.test/
+- [ ] Browser testing complete
+- [ ] Mobile testing complete
+- [ ] No debug code (`dd()`, `console.log()`)
+- [ ] No secrets in code
+- [ ] Environment variables configured
+- [ ] Database migrations ready
+- [ ] Assets compiled
+- [ ] Dependencies updated
+
+### During Deployment
+
+- [ ] Monitor Railway build logs
+- [ ] Watch for build errors
+- [ ] Check migration status
+- [ ] Verify asset compilation
+- [ ] Wait for deployment completion
+
+### After Deployment
+
+- [ ] Test production site
+- [ ] Verify homepage loads
+- [ ] Check all main features
+- [ ] Test user flows
+- [ ] Check for console errors
+- [ ] Verify mobile responsiveness
+- [ ] Test in multiple browsers
+- [ ] Monitor error logs
+
+## Troubleshooting
+
+### Common Issues
+
+#### Build Fails
+
+**Issue**: Build fails during deployment
+
+**Solutions**:
+- Check Railway build logs
+- Verify `composer.json` is valid
+- Ensure all dependencies are listed
+- Check for PHP version compatibility
+- Verify `nixpacks.toml` configuration
+
+#### App Key Not Set
+
+**Issue**: "No application encryption key has been set"
+
+**Solution**:
+```powershell
+# Generate key locally
+php artisan key:generate --show
+
+# Add to Railway environment variables
+APP_KEY=base64:generated-key
+```
+
+#### Database Connection Fails
+
+**Issue**: Can't connect to database
+
+**Solutions**:
+- Verify DATABASE_URL is set
+- Check database service is running
+- Ensure database credentials are correct
+- Verify database exists
+- Check connection settings in config/database.php
+
+#### Assets Not Loading
+
+**Issue**: CSS/JS files return 404
+
+**Solutions**:
+- Verify `npm run build` runs during deployment
+- Check `public` directory structure
+- Verify asset paths in Blade templates
+- Check `vite.config.js` configuration
+- Ensure Vite manifest is generated
+
+#### Migration Fails
+
+**Issue**: Database migration fails during deployment
+
+**Solutions**:
+- Check migration syntax
+- Verify database connection
+- Review migration order
+- Check for conflicting migrations
+- Test migration locally first
+
+## Rollback
+
+### Railway Rollback
+
+Railway allows instant rollback to previous deployments:
+
+1. Open Railway dashboard
+2. Navigate to Deployments
+3. Find previous working deployment
+4. Click "Redeploy"
+
+### Database Rollback
+
+```powershell
+# Rollback last migration
+railway run php artisan migrate:rollback
+
+# Rollback specific steps
+railway run php artisan migrate:rollback --step=2
+
+# Reset database (DANGER: loses all data)
+railway run php artisan migrate:reset
+```
+
+## Best Practices
+
+### Deployment Strategy
+
+1. **Test Thoroughly**: Test locally before pushing
+2. **Small Changes**: Deploy small, incremental changes
+3. **Monitor Deployment**: Watch build logs
+4. **Test Production**: Verify after deployment
+5. **Be Ready to Rollback**: Know how to rollback quickly
+
+### Environment Configuration
+
+- Keep `.env.example` updated
+- Document all environment variables
+- Never commit `.env` file
+- Use Railway's environment variables
+- Review variables regularly
+
+### Database Management
+
+- Always test migrations locally first
+- Use migration rollback for mistakes
+- Keep database backups
+- Never run seeders in production
+- Review migration order
+
+### Asset Management
+
+- Use Vite for asset compilation
+- Test asset loading after deployment
+- Ensure cache busting works
+- Verify asset paths are correct
+- Monitor asset file sizes
+
+## Summary
+
+### Key Points
+
+- Railway auto-deploys from main branch
+- Test thoroughly before pushing to main
+- Monitor deployment logs
+- Verify site after deployment
+- Be ready to rollback if needed
+- Keep environment variables secure
+- Use database for sessions and cache
+- Optimize for production
+- Monitor application performance
+- Document deployment process
+
+### Railway Compatibility
+
+- This site is hosted on Railway
+- Must maintain Railway compatibility
+- Test deployment pipeline regularly
+- Keep `nixpacks.toml` updated
+- Use Railway's environment variables
+- Monitor Railway service status
+- Review Railway best practices
+- Stay within resource limits
