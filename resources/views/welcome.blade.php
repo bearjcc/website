@@ -30,13 +30,13 @@
 			<a class="nav left" href="/f1">F1</a>
 			<a class="nav right" href="/about">About</a>
 			<a class="nav right" href="/contact">Contact</a>
-                </nav>
+        </nav>
 		<div class="center-content">
 			<span class="ursa">ursa</span>
 			<object class="bear" data="{{ asset('bear.svg') }}" type="image/svg+xml"></object>
 			<span class="minor">minor</span>
 		</div>
-        </header>
+    </header>
 	<div id="stars">
 		<div class="circle blink" id="circle-animate"> </div>
 		<div class="circle" id="circle"> </div>
