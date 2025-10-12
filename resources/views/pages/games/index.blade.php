@@ -58,6 +58,14 @@
                     <span class="play-button">Play Now →</span>
                 </a>
 
+                <!-- Snake -->
+                <a href="{{ route('games.snake') }}" class="game-card">
+                    <div class="game-icon">🐍</div>
+                    <h3>Snake</h3>
+                    <p>Classic arcade game. Eat food to grow, avoid walls and yourself. Speeds up as you grow!</p>
+                    <span class="play-button">Play Now →</span>
+                </a>
+
                 <!-- Coming Soon Games -->
 
                 <div class="game-card coming-soon-card">
