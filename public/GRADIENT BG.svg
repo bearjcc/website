@@ -1,0 +1,11 @@
+<svg id="prefix__Capa_1" height="100%" width="100%" preserveAspectRatio="none" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2500 2500">
+    <defs>
+        <linearGradient id="prefix__Degradado_sin_nombre_6" x1="1206.71" y1="4236.67" x2="1270.01" y2="-130.8"
+            gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#002d58" />
+            <stop offset=".48" stop-color="#002d58" />
+            <stop offset="1" />
+        </linearGradient>
+    </defs>
+    <path fill="url(#prefix__Degradado_sin_nombre_6)" d="M 0 0 h 2500 v 2500 H 0 z" />
+    </svg>
