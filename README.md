@@ -83,39 +83,25 @@ Quick deploy:
 2. Railway auto-deploys via webhook
 3. Site goes live automatically
 
-## Roadmap
+## Documentation
 
-### Phase 1: Homepage (Current)
-- [x] Basic Laravel setup
-- [x] Static homepage with animations
-- [x] Railway deployment
-- [x] Night sky gradient and starfield effects
-- [x] Branding guidelines and documentation
+**📚 Complete documentation is now available in the `docs/` folder:**
 
-### Phase 2: Browser Games
-- Sudoku game implementation
-- Chess game implementation
-- Game lobby and navigation system
-- User profiles and game history
+- **[Master Roadmap](docs/MASTER_ROADMAP.md)** - Complete project vision and plan
+- **[Documentation Index](docs/INDEX.md)** - All documentation organized
+- **[Feature Extraction Guide](docs/FEATURE_EXTRACTION_GUIDE.md)** - How to integrate features
+- **[TODO List](TODO.md)** - Current tasks and priorities
 
-### Phase 3: F1 Predictions
-- User authentication and authorization
-- Race predictions system
-- Real-time leaderboards
-- Points calculation engine
-- Season tracking
+### Quick Phase Overview
 
-### Phase 4: Board Games
-- Digital board game platform
-- Rules engine for custom games
-- Multiplayer support with real-time sync
-- Print-and-play PDF generation
+**Phase 0 (Current)**: Emergency fixes - Railway deployment ✅
+**Phase 1 (Weeks 1-2)**: Foundation & Infrastructure - TALL stack, components
+**Phase 2 (Weeks 3-10)**: Browser Games - 5-10 classic games
+**Phase 3 (Weeks 11-18)**: F1 Predictions - Full system from formula1predictions repo
+**Phase 4 (Weeks 19-30)**: Board Game Platform - Digital prototyping system
+**Phase 5 (Weeks 31-40)**: World-Building Wiki - Collaborative lore system
 
-### Phase 5: Video Game Content
-- World-building wiki with collaborative editing
-- Lore documentation system
-- Asset gallery and media library
-- Development blog and devlog updates
+See [Master Roadmap](docs/MASTER_ROADMAP.md) for complete details.
 
 ## Contributing
 
