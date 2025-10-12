@@ -27,4 +27,8 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/sudoku', function () {
         return view('pages.games.sudoku');
     })->name('sudoku');
+    
+    Route::get('/2048', function () {
+        return view('pages.games.2048');
+    })->name('2048');
 });
