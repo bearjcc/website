@@ -13,3 +13,14 @@ Route::get('/about', function () {
 Route::get('/contact', function () {
     return view('pages.contact');
 })->name('contact');
+
+// Games
+Route::prefix('games')->name('games.')->group(function () {
+    Route::get('/', function () {
+        return view('pages.games.index');
+    })->name('index');
+    
+    Route::get('/tic-tac-toe', function () {
+        return view('pages.games.tic-tac-toe');
+    })->name('tic-tac-toe');
+});
