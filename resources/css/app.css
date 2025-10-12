@@ -1,36 +1,20 @@
-@import 'tailwindcss';
-
-@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
-@source '../**/*.blade.php';
-@source '../**/*.js';
-
-@theme {
-    /* Ursa Minor Brand Colors */
-    --color-night-black: #000000;
-    --color-midnight-blue: #001a33;
-    --color-evening-blue: #002d58;
-    --color-star-white: #ffffff;
-    --color-star-yellow: #fff89a;
-
-    /* Font Family - Oswald from Google Fonts */
-    --font-sans: 'Oswald', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Starlight Design Tokens */
-@layer base {
-    :root {
-        --ink: #f2f4f8;
-        --ink-muted: #aeb6c2;
-        --space-900: #050914;
-        --space-800: #0b1a33;
-        --star: #f6e08f;
-        --constellation: #9ec7ff;
-        --surface: rgba(255, 255, 255, 0.04);
-        --border: rgba(255, 255, 255, 0.10);
-    }
+:root {
+    --ink: #f2f4f8;
+    --ink-muted: #aeb6c2;
+    --space-900: #050914;
+    --space-800: #0b1a33;
+    --star: #f6e08f;
+    --constellation: #9ec7ff;
+    --surface: rgba(255, 255, 255, 0.04);
+    --border: rgba(255, 255, 255, 0.10);
+}
 
+@layer base {
     html,
     body {
         height: 100%;
@@ -40,6 +24,7 @@
         background: linear-gradient(180deg, var(--space-900) 0%, var(--space-800) 100%);
         min-height: 100vh;
         color: var(--ink); /* Default text color */
+        font-family: 'Oswald', ui-sans-serif, system-ui, sans-serif;
     }
 
     /* Subtle starfield layer */
@@ -80,156 +65,91 @@
     }
 }
 
-/* Starlight UI Components */
 @layer components {
     .glass {
-        @apply bg-white/5 border border-white/10 backdrop-blur rounded-xl;
+        background-color: var(--surface);
+        border: 1px solid var(--border);
+        backdrop-filter: blur(12px);
+        border-radius: 0.75rem;
     }
 
     .btn-primary {
-        @apply inline-flex items-center justify-center px-5 py-2.5 font-medium rounded-lg text-black transition-colors hover:opacity-90;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.625rem 1.25rem;
+        font-weight: 500;
+        border-radius: 0.5rem;
+        color: black;
         background: var(--star);
+        transition: all 0.15s ease-in-out;
+    }
+
+    .btn-primary:hover {
+        opacity: 0.9;
     }
 
     .btn-secondary {
-        @apply inline-flex items-center justify-center px-4 py-2 rounded-lg border border-white/20 transition-colors hover:border-white/30;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
         color: var(--ink);
+        transition: all 0.15s ease-in-out;
+    }
+
+    .btn-secondary:hover {
+        border-color: rgba(255, 255, 255, 0.3);
     }
 
     .section {
-        @apply max-w-[960px] mx-auto px-5;
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 0 1.25rem;
     }
 
     @media (min-width: 768px) {
         .section {
-            @apply px-6;
+            padding: 0 1.5rem;
         }
     }
 
     .kicker {
-        @apply tracking-widest uppercase text-xs;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 0.75rem;
         color: var(--ink-muted);
     }
 
     .h1 {
-        @apply text-4xl font-extrabold;
+        font-size: 2.25rem;
+        font-weight: 800;
         color: var(--ink);
     }
 
     @media (min-width: 768px) {
         .h1 {
-            @apply text-5xl;
+            font-size: 3rem;
         }
     }
 
     .h2 {
-        @apply text-2xl font-bold;
+        font-size: 1.5rem;
+        font-weight: 700;
         color: var(--ink);
     }
 
     @media (min-width: 768px) {
         .h2 {
-            @apply text-3xl;
+            font-size: 1.875rem;
         }
     }
 
     .p {
-        @apply leading-relaxed;
+        line-height: 1.6;
         color: var(--ink-muted);
     }
 }
 
-/* Legacy Card Components */
-.card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 0.5rem;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
-}
-
-/* Legacy Button Styles */
-.btn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.375rem;
-    font-weight: 600;
-    transition: all 0.2s;
-    cursor: pointer;
-    border: none;
-}
-
-/* Legacy Input Styles */
-.input {
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 0.375rem;
-    padding: 0.75rem;
-    color: #ffffff;
-}
-
-.input:focus {
-    outline: none;
-    border-color: #fff89a;
-    box-shadow: 0 0 0 3px rgba(255, 248, 154, 0.1);
-}
-
-/* Legacy Hero Section */
-.hero {
-    padding: 4rem 1rem;
-    text-align: center;
-}
-
-.hero h1 {
-    font-size: 3rem;
-    font-weight: 700;
-    margin-bottom: 1rem;
-    color: #fff89a;
-}
-
-.hero p {
-    font-size: 1.25rem;
-    color: rgba(255, 255, 255, 0.7);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-/* Feature Grid */
-.feature-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    padding: 2rem 0;
-}
-
-/* Navigation */
-nav {
-    backdrop-filter: blur(10px);
-    background: rgba(0, 0, 0, 0.5);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Markdown Content */
-.prose {
-    max-width: 65ch;
-    line-height: 1.8;
-}
-
-.prose h1, .prose h2, .prose h3 {
-    color: #fff89a;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-}
-
-.prose p {
-    margin-bottom: 1rem;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-.prose a {
-    color: #fff89a;
-    text-decoration: underline;
-}
-
-.prose a:hover {
-    color: #ffffff;
-}

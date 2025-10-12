@@ -12,7 +12,7 @@
     <link href="https://fonts.bunny.net/css?family=oswald:200,300,400,500,600,700&display=swap" rel="stylesheet" />
 
     {{-- Styles --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
     @livewireStyles
 </head>
 <body class="font-sans text-[color:var(--ink)] bg-[color:var(--space-900)]">

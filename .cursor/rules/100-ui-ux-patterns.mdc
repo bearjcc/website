@@ -297,6 +297,322 @@ Applied for depth:
 }
 ```
 
+## UI Correctness Criteria
+
+### CRITICAL: Verification Requirements
+
+**After ANY UI change, you MUST verify**:
+
+1. **Visual Verification**: Check http://website.test/ in browser
+2. **Layout Integrity**: Confirm layout matches intended design
+3. **Responsive Behavior**: Test at mobile, tablet, desktop sizes
+4. **No Regressions**: Ensure you didn't break existing functionality
+5. **Accessibility**: Verify contrast, focus indicators, semantic HTML
+
+**DO NOT claim success without completing these checks.**
+
+### Contrast Ratios (WCAG AA Required)
+
+**MANDATORY**: All text must meet WCAG AA contrast requirements.
+
+**Minimum Ratios**:
+- **Normal text** (< 18pt): ≥ 4.5:1 contrast ratio
+- **Large text** (≥ 18pt or 14pt bold): ≥ 3:1 contrast ratio
+- **UI components** (buttons, form inputs): ≥ 3:1 against adjacent colors
+
+**Night Sky Palette Ratios** (pre-approved):
+- Star White (#ffffff) on Night Black (#000000): 21:1 ✅ Exceeds AA
+- Star Yellow (#fff89a) on Night Black (#000000): ~18:1 ✅ Exceeds AA
+- Muted Text (rgba(255, 255, 255, 0.7)) on Night Black: ~14:1 ✅ Exceeds AA
+
+**Custom Colors**:
+If using custom colors, verify contrast ratio using:
+- WebAIM Contrast Checker: https://webaim.org/resources/contrastchecker/
+- Browser DevTools Accessibility panel
+- Command: Must pass WCAG AA minimum
+
+**Common Violations to Avoid**:
+```css
+/* ❌ FAIL: Light gray on white - insufficient contrast */
+color: #cccccc;
+background: #ffffff;
+
+/* ❌ FAIL: Muted yellow on light background */
+color: rgba(255, 248, 154, 0.5);
+background: #f0f0f0;
+
+/* ✅ PASS: Star White on Night Black */
+color: #ffffff;
+background: #000000;
+
+/* ✅ PASS: Star Yellow on Night Black */
+color: #fff89a;
+background: #000000;
+```
+
+### Icon Sizing and Scaling
+
+**CRITICAL**: Icons must scale proportionally with surrounding content.
+
+**Size Guidelines**:
+- **Inline icons**: 1.2em - 1.5em (relative to surrounding text)
+- **Button icons**: 1em - 1.25em
+- **Feature card icons**: 2rem - 3rem (fixed size)
+- **Hero icons**: 3rem - 5rem (fixed size)
+
+**Scaling Rules**:
+```css
+/* ✅ DO: Scale with text */
+.icon-inline {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+}
+
+/* ✅ DO: Fixed size for feature cards */
+.feature-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* ❌ DON'T: Oversized icons that dwarf text */
+.icon-too-large {
+    width: 64px; /* Too large for 16px text */
+    height: 64px;
+}
+
+/* ❌ DON'T: Inconsistent sizing */
+.icon-1 { width: 24px; }
+.icon-2 { width: 18px; }
+.icon-3 { width: 32px; }
+```
+
+**Icon Alignment**:
+- Inline icons: `vertical-align: middle` or `vertical-align: text-bottom`
+- Button icons: Centered with text
+- Card header icons: Aligned with heading baseline
+
+### Max-Width Containers
+
+**CRITICAL**: Content sections must respect max-width constraints to prevent full-screen stretching.
+
+**Standard Max-Widths**:
+```css
+/* Main content wrapper */
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Section containers */
+.section {
+    max-width: 960px;
+    margin: 0 auto;
+}
+
+/* Article/content blocks */
+article {
+    max-width: 800px; /* Optimal reading width */
+    margin: 0 auto;
+}
+
+/* Hero sections can be wider */
+.hero {
+    max-width: 1400px;
+    margin: 0 auto;
+}
+```
+
+**Common Mistakes**:
+```css
+/* ❌ FAIL: No max-width, stretches too wide on large screens */
+.section {
+    width: 100%;
+    padding: 2rem;
+}
+
+/* ✅ PASS: Constrained width with centering */
+.section {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+```
+
+### Hero Section Layout
+
+**CRITICAL**: Hero sections must follow specific layout patterns.
+
+**Two-Column Hero** (desktop, ≥768px):
+```css
+.hero-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.hero-content {
+    text-align: left;
+}
+
+.hero-visual {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .hero-container {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+}
+```
+
+**Single-Column Hero** (mobile, <768px):
+```css
+.hero-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    padding: 3rem 1.5rem;
+}
+```
+
+**Hero Requirements**:
+- Logo/visual must be visible and properly sized
+- Heading must be legible (min 2rem on mobile, 3rem on desktop)
+- CTA button must be prominent and easily tappable (min 44x44px)
+- Background must not obscure text
+- Two-column layout at md+ breakpoint
+- Single-column layout below md breakpoint
+
+### Card Grid Layout
+
+**CRITICAL**: Card grids must align properly and be responsive.
+
+**Grid Pattern**:
+```css
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding: 1.5rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .card-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1025px) {
+    .card-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+```
+
+**Card Alignment**:
+```css
+.card {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Equal height cards */
+}
+
+.card-content {
+    flex: 1; /* Push footer to bottom */
+}
+
+.card-footer {
+    margin-top: auto;
+}
+```
+
+**Requirements**:
+- Cards must have equal heights in grid
+- Minimum card width: 300px
+- Responsive: 1 column (mobile), 2 columns (tablet), 3 columns (desktop)
+- Consistent gap spacing (1.5rem - 2rem)
+- Proper alignment within each card
+
+### Element Alignment
+
+**Text Alignment**:
+```css
+/* Headings: Centered or left-aligned, never right */
+h1, h2, h3 {
+    text-align: center; /* Or left, never right */
+}
+
+/* Body text: Left-aligned for readability */
+p, li {
+    text-align: left;
+}
+
+/* Centered text only for hero sections or short taglines */
+.hero-tagline {
+    text-align: center;
+}
+```
+
+**CTA Button Alignment**:
+```css
+/* Center CTAs in hero sections */
+.hero .cta-button {
+    margin: 2rem auto 0;
+    display: block;
+    width: fit-content;
+}
+
+/* Left-align CTAs in content sections */
+.section .cta-button {
+    margin: 2rem 0 0;
+}
+```
+
+**Visual Alignment**:
+- Logo/images: Centered in hero, flexible in sections
+- Icons: Aligned with text baseline or centered
+- Forms: Left-aligned labels, full-width inputs
+- Navigation: Horizontally distributed or right-aligned
+
+### Post-Change Verification Checklist
+
+**After modifying any UI component, verify**:
+
+- [ ] **Contrast**: All text meets ≥4.5:1 ratio (use DevTools)
+- [ ] **Icons**: Sized proportionally (1.2-1.5em inline, 2-3rem for features)
+- [ ] **Max-width**: Sections constrained (960px-1200px typical)
+- [ ] **Hero layout**: 2-column at md+, 1-column below
+- [ ] **Card grids**: Proper responsive columns (1/2/3)
+- [ ] **Alignment**: Text left/center appropriate, CTAs positioned correctly
+- [ ] **Mobile**: Test at 375px, 768px widths
+- [ ] **Desktop**: Test at 1024px, 1920px widths
+- [ ] **No regressions**: Existing features still work
+- [ ] **Browser test**: Verify at http://website.test/
+
+**If ANY item fails**: Fix it before claiming success.
+
 ## Accessibility
 
 ### WCAG Standards

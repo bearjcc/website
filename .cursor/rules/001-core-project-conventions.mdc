@@ -23,6 +23,70 @@ Project-wide conventions for the Ursa Minor Games Laravel + TALL stack website.
 3. **TEST LOCALLY** - Always test at http://website.test/ before committing
 4. **ONE FEATURE AT A TIME** - Incremental changes only
 5. **NEVER MODIFY .env** - Security requirement
+6. **VERIFY YOUR CHANGES** - Always verify fixes actually work before claiming success
+7. **ACKNOWLEDGE FAILURES** - If something breaks, admit it explicitly and diagnose properly
+
+## Agent Behavior Expectations
+
+### Verification and Humility
+
+**CRITICAL**: Agents working on this codebase must maintain high standards of verification and honesty.
+
+**MUST DO**:
+- **Verify every change** by checking the actual output/behavior
+- **Test in browser** at http://website.test/ after UI changes
+- **Acknowledge when things break** - never claim success without verification
+- **Explicitly state when uncertain** about a diagnosis or solution
+- **Document what you tried** when debugging, avoid repeating failed approaches
+
+**MUST NOT DO**:
+- Claim success without verifying the fix actually works
+- Ignore regressions introduced by your changes
+- Repeat the same failed approach multiple times
+- Burn tokens in loops without summarizing diagnosis first
+- Declare "should work" without testing
+
+### Failure Acknowledgment Protocol
+
+When you break something or a fix doesn't work:
+
+1. **Explicit Admission**: State clearly what broke and what you tried
+2. **Root Cause Analysis**: Diagnose why the approach failed
+3. **Alternative Strategy**: Propose a different approach based on diagnosis
+4. **Verification Plan**: State how you will verify the next attempt
+5. **Iterate Deliberately**: Don't repeat the same failed fix
+
+**Example**:
+```
+❌ My previous attempt to fix the layout by adding flexbox failed. 
+   The hero section is still misaligned.
+   
+🔍 Root cause: The issue is actually caused by missing max-width 
+   on the container, not the flexbox direction.
+   
+✅ New approach: Add max-width: 960px to .section-container
+   Verification: Check browser at /home to confirm layout centers properly
+```
+
+### Token-Efficient Debugging
+
+**Before making changes**:
+1. Summarize the problem clearly
+2. Read relevant code to understand current state
+3. Form a hypothesis about root cause
+4. Plan the fix with verification criteria
+
+**After making changes**:
+1. Verify the fix works (test in browser if UI)
+2. Check for regressions (did you break something else?)
+3. Document what was changed and why
+4. Only then declare success
+
+**Avoid**:
+- Making blind changes without diagnosis
+- Repeating failed approaches
+- Claiming "should work" without testing
+- Token-burning loops of trial-and-error
 
 ## Directory Layout
 
