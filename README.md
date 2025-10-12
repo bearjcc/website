@@ -1,61 +1,139 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Ursa Minor Games
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel-based website for **Ursa Minor Games**, featuring browser-based games, F1 predictions, and more.
 
-## About Laravel
+## About
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Ursa Minor is a gaming brand focused on:
+- **Browser Games**: Free-to-play classic games (sudoku, chess, etc.)
+- **F1 Predictions**: Community-driven F1 race predictions and leaderboards
+- **Board Games**: Digital versions of custom board game designs
+- **Video Game Development**: Future ambitious video game projects
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+This repository contains the main homepage and will serve as the hub for all Ursa Minor gaming experiences.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Current Features
 
-## Learning Laravel
+- ✨ Animated starfield background
+- 🐻 Ursa Minor branding with animated header
+- 📱 Responsive design
+- 🚀 Fast, simple, and elegant
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech Stack
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- **Framework**: Laravel 12.x
+- **PHP**: 8.3+
+- **Hosting**: Railway
+- **Frontend**: HTML, CSS, JavaScript (vanilla)
+- **Future**: TALL Stack (Tailwind, Alpine.js, Laravel, Livewire)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Development
 
-## Laravel Sponsors
+### Prerequisites
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- PHP 8.3 or higher
+- Composer
+- Git
 
-### Premium Partners
+### Local Setup
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```powershell
+# Clone the repository
+git clone https://github.com/bearjcc/website.git
+cd website
+
+# Install dependencies
+composer install
+
+# Set up environment
+Copy-Item -Path ".env.example" -Destination ".env"
+php artisan key:generate
+
+# Run local development server
+php artisan serve
+```
+
+Visit http://localhost:8000 to view the site.
+
+### Project Structure
+
+```
+website/
+├── app/                 # Application logic
+├── public/             # Static assets (CSS, JS, SVGs)
+│   ├── bear.svg       # Ursa Minor logo
+│   ├── GRADIENT BG.svg
+│   ├── style.css      # Main styles
+│   ├── script.js      # Starfield animation
+│   └── scroll.js      # Header scroll behavior
+├── resources/
+│   └── views/
+│       └── welcome.blade.php  # Homepage
+├── routes/
+│   └── web.php        # Application routes
+└── nixpacks.toml      # Railway deployment config
+```
+
+## Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed Railway deployment instructions.
+
+Quick deploy:
+1. Push to `main` branch
+2. Railway auto-deploys via webhook
+3. Site goes live automatically
+
+## Roadmap
+
+### Phase 1: Homepage (Current)
+- ✅ Basic Laravel setup
+- ✅ Static homepage with animations
+- ✅ Railway deployment
+
+### Phase 2: Browser Games
+- [ ] Sudoku game
+- [ ] Chess game
+- [ ] Game lobby/navigation
+
+### Phase 3: F1 Predictions
+- [ ] User authentication
+- [ ] Race predictions system
+- [ ] Leaderboards
+- [ ] Points calculation
+
+### Phase 4: Board Games
+- [ ] Digital board game platform
+- [ ] Rules engine
+- [ ] Multiplayer support
+
+### Phase 5: Video Game Content
+- [ ] World-building wiki
+- [ ] Lore documentation
+- [ ] Asset gallery
+- [ ] Development blog
 
 ## Contributing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+This is a personal project, but suggestions and feedback are welcome!
 
-## Code of Conduct
+## Development Workflow
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Main Branch**: Production-ready code (auto-deploys to Railway)
+- **Feature Branches**: New features and experiments
+- **Commit Convention**: [Conventional Commits](https://www.conventionalcommits.org/)
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Example:
+```powershell
+git checkout -b feature/sudoku-game
+# ... make changes ...
+git commit -m "feat(games): add sudoku game implementation"
+git push origin feature/sudoku-game
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+All rights reserved. This is proprietary software for Ursa Minor Games.
+
+---
+
+**Built with Laravel** | **Deployed on Railway** | **© Ursa Minor Games**
