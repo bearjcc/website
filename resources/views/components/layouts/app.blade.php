@@ -16,23 +16,28 @@
     @livewireStyles
 </head>
 <body class="font-sans text-[color:var(--ink)] bg-[color:var(--space-900)]">
-    {{-- Sticky top navigation --}}
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-[color:var(--space-900)]/80 border-b border-[color:var(--border)]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <x-ui.nav-logo />
-                @include('partials.nav')
+    {{-- Starfield canvas will be inserted here by starfield.js --}}
+
+    {{-- Main content wrapper with stacking context above starfield --}}
+    <div id="um-app" class="relative z-10">
+        {{-- Sticky top navigation --}}
+        <header class="sticky top-0 z-50 backdrop-blur-md bg-[color:var(--space-900)]/80 border-b border-[color:var(--border)]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <x-ui.nav-logo />
+                    @include('partials.nav')
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    {{-- Main content area --}}
-    <main class="flex-1">
-        {{ $slot }}
-    </main>
+        {{-- Main content area --}}
+        <main class="flex-1">
+            {{ $slot }}
+        </main>
 
-    {{-- Footer --}}
-    @include('partials.footer')
+        {{-- Footer --}}
+        @include('partials.footer')
+    </div>
 
     @livewireScripts
 </body>

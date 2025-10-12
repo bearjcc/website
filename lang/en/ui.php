@@ -26,7 +26,9 @@ return [
     'coming_soon_placeholder_sub' => 'New games are in the works.',
 
     // Footer
-    'footer_note' => 'Building games under the Southern Cross.',
+    'footer_note_primary' => 'The sky is the limit.',
+    'footer_note_alt1' => 'Little Bear. Big craft.',
+    'footer_note_alt2' => 'Charting small constellations.',
 
     // Navigation
     'nav_games' => 'Games',

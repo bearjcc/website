@@ -1,12 +1,18 @@
-{{-- Simple footer with poetic tagline --}}
-<footer class="mt-12 md:mt-16 py-6 md:py-8 border-t border-[color:var(--border)]">
-    <div class="section text-center">
-        <p class="text-sm text-[color:var(--ink-muted)]">
-            {{ __('ui.footer_note') }}
-        </p>
-        <p class="text-xs text-[color:var(--ink-muted)] mt-2">
-            &copy; {{ date('Y') }} Ursa Minor Games
-        </p>
+{{-- Horizon footer with elegant gradient line --}}
+<footer class="mt-12 md:mt-16 py-8 md:py-10">
+    <div class="section">
+        {{-- Horizon line --}}
+        <div class="h-[1px] bg-gradient-to-r from-white/0 via-white/20 to-white/0 mb-6" aria-hidden="true"></div>
+        
+        {{-- Footer content --}}
+        <div class="text-center space-y-2">
+            <p class="text-sm text-white/70">
+                {{ __('ui.footer_note_primary') }}
+            </p>
+            <p class="text-xs text-white/50">
+                &copy; {{ date('Y') }} Ursa Minor Games
+            </p>
+        </div>
     </div>
 </footer>
 

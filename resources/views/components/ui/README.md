@@ -162,8 +162,8 @@ Simple navigation links for the main nav.
 - Contact
 
 ### Footer Partial (`partials/footer.blade.php`)
-Minimalist footer with poetic tagline:
-> "Building games under the Southern Cross."
+Elegant horizon footer with subtle gradient line and poetic tagline:
+> "The sky is the limit."
 
 ---
 
