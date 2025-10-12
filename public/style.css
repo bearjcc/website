@@ -3,9 +3,9 @@
 
 :root {
     /* Layout */
-    --header-height: 25vh;
+    --header-height: 35vh;
     --nav-spacing: 6rem;
-    --header-min-height: 80px;
+    --header-min-height: 100px;
     
     /* Night Sky Color Palette */
     --color-night-black: #000000;
@@ -31,6 +31,13 @@
 }
 
 /* ===== Reset & Base Styles ===== */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -43,10 +50,12 @@
 /* ===== Scrollbar Styles ===== */
 body {
     min-height: 100vh;
-    background: linear-gradient(to bottom, #000000 0%, #001a33 50%, #002d58 100%);
+    background: #000000;
+    background-image: linear-gradient(180deg, #000000 0%, #001a33 30%, #002d58 100%);
     background-attachment: fixed;
-    background-size: 100% 100%;
+    background-size: 100% 100vh;
     background-repeat: no-repeat;
+    background-position: top;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -73,8 +82,9 @@ header {
     top: 0;
     z-index: 1000;
     background: transparent;
-    padding: 2rem 0;
-    transition: height var(--transition-duration) var(--transition-timing), flex-direction var(--transition-duration) var(--transition-timing), padding var(--transition-duration) var(--transition-timing);
+    padding: 3rem 0;
+    margin-top: 2rem;
+    transition: height var(--transition-duration) var(--transition-timing), flex-direction var(--transition-duration) var(--transition-timing), padding var(--transition-duration) var(--transition-timing), margin-top var(--transition-duration) var(--transition-timing);
 }
 
 html:not([data-scroll="0"]) header {
@@ -82,6 +92,7 @@ html:not([data-scroll="0"]) header {
     align-items: center;
     height: var(--header-min-height);
     padding: 0.5rem 0;
+    margin-top: 0;
 }
 
 .header-nav {
