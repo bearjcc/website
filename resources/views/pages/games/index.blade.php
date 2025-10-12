@@ -50,19 +50,20 @@
                     <span class="play-button">Play Now →</span>
                 </a>
 
+                <!-- Minesweeper -->
+                <a href="{{ route('games.minesweeper') }}" class="game-card">
+                    <div class="game-icon">💣</div>
+                    <h3>Minesweeper</h3>
+                    <p>Classic mine-finding puzzle. Left-click to reveal, right-click to flag. Three difficulty levels!</p>
+                    <span class="play-button">Play Now →</span>
+                </a>
+
                 <!-- Coming Soon Games -->
 
                 <div class="game-card coming-soon-card">
                     <div class="game-icon">♟️</div>
                     <h3>Chess</h3>
                     <p>The classic strategy game. Play against friends or challenge the AI.</p>
-                    <span class="coming-soon-badge">Coming Soon</span>
-                </div>
-
-                <div class="game-card coming-soon-card">
-                    <div class="game-icon">💣</div>
-                    <h3>Minesweeper</h3>
-                    <p>Clear the board without hitting mines. Test your logic and deduction skills.</p>
                     <span class="coming-soon-badge">Coming Soon</span>
                 </div>
 

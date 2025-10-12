@@ -31,4 +31,8 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/2048', function () {
         return view('pages.games.2048');
     })->name('2048');
+    
+    Route::get('/minesweeper', function () {
+        return view('pages.games.minesweeper');
+    })->name('minesweeper');
 });
