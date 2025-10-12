@@ -27,4 +27,9 @@ return [
     'nav_blog' => 'Blog',
     'nav_about' => 'About',
     'nav_contact' => 'Contact',
+    'nav_dashboard' => 'Dashboard',
+    'nav_login' => 'Login',
+
+    // Accessibility
+    'skip_to_content' => 'Skip to content',
 ];

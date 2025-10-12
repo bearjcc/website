@@ -9,9 +9,13 @@ namespace App\Games\Connect4;
 class Connect4Engine
 {
     public const ROWS = 6;
+
     public const COLS = 7;
+
     public const EMPTY = null;
+
     public const RED = 'red';
+
     public const YELLOW = 'yellow';
 
     /**
@@ -31,7 +35,7 @@ class Connect4Engine
             'gameTime' => 0,
             'mode' => 'pass_and_play', // pass_and_play, vs_ai
             'difficulty' => 'medium',
-            'score' => [self::RED => 0, self::YELLOW => 0]
+            'score' => [self::RED => 0, self::YELLOW => 0],
         ];
     }
 
@@ -40,7 +44,7 @@ class Connect4Engine
      */
     public static function dropPiece(array $state, int $column): array
     {
-        if ($state['gameOver'] || !self::isValidColumn($column) || !self::canDropInColumn($state, $column)) {
+        if ($state['gameOver'] || ! self::isValidColumn($column) || ! self::canDropInColumn($state, $column)) {
             return $state;
         }
 
@@ -51,7 +55,7 @@ class Connect4Engine
         }
 
         $player = $state['currentPlayer'];
-        
+
         // Place the piece
         $state['board'][$row][$column] = $player;
         $state['moves']++;
@@ -105,6 +109,7 @@ class Connect4Engine
                 return $row;
             }
         }
+
         return -1; // Column is full
     }
 
@@ -118,6 +123,7 @@ class Connect4Engine
                 return false;
             }
         }
+
         return true;
     }
 
@@ -130,7 +136,7 @@ class Connect4Engine
             [0, 1],   // Horizontal
             [1, 0],   // Vertical
             [1, 1],   // Diagonal /
-            [1, -1]   // Diagonal \
+            [1, -1],   // Diagonal \
         ];
 
         foreach ($directions as $direction) {
@@ -190,6 +196,7 @@ class Connect4Engine
                 $validMoves[] = $col;
             }
         }
+
         return $validMoves;
     }
 
@@ -199,14 +206,14 @@ class Connect4Engine
     public static function getScore(array $state): array
     {
         $scores = $state['score'];
-        
+
         // Add bonuses for quick wins
         if ($state['gameOver'] && $state['winner'] !== 'draw') {
             $winner = $state['winner'];
             $moveBonus = max(0, 42 - $state['moves']) * 10; // Faster wins get more points
             $scores[$winner] += $moveBonus;
         }
-        
+
         return $scores;
     }
 
@@ -223,8 +230,7 @@ class Connect4Engine
             'difficulty' => $state['difficulty'],
             'score' => self::getScore($state),
             'piecesPlayed' => $state['moves'],
-            'boardFull' => self::isBoardFull($state)
+            'boardFull' => self::isBoardFull($state),
         ];
     }
 }
-

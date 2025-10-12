@@ -38,11 +38,10 @@ class SudokuGame implements GameInterface
 
     public function applyMove(array $state, array $move): array
     {
-        if (!SudokuEngine::validateMove($state, $move)) {
+        if (! SudokuEngine::validateMove($state, $move)) {
             return $state;
         }
 
         return SudokuEngine::applyMove($state, $move);
     }
 }
-

@@ -1,0 +1,632 @@
+---
+description: "UI/UX patterns, design system, and frontend standards for Ursa Minor Games"
+globs: "resources/views/**/*,resources/js/**/*,app/View/Components/**/*,public/**/*.{js,css}"
+---
+
+# UI/UX Patterns and Frontend Standards
+
+Design system and frontend development standards for Ursa Minor Games.
+
+## Critical Rules
+
+1. **NO EMOJI** in production code - Absolutely forbidden
+2. **NO PURPLE GRADIENTS** - Avoid AI-typical color schemes
+3. **NO INLINE STYLES** - Use CSS classes
+4. **NO INLINE JAVASCRIPT** - Use external scripts
+5. **BLADE COMPONENTS** for interactive UI, not inline logic
+6. **WCAG AA MINIMUM** for accessibility
+
+## Night Sky Design System
+
+### Theme
+
+**Inspiration**: Simple elegance of the night sky
+
+**Core Elements**:
+- Stars and constellations
+- Moon and celestial bodies
+- Deep space aesthetic
+- Clean, minimalist approach
+- Transition from deep night to late evening
+
+### Color Palette
+
+#### Primary Colors
+
+| Color Name | Hex Code | RGB | Usage |
+|------------|----------|-----|-------|
+| Night Black | `#000000` | rgb(0, 0, 0) | Deep space, primary background |
+| Midnight Blue | `#001a33` | rgb(0, 26, 51) | Mid-gradient, depth |
+| Evening Blue | `#002d58` | rgb(0, 45, 88) | Late dusk, lighter sections |
+| Star White | `#ffffff` | rgb(255, 255, 255) | Text, stars, highlights |
+| Star Yellow | `#fff89a` | rgb(255, 248, 154) | Accents, highlights, CTAs |
+
+#### Secondary Colors (Opacity Variations)
+
+| Purpose | Value | Usage |
+|---------|-------|-------|
+| Dark Overlay | `rgba(0, 0, 0, 0.3)` | Content cards, sections |
+| Light Overlay | `rgba(255, 255, 255, 0.05)` | Feature cards, subtle backgrounds |
+| Muted Text | `rgba(255, 255, 255, 0.7)` | Secondary text, disclaimers |
+| Subtle Accent | `rgba(255, 248, 154, 0.3)` | Borders, dividers |
+
+#### Forbidden Colors
+
+❌ **NEVER USE**:
+- Any shade of purple
+- Hot pink
+- Lime green
+- Neon colors
+- AI-typical gradient combinations
+
+### Gradients
+
+**Night Sky Gradient** (primary background):
+```css
+background: linear-gradient(to bottom, #000000, #001a33, #002d58);
+```
+
+**Variants**:
+```css
+/* Shorter gradient */
+background: linear-gradient(to bottom, #000000, #002d58);
+
+/* Radial variant */
+background: radial-gradient(ellipse at top, #001a33, #000000);
+```
+
+❌ **FORBIDDEN**:
+```css
+/* NO purple gradients */
+background: linear-gradient(purple, pink);
+
+/* NO AI-typical schemes */
+background: linear-gradient(#9333ea, #ec4899);
+```
+
+## Typography
+
+### Font Family
+
+**Primary Font**: Oswald (Google Fonts)
+
+```html
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+```
+
+```css
+font-family: 'Oswald', sans-serif;
+```
+
+### Type Hierarchy
+
+| Element | Size | Weight | Color | Line Height |
+|---------|------|--------|-------|-------------|
+| H1 | 3rem (48px) | 700 | Star White | 1.2 |
+| H2 | 2.5rem (40px) | 600 | Star Yellow | 1.3 |
+| H3 | 1.8rem (28.8px) | 500 | Star White | 1.4 |
+| Tagline | 1.5rem (24px) | 400 italic | Star Yellow | 1.5 |
+| Body | 1.1rem (17.6px) | 400 | Star White | 1.8 |
+| Small | 0.95rem (15.2px) | 400 | Muted Text | 1.6 |
+
+### Typography Guidelines
+
+**DO**:
+- Maintain clear visual hierarchy
+- Use generous line-height (1.8) for body text
+- Apply italic style for taglines and emphasis
+- Center-align headings for balanced look
+- Use heavier weights for important CTAs
+- Ensure proper contrast for readability
+
+**DON'T**:
+- Use more than 3 heading levels per page
+- Set body text below 1rem
+- Use ultra-light weights (200) for critical text
+- Create long lines of text (max-width: 800px)
+
+## Reusable Components
+
+### Layout Component
+
+```blade
+{{-- resources/views/components/layout.blade.php --}}
+<!DOCTYPE html>
+<html lang="en" data-scroll="0">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ $title ?? 'Ursa Minor Games' }}</title>
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{ $head ?? '' }}
+</head>
+<body>
+    <div id="stars">
+        <div class="circle blink" id="circle-animate"></div>
+        <div class="circle" id="circle"></div>
+    </div>
+    
+    <x-header />
+    
+    <main>
+        {{ $slot }}
+    </main>
+    
+    <x-footer />
+    
+    <script src="{{ asset('script.js') }}"></script>
+    <script src="{{ asset('scroll.js') }}"></script>
+</body>
+</html>
+```
+
+### Card Component
+
+**Feature Card**:
+```css
+.feature {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 4px solid #fff89a;
+    border-radius: 10px;
+    padding: 2rem;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature:hover {
+    transform: translateX(10px);
+    box-shadow: 0 5px 20px rgba(255, 248, 154, 0.2);
+}
+```
+
+**Section Container**:
+```css
+.section-container {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    padding: 3rem 2rem;
+}
+```
+
+### Button Styles
+
+**Primary Button** (future implementation):
+```css
+.btn-primary {
+    background: #fff89a;
+    color: #000000;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(255, 248, 154, 0.4);
+}
+```
+
+**Link Style**:
+```css
+a {
+    color: #ffffff;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #fff89a;
+}
+```
+
+### Navigation Patterns
+
+**Header Navigation**:
+- Sticky positioning
+- Smooth transitions (1s ease)
+- Collapses on scroll from 20vh to 64px
+- Links: White text, yellow on hover
+
+**Implementation**:
+```css
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    transition: all 1s ease;
+}
+
+header.scrolled {
+    height: 64px;
+}
+```
+
+## Animation and Effects
+
+### Starfield Effect
+
+**Location**: `public/script.js`
+
+**Specification**:
+- Randomly positioned circles (1-3px diameter)
+- 60% of stars blink with random timing
+- White base color, yellow blink color
+- Density: ~1 star per 10,000 pixels
+- Animation duration: 1-4 seconds
+- Random delays for natural feel
+
+**Guidelines**:
+- Keep animations subtle
+- Don't animate too many stars (performance)
+- Use CSS animations, not JavaScript loops
+- Respect `prefers-reduced-motion`
+
+### Scroll Animations
+
+**Header Collapse**:
+- Transition duration: 1s ease
+- Elements scale and reposition smoothly
+- Flexbox layout shifts
+
+**Hover Effects**:
+- Transform: translateX(10px) on feature cards
+- Box shadow: subtle yellow glow
+- Duration: 0.3s ease
+- Never use bounce or elastic easing
+
+### Backdrop Blur
+
+Applied for depth:
+- Feature cards: `blur(5px)`
+- Section containers: `blur(10px)`
+- Footer: `blur(10px)`
+
+**Browser Support**:
+```css
+/* Include fallback */
+.feature {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px); /* Safari */
+}
+```
+
+## Accessibility
+
+### WCAG Standards
+
+**Minimum**: WCAG 2.1 Level AA
+**Target**: AAA where feasible
+
+### Color Contrast
+
+**Actual Ratios**:
+- Star White (#ffffff) on Night Black (#000000): 21:1 ✅ AAA
+- Star Yellow (#fff89a) on Night Black: ~18:1 ✅ AAA
+- Muted Text on backgrounds: Minimum 4.5:1 ✅ AA
+
+**Requirements**:
+- Normal text: 4.5:1 minimum (AA)
+- Large text: 3:1 minimum (AA)
+- UI components: 3:1 minimum (AA)
+
+### Semantic HTML
+
+**DO**:
+```html
+<header>
+  <nav>
+    <a href="/">Home</a>
+  </nav>
+</header>
+<main>
+  <article>
+    <h1>Page Title</h1>
+    <section>
+      <h2>Section Title</h2>
+    </section>
+  </article>
+</main>
+<footer>
+  <p>&copy; 2025 Ursa Minor Games</p>
+</footer>
+```
+
+**DON'T**:
+```html
+<div class="header">
+  <div class="nav">
+    <span onclick="navigate()">Home</span>
+  </div>
+</div>
+```
+
+### Keyboard Navigation
+
+**Requirements**:
+- All interactive elements focusable
+- Logical tab order
+- Visible focus indicators
+- Keyboard shortcuts (optional but nice)
+- Skip to content link (for longer pages)
+
+**Focus Styles**:
+```css
+a:focus,
+button:focus {
+    outline: 2px solid #fff89a;
+    outline-offset: 2px;
+}
+```
+
+### Screen Reader Support
+
+**ARIA Labels**:
+```html
+<button aria-label="Open navigation menu">
+  <span aria-hidden="true">☰</span>
+</button>
+
+<nav aria-label="Main navigation">
+  <!-- nav items -->
+</nav>
+```
+
+**Alt Text**:
+```html
+<img src="bear.svg" alt="Ursa Minor Games logo - constellation bear">
+```
+
+### Motion Sensitivity
+
+**Respect User Preferences**:
+```css
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .blink {
+        animation: none !important;
+    }
+}
+```
+
+## Responsive Design
+
+### Breakpoints
+
+| Size | Width | Target Devices |
+|------|-------|----------------|
+| Mobile | < 768px | Phones |
+| Tablet | 768px - 1024px | Tablets, small laptops |
+| Desktop | > 1024px | Desktops, large laptops |
+
+### Mobile Considerations
+
+**DO**:
+- Header scales appropriately (min-height: 64px)
+- Touch targets minimum 44x44px
+- Readable text without zoom (16px minimum)
+- Single column layouts
+- Larger interactive elements
+- Simplified navigation patterns
+
+**Example**:
+```css
+@media (max-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .feature {
+        padding: 1.5rem;
+    }
+    
+    header .logo {
+        height: 3rem;
+    }
+}
+```
+
+### Desktop Optimization
+
+**Max Content Width**:
+```css
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+```
+
+## Icon Usage
+
+### Allowed Icon Sets
+
+✅ **Approved**:
+- **Heroicons** (recommended): https://heroicons.com
+- **Feather Icons**: Simple, clean line icons
+- **Lucide**: Modern, consistent icon set
+- Custom celestial icons (stars, moon, etc.)
+
+### Icon Guidelines
+
+**DO**:
+- Use outline style for most icons
+- Match icon weight to surrounding text
+- Size icons proportionally (1.2-1.5em for inline)
+- Keep icon sets consistent across the site
+
+**DON'T**:
+- Use emoji as icons (absolutely forbidden)
+- Mix icon styles randomly
+- Use overly complex or detailed icons
+- Add icons to every heading
+
+**Example**:
+```html
+<!-- Using Heroicons -->
+<svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+</svg>
+```
+
+## Blade Component Standards
+
+### Interactive UI
+
+**Use Blade Components**, not inline logic:
+
+❌ **DON'T**:
+```blade
+<div>
+    @if($game->status === 'published' && $game->published_at->isPast())
+        <p>Game is live</p>
+        @foreach($game->scores as $score)
+            <div>{{ $score->value }}</div>
+        @endforeach
+    @endif
+</div>
+```
+
+✅ **DO**:
+```blade
+<x-game-status :game="$game" />
+<x-score-list :scores="$game->scores" />
+```
+
+### Component Props
+
+```blade
+{{-- components/game-card.blade.php --}}
+@props(['game', 'showDescription' => true])
+
+<div class="feature">
+    <h3>{{ $game->name }}</h3>
+    @if($showDescription)
+        <p>{{ $game->description }}</p>
+    @endif
+</div>
+```
+
+### Slots
+
+```blade
+{{-- components/card.blade.php --}}
+<div class="feature">
+    <div class="card-header">
+        {{ $header }}
+    </div>
+    <div class="card-body">
+        {{ $slot }}
+    </div>
+    @isset($footer)
+        <div class="card-footer">
+            {{ $footer }}
+        </div>
+    @endisset
+</div>
+```
+
+## Performance
+
+### Asset Optimization
+
+**DO**:
+- Minimize CSS/JS
+- Optimize images
+- Use Vite for bundling
+- Lazy load non-critical resources
+- Cache static assets
+
+**Prefer CSS over Images**:
+```css
+/* Use gradients instead of image backgrounds */
+background: linear-gradient(to bottom, #000000, #002d58);
+
+/* Use CSS shapes instead of images */
+.star {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: white;
+}
+```
+
+### Heavy Images
+
+❌ **Avoid on homepage**:
+- Large background images
+- Unoptimized photos
+- Multiple high-res images
+
+✅ **Prefer**:
+- CSS gradients
+- SVG graphics
+- Optimized, compressed images
+- Lazy loading for below-fold images
+
+## Examples
+
+### Good Design Pattern
+
+```blade
+<x-layout>
+    <section class="section-container">
+        <article>
+            <h2>Browser Games</h2>
+            <p>Classic games reimagined for the web.</p>
+            
+            <div class="features-grid">
+                @foreach($games as $game)
+                    <x-game-card :game="$game" />
+                @endforeach
+            </div>
+        </article>
+    </section>
+</x-layout>
+```
+
+### Anti-Patterns
+
+❌ **Don't use emoji**:
+```html
+<h3>🎮 Games</h3>
+```
+
+❌ **Don't use inline styles**:
+```html
+<div style="background: purple;">
+```
+
+❌ **Don't use inline JavaScript**:
+```html
+<button onclick="alert('clicked')">Click</button>
+```
+
+❌ **Don't use purple**:
+```css
+background: linear-gradient(purple, pink);
+```
+
+## Questions?
+
+When building UI:
+- Check this guide for design system rules
+- Use Blade components for reusability
+- Test accessibility with keyboard navigation
+- Verify responsive design at different sizes
+- Always test locally before committing

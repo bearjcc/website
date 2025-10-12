@@ -62,8 +62,8 @@ class Connect4Game implements GameInterface
         }
 
         $column = $move['column'] ?? null;
-        
-        if ($column === null || !is_int($column)) {
+
+        if ($column === null || ! is_int($column)) {
             return $state;
         }
 
@@ -77,8 +77,8 @@ class Connect4Game implements GameInterface
         }
 
         $column = $move['column'] ?? null;
-        
-        if ($column === null || !is_int($column)) {
+
+        if ($column === null || ! is_int($column)) {
             return false;
         }
 
@@ -88,9 +88,8 @@ class Connect4Game implements GameInterface
     public function getScore(array $state): int
     {
         $scores = Connect4Engine::getScore($state);
-        
+
         // Return total score (could be adapted for single player scoring)
         return $scores[Connect4Engine::RED] + $scores[Connect4Engine::YELLOW];
     }
 }
-

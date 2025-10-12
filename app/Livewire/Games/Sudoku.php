@@ -3,27 +3,42 @@
 namespace App\Livewire\Games;
 
 use App\Games\Sudoku\SudokuEngine;
-use App\Games\Sudoku\SudokuGame;
 use Livewire\Component;
 
 class Sudoku extends Component
 {
     public array $board = [];
+
     public array $originalPuzzle = [];
+
     public array $solution = [];
+
     public array $notes = [];
+
     public ?array $selectedCell = null;
+
     public string $difficulty = 'medium';
+
     public int $hintsUsed = 0;
+
     public int $maxHints = 3;
+
     public int $mistakes = 0;
+
     public int $maxMistakes = 3;
+
     public int $gameTime = 0;
+
     public bool $gameComplete = false;
+
     public array $conflicts = [];
+
     public bool $notesMode = false;
+
     public bool $gameStarted = false;
+
     public bool $showDifficultySelector = true;
+
     public ?array $lastHint = null;
 
     public function mount()
@@ -36,7 +51,7 @@ class Sudoku extends Component
         if ($difficulty) {
             $this->difficulty = $difficulty;
         }
-        
+
         $state = SudokuEngine::newGame($this->difficulty);
         $this->syncFromState($state);
         $this->showDifficultySelector = false;
@@ -57,26 +72,26 @@ class Sudoku extends Component
 
     public function placeNumber(int $number)
     {
-        if (!$this->selectedCell) {
+        if (! $this->selectedCell) {
             return;
         }
 
         [$row, $col] = $this->selectedCell;
-        
+
         // Don't allow changes to original puzzle cells
         if ($this->originalPuzzle[$row][$col] !== 0) {
             return;
         }
 
         $state = $this->getCurrentState();
-        
+
         if ($this->notesMode) {
             // Toggle note
             $state = SudokuEngine::applyMove($state, [
                 'action' => 'toggle_note',
                 'row' => $row,
                 'col' => $col,
-                'number' => $number
+                'number' => $number,
             ]);
         } else {
             // Place number or clear if same number
@@ -85,56 +100,56 @@ class Sudoku extends Component
                 'action' => 'place_number',
                 'row' => $row,
                 'col' => $col,
-                'number' => $numberToPlace
+                'number' => $numberToPlace,
             ]);
         }
-        
+
         $this->syncFromState($state);
     }
 
     public function clearCell()
     {
-        if (!$this->selectedCell) {
+        if (! $this->selectedCell) {
             return;
         }
 
         [$row, $col] = $this->selectedCell;
-        
+
         if ($this->originalPuzzle[$row][$col] !== 0) {
             return;
         }
 
         $state = $this->getCurrentState();
         $state = SudokuEngine::applyMove($state, [
-            'action' => 'clear_cell'
+            'action' => 'clear_cell',
         ]);
-        
+
         $this->syncFromState($state);
     }
 
     public function toggleNotesMode()
     {
-        $this->notesMode = !$this->notesMode;
+        $this->notesMode = ! $this->notesMode;
     }
 
     public function useHint()
     {
-        if (!SudokuEngine::canUseHint($this->getCurrentState())) {
+        if (! SudokuEngine::canUseHint($this->getCurrentState())) {
             return;
         }
 
         $hint = SudokuEngine::generateHint($this->getCurrentState());
-        
-        if (!$hint) {
+
+        if (! $hint) {
             return;
         }
 
         $this->lastHint = [$hint['row'], $hint['col']];
-        
+
         $state = $this->getCurrentState();
         $state = SudokuEngine::useHint($state);
         $this->syncFromState($state);
-        
+
         // Clear hint highlight after 2 seconds
         $this->dispatch('hint-used');
     }
@@ -163,7 +178,7 @@ class Sudoku extends Component
             'gameComplete' => $this->gameComplete,
             'conflicts' => $this->conflicts,
             'notesMode' => $this->notesMode,
-            'gameStarted' => $this->gameStarted
+            'gameStarted' => $this->gameStarted,
         ];
     }
 
@@ -193,6 +208,7 @@ class Sudoku extends Component
                 return true;
             }
         }
+
         return false;
     }
 

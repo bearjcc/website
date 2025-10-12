@@ -1,8 +1,37 @@
 <div>
     {{-- Skip to content for accessibility --}}
     <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 btn-primary">
-        Skip to content
+        {{ __('ui.skip_to_content') }}
     </a>
+
+    {{-- Navigation --}}
+    <nav class="sticky top-0 z-50 glass border-b border-white/10">
+        <div class="section py-4 flex justify-between items-center">
+            <a href="{{ route('home') }}" class="text-2xl font-bold text-[color:var(--star)]">
+                Ursa Minor
+            </a>
+            
+            <div class="flex gap-6 items-center">
+                <a href="{{ route('games.index') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_games') }}</a>
+                <a href="{{ route('blog.index') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_blog') }}</a>
+                <a href="{{ route('about') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_about') }}</a>
+                
+                @auth
+                    @can('access-lore')
+                        <a href="{{ route('lore.index') }}" class="hover:text-[color:var(--star)] transition">Lore</a>
+                    @endcan
+                    
+                    @can('admin')
+                        <a href="{{ route('admin.features') }}" class="hover:text-[color:var(--star)] transition">Admin</a>
+                    @endcan
+                    
+                    <livewire:auth.logout />
+                @else
+                    <a href="{{ route('login') }}" class="hover:text-[color:var(--star)] transition">{{ __('ui.nav_login') }}</a>
+                @endauth
+            </div>
+        </div>
+    </nav>
 
     {{-- Hero Section --}}
     <section class="section pt-10 md:pt-16" id="main-content">
@@ -10,7 +39,7 @@
             <div class="space-y-4">
                 <x-ui.logo-lockup />
 
-                <p class="kicker">{{ __('ui.tagline') }}</p>
+                <p class="kicker">URSA MINOR</p>
                 <h1 class="h1">{{ __('ui.tagline') }}</h1>
                 <p class="p max-w-prose">
                     {{ __('ui.hero_body') }}

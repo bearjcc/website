@@ -1,0 +1,154 @@
+---
+description: "Enforce that all .mdc rule files must live under .cursor/rules/"
+alwaysApply: true
+---
+
+# Cursor Rule File Location Enforcement
+
+This rule ensures all Cursor rule files (`.mdc`) are properly located in the designated directory.
+
+## Critical Rule
+
+**ALL `.mdc` files MUST live under `.cursor/rules/` or its subdirectories.**
+
+## Valid Locations
+
+✅ **Allowed**:
+```
+.cursor/rules/rules.mdc
+.cursor/rules/cursor-rules-location.mdc
+.cursor/rules/001-core-project-conventions.mdc
+.cursor/rules/100-ui-ux-patterns.mdc
+.cursor/rules/subdirectory/custom-rule.mdc
+```
+
+❌ **Not Allowed**:
+```
+.cursorrules (deprecated)
+rules.mdc (wrong location)
+docs/rules.mdc (wrong location)
+.cursor/custom-rule.mdc (missing /rules/ directory)
+src/.cursor/rules/rule.mdc (wrong .cursor location)
+```
+
+## Directory Structure
+
+The canonical location for Cursor rules is:
+
+```
+project-root/
+├── .cursor/
+│   └── rules/
+│       ├── rules.mdc
+│       ├── cursor-rules-location.mdc
+│       ├── 001-*.mdc
+│       ├── 100-*.mdc
+│       ├── 200-*.mdc
+│       ├── 300-*.mdc
+│       └── ... (additional rules)
+├── .cursorrules (DEPRECATED - do not use)
+└── ... (other project files)
+```
+
+## Deprecated Files
+
+### .cursorrules (Root Level)
+
+The file `.cursorrules` at the project root is **DEPRECATED**.
+
+- **Status**: Legacy, do not modify
+- **Replacement**: Structured `.mdc` files in `.cursor/rules/`
+- **Migration**: Content has been split into organized `.mdc` files
+- **Action**: This file can be removed after migration is complete
+
+## Enforcement
+
+When creating or modifying rule files:
+
+1. **Check Location**: Verify the file is in `.cursor/rules/`
+2. **Reject Invalid Locations**: Do not create `.mdc` files elsewhere
+3. **Warn on Violations**: Alert if `.mdc` files appear outside `.cursor/rules/`
+4. **Suggest Correction**: Provide the correct path
+
+## Why This Matters
+
+### Organization
+- Centralized rule management
+- Clear separation from code
+- Easy to find and maintain
+- Consistent with Cursor conventions
+
+### Tooling
+- Cursor IDE can discover rules automatically
+- Version control tracks rule changes
+- Easy to exclude from builds if needed
+
+### Clarity
+- Developers know where to look for rules
+- No confusion about which rules apply
+- Clear deprecation path from `.cursorrules`
+
+## Examples
+
+### Creating a New Rule
+
+❌ **Don't**:
+```bash
+# Wrong location
+touch custom-rule.mdc
+touch docs/cursor-rules/custom-rule.mdc
+```
+
+✅ **Do**:
+```bash
+# Correct location
+touch .cursor/rules/custom-rule.mdc
+# Or in subdirectory
+touch .cursor/rules/domain/custom-rule.mdc
+```
+
+### Organizing Rules
+
+You can create subdirectories under `.cursor/rules/` for better organization:
+
+```
+.cursor/rules/
+├── foundation/
+│   ├── 001-core-conventions.mdc
+│   └── 002-architecture.mdc
+├── design/
+│   ├── 100-brand-guidelines.mdc
+│   └── 101-component-library.mdc
+├── domain/
+│   ├── 200-models.mdc
+│   └── 201-services.mdc
+└── quality/
+    ├── 300-testing.mdc
+    └── 301-security.mdc
+```
+
+## Validation Checklist
+
+When working with rule files:
+
+- [ ] File has `.mdc` extension
+- [ ] File is located in `.cursor/rules/` or subdirectory
+- [ ] File has valid YAML frontmatter
+- [ ] File follows naming conventions
+- [ ] File is tracked in version control
+- [ ] No `.mdc` files exist outside `.cursor/rules/`
+
+## Migration from .cursorrules
+
+If you encounter the legacy `.cursorrules` file:
+
+1. **Do NOT modify** the `.cursorrules` file
+2. Create new rules in `.cursor/rules/` instead
+3. Reference the content for context if needed
+4. After full migration, `.cursorrules` can be removed
+
+## Questions?
+
+- Unsure where to put a rule? → `.cursor/rules/`
+- Need to organize by topic? → Create subdirectories under `.cursor/rules/`
+- Found `.mdc` elsewhere? → Move it to `.cursor/rules/`

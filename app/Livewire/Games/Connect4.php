@@ -9,6 +9,7 @@ use Livewire\Component;
 class Connect4 extends Component
 {
     public array $state = [];
+
     public bool $showRules = false;
 
     public function mount()
@@ -39,16 +40,16 @@ class Connect4 extends Component
 
     public function toggleRules()
     {
-        $this->showRules = !$this->showRules;
+        $this->showRules = ! $this->showRules;
     }
 
     public function isWinningPiece(int $row, int $col): bool
     {
-        if (!$this->state['gameOver'] || $this->state['winner'] === 'draw') {
+        if (! $this->state['gameOver'] || $this->state['winner'] === 'draw') {
             return false;
         }
 
-        if (!isset($this->state['winningLine'])) {
+        if (! isset($this->state['winningLine'])) {
             return false;
         }
 
@@ -71,4 +72,3 @@ class Connect4 extends Component
         return view('livewire.games.connect4');
     }
 }
-

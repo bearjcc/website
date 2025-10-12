@@ -33,28 +33,28 @@ class MinesweeperGame implements GameInterface
                 'Find all mines on the board without clicking on them',
                 'Use numbered squares to deduce mine locations',
                 'Flag squares you suspect contain mines',
-                'Clear all safe squares to win the game'
+                'Clear all safe squares to win the game',
             ],
             'Gameplay' => [
                 'Left-click to reveal a square',
                 'Right-click to flag/unflag a square',
                 'Numbers show how many mines are adjacent to that square',
                 'Use logic to determine where mines are located',
-                'Game ends when you hit a mine or clear all safe squares'
+                'Game ends when you hit a mine or clear all safe squares',
             ],
             'Scoring' => [
                 'Each revealed square: 1 point',
                 'Correctly flagged mine: 10 points',
                 'Incorrectly flagged square: -5 points',
                 'Time bonus for quick completion',
-                'Perfect game bonus for no mistakes'
+                'Perfect game bonus for no mistakes',
             ],
             'Difficulty' => [
                 'Beginner: 9×9 grid with 10 mines',
                 'Intermediate: 16×16 grid with 40 mines',
                 'Expert: 16×30 grid with 99 mines',
-                'Custom: Choose your own grid size and mine count'
-            ]
+                'Custom: Choose your own grid size and mine count',
+            ],
         ];
     }
 
@@ -105,7 +105,7 @@ class MinesweeperGame implements GameInterface
 
     public function applyMove(array $state, array $move): array
     {
-        if (!$this->validateMove($state, $move)) {
+        if (! $this->validateMove($state, $move)) {
             return $state;
         }
 

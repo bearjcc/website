@@ -24,29 +24,23 @@
         @if($icon)
             <x-dynamic-component 
                 :component="'heroicon-o-' . $icon" 
-                class="w-6 h-6 text-white/70 shrink-0 mt-0.5" 
+                class="w-6 h-6 text-[color:var(--constellation)] shrink-0 mt-0.5" 
             />
         @endif
 
         <div class="min-w-0 flex-1">
-            <div class="flex items-start justify-between gap-4">
-                <h3 class="text-lg font-semibold text-white">{{ $title }}</h3>
-                @if($meta)
-                    <span class="text-xs text-white/50 whitespace-nowrap">{{ $meta }}</span>
-                @endif
-            </div>
-
+            <h3 class="text-lg font-semibold text-[color:var(--ink)]">{{ $title }}</h3>
             @if($subtitle)
-                <p class="p mt-1 line-clamp-2">{{ $subtitle }}</p>
+                <p class="text-sm text-[color:var(--ink-muted)] mt-1 line-clamp-2">{{ $subtitle }}</p>
             @endif
-
-            @if($href && !$disabled)
-                <div class="mt-3 inline-flex items-center gap-1 text-sm text-white/80">
-                    <span>Open</span>
-                    <x-heroicon-o-chevron-right class="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                </div>
+            @if($meta)
+                <p class="text-xs text-[color:var(--ink-muted)] mt-2">{{ $meta }}</p>
             @endif
         </div>
+
+        @if($href && !$disabled)
+            <x-heroicon-o-chevron-right class="w-5 h-5 text-[color:var(--ink-muted)] group-hover:text-[color:var(--star)] transition-colors shrink-0 mt-0.5" />
+        @endif
     </div>
 </{{ $tag }}>
 

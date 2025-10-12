@@ -12,8 +12,8 @@
             decoding="async"
         />
         <div class="flex flex-col">
-            <span class="text-3xl md:text-4xl font-bold tracking-tight text-white">ursa</span>
-            <span class="text-2xl md:text-3xl font-light tracking-wide text-white/80">minor</span>
+            <span class="text-3xl md:text-4xl font-bold tracking-tight text-[color:var(--ink)]">ursa</span>
+            <span class="text-2xl md:text-3xl font-light tracking-wide text-[color:var(--ink-muted)]">minor</span>
         </div>
     </div>
 </div>

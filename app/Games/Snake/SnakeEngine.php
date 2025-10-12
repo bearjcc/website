@@ -8,10 +8,15 @@ namespace App\Games\Snake;
 class SnakeEngine
 {
     public const BOARD_WIDTH = 20;
+
     public const BOARD_HEIGHT = 15;
+
     public const INITIAL_SPEED = 150; // milliseconds
+
     public const SPEED_INCREASE = 10; // milliseconds per level
+
     public const FOOD_SCORE = 10;
+
     public const LEVEL_UP_FOOD = 5;
 
     public static function newGame(): array
@@ -19,7 +24,7 @@ class SnakeEngine
         $snake = [
             ['x' => 10, 'y' => 7], // Head
             ['x' => 9, 'y' => 7],  // Body
-            ['x' => 8, 'y' => 7]   // Tail
+            ['x' => 8, 'y' => 7],   // Tail
         ];
 
         return [
@@ -35,35 +40,36 @@ class SnakeEngine
             'foodEaten' => 0,
             'highScore' => 0,
             'gameTime' => 0,
-            'paused' => false
+            'paused' => false,
         ];
     }
 
     public static function validateMove(array $state, array $move): bool
     {
         $action = $move['action'] ?? '';
-        
+
         switch ($action) {
             case 'change_direction':
                 $direction = $move['direction'] ?? '';
+
                 return in_array($direction, ['up', 'down', 'left', 'right']) &&
-                       !self::isOppositeDirection($state['direction'], $direction);
-            
+                       ! self::isOppositeDirection($state['direction'], $direction);
+
             case 'start_game':
-                return !$state['gameStarted'] && !$state['gameOver'];
-            
+                return ! $state['gameStarted'] && ! $state['gameOver'];
+
             case 'pause_game':
-                return $state['gameStarted'] && !$state['gameOver'];
-            
+                return $state['gameStarted'] && ! $state['gameOver'];
+
             case 'resume_game':
-                return $state['paused'] && !$state['gameOver'];
-            
+                return $state['paused'] && ! $state['gameOver'];
+
             case 'new_game':
                 return $state['gameOver'];
-            
+
             case 'tick':
-                return $state['gameStarted'] && !$state['gameOver'] && !$state['paused'];
-            
+                return $state['gameStarted'] && ! $state['gameOver'] && ! $state['paused'];
+
             default:
                 return false;
         }
@@ -72,29 +78,32 @@ class SnakeEngine
     public static function applyMove(array $state, array $move): array
     {
         $action = $move['action'] ?? '';
-        
+
         switch ($action) {
             case 'change_direction':
                 return self::changeDirection($state, $move['direction']);
-            
+
             case 'start_game':
                 $state['gameStarted'] = true;
+
                 return $state;
-            
+
             case 'pause_game':
                 $state['paused'] = true;
+
                 return $state;
-            
+
             case 'resume_game':
                 $state['paused'] = false;
+
                 return $state;
-            
+
             case 'new_game':
                 return self::newGame();
-            
+
             case 'tick':
                 return self::gameTick($state);
-            
+
             default:
                 return $state;
         }
@@ -102,40 +111,42 @@ class SnakeEngine
 
     public static function changeDirection(array $state, string $newDirection): array
     {
-        if (!self::isOppositeDirection($state['direction'], $newDirection)) {
+        if (! self::isOppositeDirection($state['direction'], $newDirection)) {
             $state['nextDirection'] = $newDirection;
         }
+
         return $state;
     }
 
     public static function gameTick(array $state): array
     {
-        if ($state['gameOver'] || !$state['gameStarted'] || $state['paused']) {
+        if ($state['gameOver'] || ! $state['gameStarted'] || $state['paused']) {
             return $state;
         }
 
         // Update direction
         $state['direction'] = $state['nextDirection'];
-        
+
         // Move snake
         $newHead = self::getNextHeadPosition($state['snake'][0], $state['direction']);
-        
+
         // Check for collisions
         if (self::checkCollision($newHead, $state['snake'])) {
             $state['gameOver'] = true;
             $state['highScore'] = max($state['highScore'], $state['score']);
+
             return $state;
         }
-        
+
         // Add new head
         array_unshift($state['snake'], $newHead);
-        
+
         // Check if food was eaten
         if ($newHead['x'] === $state['food']['x'] && $newHead['y'] === $state['food']['y']) {
             $state['score'] += self::FOOD_SCORE;
             $state['foodEaten']++;
             $state['food'] = self::generateFood($state['snake']);
-            
+
             // Level up
             if ($state['foodEaten'] % self::LEVEL_UP_FOOD === 0) {
                 $state['level']++;
@@ -145,15 +156,16 @@ class SnakeEngine
             // Remove tail if no food eaten
             array_pop($state['snake']);
         }
-        
+
         $state['gameTime']++;
+
         return $state;
     }
 
     public static function getNextHeadPosition(array $head, string $direction): array
     {
         $newHead = $head;
-        
+
         switch ($direction) {
             case 'up':
                 $newHead['y']--;
@@ -168,7 +180,7 @@ class SnakeEngine
                 $newHead['x']++;
                 break;
         }
-        
+
         return $newHead;
     }
 
@@ -179,14 +191,14 @@ class SnakeEngine
             $head['y'] < 0 || $head['y'] >= self::BOARD_HEIGHT) {
             return true;
         }
-        
+
         // Check self collision
         foreach ($snake as $segment) {
             if ($head['x'] === $segment['x'] && $head['y'] === $segment['y']) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -195,10 +207,10 @@ class SnakeEngine
         do {
             $food = [
                 'x' => rand(0, self::BOARD_WIDTH - 1),
-                'y' => rand(0, self::BOARD_HEIGHT - 1)
+                'y' => rand(0, self::BOARD_HEIGHT - 1),
             ];
         } while (self::isPositionOnSnake($food, $snake));
-        
+
         return $food;
     }
 
@@ -209,6 +221,7 @@ class SnakeEngine
                 return true;
             }
         }
+
         return false;
     }
 
@@ -218,9 +231,9 @@ class SnakeEngine
             'up' => 'down',
             'down' => 'up',
             'left' => 'right',
-            'right' => 'left'
+            'right' => 'left',
         ];
-        
+
         return $opposites[$current] === $new;
     }
 
@@ -245,7 +258,7 @@ class SnakeEngine
             'gameStarted' => $state['gameStarted'],
             'paused' => $state['paused'],
             'speed' => $state['speed'],
-            'highScore' => $state['highScore']
+            'highScore' => $state['highScore'],
         ];
     }
 

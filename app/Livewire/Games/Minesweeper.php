@@ -3,24 +3,36 @@
 namespace App\Livewire\Games;
 
 use App\Games\Minesweeper\MinesweeperEngine;
-use App\Games\Minesweeper\MinesweeperGame;
 use Livewire\Component;
 
 class Minesweeper extends Component
 {
     public array $board = [];
+
     public array $mines = [];
+
     public int $width = 9;
+
     public int $height = 9;
+
     public int $mineCount = 10;
+
     public string $difficulty = 'beginner';
+
     public bool $gameStarted = false;
+
     public bool $gameOver = false;
+
     public bool $gameWon = false;
+
     public bool $firstClick = true;
+
     public int $score = 0;
+
     public int $flagsUsed = 0;
+
     public int $squaresRevealed = 0;
+
     public bool $showDifficultySelector = true;
 
     public function mount()
@@ -33,7 +45,7 @@ class Minesweeper extends Component
         if ($difficulty) {
             $this->difficulty = $difficulty;
         }
-        
+
         $state = MinesweeperEngine::newGame($this->difficulty);
         $this->syncFromState($state);
         $this->showDifficultySelector = false;
@@ -52,7 +64,7 @@ class Minesweeper extends Component
         }
 
         $state = $this->getCurrentState();
-        
+
         // First click can't be a mine - regenerate if needed
         if ($this->firstClick && $this->board[$y][$x]['type'] === 'mine') {
             $state = MinesweeperEngine::newGame($this->difficulty);
@@ -64,7 +76,7 @@ class Minesweeper extends Component
         $state = MinesweeperEngine::applyMove($state, [
             'action' => 'reveal_cell',
             'x' => $x,
-            'y' => $y
+            'y' => $y,
         ]);
 
         $this->syncFromState($state);
@@ -80,7 +92,7 @@ class Minesweeper extends Component
         $state = MinesweeperEngine::applyMove($state, [
             'action' => 'flag_cell',
             'x' => $x,
-            'y' => $y
+            'y' => $y,
         ]);
 
         $this->syncFromState($state);
@@ -106,7 +118,7 @@ class Minesweeper extends Component
             'endTime' => null,
             'gameTime' => 0,
             'bestTime' => null,
-            'perfectGame' => true
+            'perfectGame' => true,
         ];
     }
 

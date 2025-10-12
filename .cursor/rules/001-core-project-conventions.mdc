@@ -1,0 +1,498 @@
+---
+description: "Core project conventions, architecture, and coding standards for Ursa Minor Games"
+globs: "**/*"
+---
+
+# Core Project Conventions
+
+Project-wide conventions for the Ursa Minor Games Laravel + TALL stack website.
+
+## Project Identity
+
+**Name**: Ursa Minor Games  
+**Theme**: Simple elegance of the night sky  
+**Tagline**: "Where games are born under the stars"  
+**Tech Stack**: Laravel 12.x, Livewire, Vanilla JS/CSS → TALL Stack  
+**Local Dev**: http://website.test/ (Laravel Herd)  
+**Deployment**: Railway (auto-deploy from main branch)
+
+## Critical Rules
+
+1. **NO EMOJI in production code** - Absolutely forbidden
+2. **NO PURPLE GRADIENTS** - Avoid AI-typical design patterns
+3. **TEST LOCALLY** - Always test at http://website.test/ before committing
+4. **ONE FEATURE AT A TIME** - Incremental changes only
+5. **NEVER MODIFY .env** - Security requirement
+
+## Directory Layout
+
+### Standard Laravel Structure
+
+```
+app/
+├── Games/                  # Game logic (Connect4, Sudoku, etc.)
+│   ├── {GameName}/
+│   │   ├── {GameName}Engine.php
+│   │   └── {GameName}State.php
+│   └── Contracts/
+├── Http/
+│   └── Controllers/        # Thin controllers
+├── Livewire/              # Livewire components
+│   ├── Auth/
+│   ├── Games/
+│   └── Pages/
+├── Models/                # Eloquent models
+├── Policies/              # Authorization policies
+└── Providers/
+
+resources/
+├── css/
+│   └── app.css           # Tailwind (future)
+├── js/
+│   ├── app.js            # Main JS entry
+│   └── bootstrap.js      # Vite bootstrap
+└── views/
+    ├── components/        # Blade components
+    ├── livewire/         # Livewire views
+    ├── pages/            # Page templates
+    └── welcome.blade.php
+
+public/
+├── style.css             # Main stylesheet
+├── script.js             # Starfield animation
+├── scroll.js             # Header scroll behavior
+└── bear.svg              # Logo asset
+
+tests/
+├── Feature/              # Feature tests
+└── Unit/                # Unit tests
+```
+
+## Naming Conventions
+
+### Laravel Components
+
+**Models** (Singular, PascalCase):
+```php
+Game.php
+User.php
+Score.php
+LorePage.php
+Novella.php
+```
+
+**Controllers** (PascalCase + Controller suffix):
+```php
+GameController.php
+HomeController.php
+```
+
+**Livewire Components** (PascalCase, descriptive):
+```php
+app/Livewire/Games/SudokuGame.php
+app/Livewire/Pages/AboutPage.php
+app/Livewire/Auth/LoginForm.php
+```
+
+**Blade Components** (kebab-case in usage, PascalCase in PHP):
+```blade
+<x-layout />
+<x-header />
+<x-game-card :game="$game" />
+```
+
+```php
+app/View/Components/Layout.php
+app/View/Components/Header.php
+app/View/Components/GameCard.php
+```
+
+**Database Tables** (plural, snake_case):
+```
+users
+games
+scores
+lore_pages
+novellas
+feature_blocks
+```
+
+**Migrations** (descriptive, timestamped):
+```
+2024_01_02_000001_create_games_table.php
+2024_01_02_000002_add_role_to_users_table.php
+```
+
+### Files and Directories
+
+- **PHP files**: PascalCase
+- **Views**: kebab-case.blade.php
+- **CSS/JS**: kebab-case.css, kebab-case.js
+- **Directories**: kebab-case or PascalCase (match Laravel conventions)
+
+## Copy Tone and Content Rules
+
+### Public-Facing Content
+
+**DO**:
+- Be welcoming and passionate about games
+- Be transparent about current state ("coming soon" is okay)
+- Use active voice
+- Keep it conversational and authentic
+- Focus on what exists NOW
+
+**DON'T** (on public pages):
+- Mention future café/shop/storefront plans in detail
+- Make promises about features not yet built
+- Use hyperbolic marketing language
+- Include emoji
+- Be demanding or pushy
+
+### Internal vs. Public Content
+
+**Internal Documentation** (README.md, docs/):
+- Can mention long-term goals like "board game café in New Zealand"
+- Detailed roadmaps and ambitions are fine
+- Technical language acceptable
+
+**Public Pages** (resources/views/pages/, welcome.blade.php):
+- Focus on current offerings and immediate next steps
+- Brief mention of mission is okay ("working toward...") but don't center it
+- Keep promises realistic and achievable
+
+### Tone Guidelines
+
+- **Peaceful and kind**, not distracting or demanding
+- **Just there when asked**
+- **No gaudy design, no ads, no begging for attention**
+- **Honest about progress and timeline**
+
+## Internationalization (i18n)
+
+### UI Strings
+
+**Guideline**: UI strings should be in translation files, not hardcoded.
+
+**Location**: `lang/en/ui.php`
+
+**Current Status**: Warning level (not strict enforcement yet)
+
+**Example**:
+
+❌ **Avoid** (hardcoded):
+```blade
+<button>Click Here</button>
+```
+
+✅ **Prefer** (translatable):
+```blade
+<button>{{ __('ui.click_here') }}</button>
+```
+
+```php
+// lang/en/ui.php
+return [
+    'click_here' => 'Click Here',
+];
+```
+
+**Exceptions**:
+- Content that is inherently English (brand name "Ursa Minor Games")
+- Temporary prototyping (but refactor before production)
+
+## Code Style
+
+### PHP Standards
+
+**Follow PSR-12**:
+- 4 spaces for indentation
+- Opening braces on new line for classes/methods
+- CamelCase for method names
+- Snake_case for array keys
+
+**Use Pint**:
+```bash
+./vendor/bin/pint
+```
+
+**Type Hints**:
+```php
+// Always use type hints
+public function calculateScore(int $moves, float $time): int
+{
+    return (int) (1000 / ($moves * $time));
+}
+```
+
+**Strict Types**:
+```php
+<?php
+
+declare(strict_types=1);
+```
+
+### Blade Templates
+
+**DO**:
+- Use Blade components for reusable UI
+- Use Blade comments: `{{-- comment --}}`
+- Escape output: `{{ $variable }}`
+- Use `@csrf` in forms
+- Use asset helpers: `asset()`, `@vite()`
+
+**DON'T**:
+- Use inline JavaScript or CSS
+- Use `{!! !!}` unless absolutely necessary
+- Put complex logic in views
+- Hardcode asset paths
+
+### JavaScript/CSS
+
+**Organization**:
+- Clear section comments
+- Modular and well-commented
+- Use semantic naming
+
+**Style**:
+- Use region markers: `// === Section Name ===`
+- Avoid elaborate headers (keep it simple)
+
+**Example**:
+```javascript
+// === Starfield Animation ===
+function createStarfield() {
+    // Implementation
+}
+
+// === Header Scroll Behavior ===
+function handleScroll() {
+    // Implementation
+}
+```
+
+## Asset Handling
+
+### Images
+
+**Use Vite for bundling**:
+- Import via `@images/` alias
+- Bootstrap Vite handles cache busting
+- DO NOT manually copy to public/
+
+**Example**:
+```javascript
+import logo from '@images/logo.png';
+```
+
+### SVG Files
+
+- Use `Get-Content` (PowerShell) or appropriate tools to view
+- DO NOT read directly with text editors
+- Keep in public/ for web serving
+
+### Tavern Assets
+
+- Keep `tavern_assets/` separate from `public/`
+- Maintain this separation for git backup strategy
+
+## Windows Development
+
+This project runs on Windows with PowerShell 7:
+
+**Commands**:
+- Use `Get-Location` for `pwd`
+- Use `Get-Content` for `cat`
+- Use `Select-String` for `grep`
+- Use `docker compose` (not `docker-compose`)
+
+**Paths**:
+- Use `\` or let tools normalize
+- Relative paths from workspace root
+
+## Laravel Best Practices
+
+### Controllers
+
+**Keep Thin**:
+```php
+// ❌ DON'T - Fat controller
+public function store(Request $request)
+{
+    // 50 lines of business logic
+}
+
+// ✅ DO - Thin controller
+public function store(StoreGameRequest $request)
+{
+    $this->gameService->createGame($request->validated());
+    return redirect()->route('games.index');
+}
+```
+
+### Services
+
+Use service classes for complex logic:
+```php
+app/Services/GameService.php
+app/Services/ScoreCalculator.php
+```
+
+### Livewire Preference
+
+**Prefer Livewire over React/Vue** for interactive UI:
+- Follows Laravel-native approach
+- Simpler state management
+- Better server integration
+
+### Middleware
+
+Use for cross-cutting concerns:
+- Authentication
+- Authorization
+- Logging
+- Rate limiting
+
+## Version Control
+
+### Conventional Commits
+
+**Format**: `<type>(<scope>): <description>`
+
+**Types**:
+- `feat:` - New features (minor bump)
+- `fix:` - Bug fixes (patch bump)
+- `docs:` - Documentation only
+- `style:` - Code formatting (not CSS)
+- `refactor:` - Code restructuring
+- `perf:` - Performance improvements
+- `test:` - Test additions/updates
+- `chore:` - Maintenance tasks
+
+**Examples**:
+```
+feat(games): add sudoku game component
+fix(header): correct sticky positioning on scroll
+docs(brand): update branding guidelines
+test(auth): add login flow tests
+```
+
+### Git Workflow
+
+1. **Feature branches** for new work
+2. **Main branch** auto-deploys to Railway
+3. **Test locally** before committing
+4. **Commit after completing tasks**
+5. **Never commit** secrets or .env files
+6. **Never force push** to main/master
+
+## Security
+
+### Critical Rules
+
+1. **Never read or modify .env files**
+2. **Validate all user input**
+3. **Use CSRF protection** (`@csrf`)
+4. **Escape output** (use `{{ }}` not `{!! !!}`)
+5. **Use parameterized queries** (Eloquent handles this)
+6. **Keep dependencies updated**
+
+### OWASP Guidelines
+
+Follow OWASP Top 10:
+- Injection prevention
+- Broken authentication
+- XSS protection
+- Insecure direct object references
+- Security misconfiguration
+
+## Testing
+
+### Coverage Goals
+
+- **Target**: 80%+ code coverage
+- **Minimum**: All critical paths tested
+- **Approach**: TDD when possible
+
+### Test Organization
+
+```php
+tests/
+├── Feature/
+│   ├── HomePageTest.php
+│   ├── GamesTest.php
+│   └── AuthTest.php
+└── Unit/
+    ├── Models/
+    ├── Services/
+    └── Helpers/
+```
+
+### PHPUnit
+
+```bash
+php artisan test
+# or
+./vendor/bin/phpunit
+```
+
+## Performance
+
+### Optimization Strategies
+
+1. **Query optimization**: Use eager loading, indexes
+2. **Caching**: Cache expensive operations
+3. **Asset optimization**: Minimize, compress, cache-bust
+4. **Lazy loading**: For non-critical resources
+5. **CSS over images**: Prefer CSS solutions when possible
+
+### Railway Considerations
+
+- Environment variables for config
+- Database connections optimized
+- Asset compilation in build step
+- Log management
+
+## Development Workflow
+
+### Local Development
+
+1. Start Herd: http://website.test/
+2. Run `npm run dev` in background
+3. Make changes
+4. Test in browser
+5. Commit when working
+
+### Before Committing
+
+- [ ] Test locally at http://website.test/
+- [ ] Run Pint: `./vendor/bin/pint`
+- [ ] Check for linter errors
+- [ ] Verify no emoji in production code
+- [ ] Ensure no secrets committed
+- [ ] Write descriptive commit message
+
+### Before Merging
+
+- [ ] All tests pass
+- [ ] Feature works as expected
+- [ ] Code reviewed (if team project)
+- [ ] Documentation updated
+- [ ] Railway deployment planned
+
+## Problem-Solving Approach
+
+1. **Root cause analysis** before changes
+2. **Understand the problem and intent** thoroughly
+3. **Use existing solutions** before creating new ones
+4. **Prefer simple, maintainable solutions** (Occam's Razor)
+5. **Focus on one task at a time** ("eat the elephant one bite at a time")
+6. **Test incrementally**
+
+## Questions?
+
+When in doubt:
+- Check Laravel documentation
+- Review existing code patterns
+- Test locally before committing
+- Ask for clarification
+- Keep it simple

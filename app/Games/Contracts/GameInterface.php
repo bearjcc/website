@@ -18,4 +18,3 @@ interface GameInterface
 
     public function applyMove(array $state, array $move): array;
 }
-

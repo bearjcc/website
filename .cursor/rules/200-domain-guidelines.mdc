@@ -1,0 +1,906 @@
+---
+description: "Domain logic, business rules, and backend architecture patterns for Ursa Minor Games"
+globs: "app/Models/**/*,app/Livewire/**/*,app/Http/Controllers/**/*,app/Games/**/*,app/Services/**/*"
+---
+
+# Domain Guidelines and Backend Architecture
+
+Business logic, domain patterns, and backend architecture for Ursa Minor Games.
+
+## Critical Rules
+
+1. **SEPARATION OF CONCERNS** - Domain logic in models/services, NOT views
+2. **THIN CONTROLLERS** - Controllers coordinate, don't contain business logic
+3. **ELOQUENT FIRST** - Use Eloquent ORM, not raw SQL
+4. **SERVICE CLASSES** for complex operations
+5. **LIVEWIRE** for interactive components (not React/Vue)
+
+## Architecture Principles
+
+### Separation of Concerns
+
+**Layers**:
+
+```
+Views (Blade)
+    ↓
+Controllers/Livewire (Coordination)
+    ↓
+Services (Business Logic)
+    ↓
+Models (Data & Domain Logic)
+    ↓
+Database
+```
+
+**Responsibilities**:
+
+- **Views**: Presentation only, no logic
+- **Controllers**: Route handling, request/response
+- **Livewire**: Interactive UI state management
+- **Services**: Complex business operations
+- **Models**: Data access, relationships, domain logic
+- **Policies**: Authorization logic
+
+### When to Use What
+
+**Livewire Component**:
+- Interactive UI that updates without page refresh
+- Form handling with validation
+- Real-time features
+- Game interfaces
+
+**Controller**:
+- Simple CRUD operations
+- API endpoints
+- Traditional form submissions
+- Static page rendering
+
+**Service Class**:
+- Complex business logic
+- Multi-model operations
+- External API integration
+- Heavy calculations
+
+## Models
+
+### Model Structure
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
+class Game extends Model
+{
+    use HasFactory;
+
+    // Mass assignment protection
+    protected $fillable = [
+        'name',
+        'slug',
+        'description',
+        'status',
+    ];
+
+    // Type casting
+    protected $casts = [
+        'is_active' => 'boolean',
+        'published_at' => 'datetime',
+        'config' => 'array',
+    ];
+
+    // Relationships
+    public function scores(): HasMany
+    {
+        return $this->hasMany(Score::class);
+    }
+
+    // Accessors
+    public function getIsLiveAttribute(): bool
+    {
+        return $this->status === 'published' 
+            && $this->published_at?->isPast();
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    // Business logic methods
+    public function recordScore(User $user, int $value): Score
+    {
+        return $this->scores()->create([
+            'user_id' => $user->id,
+            'value' => $value,
+        ]);
+    }
+}
+```
+
+### Model Conventions
+
+**Naming**:
+- Singular, PascalCase: `Game`, `LorePage`, `FeatureBlock`
+- Table name: plural, snake_case: `games`, `lore_pages`, `feature_blocks`
+
+**Properties**:
+```php
+// Define fillable or guarded
+protected $fillable = ['name', 'description'];
+// OR
+protected $guarded = ['id', 'admin'];
+
+// Cast attributes
+protected $casts = [
+    'is_active' => 'boolean',
+    'config' => 'array',
+    'published_at' => 'datetime',
+];
+
+// Hidden from JSON
+protected $hidden = ['password', 'api_token'];
+```
+
+**Relationships**:
+```php
+// One-to-many
+public function scores(): HasMany
+{
+    return $this->hasMany(Score::class);
+}
+
+// Belongs to
+public function user(): BelongsTo
+{
+    return $this->belongsTo(User::class);
+}
+
+// Many-to-many
+public function tags(): BelongsToMany
+{
+    return $this->belongsToMany(Tag::class);
+}
+```
+
+**Accessors & Mutators**:
+```php
+// Accessor (Eloquent 11+)
+protected function fullName(): Attribute
+{
+    return Attribute::make(
+        get: fn () => "{$this->first_name} {$this->last_name}",
+    );
+}
+
+// Or legacy style
+public function getFullNameAttribute(): string
+{
+    return "{$this->first_name} {$this->last_name}";
+}
+```
+
+**Scopes**:
+```php
+// Local scope
+public function scopeActive($query)
+{
+    return $query->where('is_active', true);
+}
+
+// Usage
+Game::active()->get();
+```
+
+## Controllers
+
+### Thin Controllers
+
+❌ **DON'T - Fat controller**:
+```php
+public function store(Request $request)
+{
+    $validated = $request->validate([
+        'name' => 'required|string',
+        'description' => 'required|string',
+    ]);
+
+    $game = new Game();
+    $game->name = $validated['name'];
+    $game->description = $validated['description'];
+    $game->slug = Str::slug($validated['name']);
+    $game->status = 'draft';
+    $game->save();
+
+    // Complex business logic here...
+    // ... 30 more lines ...
+
+    return redirect()->route('games.show', $game);
+}
+```
+
+✅ **DO - Thin controller**:
+```php
+public function store(StoreGameRequest $request)
+{
+    $game = $this->gameService->createGame($request->validated());
+
+    return redirect()->route('games.show', $game)
+        ->with('success', 'Game created successfully!');
+}
+```
+
+### Controller Structure
+
+```php
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Game;
+use App\Services\GameService;
+use App\Http\Requests\StoreGameRequest;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+
+class GameController extends Controller
+{
+    public function __construct(
+        private GameService $gameService
+    ) {}
+
+    public function index(): View
+    {
+        $games = Game::active()->latest()->paginate(10);
+        
+        return view('games.index', compact('games'));
+    }
+
+    public function show(Game $game): View
+    {
+        return view('games.show', compact('game'));
+    }
+
+    public function store(StoreGameRequest $request): RedirectResponse
+    {
+        $game = $this->gameService->createGame($request->validated());
+
+        return redirect()->route('games.show', $game);
+    }
+}
+```
+
+### Resource Controllers
+
+Use Laravel resource routes:
+```php
+// routes/web.php
+Route::resource('games', GameController::class);
+
+// Generates:
+// GET /games - index
+// GET /games/create - create
+// POST /games - store
+// GET /games/{game} - show
+// GET /games/{game}/edit - edit
+// PUT /games/{game} - update
+// DELETE /games/{game} - destroy
+```
+
+## Services
+
+### When to Create Services
+
+Create a service class when:
+- Logic spans multiple models
+- Complex calculations needed
+- External API integration
+- Operation has many steps
+- Logic is reused in multiple places
+
+### Service Structure
+
+```php
+<?php
+
+namespace App\Services;
+
+use App\Models\Game;
+use App\Models\Score;
+use App\Models\User;
+use Illuminate\Support\Str;
+
+class GameService
+{
+    public function createGame(array $data): Game
+    {
+        return Game::create([
+            'name' => $data['name'],
+            'slug' => Str::slug($data['name']),
+            'description' => $data['description'],
+            'status' => 'draft',
+        ]);
+    }
+
+    public function calculateFinalScore(Game $game, int $moves, float $time): int
+    {
+        $baseScore = 1000;
+        $movePenalty = $moves * 5;
+        $timePenalty = (int) ($time * 2);
+        
+        return max(0, $baseScore - $movePenalty - $timePenalty);
+    }
+
+    public function publishGame(Game $game): bool
+    {
+        if (!$this->isReadyForPublish($game)) {
+            return false;
+        }
+
+        $game->update([
+            'status' => 'published',
+            'published_at' => now(),
+        ]);
+
+        return true;
+    }
+
+    private function isReadyForPublish(Game $game): bool
+    {
+        return !empty($game->name) 
+            && !empty($game->description)
+            && $game->status === 'draft';
+    }
+}
+```
+
+### Service Registration
+
+Services can be injected via constructor:
+```php
+// Automatic resolution
+public function __construct(
+    private GameService $gameService
+) {}
+
+// Or register in AppServiceProvider if needed
+public function register(): void
+{
+    $this->app->singleton(GameService::class);
+}
+```
+
+## Livewire Components
+
+### Livewire Preference
+
+**Prefer Livewire over React/Vue** for interactive UI:
+- Laravel-native approach
+- Simpler state management
+- Better server integration
+- Less JavaScript complexity
+
+### Livewire Component Structure
+
+```php
+<?php
+
+namespace App\Livewire\Games;
+
+use App\Models\Game;
+use Livewire\Component;
+use Livewire\Attributes\Validate;
+
+class SudokuGame extends Component
+{
+    public Game $game;
+    
+    #[Validate('required|array')]
+    public array $board = [];
+    
+    public int $moves = 0;
+    
+    public bool $isComplete = false;
+
+    public function mount(Game $game): void
+    {
+        $this->game = $game;
+        $this->initializeBoard();
+    }
+
+    public function makeMove(int $row, int $col, int $value): void
+    {
+        if ($this->isValidMove($row, $col, $value)) {
+            $this->board[$row][$col] = $value;
+            $this->moves++;
+            
+            if ($this->checkComplete()) {
+                $this->isComplete = true;
+                $this->saveScore();
+            }
+        }
+    }
+
+    public function resetGame(): void
+    {
+        $this->initializeBoard();
+        $this->moves = 0;
+        $this->isComplete = false;
+    }
+
+    private function initializeBoard(): void
+    {
+        // Initialize game board
+        $this->board = array_fill(0, 9, array_fill(0, 9, 0));
+    }
+
+    private function isValidMove(int $row, int $col, int $value): bool
+    {
+        // Validation logic
+        return true;
+    }
+
+    private function checkComplete(): bool
+    {
+        // Check if puzzle is solved
+        return false;
+    }
+
+    private function saveScore(): void
+    {
+        if (auth()->check()) {
+            $this->game->recordScore(auth()->user(), $this->moves);
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.games.sudoku-game');
+    }
+}
+```
+
+### Livewire View
+
+```blade
+<div class="game-container">
+    <div class="game-header">
+        <h2>{{ $game->name }}</h2>
+        <p>Moves: {{ $moves }}</p>
+    </div>
+
+    @if($isComplete)
+        <div class="completion-message">
+            <p>Congratulations! You completed the puzzle in {{ $moves }} moves!</p>
+            <button wire:click="resetGame">Play Again</button>
+        </div>
+    @else
+        <div class="game-board">
+            @foreach($board as $rowIndex => $row)
+                <div class="board-row">
+                    @foreach($row as $colIndex => $cell)
+                        <input 
+                            type="number" 
+                            min="1" 
+                            max="9"
+                            wire:model.live="board.{{ $rowIndex }}.{{ $colIndex }}"
+                            wire:change="makeMove({{ $rowIndex }}, {{ $colIndex }}, $event.target.value)"
+                        >
+                    @endforeach
+                </div>
+            @endforeach
+        </div>
+    @endif
+</div>
+```
+
+### Livewire Best Practices
+
+**DO**:
+- Keep component focused on single responsibility
+- Use computed properties for derived data
+- Validate inputs with attributes
+- Use wire:loading for better UX
+- Emit events for component communication
+
+**DON'T**:
+- Put too much logic in Livewire components
+- Make excessive database queries in render
+- Store large objects in public properties
+- Forget to validate user input
+
+## Game Architecture
+
+### Game Structure
+
+Games live in `app/Games/{GameName}/`:
+
+```
+app/Games/
+├── Connect4/
+│   ├── Connect4Engine.php
+│   └── Connect4State.php
+├── Sudoku/
+│   ├── SudokuEngine.php
+│   └── SudokuState.php
+└── Contracts/
+    ├── GameEngine.php
+    └── GameState.php
+```
+
+### Game Engine Pattern
+
+```php
+<?php
+
+namespace App\Games\Sudoku;
+
+use App\Games\Contracts\GameEngine;
+
+class SudokuEngine implements GameEngine
+{
+    public function initialize(array $config = []): SudokuState
+    {
+        $board = $this->generatePuzzle($config['difficulty'] ?? 'medium');
+        
+        return new SudokuState($board);
+    }
+
+    public function makeMove(SudokuState $state, array $move): SudokuState
+    {
+        $newState = clone $state;
+        
+        if ($this->isValidMove($state, $move)) {
+            $newState->placeNumber(
+                $move['row'],
+                $move['col'],
+                $move['value']
+            );
+        }
+        
+        return $newState;
+    }
+
+    public function checkWin(SudokuState $state): bool
+    {
+        return $this->isComplete($state->getBoard()) 
+            && $this->isValid($state->getBoard());
+    }
+
+    private function generatePuzzle(string $difficulty): array
+    {
+        // Generate Sudoku puzzle
+        return [];
+    }
+
+    private function isValidMove(SudokuState $state, array $move): bool
+    {
+        // Validate move
+        return true;
+    }
+}
+```
+
+### Game State Pattern
+
+```php
+<?php
+
+namespace App\Games\Sudoku;
+
+use App\Games\Contracts\GameState;
+
+class SudokuState implements GameState
+{
+    private array $board;
+    private int $moves = 0;
+
+    public function __construct(array $board)
+    {
+        $this->board = $board;
+    }
+
+    public function getBoard(): array
+    {
+        return $this->board;
+    }
+
+    public function placeNumber(int $row, int $col, int $value): void
+    {
+        $this->board[$row][$col] = $value;
+        $this->moves++;
+    }
+
+    public function getMoves(): int
+    {
+        return $this->moves;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'board' => $this->board,
+            'moves' => $this->moves,
+        ];
+    }
+
+    public function fromArray(array $data): static
+    {
+        $state = new static($data['board']);
+        $state->moves = $data['moves'];
+        return $state;
+    }
+}
+```
+
+## Lore and Content Management
+
+### LorePage Model
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
+class LorePage extends Model
+{
+    protected $fillable = [
+        'title',
+        'slug',
+        'content',
+        'category',
+        'is_published',
+    ];
+
+    protected $casts = [
+        'is_published' => 'boolean',
+        'published_at' => 'datetime',
+    ];
+
+    // Automatically generate slug
+    protected static function booted()
+    {
+        static::creating(function ($lorePage) {
+            if (empty($lorePage->slug)) {
+                $lorePage->slug = Str::slug($lorePage->title);
+            }
+        });
+    }
+
+    // Parse markdown content
+    public function getRenderedContentAttribute(): string
+    {
+        return Str::markdown($this->content);
+    }
+
+    // Scope for published pages
+    public function scopePublished($query)
+    {
+        return $query->where('is_published', true)
+            ->whereNotNull('published_at');
+    }
+}
+```
+
+### Markdown Handling
+
+Use Laravel's `Str::markdown()`:
+```php
+use Illuminate\Support\Str;
+
+$html = Str::markdown($markdown);
+```
+
+In Blade:
+```blade
+<div class="lore-content">
+    {!! Str::markdown($lorePage->content) !!}
+</div>
+```
+
+## FeatureBlock and Homepage
+
+### FeatureBlock Model
+
+```php
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class FeatureBlock extends Model
+{
+    protected $fillable = [
+        'title',
+        'description',
+        'icon',
+        'order',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'order' => 'integer',
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true)
+            ->orderBy('order');
+    }
+}
+```
+
+### Homepage Management
+
+Feature blocks are dynamically managed:
+
+```php
+// Controller
+public function index()
+{
+    $features = FeatureBlock::active()->get();
+    
+    return view('pages.home', compact('features'));
+}
+```
+
+```blade
+{{-- View --}}
+<section class="features-section">
+    @foreach($features as $feature)
+        <div class="feature">
+            <h3>{{ $feature->title }}</h3>
+            <p>{{ $feature->description }}</p>
+        </div>
+    @endforeach
+</section>
+```
+
+## Policies
+
+### Authorization
+
+Use policies for authorization logic:
+
+```php
+<?php
+
+namespace App\Policies;
+
+use App\Models\LorePage;
+use App\Models\User;
+
+class LorePagePolicy
+{
+    public function viewAny(User $user): bool
+    {
+        return true;
+    }
+
+    public function view(?User $user, LorePage $lorePage): bool
+    {
+        return $lorePage->is_published || $user?->isAdmin();
+    }
+
+    public function create(User $user): bool
+    {
+        return $user->isAdmin();
+    }
+
+    public function update(User $user, LorePage $lorePage): bool
+    {
+        return $user->isAdmin();
+    }
+
+    public function delete(User $user, LorePage $lorePage): bool
+    {
+        return $user->isAdmin();
+    }
+}
+```
+
+Register in `AppServiceProvider`:
+```php
+use Illuminate\Support\Facades\Gate;
+
+public function boot(): void
+{
+    Gate::policy(LorePage::class, LorePagePolicy::class);
+}
+```
+
+## Validation
+
+### Form Requests
+
+Use Form Requests for validation:
+
+```php
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class StoreGameRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return $this->user()->can('create', Game::class);
+    }
+
+    public function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255|unique:games',
+            'description' => 'required|string|min:10',
+            'status' => 'in:draft,published',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Please provide a game name.',
+            'name.unique' => 'A game with this name already exists.',
+        ];
+    }
+}
+```
+
+## Database Queries
+
+### Optimization
+
+**Use Eager Loading**:
+```php
+// ❌ N+1 problem
+$games = Game::all();
+foreach ($games as $game) {
+    echo $game->user->name; // Queries for each game
+}
+
+// ✅ Eager loading
+$games = Game::with('user')->get();
+foreach ($games as $game) {
+    echo $game->user->name; // No additional queries
+}
+```
+
+**Use Chunking for Large Datasets**:
+```php
+Game::chunk(100, function ($games) {
+    foreach ($games as $game) {
+        // Process game
+    }
+});
+```
+
+**Use Indexes**:
+```php
+// Migration
+Schema::table('games', function (Blueprint $table) {
+    $table->index('slug');
+    $table->index(['status', 'published_at']);
+});
+```
+
+## Questions?
+
+For backend/domain concerns:
+- Keep business logic in models/services
+- Use Livewire for interactive components
+- Follow Laravel conventions
+- Validate all user input
+- Use Eloquent ORM for database access

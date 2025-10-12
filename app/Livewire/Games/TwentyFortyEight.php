@@ -2,17 +2,21 @@
 
 namespace App\Livewire\Games;
 
-use App\Games\TwentyFortyEight\TwentyFortyEightEngine;
 use App\Games\TwentyFortyEight\TwentyFortyEightGame;
 use Livewire\Component;
 
 class TwentyFortyEight extends Component
 {
     public array $board = [];
+
     public int $score = 0;
+
     public bool $isWon = false;
+
     public bool $isOver = false;
+
     public int $bestScore = 0;
+
     public array $previousState = [];
 
     public function mount()
@@ -42,7 +46,7 @@ class TwentyFortyEight extends Component
             'board' => $this->board,
             'score' => $this->score,
             'isWon' => $this->isWon,
-            'isOver' => $this->isOver
+            'isOver' => $this->isOver,
         ];
 
         $game = new TwentyFortyEightGame();
@@ -50,7 +54,7 @@ class TwentyFortyEight extends Component
             'board' => $this->board,
             'score' => $this->score,
             'isWon' => $this->isWon,
-            'isOver' => $this->isOver
+            'isOver' => $this->isOver,
         ], ['dir' => $direction]);
 
         // Only update if board changed
@@ -69,7 +73,7 @@ class TwentyFortyEight extends Component
 
     public function undo()
     {
-        if (!empty($this->previousState)) {
+        if (! empty($this->previousState)) {
             $this->board = $this->previousState['board'];
             $this->score = $this->previousState['score'];
             $this->isWon = $this->previousState['isWon'];
@@ -80,7 +84,7 @@ class TwentyFortyEight extends Component
 
     public function getTileColor(int $value): string
     {
-        return match($value) {
+        return match ($value) {
             0 => 'rgba(255, 255, 255, 0.05)',
             2 => '#eee4da',
             4 => '#ede0c8',

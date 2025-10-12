@@ -3,22 +3,32 @@
 namespace App\Livewire\Games;
 
 use App\Games\Snake\SnakeEngine;
-use App\Games\Snake\SnakeGame;
 use Livewire\Component;
 
 class Snake extends Component
 {
     public array $snake = [];
+
     public string $direction = 'right';
+
     public string $nextDirection = 'right';
+
     public array $food = [];
+
     public int $score = 0;
+
     public bool $gameOver = false;
+
     public bool $gameStarted = false;
+
     public int $speed = 150;
+
     public int $level = 1;
+
     public int $foodEaten = 0;
+
     public int $highScore = 0;
+
     public bool $paused = false;
 
     public function mount()
@@ -46,7 +56,7 @@ class Snake extends Component
 
     public function tick()
     {
-        if ($this->gameOver || !$this->gameStarted || $this->paused) {
+        if ($this->gameOver || ! $this->gameStarted || $this->paused) {
             return;
         }
 
@@ -57,8 +67,8 @@ class Snake extends Component
 
     public function togglePause()
     {
-        if ($this->gameStarted && !$this->gameOver) {
-            $this->paused = !$this->paused;
+        if ($this->gameStarted && ! $this->gameOver) {
+            $this->paused = ! $this->paused;
         }
     }
 
@@ -77,7 +87,7 @@ class Snake extends Component
             'foodEaten' => $this->foodEaten,
             'highScore' => $this->highScore,
             'gameTime' => 0,
-            'paused' => $this->paused
+            'paused' => $this->paused,
         ];
     }
 
