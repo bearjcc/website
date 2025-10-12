@@ -26,9 +26,7 @@
 	<body onload="stars();">
 	<header>
 		<nav aria-label="Main navigation" class="header-nav">
-			<a class="nav left" href="/games">Games</a>
-			<a class="nav left" href="/f1">F1</a>
-			<a class="nav right" href="/about">About</a>
+			<a class="nav left" href="/about">About</a>
 			<a class="nav right" href="/contact">Contact</a>
         </nav>
 		<div class="center-content">
