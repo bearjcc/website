@@ -66,6 +66,14 @@
                     <span class="play-button">Play Now →</span>
                 </a>
 
+                <!-- Connect 4 -->
+                <a href="{{ route('games.connect4') }}" class="game-card">
+                    <div class="game-icon">🔴🟡</div>
+                    <h3>Connect 4</h3>
+                    <p>Drop pieces to get 4 in a row. Classic strategy game for two players. Vertical, horizontal, or diagonal!</p>
+                    <span class="play-button">Play Now →</span>
+                </a>
+
                 <!-- Coming Soon Games -->
 
                 <div class="game-card coming-soon-card">

@@ -39,4 +39,8 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/snake', function () {
         return view('pages.games.snake');
     })->name('snake');
+    
+    Route::get('/connect4', function () {
+        return view('pages.games.connect4');
+    })->name('connect4');
 });
