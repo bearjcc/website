@@ -3,9 +3,9 @@
 
 :root {
     /* Layout */
-    --header-height: 20vh;
+    --header-height: 25vh;
     --nav-spacing: 6rem;
-    --header-min-height: 64px;
+    --header-min-height: 80px;
     
     /* Night Sky Color Palette */
     --color-night-black: #000000;
@@ -43,8 +43,10 @@
 /* ===== Scrollbar Styles ===== */
 body {
     min-height: 100vh;
-    background: linear-gradient(180deg, var(--color-night-black) 0%, var(--color-midnight-blue) 50%, var(--color-evening-blue) 100%);
+    background: linear-gradient(to bottom, #000000 0%, #001a33 50%, #002d58 100%);
     background-attachment: fixed;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
@@ -71,13 +73,15 @@ header {
     top: 0;
     z-index: 1000;
     background: transparent;
-    transition: height var(--transition-duration) var(--transition-timing), flex-direction var(--transition-duration) var(--transition-timing);
+    padding: 2rem 0;
+    transition: height var(--transition-duration) var(--transition-timing), flex-direction var(--transition-duration) var(--transition-timing), padding var(--transition-duration) var(--transition-timing);
 }
 
 html:not([data-scroll="0"]) header {
     flex-direction: row;
     align-items: center;
     height: var(--header-min-height);
+    padding: 0.5rem 0;
 }
 
 .header-nav {
@@ -338,11 +342,12 @@ footer {
 /* ===== Layout Helpers ===== */
 .center-content {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
     flex: 2;
     width: 100%;
+    height: 100%;
     transition: flex-direction var(--transition-duration) var(--transition-timing);
 }
 
