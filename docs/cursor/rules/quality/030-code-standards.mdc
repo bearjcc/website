@@ -1,0 +1,856 @@
+---
+description: "Ursa Minor Games - Code Quality Standards"
+globs: "app/**/*.php,resources/views/**/*.blade.php,public/**/*.{js,css}"
+---
+
+# Code Quality Standards
+
+## PHP Standards
+
+### PSR-12 Coding Style
+
+Follow PSR-12 coding standards for all PHP code:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+use App\Models\Game;
+use Illuminate\Support\Collection;
+
+class GameService
+{
+    public function __construct(
+        private readonly GameRepository $repository
+    ) {}
+    
+    public function getActiveGames(): Collection
+    {
+        return $this->repository->findActive();
+    }
+    
+    public function createGame(array $data): Game
+    {
+        $this->validateGameData($data);
+        
+        return $this->repository->create($data);
+    }
+    
+    private function validateGameData(array $data): void
+    {
+        // Validation logic
+    }
+}
+```
+
+### Type Declarations
+
+**Always use type declarations**:
+
+```php
+<?php
+
+// ✅ DO - Use type declarations
+public function createGame(array $data): Game
+{
+    // Implementation
+}
+
+// ❌ DON'T - Skip type declarations
+public function createGame($data)
+{
+    // Implementation
+}
+```
+
+### Strict Types
+
+Use strict types at the top of every PHP file:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+```
+
+### Laravel Pint
+
+Use Laravel Pint for automatic code formatting:
+
+```powershell
+# Format all files
+./vendor/bin/pint
+
+# Format specific file
+./vendor/bin/pint app/Services/GameService.php
+
+# Check without fixing
+./vendor/bin/pint --test
+```
+
+**Configuration**: `pint.json`
+
+```json
+{
+    "preset": "laravel",
+    "rules": {
+        "declare_strict_types": true
+    }
+}
+```
+
+## Code Organization
+
+### File Structure
+
+**Namespace and Imports**:
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App\Services;
+
+// Group imports logically
+use App\Models\Game;
+use App\Models\User;
+use App\Repositories\GameRepository;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
+
+class GameService
+{
+    // Implementation
+}
+```
+
+### Class Structure
+
+```php
+<?php
+
+class GameService
+{
+    // 1. Constants
+    private const MAX_GAMES = 100;
+    
+    // 2. Properties
+    private GameRepository $repository;
+    
+    // 3. Constructor
+    public function __construct(GameRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+    
+    // 4. Public methods
+    public function getGames(): Collection
+    {
+        return $this->repository->all();
+    }
+    
+    // 5. Protected methods
+    protected function validateGame(Game $game): bool
+    {
+        return true;
+    }
+    
+    // 6. Private methods
+    private function logGameAction(string $action): void
+    {
+        Log::info($action);
+    }
+}
+```
+
+### Method Size
+
+**Keep methods small and focused**:
+
+```php
+// ❌ DON'T - Long methods
+public function processGame($id)
+{
+    // 100 lines of code...
+}
+
+// ✅ DO - Small, focused methods
+public function processGame(int $id): void
+{
+    $game = $this->findGame($id);
+    $this->validateGame($game);
+    $this->executeGameLogic($game);
+    $this->saveGame($game);
+}
+
+private function findGame(int $id): Game
+{
+    return Game::findOrFail($id);
+}
+
+private function validateGame(Game $game): void
+{
+    // Validation logic
+}
+```
+
+## Naming Conventions
+
+### Classes
+
+```php
+// Controllers
+GameController
+UserController
+
+// Models
+Game
+User
+GameScore
+
+// Services
+GameService
+UserAuthenticationService
+
+// Repositories
+GameRepository
+UserRepository
+
+// Requests
+StoreGameRequest
+UpdateUserRequest
+
+// Jobs
+ProcessGameData
+SendGameNotification
+```
+
+### Methods
+
+```php
+// Actions - verbs
+public function createGame(array $data): Game
+public function updateScore(int $gameId, int $score): void
+public function deleteGame(int $id): bool
+
+// Queries - get/find/is/has
+public function getActiveGames(): Collection
+public function findGameById(int $id): ?Game
+public function isGameActive(Game $game): bool
+public function hasPermission(User $user): bool
+```
+
+### Variables
+
+```php
+// Use descriptive names
+$activeGames = Game::active()->get();
+$userScore = $user->calculateScore();
+$isGameComplete = $game->isComplete();
+
+// ❌ DON'T - Single letter or unclear
+$g = Game::find(1);
+$x = $user->score();
+$flag = $game->status === 'complete';
+```
+
+## Documentation
+
+### PHPDoc Comments
+
+```php
+<?php
+
+/**
+ * Service for managing game operations.
+ */
+class GameService
+{
+    /**
+     * Create a new game with the given data.
+     *
+     * @param  array  $data  The game data
+     * @return Game  The created game
+     * @throws GameCreationException  If game creation fails
+     */
+    public function createGame(array $data): Game
+    {
+        // Implementation
+    }
+    
+    /**
+     * Get all active games.
+     *
+     * @return Collection<int, Game>
+     */
+    public function getActiveGames(): Collection
+    {
+        return Game::active()->get();
+    }
+}
+```
+
+### Inline Comments
+
+```php
+// ✅ DO - Explain why, not what
+// Eager load user to prevent N+1 queries
+$games = Game::with('user')->get();
+
+// Cache for 1 hour because game list rarely changes
+$games = Cache::remember('active_games', 3600, fn() => Game::active()->get());
+
+// ❌ DON'T - State the obvious
+// Get games
+$games = Game::all();
+
+// Loop through games
+foreach ($games as $game) {
+    // Process game
+}
+```
+
+### Complex Logic
+
+Document complex algorithms or business rules:
+
+```php
+/**
+ * Calculate game score based on multiple factors.
+ * 
+ * Score calculation:
+ * - Base score: time_taken * difficulty_multiplier
+ * - Bonus: achievements * 100
+ * - Penalty: mistakes * -50
+ * - Final score cannot be negative
+ */
+public function calculateScore(Game $game): int
+{
+    $baseScore = $game->time_taken * $game->difficulty_multiplier;
+    $bonus = $game->achievements * 100;
+    $penalty = $game->mistakes * -50;
+    
+    return max(0, $baseScore + $bonus + $penalty);
+}
+```
+
+## Error Handling
+
+### Exceptions
+
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Exception;
+
+class GameNotFoundException extends Exception
+{
+    public function __construct(int $gameId)
+    {
+        parent::__construct("Game with ID {$gameId} not found");
+    }
+}
+```
+
+### Try-Catch Blocks
+
+```php
+public function processGame(int $id): void
+{
+    try {
+        $game = Game::findOrFail($id);
+        $this->executeGameLogic($game);
+    } catch (ModelNotFoundException $e) {
+        Log::error("Game not found", ['id' => $id]);
+        throw new GameNotFoundException($id);
+    } catch (Exception $e) {
+        Log::error("Game processing failed", [
+            'id' => $id,
+            'error' => $e->getMessage()
+        ]);
+        throw $e;
+    }
+}
+```
+
+### Logging
+
+```php
+use Illuminate\Support\Facades\Log;
+
+// Different log levels
+Log::debug('Debug information', ['data' => $debugData]);
+Log::info('User created game', ['user_id' => $user->id]);
+Log::warning('Game approaching time limit', ['game_id' => $game->id]);
+Log::error('Game processing failed', ['error' => $e->getMessage()]);
+```
+
+## SOLID Principles
+
+### Single Responsibility
+
+```php
+// ❌ DON'T - Class doing too much
+class Game
+{
+    public function save() {}
+    public function validate() {}
+    public function sendNotification() {}
+    public function generateReport() {}
+}
+
+// ✅ DO - Separate responsibilities
+class Game
+{
+    public function save() {}
+}
+
+class GameValidator
+{
+    public function validate(Game $game): bool {}
+}
+
+class GameNotificationService
+{
+    public function notify(Game $game): void {}
+}
+
+class GameReportGenerator
+{
+    public function generate(Game $game): Report {}
+}
+```
+
+### Open/Closed Principle
+
+```php
+// ✅ DO - Open for extension, closed for modification
+interface ScoreCalculator
+{
+    public function calculate(Game $game): int;
+}
+
+class StandardScoreCalculator implements ScoreCalculator
+{
+    public function calculate(Game $game): int
+    {
+        return $game->points;
+    }
+}
+
+class BonusScoreCalculator implements ScoreCalculator
+{
+    public function calculate(Game $game): int
+    {
+        return $game->points * 2;
+    }
+}
+```
+
+### Dependency Inversion
+
+```php
+// ✅ DO - Depend on abstractions, not concretions
+interface GameRepository
+{
+    public function find(int $id): ?Game;
+}
+
+class EloquentGameRepository implements GameRepository
+{
+    public function find(int $id): ?Game
+    {
+        return Game::find($id);
+    }
+}
+
+class GameService
+{
+    public function __construct(
+        private readonly GameRepository $repository
+    ) {}
+}
+```
+
+## Frontend Code Standards
+
+### HTML/Blade
+
+```blade
+{{-- ✅ DO - Semantic HTML --}}
+<header class="site-header">
+    <nav class="primary-nav">
+        <ul>
+            <li><a href="{{ route('home') }}">Home</a></li>
+            <li><a href="{{ route('games') }}">Games</a></li>
+        </ul>
+    </nav>
+</header>
+
+{{-- ❌ DON'T - Div soup --}}
+<div class="header">
+    <div class="nav">
+        <div class="list">
+            <div class="item"><div class="link">Home</div></div>
+        </div>
+    </div>
+</div>
+```
+
+### CSS
+
+```css
+/* ✅ DO - Organized, commented, descriptive */
+
+/* ===== Header & Navigation ===== */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(to bottom, #000000, #001a33);
+    transition: all 1s ease;
+}
+
+.site-header.scrolled {
+    padding: 1rem 0;
+}
+
+.primary-nav ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+}
+```
+
+### JavaScript
+
+```javascript
+'use strict';
+
+/**
+ * Initialize starfield animation
+ * Creates random stars with blinking effect
+ */
+function initStarfield() {
+    const canvas = document.getElementById('starfield');
+    const ctx = canvas.getContext('2d');
+    const stars = [];
+    
+    // Set canvas size to viewport
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    
+    // Create stars based on viewport size
+    function createStars() {
+        const starCount = Math.floor((canvas.width * canvas.height) / 10000);
+        
+        for (let i = 0; i < starCount; i++) {
+            stars.push(createStar());
+        }
+    }
+    
+    // Create individual star
+    function createStar() {
+        return {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 2 + 1,
+            blinking: Math.random() < 0.6
+        };
+    }
+    
+    // Initialize
+    resizeCanvas();
+    createStars();
+    animate();
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initStarfield);
+```
+
+## Security Standards
+
+### Input Validation
+
+```php
+// ✅ DO - Always validate input
+public function store(StoreGameRequest $request)
+{
+    $validated = $request->validated();
+    $game = Game::create($validated);
+}
+
+// ❌ DON'T - Trust user input
+public function store(Request $request)
+{
+    $game = Game::create($request->all());
+}
+```
+
+### Output Escaping
+
+```blade
+{{-- ✅ DO - Auto-escape (default) --}}
+<p>{{ $game->name }}</p>
+
+{{-- ❌ DON'T - Raw output unless necessary --}}
+<p>{!! $game->name !!}</p>
+
+{{-- ✅ OK - When HTML is needed and trusted --}}
+<div>{!! $game->sanitized_html_description !!}</div>
+```
+
+### SQL Injection Prevention
+
+```php
+// ✅ DO - Use Eloquent or query builder
+Game::where('name', $name)->get();
+DB::table('games')->where('name', $name)->get();
+
+// ✅ DO - Use parameter binding
+DB::select('SELECT * FROM games WHERE name = ?', [$name]);
+
+// ❌ DON'T - Concatenate strings
+DB::select("SELECT * FROM games WHERE name = '{$name}'");
+```
+
+## Performance Standards
+
+### Database Queries
+
+```php
+// ✅ DO - Eager load relationships
+$games = Game::with('user', 'scores')->get();
+
+// ✅ DO - Select only needed columns
+$games = Game::select('id', 'name', 'status')->get();
+
+// ✅ DO - Use chunk for large datasets
+Game::chunk(100, function ($games) {
+    foreach ($games as $game) {
+        // Process
+    }
+});
+
+// ❌ DON'T - N+1 queries
+$games = Game::all();
+foreach ($games as $game) {
+    echo $game->user->name; // N+1 query
+}
+```
+
+### Caching
+
+```php
+use Illuminate\Support\Facades\Cache;
+
+// ✅ DO - Cache expensive operations
+$activeGames = Cache::remember('active_games', 3600, function () {
+    return Game::with('user')
+        ->where('status', 'active')
+        ->get();
+});
+
+// ✅ DO - Clear cache when data changes
+Game::saved(function ($game) {
+    Cache::forget('active_games');
+});
+```
+
+## Testing Standards
+
+### Test Coverage
+
+- Aim for 80%+ code coverage
+- Test critical business logic
+- Test all public methods
+- Test edge cases and error conditions
+
+### Test Organization
+
+```php
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\User;
+use App\Models\Game;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class GameManagementTest extends TestCase
+{
+    use RefreshDatabase;
+    
+    /** @test */
+    public function user_can_create_game(): void
+    {
+        $user = User::factory()->create();
+        
+        $response = $this->actingAs($user)
+            ->post(route('games.store'), [
+                'name' => 'Test Game',
+                'description' => 'A test game',
+            ]);
+        
+        $response->assertRedirect();
+        $this->assertDatabaseHas('games', [
+            'name' => 'Test Game',
+        ]);
+    }
+    
+    /** @test */
+    public function guest_cannot_create_game(): void
+    {
+        $response = $this->post(route('games.store'), [
+            'name' => 'Test Game',
+        ]);
+        
+        $response->assertRedirect(route('login'));
+    }
+}
+```
+
+## Code Review Checklist
+
+Before committing code:
+
+### PHP
+
+- [ ] Follows PSR-12 standards
+- [ ] Uses strict types
+- [ ] Has type declarations
+- [ ] Formatted with Laravel Pint
+- [ ] No obvious security issues
+- [ ] Proper error handling
+- [ ] Descriptive variable names
+- [ ] Methods are small and focused
+- [ ] Has tests
+
+### Blade/HTML
+
+- [ ] Uses semantic HTML
+- [ ] No inline styles or scripts
+- [ ] Proper escaping ({{ }})
+- [ ] Accessible (ARIA labels, alt text)
+- [ ] No emoji in production code
+
+### CSS
+
+- [ ] Follows brand guidelines
+- [ ] Well organized with comments
+- [ ] Uses night sky colors only
+- [ ] Responsive design
+- [ ] No purple or off-brand colors
+
+### JavaScript
+
+- [ ] Modern JavaScript (ES6+)
+- [ ] Well commented
+- [ ] No console.log in production
+- [ ] Proper error handling
+- [ ] Performance optimized
+
+## Common Code Smells
+
+### Avoid
+
+- **God Classes**: Classes that do too much
+- **Long Methods**: Methods over 20 lines
+- **Deep Nesting**: More than 3 levels
+- **Magic Numbers**: Use constants instead
+- **Duplicate Code**: Extract to methods
+- **Large Classes**: Split into smaller classes
+- **Long Parameter Lists**: Use DTOs or arrays
+- **Dead Code**: Remove unused code
+
+## Refactoring
+
+### When to Refactor
+
+- Before adding new features
+- When fixing bugs
+- During code review
+- When code smells detected
+- When tests are hard to write
+
+### How to Refactor
+
+1. Ensure tests exist
+2. Make small changes
+3. Run tests after each change
+4. Commit incrementally
+5. Document significant changes
+
+## Tools
+
+### Laravel Pint
+
+```powershell
+# Format code
+./vendor/bin/pint
+
+# Check formatting
+./vendor/bin/pint --test
+```
+
+### PHPUnit
+
+```powershell
+# Run tests
+php artisan test
+
+# Run specific test
+php artisan test --filter=GameManagementTest
+
+# Run with coverage
+php artisan test --coverage
+```
+
+### Static Analysis (Future)
+
+```powershell
+# PHPStan
+./vendor/bin/phpstan analyse
+
+# Psalm
+./vendor/bin/psalm
+```
+
+## Best Practices Summary
+
+### DO
+
+- ✅ Follow PSR-12 standards
+- ✅ Use type declarations
+- ✅ Write tests
+- ✅ Keep methods small
+- ✅ Use descriptive names
+- ✅ Document complex logic
+- ✅ Handle errors properly
+- ✅ Follow SOLID principles
+- ✅ Use Laravel's built-in features
+- ✅ Format with Laravel Pint
+
+### DON'T
+
+- ❌ Skip type declarations
+- ❌ Write long methods
+- ❌ Use single-letter variables
+- ❌ Skip tests
+- ❌ Ignore security
+- ❌ Put logic in views
+- ❌ Use emoji in production
+- ❌ Skip error handling
+- ❌ Reinvent the wheel
+- ❌ Ignore code smells

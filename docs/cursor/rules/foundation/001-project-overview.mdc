@@ -1,0 +1,199 @@
+---
+description: "Ursa Minor Games - Website Project Overview"
+globs: "app/**/*.php,resources/views/**/*.blade.php,public/**/*.{js,css}"
+---
+
+# Project Overview
+
+## About Ursa Minor Games
+
+Ursa Minor Games is a game development brand focused on creating memorable gaming experiences. The website serves as a hub for browser games, F1 predictions, board games, and world-building content.
+
+**Mission**: To build a community of passionate gamers while working toward opening a board game café in New Zealand.
+
+**Tagline**: "Where games are born under the stars"
+
+## Core Technologies
+
+- **Laravel 12.x**: Backend framework with PHP 8.3+
+- **Frontend**: Vanilla HTML, CSS, JavaScript
+- **Styling**: Custom CSS with night sky theme
+- **Hosting**: Railway (auto-deploy from main branch)
+- **Local Dev**: Laravel Herd at http://website.test/
+
+## Future Stack Evolution
+
+- **Target**: TALL Stack (Tailwind, Alpine.js, Laravel, Livewire)
+- **Current Phase**: Vanilla implementation with incremental enhancements
+- **Approach**: One feature at a time, tested locally before commit
+
+## Core Design Philosophy
+
+### Visual Identity
+- **Theme**: Simple elegance of the night sky
+- **Inspiration**: Stars, constellations, moon, celestial elements
+- **Style**: Deep space aesthetic with clean, minimalist approach
+- **NO EMOJI**: Emoji is strictly prohibited in production code
+- **NO PURPLE GRADIENTS**: Avoid AI-typical purple gradients
+- **YES TO NIGHT SKY**: Black to evening blue gradients encouraged
+
+### Brand Values
+- Peaceful and kind, not distracting or demanding
+- No gaudy design, no ads, no begging for attention
+- Just there when asked
+- Good design principles and coding standards
+- Incremental changes via commits, features via branching
+
+## Project Structure
+
+```
+public/
+  ├── style.css       # Main stylesheet
+  ├── script.js       # Starfield animation
+  ├── scroll.js       # Header scroll behavior
+  └── bear.svg        # Logo asset
+
+resources/
+  ├── views/
+  │   └── *.blade.php # Blade templates
+  ├── css/
+  │   └── app.css    # Future Tailwind config
+  └── js/
+      └── app.js     # Main JS entry
+
+app/
+  ├── Http/
+  │   └── Controllers/
+  ├── Models/
+  └── Providers/
+```
+
+## Key Features (Current & Planned)
+
+### Current
+- Homepage with night sky aesthetic
+- Responsive design
+- Starfield animation background
+- Smooth scroll effects
+- Brand identity established
+
+### Coming Soon
+- Browser games (Sudoku, Chess)
+- F1 predictions platform
+- Board game digital versions
+- World-building wiki
+- User authentication system
+
+## Development Principles
+
+### Code Quality
+1. Follow Laravel conventions and naming standards
+2. Use Blade templates for views
+3. Prefer Laravel-native solutions
+4. Keep controllers thin, use service classes for logic
+5. Follow PSR-12 coding standards
+6. Write tests for new features
+
+### Workflow Standards
+1. Test changes in browser at http://website.test/ before committing
+2. Definitely test before merging branches
+3. One feature at a time ("eat the elephant one bite at a time")
+4. Feature branches for new functionality
+5. Main branch auto-deploys to Railway
+
+### Railway Compatibility
+- This site is hosted on Railway
+- Must maintain compatibility with Railway deployment
+- Use environment variables for configuration
+- Never commit secrets or .env files
+- Test deployment pipeline
+
+## Architecture Guidelines
+
+### Frontend
+- No inline JavaScript or CSS in Blade views
+- Use asset helpers: `asset()`, `@vite()`, etc.
+- Organize CSS with clear section comments
+- Keep JavaScript modular and well-commented
+- Use semantic HTML5 elements
+- Ensure accessibility (ARIA labels, semantic markup)
+
+### Backend
+- Thin controllers
+- Service classes for business logic
+- Middleware for authentication and authorization
+- Follow PSR-12 coding standards
+- Use Laravel's built-in security features
+
+## Asset Management
+
+- Images should use Bootstrap Vite for cache busting
+- Use `@images/` alias for imports
+- Do NOT manually copy assets to public/
+- SVG files: use appropriate tools to view
+- Keep assets organized
+
+## Local Development
+
+- Use Laravel Herd: http://website.test/
+- Run `npm run dev` for auto-updates (runs in background)
+- Do NOT run `npm run build` manually
+- Changes apply through dev server automatically
+
+## Critical Rules
+
+- NO EMOJI in production code
+- NO PURPLE GRADIENTS or AI-typical color schemes
+- NO CASTLE ICONS or fantasy imagery
+- Test locally before committing
+- Test before merging branches
+- Maintain Railway compatibility
+- One feature at a time
+- Incremental changes
+
+## Brand Consistency
+
+- Always use night sky color palette
+- Maintain Oswald font family
+- Implement starfield effects
+- Keep designs clean and minimal
+- Use soft yellow for accents
+- Ensure proper contrast for accessibility
+- Use heroicons or similar free icon packs
+
+## Security Standards
+
+- Never read or modify .env files
+- Validate and sanitize user input
+- Use Laravel's built-in security features
+- Follow OWASP guidelines
+- Encrypt sensitive data
+- Keep dependencies updated
+
+## Testing Approach
+
+- Write tests for new features
+- Aim for 80%+ coverage
+- Use PHPUnit for backend tests
+- Test responsive designs manually
+- Test in multiple browsers
+- Test before committing
+
+## Problem-Solving Methodology
+
+1. Perform root cause analysis before changes
+2. Understand the problem and intent thoroughly
+3. Use existing solutions before creating new ones
+4. Prefer simple, maintainable solutions
+5. Focus on one task at a time
+6. Test incrementally
+7. Use Occam's Razor: simple solution is likely better
+
+## Version Control
+
+- Use Conventional Commits format
+- Branch strategy: feature branches, main for production
+- Main branch auto-deploys to Railway
+- Never commit secrets or .env files
+- Commit after completing tasks
+- Descriptive commit messages explaining why, not just what
