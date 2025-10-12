@@ -75,37 +75,37 @@
 			<article>
 				<h2>What's Coming</h2>
 				
-				<div class="feature">
-					<h3>🎮 Browser Games</h3>
-					<p>
-						Classic games like Sudoku, Chess, and more—reimagined for the web. Play for free, 
-						challenge yourself, and compete on leaderboards. Coming soon!
-					</p>
-				</div>
+			<div class="feature">
+				<h3>Browser Games</h3>
+				<p>
+					Classic games like Sudoku, Chess, and more—reimagined for the web. Play for free, 
+					challenge yourself, and compete on leaderboards. Coming soon!
+				</p>
+			</div>
 
-				<div class="feature">
-					<h3>🏎️ F1 Predictions</h3>
-					<p>
-						Join our community to predict race outcomes, earn points, and climb the seasonal leaderboard. 
-						Perfect for Formula 1 fans who want to add an extra layer of excitement to race weekends.
-					</p>
+			<div class="feature">
+				<h3>F1 Predictions</h3>
+				<p>
+					Join our community to predict race outcomes, earn points, and climb the seasonal leaderboard. 
+					Perfect for Formula 1 fans who want to add an extra layer of excitement to race weekends.
+				</p>
                 </div>
 
-				<div class="feature">
-					<h3>🎲 Board Games</h3>
-					<p>
-						Original board game designs available digitally and as print-and-play downloads. 
-						Playtest new mechanics, provide feedback, and be part of the creative process.
-					</p>
+			<div class="feature">
+				<h3>Board Games</h3>
+				<p>
+					Original board game designs available digitally and as print-and-play downloads. 
+					Playtest new mechanics, provide feedback, and be part of the creative process.
+				</p>
         </div>
 
-				<div class="feature">
-					<h3>🌍 World Building</h3>
-					<p>
-						Explore the lore, maps, and stories behind our ambitious video game project. 
-						A collaborative space for writers, artists, and world-builders to contribute to something epic.
-					</p>
-				</div>
+			<div class="feature">
+				<h3>World Building</h3>
+				<p>
+					Explore the lore, maps, and stories behind our ambitious video game project. 
+					A collaborative space for writers, artists, and world-builders to contribute to something epic.
+				</p>
+			</div>
 			</article>
 		</section>
 

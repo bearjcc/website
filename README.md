@@ -14,10 +14,10 @@ This repository contains the main homepage and will serve as the hub for all Urs
 
 ## Current Features
 
-- ✨ Animated starfield background
-- 🐻 Ursa Minor branding with animated header
-- 📱 Responsive design
-- 🚀 Fast, simple, and elegant
+- Animated starfield background with blinking stars
+- Ursa Minor branding with smooth scroll animations
+- Responsive design for all screen sizes
+- Fast, simple, and elegant night sky aesthetic
 
 ## Tech Stack
 
@@ -86,31 +86,36 @@ Quick deploy:
 ## Roadmap
 
 ### Phase 1: Homepage (Current)
-- ✅ Basic Laravel setup
-- ✅ Static homepage with animations
-- ✅ Railway deployment
+- [x] Basic Laravel setup
+- [x] Static homepage with animations
+- [x] Railway deployment
+- [x] Night sky gradient and starfield effects
+- [x] Branding guidelines and documentation
 
 ### Phase 2: Browser Games
-- [ ] Sudoku game
-- [ ] Chess game
-- [ ] Game lobby/navigation
+- Sudoku game implementation
+- Chess game implementation
+- Game lobby and navigation system
+- User profiles and game history
 
 ### Phase 3: F1 Predictions
-- [ ] User authentication
-- [ ] Race predictions system
-- [ ] Leaderboards
-- [ ] Points calculation
+- User authentication and authorization
+- Race predictions system
+- Real-time leaderboards
+- Points calculation engine
+- Season tracking
 
 ### Phase 4: Board Games
-- [ ] Digital board game platform
-- [ ] Rules engine
-- [ ] Multiplayer support
+- Digital board game platform
+- Rules engine for custom games
+- Multiplayer support with real-time sync
+- Print-and-play PDF generation
 
 ### Phase 5: Video Game Content
-- [ ] World-building wiki
-- [ ] Lore documentation
-- [ ] Asset gallery
-- [ ] Development blog
+- World-building wiki with collaborative editing
+- Lore documentation system
+- Asset gallery and media library
+- Development blog and devlog updates
 
 ## Contributing
 
