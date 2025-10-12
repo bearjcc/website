@@ -82,7 +82,7 @@ header {
     top: 0;
     z-index: 1000;
     background: transparent;
-    padding: 0;
+    padding: 8rem 0 0 0;
     margin-top: 3rem;
     transition: height var(--transition-duration) var(--transition-timing), flex-direction var(--transition-duration) var(--transition-timing), padding var(--transition-duration) var(--transition-timing), margin-top var(--transition-duration) var(--transition-timing), background var(--transition-duration) var(--transition-timing), backdrop-filter var(--transition-duration) var(--transition-timing);
 }
