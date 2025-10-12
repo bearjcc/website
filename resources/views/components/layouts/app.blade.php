@@ -11,8 +11,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=oswald:200,300,400,500,600,700&display=swap" rel="stylesheet" />
 
-    {{-- Styles --}}
-    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    {{-- Styles via Vite --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
 <body class="font-sans text-[color:var(--ink)] bg-[color:var(--space-900)]">

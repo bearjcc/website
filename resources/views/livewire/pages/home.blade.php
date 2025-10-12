@@ -1,13 +1,15 @@
 <div>
     {{-- Hero Section --}}
-    <section class="section pt-16 md:pt-24" id="main-content">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-                <x-ui.logo-lockup />
+    <section class="section pt-16 md:pt-24 pb-16" id="main-content">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="space-y-8">
+                <x-ui.logo-lockup class="w-[240px] md:w-[280px]" />
                 
-                <p class="kicker">A small game studio</p>
+                <div class="space-y-4">
+                    <p class="kicker">A small game studio</p>
+                    <h1 class="h1">{{ __('ui.tagline') }}</h1>
+                </div>
 
-                <h1 class="h1">{{ __('ui.tagline') }}</h1>
                 <p class="p max-w-prose">
                     {{ __('ui.hero_body') }}
                 </p>
@@ -17,13 +19,14 @@
                     :primaryLabel="__('ui.cta_play')"
                     :secondaryHref="route('games.index')"
                     :secondaryLabel="__('ui.cta_browse')"
+                    data-um-goal="hero_play_click"
                 />
             </div>
 
             {{-- Right column for minimal constellation accent --}}
-            <div class="hidden md:block flex justify-center items-center">
-                <div class="w-32 h-32 opacity-20">
-                    <svg viewBox="0 0 100 100" class="w-full h-full text-[color:var(--constellation)]">
+            <div class="hidden md:flex justify-center items-center">
+                <div class="w-48 h-48 opacity-10">
+                    <svg viewBox="0 0 100 100" class="w-full h-full text-[color:var(--constellation)]" aria-hidden="true">
                         <!-- Simple constellation pattern -->
                         <circle cx="20" cy="30" r="1.5" fill="currentColor" />
                         <circle cx="40" cy="20" r="1" fill="currentColor" />
@@ -48,20 +51,20 @@
     </section>
 
     {{-- Available Now Section --}}
-    <section class="mt-24 md:mt-32">
+    <section class="mt-32 md:mt-48">
         <x-ui.section-header
             :kicker="__('ui.available_kicker')"
             :title="__('ui.available_title')"
             :subtitle="__('ui.available_sub')"
         />
 
-        <div class="section mt-8 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+        <div class="section mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @forelse($games as $game)
                 <x-ui.card
                     :title="$game->title"
                     :subtitle="Str::limit($game->short_description, 90)"
                     :href="route('games.play', $game->slug)"
-                    :icon="match($game->type) {
+                    :icon="match($game->type ?? 'default') {
                         'puzzle' => 'cube-transparent',
                         'board' => 'rectangle-group',
                         'card' => 'rectangle-stack',
@@ -93,14 +96,14 @@
 
     {{-- From the Studio Section (only if posts exist) --}}
     @if($posts->isNotEmpty())
-        <section class="mt-24 md:mt-32 mb-24">
+        <section class="mt-32 md:mt-48 mb-16">
             <x-ui.section-header
                 :kicker="__('ui.studio_kicker')"
                 :title="__('ui.studio_title')"
                 :subtitle="__('ui.studio_sub')"
             />
 
-            <div class="section mt-8 space-y-6">
+            <div class="section mt-12 space-y-4">
                 @foreach($posts as $post)
                     <x-ui.card
                         :title="$post->title"
@@ -113,6 +116,6 @@
         </section>
     @else
         {{-- Add bottom margin when no posts section --}}
-        <div class="mb-24"></div>
+        <div class="mb-16"></div>
     @endif
 </div>

@@ -14,6 +14,14 @@ use App\Livewire\Pages\LoreShow;
 use App\Livewire\Pages\PostShow;
 use Illuminate\Support\Facades\Route;
 
+// Health check for Railway deployment
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String(),
+    ]);
+})->name('health');
+
 // Public routes
 Route::get('/', Home::class)->name('home');
 Route::get('/about', About::class)->name('about');
