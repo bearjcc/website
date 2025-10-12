@@ -35,4 +35,8 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/minesweeper', function () {
         return view('pages.games.minesweeper');
     })->name('minesweeper');
+    
+    Route::get('/snake', function () {
+        return view('pages.games.snake');
+    })->name('snake');
 });
