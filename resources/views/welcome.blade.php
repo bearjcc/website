@@ -5,8 +5,19 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Ursa Minor, Inc</title>
-
+	<title>Ursa Minor Games - Where Games Are Born Under the Stars</title>
+	
+	<!-- SEO Meta Tags -->
+	<meta name="description" content="Ursa Minor Games: Browser games, F1 predictions, original board games, and world-building. Join our gaming community and follow our journey towards a board game café in New Zealand.">
+	<meta name="keywords" content="browser games, sudoku, chess, F1 predictions, board games, game development, New Zealand, gaming community">
+	<meta name="author" content="Ursa Minor Games">
+	
+	<!-- Open Graph / Social Media -->
+	<meta property="og:type" content="website">
+	<meta property="og:title" content="Ursa Minor Games - Where Games Are Born Under the Stars">
+	<meta property="og:description" content="Creating memorable gaming experiences from browser games to board games and beyond.">
+	<meta property="og:url" content="{{ config('app.url') }}">
+	
 	<link rel="stylesheet" href="{{ asset('style.css') }}">
 	<script src="{{ asset('script.js') }}"></script>
 	<script src="{{ asset('scroll.js') }}"></script>
@@ -19,115 +30,108 @@
 			<a class="nav left" href="/f1">F1</a>
 			<a class="nav right" href="/about">About</a>
 			<a class="nav right" href="/contact">Contact</a>
-		</nav>
+                </nav>
 		<div class="center-content">
 			<span class="ursa">ursa</span>
 			<object class="bear" data="{{ asset('bear.svg') }}" type="image/svg+xml"></object>
 			<span class="minor">minor</span>
 		</div>
-	</header>
+        </header>
 	<div id="stars">
 		<div class="circle blink" id="circle-animate"> </div>
 		<div class="circle" id="circle"> </div>
-	</div>
+                </div>
 
 	<main>
-		<article>
-			Non labore qui in commodo qui ullamco velit ipsum laboris aliquip sit. Ea tempor amet enim dolore velit
-			nulla. Nulla cupidatat cupidatat excepteur id aliqua nisi. Et laborum tempor voluptate id ex qui quis. Aute
-			consequat ad qui laborum aute eu amet in mollit enim reprehenderit aliquip. Anim pariatur eu exercitation
-			consequat fugiat nisi.
+		<section class="hero-section">
+			<article>
+				<h1>Welcome to Ursa Minor</h1>
+				<p class="tagline">Where games are born under the stars</p>
+				
+				<p class="intro">
+					Ursa Minor is a game development brand focused on creating memorable gaming experiences—from classic 
+					browser games to innovative board games and beyond. We believe great games start with great ideas, 
+					careful planning, and a community of passionate players.
+				</p>
+			</article>
+		</section>
 
-			Magna eiusmod fugiat id nulla. Est tempor pariatur non exercitation sit sit cillum non non ex aliquip enim
-			occaecat. Est tempor sit aliquip duis esse. Esse et eiusmod laborum exercitation deserunt elit id amet
-			consequat nostrud nisi do esse non.
+		<section class="mission-section">
+			<article>
+				<h2>Our Vision</h2>
+				<p>
+					One day, we dream of opening a board game café in New Zealand—a place where friends gather, 
+					strategies unfold, and new adventures begin. But every great journey starts with a single step.
+				</p>
+				<p>
+					Before that dream becomes reality, we're building something special: a platform where we can 
+					test game mechanics, explore world-building, share original board game designs, and create a 
+					community around the love of gaming.
+				</p>
+			</article>
+		</section>
 
-			Aliqua in minim reprehenderit amet incididunt labore ad velit qui occaecat anim ad do cillum. Nulla sit
-			nostrud occaecat irure consectetur nostrud duis elit sit proident. Aliquip officia enim ea voluptate fugiat
-			duis minim.
+		<section class="coming-soon">
+			<article>
+				<h2>What's Coming</h2>
+				
+				<div class="feature">
+					<h3>🎮 Browser Games</h3>
+					<p>
+						Classic games like Sudoku, Chess, and more—reimagined for the web. Play for free, 
+						challenge yourself, and compete on leaderboards. Coming soon!
+					</p>
+				</div>
 
-			Labore ad aute anim nisi reprehenderit ipsum enim. Proident exercitation cillum est est eiusmod ut in minim
-			reprehenderit sit laborum. Deserunt ipsum eu do aute incididunt excepteur cillum sit et irure consequat
-			excepteur. Ex voluptate labore consequat exercitation sint nostrud ut commodo minim ea. Veniam culpa velit
-			incididunt aliquip.
+				<div class="feature">
+					<h3>🏎️ F1 Predictions</h3>
+					<p>
+						Join our community to predict race outcomes, earn points, and climb the seasonal leaderboard. 
+						Perfect for Formula 1 fans who want to add an extra layer of excitement to race weekends.
+					</p>
+                </div>
 
-			Labore cupidatat minim laborum reprehenderit qui excepteur. Dolore ut ipsum sint do. Est qui est sint sint
-			cupidatat labore. Laborum amet consectetur officia quis dolore veniam consectetur ipsum labore veniam aute
-			officia velit voluptate. Duis cillum minim laboris dolore nostrud dolor elit laborum et aliquip ipsum cillum
-			duis cupidatat. Mollit nostrud eiusmod duis excepteur duis in minim cupidatat consequat voluptate irure
-			culpa ut. Irure cupidatat ullamco consequat reprehenderit fugiat ex dolor ex pariatur ex.
+				<div class="feature">
+					<h3>🎲 Board Games</h3>
+					<p>
+						Original board game designs available digitally and as print-and-play downloads. 
+						Playtest new mechanics, provide feedback, and be part of the creative process.
+					</p>
+        </div>
 
-			Fugiat ut qui anim voluptate ea eu reprehenderit cupidatat proident ullamco adipisicing commodo. Pariatur
-			esse commodo exercitation non magna anim magna. Nulla quis excepteur qui sit quis consectetur est
-			reprehenderit sint ut occaecat officia dolor enim.
+				<div class="feature">
+					<h3>🌍 World Building</h3>
+					<p>
+						Explore the lore, maps, and stories behind our ambitious video game project. 
+						A collaborative space for writers, artists, and world-builders to contribute to something epic.
+					</p>
+				</div>
+			</article>
+		</section>
 
-			Consectetur adipisicing cupidatat sint sint ex. Enim voluptate exercitation est enim eiusmod incididunt
-			mollit tempor eiusmod magna voluptate. Fugiat irure veniam reprehenderit do cupidatat cillum quis
-			incididunt. Consequat aute ea reprehenderit dolore eu sunt deserunt nostrud ipsum dolore et aliqua. Est
-			culpa consectetur do esse irure incididunt. Laboris amet sit sit aliquip consectetur.
-
-			Amet consequat nostrud nulla deserunt officia sunt dolore deserunt aute laborum velit dolore adipisicing. Ad
-			ea labore qui et consequat velit officia culpa occaecat pariatur tempor proident officia ad. Anim non culpa
-			laboris cillum nulla minim magna exercitation elit laboris Lorem.
-
-			Consequat ut nostrud nostrud culpa tempor dolor occaecat eu et in eu. Sit sint do ullamco veniam anim. Dolor
-			adipisicing sunt do et culpa do in. Incididunt nisi exercitation id enim voluptate do.
-
-			Ad tempor aliquip cillum ex eiusmod ullamco fugiat pariatur labore culpa aute elit officia quis. Amet duis
-			mollit enim cillum esse. Voluptate ea sit ex minim nulla officia enim sint. Irure eiusmod pariatur ad esse
-			excepteur. Pariatur quis veniam excepteur dolore sint ut cupidatat. Aliqua reprehenderit commodo duis amet
-			eu laboris cupidatat id eu excepteur mollit laboris magna. Culpa sunt eu elit consectetur nostrud consequat
-			pariatur ipsum est quis.
-		</article>
-		<article>
-			Non labore qui in commodo qui ullamco velit ipsum laboris aliquip sit. Ea tempor amet enim dolore velit
-			nulla. Nulla cupidatat cupidatat excepteur id aliqua nisi. Et laborum tempor voluptate id ex qui quis. Aute
-			consequat ad qui laborum aute eu amet in mollit enim reprehenderit aliquip. Anim pariatur eu exercitation
-			consequat fugiat nisi.
-
-			Magna eiusmod fugiat id nulla. Est tempor pariatur non exercitation sit sit cillum non non ex aliquip enim
-			occaecat. Est tempor sit aliquip duis esse. Esse et eiusmod laborum exercitation deserunt elit id amet
-			consequat nostrud nisi do esse non.
-
-			Aliqua in minim reprehenderit amet incididunt labore ad velit qui occaecat anim ad do cillum. Nulla sit
-			nostrud occaecat irure consectetur nostrud duis elit sit proident. Aliquip officia enim ea voluptate fugiat
-			duis minim.
-
-			Labore ad aute anim nisi reprehenderit ipsum enim. Proident exercitation cillum est est eiusmod ut in minim
-			reprehenderit sit laborum. Deserunt ipsum eu do aute incididunt excepteur cillum sit et irure consequat
-			excepteur. Ex voluptate labore consequat exercitation sint nostrud ut commodo minim ea. Veniam culpa velit
-			incididunt aliquip.
-
-			Labore cupidatat minim laborum reprehenderit qui excepteur. Dolore ut ipsum sint do. Est qui est sint sint
-			cupidatat labore. Laborum amet consectetur officia quis dolore veniam consectetur ipsum labore veniam aute
-			officia velit voluptate. Duis cillum minim laboris dolore nostrud dolor elit laborum et aliquip ipsum cillum
-			duis cupidatat. Mollit nostrud eiusmod duis excepteur duis in minim cupidatat consequat voluptate irure
-			culpa ut. Irure cupidatat ullamco consequat reprehenderit fugiat ex dolor ex pariatur ex.
-
-			Fugiat ut qui anim voluptate ea eu reprehenderit cupidatat proident ullamco adipisicing commodo. Pariatur
-			esse commodo exercitation non magna anim magna. Nulla quis excepteur qui sit quis consectetur est
-			reprehenderit sint ut occaecat officia dolor enim.
-
-			Consectetur adipisicing cupidatat sint sint ex. Enim voluptate exercitation est enim eiusmod incididunt
-			mollit tempor eiusmod magna voluptate. Fugiat irure veniam reprehenderit do cupidatat cillum quis
-			incididunt. Consequat aute ea reprehenderit dolore eu sunt deserunt nostrud ipsum dolore et aliqua. Est
-			culpa consectetur do esse irure incididunt. Laboris amet sit sit aliquip consectetur.
-
-			Amet consequat nostrud nulla deserunt officia sunt dolore deserunt aute laborum velit dolore adipisicing. Ad
-			ea labore qui et consequat velit officia culpa occaecat pariatur tempor proident officia ad. Anim non culpa
-			laboris cillum nulla minim magna exercitation elit laboris Lorem.
-
-			Consequat ut nostrud nostrud culpa tempor dolor occaecat eu et in eu. Sit sint do ullamco veniam anim. Dolor
-			adipisicing sunt do et culpa do in. Incididunt nisi exercitation id enim voluptate do.
-
-			Ad tempor aliquip cillum ex eiusmod ullamco fugiat pariatur labore culpa aute elit officia quis. Amet duis
-			mollit enim cillum esse. Voluptate ea sit ex minim nulla officia enim sint. Irure eiusmod pariatur ad esse
-			excepteur. Pariatur quis veniam excepteur dolore sint ut cupidatat. Aliqua reprehenderit commodo duis amet
-			eu laboris cupidatat id eu excepteur mollit laboris magna. Culpa sunt eu elit consectetur nostrud consequat
-			pariatur ipsum est quis.
-		</article>
+		<section class="cta-section">
+			<article>
+				<h2>Join the Journey</h2>
+				<p>
+					We're building this platform incrementally, adding features and games step by step. 
+					Follow our progress, play our games, and become part of the Ursa Minor community.
+				</p>
+				<p class="disclaimer">
+					<em>Currently in active development. First games coming soon!</em>
+				</p>
+			</article>
+		</section>
 	</main>
 
+	<footer>
+		<div class="footer-content">
+			<p>&copy; {{ date('Y') }} Ursa Minor Games. All rights reserved.</p>
+			<p class="footer-tagline">Building games under the Southern Cross</p>
+			<div class="footer-links">
+				<a href="https://github.com/bearjcc/website" target="_blank" rel="noopener">GitHub</a>
+			</div>
+		</div>
+	</footer>
 
 </body>
 
