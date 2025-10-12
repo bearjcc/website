@@ -18,12 +18,12 @@
 	<meta property="og:description" content="Creating memorable gaming experiences from browser games to board games and beyond.">
 	<meta property="og:url" content="{{ config('app.url') }}">
 	
-	<link rel="stylesheet" href="{{ asset('style.css') }}">
-	<script src="{{ asset('script.js') }}"></script>
-	<script src="{{ asset('scroll.js') }}"></script>
+	<link rel="stylesheet" href="{{ asset('style.css') }}?v={{ time() }}">
+	<script src="{{ asset('script.js') }}?v={{ time() }}"></script>
+	<script src="{{ asset('scroll.js') }}?v={{ time() }}"></script>
 </head>
 
-<body onload="stars();">
+	<body onload="stars();" style="background: #000; color: #fff;">
 	<header>
 		<nav aria-label="Main navigation" class="header-nav">
 			<a class="nav left" href="/games">Games</a>
