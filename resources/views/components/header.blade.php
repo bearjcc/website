@@ -1,5 +1,6 @@
 <header>
     <nav aria-label="Main navigation" class="header-nav">
+        <a class="nav left" href="{{ route('games.index') }}">Games</a>
         <a class="nav left" href="{{ route('about') }}">About</a>
         <a class="nav right" href="{{ route('contact') }}">Contact</a>
     </nav>
