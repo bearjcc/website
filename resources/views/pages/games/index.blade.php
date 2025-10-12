@@ -42,14 +42,15 @@
                     <span class="play-button">Play Now →</span>
                 </a>
 
-                <!-- Coming Soon Games -->
-
-                <div class="game-card coming-soon-card">
+                <!-- 2048 -->
+                <a href="{{ route('games.2048') }}" class="game-card">
                     <div class="game-icon">2️⃣0️⃣4️⃣8️⃣</div>
                     <h3>2048</h3>
-                    <p>Slide and combine tiles to reach 2048. Simple to learn, challenging to master.</p>
-                    <span class="coming-soon-badge">Coming Soon</span>
-                </div>
+                    <p>Slide and combine tiles to reach 2048. Use arrow keys or WASD. Addictive puzzle action!</p>
+                    <span class="play-button">Play Now →</span>
+                </a>
+
+                <!-- Coming Soon Games -->
 
                 <div class="game-card coming-soon-card">
                     <div class="game-icon">♟️</div>
