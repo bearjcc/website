@@ -23,4 +23,8 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/tic-tac-toe', function () {
         return view('pages.games.tic-tac-toe');
     })->name('tic-tac-toe');
+    
+    Route::get('/sudoku', function () {
+        return view('pages.games.sudoku');
+    })->name('sudoku');
 });

@@ -34,13 +34,15 @@
                     <span class="play-button">Play Now →</span>
                 </a>
 
-                <!-- Coming Soon Games -->
-                <div class="game-card coming-soon-card">
+                <!-- Sudoku -->
+                <a href="{{ route('games.sudoku') }}" class="game-card">
                     <div class="game-icon">🔢</div>
                     <h3>Sudoku</h3>
-                    <p>Logic puzzle with numbers. Multiple difficulty levels from beginner to expert.</p>
-                    <span class="coming-soon-badge">Coming Soon</span>
-                </div>
+                    <p>Logic puzzle with numbers. Five difficulty levels from beginner to expert with hints and notes.</p>
+                    <span class="play-button">Play Now →</span>
+                </a>
+
+                <!-- Coming Soon Games -->
 
                 <div class="game-card coming-soon-card">
                     <div class="game-icon">2️⃣0️⃣4️⃣8️⃣</div>
