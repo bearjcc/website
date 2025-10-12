@@ -1,288 +1,299 @@
 ---
 description: "Railway deployment and configuration for Ursa Minor Games"
-globs: "nixpacks.toml,.env.example"
+alwaysApply: true
 ---
 
-# Railway Deployment
+# Railway Deployment Standards
 
-Railway deployment configuration and best practices for Ursa Minor Games.
+This rule ensures all code changes maintain Railway deployment compatibility.
 
-## About Railway
+## Critical Requirements
 
-Railway is a modern platform for deploying applications with:
-- **Auto-Deploy**: Automatic deployment from Git
-- **Zero Config**: Intelligent build detection
-- **Managed Services**: Databases, Redis, etc.
-- **Environment Variables**: Secure config management
-- **Automatic HTTPS**: SSL certificates included
-- **Custom Domains**: Easy domain configuration
+### Docker Build Compatibility
 
-## Deployment Flow
-
-### Automatic Deployment
-
-```
-1. Developer commits to main branch
-   ↓
-2. Git push to GitHub/GitLab
-   ↓
-3. Railway detects push to main
-   ↓
-4. Railway pulls latest code
-   ↓
-5. Railway runs build process (Nixpacks)
-   ↓
-6. Railway runs migrations
-   ↓
-7. Railway deploys to production
-   ↓
-8. Site is live with new changes
-```
-
-### Build Process
-
-Railway uses Nixpacks to build Laravel applications:
-
-1. **Detect Laravel**: Identifies Laravel via `composer.json`
-2. **Install Dependencies**: Runs `composer install --optimize-autoloader --no-dev`
-3. **Build Assets**: Runs `npm install && npm run build`
-4. **Cache Config**: Runs `php artisan config:cache`
-5. **Cache Routes**: Runs `php artisan route:cache`
-6. **Cache Views**: Runs `php artisan view:cache`
-7. **Start Server**: Runs PHP server
-
-## Configuration
-
-### Nixpacks Configuration
-
-File: `nixpacks.toml`
-
-```toml
-[phases.setup]
-nixPkgs = ["php83", "php83Extensions.pdo", "php83Extensions.pdo_sqlite"]
-
-[phases.install]
-cmds = [
-    "composer install --optimize-autoloader --no-dev",
-    "npm install",
-    "npm run build"
-]
-
-[phases.build]
-cmds = [
-    "php artisan config:cache",
-    "php artisan route:cache",
-    "php artisan view:cache"
-]
-
-[start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
-```
-
-### Environment Variables
-
-#### Required Variables
-
-Configure in Railway dashboard:
-
-```env
-# Application
-APP_NAME="Ursa Minor Games"
-APP_ENV=production
-APP_KEY=<generated-key>
-APP_DEBUG=false
-APP_URL=https://ursaminorgames.com
-
-# Database (Railway provides)
-DATABASE_URL=<railway-provided>
-
-# Logging
-LOG_CHANNEL=stack
-LOG_LEVEL=error
-
-# Session
-SESSION_DRIVER=database
-SESSION_LIFETIME=120
-
-# Cache
-CACHE_DRIVER=database
-```
-
-## Deployment Checklist
-
-### Before Deploying
-
-- [ ] All tests passing locally
-- [ ] Tested at http://website.test/
-- [ ] Browser testing complete
-- [ ] Mobile testing complete
-- [ ] No debug code (`dd()`, `console.log()`)
-- [ ] No secrets in code
-- [ ] Environment variables configured
-- [ ] Database migrations ready
-- [ ] Assets compiled
-- [ ] Dependencies updated
-
-### During Deployment
-
-- [ ] Monitor Railway build logs
-- [ ] Watch for build errors
-- [ ] Check migration status
-- [ ] Verify asset compilation
-- [ ] Wait for deployment completion
-
-### After Deployment
-
-- [ ] Test production site
-- [ ] Verify homepage loads
-- [ ] Check all main features
-- [ ] Test user flows
-- [ ] Check for console errors
-- [ ] Verify mobile responsiveness
-- [ ] Test in multiple browsers
-- [ ] Monitor error logs
-
-## Troubleshooting
-
-### Common Issues
-
-#### Build Fails
-
-**Issue**: Build fails during deployment
-
-**Solutions**:
-- Check Railway build logs
-- Verify `composer.json` is valid
-- Ensure all dependencies are listed
-- Check for PHP version compatibility
-- Verify `nixpacks.toml` configuration
-
-#### App Key Not Set
-
-**Issue**: "No application encryption key has been set"
-
-**Solution**:
-```powershell
-# Generate key locally
-php artisan key:generate --show
-
-# Add to Railway environment variables
-APP_KEY=base64:generated-key
-```
-
-#### Database Connection Fails
-
-**Issue**: Can't connect to database
-
-**Solutions**:
-- Verify DATABASE_URL is set
-- Check database service is running
-- Ensure database credentials are correct
-- Verify database exists
-- Check connection settings in config/database.php
-
-#### Assets Not Loading
-
-**Issue**: CSS/JS files return 404
-
-**Solutions**:
-- Verify `npm run build` runs during deployment
-- Check `public` directory structure
-- Verify asset paths in Blade templates
-- Check `vite.config.js` configuration
-- Ensure Vite manifest is generated
-
-#### Migration Fails
-
-**Issue**: Database migration fails during deployment
-
-**Solutions**:
-- Check migration syntax
-- Verify database connection
-- Review migration order
-- Check for conflicting migrations
-- Test migration locally first
-
-## Rollback
-
-### Railway Rollback
-
-Railway allows instant rollback to previous deployments:
-
-1. Open Railway dashboard
-2. Navigate to Deployments
-3. Find previous working deployment
-4. Click "Redeploy"
-
-### Database Rollback
-
-```powershell
-# Rollback last migration
-railway run php artisan migrate:rollback
-
-# Rollback specific steps
-railway run php artisan migrate:rollback --step=2
-
-# Reset database (DANGER: loses all data)
-railway run php artisan migrate:reset
-```
-
-## Best Practices
-
-### Deployment Strategy
-
-1. **Test Thoroughly**: Test locally before pushing
-2. **Small Changes**: Deploy small, incremental changes
-3. **Monitor Deployment**: Watch build logs
-4. **Test Production**: Verify after deployment
-5. **Be Ready to Rollback**: Know how to rollback quickly
+**ALL changes MUST be Docker-compatible:**
+- ✅ Use environment variables for configuration
+- ✅ Never hardcode absolute paths
+- ✅ Assume storage is ephemeral (use database or external storage for persistence)
+- ✅ Log to stderr/stdout (never to files in production)
 
 ### Environment Configuration
 
-- Keep `.env.example` updated
-- Document all environment variables
-- Never commit `.env` file
-- Use Railway's environment variables
-- Review variables regularly
+**ALWAYS use `config()` helper, NEVER `env()` in application code:**
 
-### Database Management
+```php
+// ❌ WRONG
+$apiKey = env('API_KEY');
 
-- Always test migrations locally first
-- Use migration rollback for mistakes
-- Keep database backups
-- Never run seeders in production
-- Review migration order
+// ✅ CORRECT
+$apiKey = config('services.api.key');
+```
 
-### Asset Management
+**All environment variables MUST have defaults in config files:**
 
-- Use Vite for asset compilation
-- Test asset loading after deployment
-- Ensure cache busting works
-- Verify asset paths are correct
-- Monitor asset file sizes
+```php
+// config/services.php
+'api' => [
+    'key' => env('API_KEY', 'default-value'),
+],
+```
 
-## Summary
+### Logging Requirements
 
-### Key Points
+**Production logs MUST go to stderr:**
+- Railway environment: `LOG_CHANNEL=stderr`
+- Local development: `LOG_CHANNEL=stack`
 
-- Railway auto-deploys from main branch
-- Test thoroughly before pushing to main
-- Monitor deployment logs
-- Verify site after deployment
-- Be ready to rollback if needed
-- Keep environment variables secure
-- Use database for sessions and cache
-- Optimize for production
-- Monitor application performance
-- Document deployment process
+**NEVER log to files in production** - Railway containers are ephemeral.
 
-### Railway Compatibility
+### Asset Building
 
-- This site is hosted on Railway
-- Must maintain Railway compatibility
-- Test deployment pipeline regularly
-- Keep `nixpacks.toml` updated
-- Use Railway's environment variables
-- Monitor Railway service status
-- Review Railway best practices
-- Stay within resource limits
+**Frontend assets MUST be built during Docker build:**
+- Vite builds to `public/build/` in Docker image
+- Never rely on dev server in production
+- Use `@vite` directive in Blade templates
+
+### Database Considerations
+
+**Support both SQLite (local) and PostgreSQL (Railway):**
+
+```php
+// Works for both
+Model::query()->where('status', 'active')->get();
+
+// Database-specific features require guards
+if (config('database.default') === 'pgsql') {
+    // PostgreSQL-specific code
+}
+```
+
+**Migrations MUST be idempotent:**
+- Safe to run multiple times
+- Use `Schema::hasTable()` and `Schema::hasColumn()` for conditional logic
+
+### Production Safety Guards
+
+**NEVER install dev dependencies in production:**
+- `composer install --no-dev` in Dockerfile
+- Dev packages in `require-dev` (e.g., debugbar, IDE helper)
+
+**Explicitly disable debug tools:**
+
+```php
+// In AppServiceProvider
+if ($this->app->environment('production')) {
+    $this->app['config']->set('debugbar.enabled', false);
+}
+```
+
+## Docker Build Structure
+
+### Multi-Stage Build Pattern
+
+**ALWAYS use multi-stage builds:**
+1. **Node stage**: Build frontend assets
+2. **Composer stage**: Install PHP dependencies
+3. **Runtime stage**: PHP-FPM + Nginx
+
+**Example structure:**
+
+```dockerfile
+FROM node:20-bullseye AS nodebuild
+# Build assets
+
+FROM composer:2 AS composerbuild
+# Install dependencies
+
+FROM php:8.3-fpm-bullseye AS app
+# Runtime with nginx + supervisor
+```
+
+### Required Docker Files
+
+**These files MUST exist and be maintained:**
+- `Dockerfile` - Multi-stage build definition
+- `deploy/nginx.conf` - Nginx web server config
+- `deploy/supervisord.conf` - Process manager config
+- `deploy/entrypoint.sh` - Startup script
+
+## Railway Configuration
+
+### Required Environment Variables
+
+**Minimum variables for Railway:**
+
+```env
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=<auto-generated-or-set>
+APP_URL=https://your-app.up.railway.app
+LOG_CHANNEL=stderr
+LOG_LEVEL=info
+```
+
+**For PostgreSQL:**
+
+```env
+DATABASE_URL=${{Postgres.DATABASE_URL}}
+# Or individual vars
+DB_CONNECTION=pgsql
+DB_HOST=${{Postgres.PGHOST}}
+DB_PORT=${{Postgres.PGPORT}}
+DB_DATABASE=${{Postgres.PGDATABASE}}
+DB_USERNAME=${{Postgres.PGUSER}}
+DB_PASSWORD=${{Postgres.PGPASSWORD}}
+```
+
+### Port Configuration
+
+**Railway expects port 8080:**
+- Nginx listens on 8080 (defined in `deploy/nginx.conf`)
+- Railway auto-detects and exposes this port
+- Never hardcode port - use `${PORT:-8080}` if needed
+
+## CI/CD Requirements
+
+### GitHub Actions Smoke Test
+
+**ALWAYS test Docker build before Railway deployment:**
+- `.github/workflows/railway-smoke.yml` runs on push to main
+- Validates Docker build succeeds
+- Checks artisan commands work
+- Verifies assets are built
+
+**If smoke test fails, fix before merging.**
+
+## Common Pitfalls to Avoid
+
+### ❌ DON'T
+
+- Don't use file-based sessions/cache without database backup
+- Don't log to files in production
+- Don't use `env()` outside config files
+- Don't rely on writable storage outside `storage/` directory
+- Don't hardcode localhost or development URLs
+- Don't include dev dependencies in production build
+- Don't run migrations manually (use `RUN_MIGRATIONS=1` env var)
+
+### ✅ DO
+
+- Use database for sessions/cache in production
+- Use stderr/stdout for logs
+- Use `config()` helper everywhere
+- Store uploads in external storage (S3, Railway volumes)
+- Use environment variables for all URLs
+- Use `composer install --no-dev` in production
+- Automate migrations via environment variable
+
+## Testing Railway Compatibility
+
+### Before Committing
+
+**Check these before pushing:**
+
+1. **Docker Build Test:**
+   ```bash
+   docker build -t test .
+   ```
+
+2. **Artisan Commands:**
+   ```bash
+   docker run --rm -e APP_KEY=base64:TEST= test php artisan --version
+   ```
+
+3. **Assets Exist:**
+   ```bash
+   docker run --rm test ls -la /var/www/html/public/build
+   ```
+
+### After Pushing
+
+**Monitor GitHub Actions:**
+- Railway smoke test must pass
+- Fix any build failures immediately
+
+**Monitor Railway Logs:**
+- Check for errors after deployment
+- Verify APP_KEY generation
+- Confirm migrations ran (if enabled)
+
+## Performance Optimization
+
+### Caching in Production
+
+**Railway entrypoint automatically caches:**
+- `php artisan config:cache`
+- `php artisan route:cache`
+- `php artisan view:cache`
+
+**Do NOT run these manually in Railway** - they're handled automatically.
+
+### OPcache Configuration
+
+**Dockerfile includes optimal OPcache settings:**
+- `opcache.enable=1`
+- `opcache.validate_timestamps=0`
+- `opcache.memory_consumption=128`
+
+## Monitoring and Debugging
+
+### Viewing Logs in Railway
+
+**All application logs go to Railway dashboard:**
+- PHP errors → stderr
+- Laravel logs → stderr (via LOG_CHANNEL)
+- Nginx errors → stderr
+
+**To debug issues:**
+1. Check Railway logs in dashboard
+2. Temporarily enable `APP_DEBUG=true` (then disable!)
+3. Use `php artisan tinker` via Railway shell
+
+### Health Checks
+
+**Railway can monitor `/up` endpoint:**
+- Laravel 11+ includes health check route
+- Returns 200 OK if app is healthy
+- Configure in Railway service settings
+
+## Deployment Checklist
+
+**Before first Railway deployment:**
+
+- [ ] Railway project created and linked to GitHub
+- [ ] Railway configured to use Dockerfile (not nixpacks)
+- [ ] Required environment variables set in Railway
+- [ ] PostgreSQL plugin added (if using database)
+- [ ] `LOG_CHANNEL=stderr` set in Railway
+- [ ] Custom domain configured (optional)
+
+**For every deployment:**
+
+- [ ] GitHub Actions smoke test passes
+- [ ] Local tests pass (`php artisan test`)
+- [ ] No `env()` calls outside config files
+- [ ] Assets build successfully (`npm run build`)
+- [ ] Migrations are idempotent and safe
+- [ ] No dev dependencies in production code
+
+## Rollback Strategy
+
+**If deployment fails:**
+
+1. **Immediate**: Railway → Deployments → Rollback to previous version
+2. **Investigate**: Check logs for error messages
+3. **Fix**: Address issue in code
+4. **Test**: Ensure smoke test passes
+5. **Redeploy**: Push fix to main branch
+
+## Additional Resources
+
+- [README - Railway Section](../../README.md#deployment)
+- [Deployment Guide](../../docs/DEPLOYMENT_GUIDE.md)
+- [Railway Documentation](https://docs.railway.app)
+- [Docker Multi-Stage Builds](https://docs.docker.com/build/building/multi-stage/)
+
+---
+
+**Last Updated**: 2025-10-13
+**Maintained By**: Development Team
