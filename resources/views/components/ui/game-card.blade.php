@@ -72,6 +72,50 @@
                 </svg>
                 @break
             
+            @case('chess')
+                {{-- Chess board 8x8 grid --}}
+                <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
+                    <g stroke="currentColor" stroke-width="2" fill="none">
+                        <rect x="10" y="10" width="100" height="100" />
+                        {{-- 8x8 grid --}}
+                        <line x1="22.5" y1="10" x2="22.5" y2="110" />
+                        <line x1="35" y1="10" x2="35" y2="110" />
+                        <line x1="47.5" y1="10" x2="47.5" y2="110" />
+                        <line x1="60" y1="10" x2="60" y2="110" />
+                        <line x1="72.5" y1="10" x2="72.5" y2="110" />
+                        <line x1="85" y1="10" x2="85" y2="110" />
+                        <line x1="97.5" y1="10" x2="97.5" y2="110" />
+                        <line x1="10" y1="22.5" x2="110" y2="22.5" />
+                        <line x1="10" y1="35" x2="110" y2="35" />
+                        <line x1="10" y1="47.5" x2="110" y2="47.5" />
+                        <line x1="10" y1="60" x2="110" y2="60" />
+                        <line x1="10" y1="72.5" x2="110" y2="72.5" />
+                        <line x1="10" y1="85" x2="110" y2="85" />
+                        <line x1="10" y1="97.5" x2="110" y2="97.5" />
+                    </g>
+                </svg>
+                @break
+            
+            @case('checkers')
+                {{-- Checkers 4x4 board with sample pieces --}}
+                <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
+                    <g stroke="currentColor" stroke-width="2.5">
+                        <rect x="10" y="10" width="100" height="100" fill="none" />
+                        {{-- 4x4 grid --}}
+                        <line x1="35" y1="10" x2="35" y2="110" />
+                        <line x1="60" y1="10" x2="60" y2="110" />
+                        <line x1="85" y1="10" x2="85" y2="110" />
+                        <line x1="10" y1="35" x2="110" y2="35" />
+                        <line x1="10" y1="60" x2="110" y2="60" />
+                        <line x1="10" y1="85" x2="110" y2="85" />
+                        {{-- Sample pieces --}}
+                        <circle cx="22.5" cy="22.5" r="8" fill="currentColor" opacity="0.4" />
+                        <circle cx="72.5" cy="22.5" r="8" fill="none" />
+                        <circle cx="97.5" cy="97.5" r="8" fill="currentColor" opacity="0.4" />
+                    </g>
+                </svg>
+                @break
+            
             @case('minesweeper')
                 {{-- Mine glyph --}}
                 <svg width="80" height="80" viewBox="0 0 80 80" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
