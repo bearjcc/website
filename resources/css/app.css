@@ -260,6 +260,15 @@
             hsl(var(--earth) / .96), 
             hsl(var(--earth-dark) / 1)
         );
+        border-top: 2px solid transparent;
+        border-image: linear-gradient(
+            90deg,
+            hsl(var(--sunset) / 0) 0%,
+            hsl(var(--sunset) / .85) 25%,
+            hsl(var(--star) / .9) 50%,
+            hsl(var(--sunset) / .85) 75%,
+            hsl(var(--sunset) / 0) 100%
+        ) 1;
     }
 
     @media (min-width: 768px) {
