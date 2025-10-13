@@ -1,10 +1,10 @@
 {{-- Horizon footer: opaque earth-toned ground with sunset horizon line --}}
-<footer class="mt-16 md:mt-24 relative bg-[#1a1f1a] w-full isolate">
+<footer class="mt-16 md:mt-24 relative bg-[color:var(--earth)] w-full isolate">
     {{-- Horizon line - last light between sky and earth --}}
-    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[rgba(255,190,140,.45)] to-transparent" aria-hidden="true"></div>
+    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[color:var(--sunset)] to-transparent" aria-hidden="true"></div>
 
     {{-- Subtle mountain ridge silhouette at horizon (darker earth tone) --}}
-    <div class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#141814] to-transparent opacity-50" aria-hidden="true"></div>
+    <div class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[color:var(--earth-dark)] to-transparent opacity-50" aria-hidden="true"></div>
 
     {{-- Back to top star rocket button --}}
     <button 
@@ -12,10 +12,10 @@
         aria-label="{{ __('ui.back_to_top') ?? 'Back to top' }}"
         class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
                w-11 h-11 rounded-full 
-               bg-[#2a2f2a] border border-[rgba(255,190,140,.3)]
+               bg-[color:var(--earth-button)] border border-[color:var(--sunset-border)]
                flex items-center justify-center
                transition-all duration-200
-               hover:bg-[#343a34] hover:border-[rgba(255,190,140,.5)] hover:scale-110
+               hover:bg-[color:var(--earth-button-hover)] hover:border-[color:var(--sunset-border-hover)] hover:scale-110
                focus-visible:outline-2 focus-visible:outline-[color:var(--star)] focus-visible:outline-offset-2
                group cursor-pointer"
     >

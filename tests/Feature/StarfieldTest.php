@@ -33,13 +33,13 @@ class StarfieldTest extends TestCase
 
         $html = $response->getContent();
 
-        // Footer should have the sunset horizon gradient line
+        // Footer should have the sunset horizon gradient line using CSS variables
         $this->assertStringContainsString('bg-gradient-to-r', $html);
         $this->assertStringContainsString('from-transparent', $html);
-        $this->assertStringContainsString('via-[rgba(255,190,140,.45)]', $html);
+        $this->assertStringContainsString('via-[color:var(--sunset)]', $html);
 
-        // Should have opaque earth-toned footer background
-        $this->assertStringContainsString('bg-[#1a1f1a]', $html);
+        // Should have opaque earth-toned footer background using CSS variable
+        $this->assertStringContainsString('bg-[color:var(--earth)]', $html);
     }
 
     public function test_footer_uses_new_copy(): void

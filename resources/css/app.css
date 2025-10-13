@@ -4,14 +4,27 @@
 
 /* Starlight Design Tokens */
 :root {
+    /* Sky & Text Colors */
     --ink: #f2f4f8;
     --ink-muted: #aeb6c2;
     --space-900: #050914;
     --space-800: #0b1a33;
+    --space-700: #0a1427;
+    --space-600: #0e203d;
+    --space-500: #122a50;
     --star: #f6e08f;
     --constellation: #9ec7ff;
     --surface: rgba(255, 255, 255, 0.04);
     --border: rgba(255, 255, 255, 0.10);
+    
+    /* Earth & Horizon Colors */
+    --earth: #1a1f1a;
+    --earth-dark: #141814;
+    --earth-button: #2a2f2a;
+    --earth-button-hover: #343a34;
+    --sunset: rgba(255, 190, 140, 0.45);
+    --sunset-border: rgba(255, 190, 140, 0.3);
+    --sunset-border-hover: rgba(255, 190, 140, 0.5);
 }
 
 @layer base {
@@ -22,7 +35,7 @@
 
     /* Continuous vertical twilight gradient on page background - spans full document height */
     html {
-        background: linear-gradient(180deg, var(--space-900) 0%, #0a1427 38%, #0e203d 70%, #122a50 100%);
+        background: linear-gradient(180deg, var(--space-900) 0%, var(--space-700) 38%, var(--space-600) 70%, var(--space-500) 100%);
         background-attachment: fixed; /* Keep gradient fixed while content scrolls */
     }
 
