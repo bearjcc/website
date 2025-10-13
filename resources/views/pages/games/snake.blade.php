@@ -3,7 +3,7 @@
     $description = 'Play Snake online. Classic arcade game with keyboard controls. Eat food to grow, avoid walls and yourself. Free to play!';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="game-page">
         <div class="game-breadcrumb">
             <a href="{{ route('games.index') }}">← Back to Games</a>
@@ -33,5 +33,5 @@
             text-decoration: underline;
         }
     </style>
-</x-layout>
+</x-layouts.app>
 

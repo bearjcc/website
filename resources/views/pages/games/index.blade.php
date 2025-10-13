@@ -3,7 +3,7 @@
     $description = 'Play free browser games including Tic-Tac-Toe, Sudoku, Chess, and more. Classic games reimagined for the web.';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="hero-section">
         <article>
             <h1>Browser Games</h1>
@@ -182,5 +182,5 @@
             }
         }
     </style>
-</x-layout>
+</x-layouts.app>
 

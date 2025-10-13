@@ -3,7 +3,7 @@
     $description = 'Play 2048 online. Slide and combine tiles to reach 2048. Use arrow keys or WASD. Free to play, no registration required.';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="game-page">
         <div class="game-breadcrumb">
             <a href="{{ route('games.index') }}">← Back to Games</a>
@@ -33,5 +33,5 @@
             text-decoration: underline;
         }
     </style>
-</x-layout>
+</x-layouts.app>
 

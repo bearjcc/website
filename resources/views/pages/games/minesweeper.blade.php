@@ -3,7 +3,7 @@
     $description = 'Play Minesweeper online. Classic mine-finding puzzle with three difficulty levels. Left-click to reveal, right-click to flag. Free to play!';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="game-page">
         <div class="game-breadcrumb">
             <a href="{{ route('games.index') }}">← Back to Games</a>
@@ -36,5 +36,5 @@
             text-decoration: underline;
         }
     </style>
-</x-layout>
+</x-layouts.app>
 

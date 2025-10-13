@@ -3,7 +3,7 @@
     $description = 'Play Sudoku online. Classic number puzzle with five difficulty levels from beginner to expert. Free to play, no registration required.';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="game-page">
         <div class="game-breadcrumb">
             <a href="{{ route('games.index') }}">← Back to Games</a>
@@ -33,5 +33,5 @@
             text-decoration: underline;
         }
     </style>
-</x-layout>
+</x-layouts.app>
 

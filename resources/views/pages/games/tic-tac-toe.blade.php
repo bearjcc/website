@@ -3,7 +3,7 @@
     $description = 'Play Tic-Tac-Toe online. Challenge a friend or test your skills against AI opponents with three difficulty levels.';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="game-page">
         <div class="game-breadcrumb">
             <a href="{{ route('games.index') }}">← Back to Games</a>
@@ -33,5 +33,5 @@
             text-decoration: underline;
         }
     </style>
-</x-layout>
+</x-layouts.app>
 

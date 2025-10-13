@@ -13,8 +13,10 @@ if [ -z "${APP_KEY:-}" ] || [ "$APP_KEY" = "" ]; then
   php artisan key:generate --force
 fi
 
-# Storage link (idempotent)
-php artisan storage:link || true
+# Storage link (idempotent - check first to avoid error message)
+if [ ! -L "/var/www/html/public/storage" ]; then
+  php artisan storage:link
+fi
 
 # Cache config, routes, views
 php artisan config:clear || true
