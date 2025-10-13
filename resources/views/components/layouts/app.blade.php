@@ -21,7 +21,7 @@
     {{-- Main content wrapper with stacking context above starfield --}}
     <div id="um-app" class="relative z-10">
         {{-- Sticky top navigation with airy spacing --}}
-        <header id="um-header" class="sticky top-0 z-50 backdrop-blur-md bg-ink/5 border-b border-border/10">
+        <header id="um-header" class="sticky top-0 z-50 backdrop-blur-md bg-ink/5 relative">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between py-4">
                     {{-- Nav logo with morph target --}}
@@ -31,6 +31,8 @@
                     @include('partials.nav')
                 </div>
             </div>
+            {{-- Glass gradient border that tapers to transparency --}}
+            <div class="absolute bottom-0 inset-x-0 h-[0.25rem] bg-gradient-to-b from-ink/10 to-transparent pointer-events-none" aria-hidden="true"></div>
         </header>
 
         {{-- Main content area --}}

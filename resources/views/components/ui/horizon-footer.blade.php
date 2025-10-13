@@ -1,5 +1,5 @@
 {{-- Horizon footer: opaque earth-toned ground with sunset horizon line --}}
-<footer class="mt-16 md:mt-24 relative bg-earth w-full isolate">
+<footer class="mt-16 md:mt-24 relative w-full isolate" style="background-color: hsl(135, 10%, 12%);">
     {{-- Horizon line - last light between sky and earth --}}
     <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-sunset/45 to-transparent" aria-hidden="true"></div>
 
