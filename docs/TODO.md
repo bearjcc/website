@@ -37,6 +37,10 @@ Homepage live with night sky theme, visual-first game cards, component architect
 - [x] Document game development patterns
 - [x] Create developer guide for building future games
 - [x] Add `.cursor/rules/210-game-development-patterns.mdc`
+- [x] Create `ProvidesAIOpponent` trait for AI opponents
+- [x] Implement 3 AI difficulty levels (easy, medium, impossible)
+- [x] Document AI opponent patterns with minimax examples
+- [x] Update Tic-Tac-Toe with AI opponents
 
 ### Remaining Tasks
 
