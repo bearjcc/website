@@ -26,7 +26,7 @@
             {{-- Right column for minimal constellation accent --}}
             <div class="hidden md:flex justify-center items-center">
                 <div class="w-48 h-48 opacity-10">
-                    <svg viewBox="0 0 100 100" class="w-full h-full text-[color:var(--constellation)]" aria-hidden="true">
+                    <svg viewBox="0 0 100 100" class="w-full h-full text-constellation" aria-hidden="true">
                         <!-- Simple constellation pattern -->
                         <circle cx="20" cy="30" r="1.5" fill="currentColor" />
                         <circle cx="40" cy="20" r="1" fill="currentColor" />

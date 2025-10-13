@@ -125,6 +125,9 @@
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Get ink color from CSS variable (HSL format)
+        const inkHSL = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();
+
         // Draw each star
         stars.forEach(star => {
             // Calculate alpha with subtle twinkle
@@ -134,7 +137,8 @@
                 alpha = star.baseAlpha + (twinkle * TWINKLE_AMPLITUDE);
             }
 
-            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+            // Use CSS variable for star color (HSL with alpha)
+            ctx.fillStyle = `hsl(${inkHSL} / ${alpha})`;
             ctx.beginPath();
             ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
             ctx.fill();

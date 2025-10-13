@@ -32,6 +32,30 @@ export default {
         '96': '6rem',     // 96px
         '128': '8rem',    // 128px
       },
+      colors: {
+        // HSL-based tokens with alpha-value support
+        'ink': 'hsl(var(--ink) / <alpha-value>)',
+        'ink-muted': 'hsl(var(--ink-muted) / <alpha-value>)',
+        'space': {
+          900: 'hsl(var(--space-900) / <alpha-value>)',
+          800: 'hsl(var(--space-800) / <alpha-value>)',
+          700: 'hsl(var(--space-700) / <alpha-value>)',
+          600: 'hsl(var(--space-600) / <alpha-value>)',
+          500: 'hsl(var(--space-500) / <alpha-value>)',
+        },
+        'star': 'hsl(var(--star) / <alpha-value>)',
+        'constellation': 'hsl(var(--constellation) / <alpha-value>)',
+        'surface': 'hsl(var(--surface) / <alpha-value>)',
+        'border': 'hsl(var(--border) / <alpha-value>)',
+        'earth': {
+          DEFAULT: 'hsl(var(--earth) / <alpha-value>)',
+          'dark': 'hsl(var(--earth-dark) / <alpha-value>)',
+          'button': 'hsl(var(--earth-button) / <alpha-value>)',
+          'button-hover': 'hsl(var(--earth-button-hover) / <alpha-value>)',
+        },
+        'sunset': 'hsl(var(--sunset) / <alpha-value>)',
+        'sunset-border': 'hsl(var(--sunset-border) / <alpha-value>)',
+      },
     },
   },
   plugins: [],

@@ -2,29 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Starlight Design Tokens */
+/* Starlight Design Tokens - HSL-based for opacity modifiers */
 :root {
-    /* Sky & Text Colors */
-    --ink: #f2f4f8;
-    --ink-muted: #aeb6c2;
-    --space-900: #050914;
-    --space-800: #0b1a33;
-    --space-700: #0a1427;
-    --space-600: #0e203d;
-    --space-500: #122a50;
-    --star: #f6e08f;
-    --constellation: #9ec7ff;
-    --surface: rgba(255, 255, 255, 0.04);
-    --border: rgba(255, 255, 255, 0.10);
-    
-    /* Earth & Horizon Colors */
-    --earth: #1a1f1a;
-    --earth-dark: #141814;
-    --earth-button: #2a2f2a;
-    --earth-button-hover: #343a34;
-    --sunset: rgba(255, 190, 140, 0.45);
-    --sunset-border: rgba(255, 190, 140, 0.3);
-    --sunset-border-hover: rgba(255, 190, 140, 0.5);
+    /* --- Neutrals (2 core) --- */
+    --ink: 210 25% 96%;           /* #f2f4f8  light text */
+    --ink-muted: 220 14% 70%;     /* #aeb6c2  muted text */
+
+    /* Dark sky gradient band (top → bottom variants) */
+    --space-900: 226 53% 4%;      /* #050914  deepest black */
+    --space-800: 220 49% 10%;     /* #0b1a33  (legacy, can derive from 900) */
+    --space-700: 220 49% 10%;     /* #0a1427  gradient mid-dark */
+    --space-600: 213 55% 18%;     /* #0e203d  gradient mid-light */
+    --space-500: 217 62% 25%;     /* #122a50  gradient lightest blue */
+
+    /* --- Brand (2 core) --- */
+    --star: 48 89% 77%;           /* #f6e08f  primary CTA accent */
+    --constellation: 212 100% 81%; /* #9ec7ff  secondary accent */
+
+    /* --- Derived tokens (surfaces & lines via opacity) --- */
+    --surface: var(--ink);         /* use with / 0.04 for glass */
+    --border: var(--ink);          /* use with / 0.10 for borders */
+
+    /* --- Earth & horizon (footer ground) --- */
+    --earth: 135 10% 12%;          /* #1a1f1a  footer ground */
+    --earth-dark: 135 12% 9%;      /* #141814  silhouette */
+    --earth-button: 135 9% 18%;    /* #2a2f2a  button base */
+    --earth-button-hover: 135 8% 22%; /* #343a34  button hover */
+
+    /* --- Sunset glint at horizon --- */
+    --sunset: 28 100% 78%;         /* warm line at horizon */
+    --sunset-border: 28 100% 78%;  /* use with / 0.3 for borders */
 }
 
 @layer base {
@@ -35,21 +42,26 @@
 
     /* Continuous vertical twilight gradient on page background - spans full document height */
     html {
-        background: linear-gradient(180deg, var(--space-900) 0%, var(--space-700) 38%, var(--space-600) 70%, var(--space-500) 100%);
+        background: linear-gradient(180deg, 
+            hsl(var(--space-900)) 0%, 
+            hsl(var(--space-700)) 38%, 
+            hsl(var(--space-600)) 70%, 
+            hsl(var(--space-500)) 100%
+        );
         background-attachment: fixed; /* Keep gradient fixed while content scrolls */
     }
 
     body {
         /* Subtle star dust overlay on top of the gradient */
         background:
-            radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.07) 0, transparent 60%),
-            radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.05) 0, transparent 60%);
-        color: var(--ink);
+            radial-gradient(2px 2px at 20% 30%, hsl(var(--ink) / .07) 0, transparent 60%),
+            radial-gradient(1px 1px at 80% 60%, hsl(var(--ink) / .05) 0, transparent 60%);
+        color: hsl(var(--ink));
         font-family: 'Oswald', ui-sans-serif, system-ui, sans-serif;
     }
 
     :focus-visible {
-        outline: 2px solid var(--star);
+        outline: 2px solid hsl(var(--star));
         outline-offset: 2px;
     }
 
@@ -81,8 +93,8 @@
     }
 
     .glass {
-        background-color: var(--surface);
-        border: 1px solid var(--border);
+        background-color: hsl(var(--surface) / .04);
+        border: 1px solid hsl(var(--border) / .10);
         backdrop-filter: blur(12px);
         border-radius: 0.75rem; /* 12px */
     }
@@ -93,7 +105,7 @@
         line-height: 1.1;
         letter-spacing: -0.02em;
         font-weight: 700;
-        color: var(--ink);
+        color: hsl(var(--ink));
     }
 
     .h2 {
@@ -101,7 +113,7 @@
         line-height: 1.15;
         letter-spacing: -0.03125em; /* -0.5px at 16px base */
         font-weight: 700;
-        color: var(--ink);
+        color: hsl(var(--ink));
     }
 
     .h3 {
@@ -109,7 +121,7 @@
         line-height: 1.1;
         letter-spacing: -0.015em;
         font-weight: 600;
-        color: var(--ink);
+        color: hsl(var(--ink));
     }
 
     .h4 {
@@ -117,7 +129,7 @@
         line-height: 1.2;
         letter-spacing: -0.015em;
         font-weight: 600;
-        color: var(--ink);
+        color: hsl(var(--ink));
     }
 
     .h5 {
@@ -125,7 +137,7 @@
         line-height: 1.2;
         letter-spacing: -0.01em;
         font-weight: 500;
-        color: var(--ink);
+        color: hsl(var(--ink));
     }
 
     .h6 {
@@ -133,7 +145,7 @@
         line-height: 1.2;
         letter-spacing: -0.01em;
         font-weight: 500;
-        color: var(--ink);
+        color: hsl(var(--ink));
     }
 
     .body,
@@ -141,7 +153,7 @@
         font-size: 1rem; /* 16px */
         line-height: 1.5; /* 150% */
         letter-spacing: 0;
-        color: var(--ink-muted);
+        color: hsl(var(--ink-muted));
     }
 
     .kicker {
@@ -150,7 +162,7 @@
         letter-spacing: 0.1em;
         text-transform: uppercase;
         font-weight: 600;
-        color: var(--ink-muted);
+        color: hsl(var(--ink-muted));
     }
 
     /* === Button Utilities === */
@@ -163,8 +175,8 @@
         font-size: 1rem;
         line-height: 1.5;
         border-radius: 0.5rem; /* 8px */
-        color: var(--space-900);
-        background: var(--star);
+        color: hsl(220 20% 10%); /* dark text for contrast on warm accent */
+        background: hsl(var(--star));
         border: none;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
@@ -172,12 +184,12 @@
     }
 
     .btn-primary:hover {
-        opacity: 0.9;
+        background: hsl(var(--star) / .92);
         transform: translateY(-1px);
     }
 
     .btn-primary:focus-visible {
-        outline: 2px solid var(--star);
+        outline: 2px solid hsl(var(--star));
         outline-offset: 2px;
     }
 
@@ -190,8 +202,8 @@
         font-size: 1rem;
         line-height: 1.5;
         border-radius: 0.5rem; /* 8px */
-        border: 1px solid var(--border);
-        color: var(--ink);
+        border: 1px solid hsl(var(--border) / .10);
+        color: hsl(var(--ink));
         background: transparent;
         cursor: pointer;
         transition: all 0.2s ease-in-out;
@@ -199,12 +211,12 @@
     }
 
     .btn-secondary:hover {
-        border-color: rgba(255, 255, 255, 0.3);
-        background: rgba(255, 255, 255, 0.05);
+        border-color: hsl(var(--ink) / .3);
+        background: hsl(var(--ink) / .05);
     }
 
     .btn-secondary:focus-visible {
-        outline: 2px solid var(--star);
+        outline: 2px solid hsl(var(--star));
         outline-offset: 2px;
     }
 }

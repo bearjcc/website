@@ -6,7 +6,7 @@
 <a 
     href="{{ route('home') }}" 
     aria-label="Ursa Minor — Home"
-    {{ $attributes->merge(['class' => 'flex items-center gap-2 transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-[color:var(--star)] focus-visible:outline-offset-2 rounded ' . $class]) }}
+    {{ $attributes->merge(['class' => 'flex items-center gap-2 transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2 rounded ' . $class]) }}
 >
     <img 
         src="{{ asset('bear.svg') }}" 
@@ -16,6 +16,6 @@
         loading="eager"
         decoding="async"
     />
-    <span class="text-base md:text-lg font-semibold text-[color:var(--ink)] tracking-tight">ursa minor</span>
+    <span class="text-base md:text-lg font-semibold text-ink tracking-tight">ursa minor</span>
 </a>
 
