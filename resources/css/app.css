@@ -168,6 +168,7 @@
         align-items: center;
         justify-content: center;
         padding: 0.75rem 1.5rem; /* 12px 24px - 8pt multiples */
+        min-height: 44px; /* Accessibility: minimum touch target */
         font-weight: 600;
         font-size: 1rem;
         line-height: 1.5;
@@ -195,6 +196,7 @@
         align-items: center;
         justify-content: center;
         padding: 0.625rem 1.25rem; /* 10px 20px - close to 8pt */
+        min-height: 44px; /* Accessibility: minimum touch target */
         font-weight: 500;
         font-size: 1rem;
         line-height: 1.5;
@@ -348,6 +350,37 @@
 
         .um-top-btn:hover::after {
             opacity: 1;
+        }
+    }
+
+    /* === Game Card Styles === */
+    /* Visual-first game cards with hover reveals */
+    .um-game-card {
+        position: relative;
+        display: block;
+        aspect-ratio: 3 / 2;
+    }
+
+    @media (min-width: 768px) {
+        .um-game-card {
+            aspect-ratio: 3 / 2;
+        }
+    }
+    
+    /* Ensure minimum touch target size on mobile */
+    .um-game-card {
+        min-height: 44px;
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        .um-game-card,
+        .um-game-card .um-title {
+            transition: none !important;
+        }
+        
+        .um-game-card:hover {
+            transform: none !important;
         }
     }
 }

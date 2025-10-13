@@ -77,34 +77,61 @@ These intentions guide every design and UX decision:
 
 - **Max width**: All main content centered in a `.section` container, max width ~960 px.  
 - **Responsiveness**: Laptop and large tablet are first-class citizens; content should gracefully center on widescreens.  
-- **Hero**: Logo on left, headline + CTA below; clean, not cluttered.  
-- **Card grid**: Used for “Available Now” games. Consistent sizing, icon alignment, and text truncation.  
-- **Footer**: Minimal, centered, with a single poetic line (“Building games under the Southern Cross.”).
+- **Hero**: Centered, minimal copy approach. Logo + headline + two one-word CTAs only. No body text unless essential.
+- **Card grid**: Visual-first game cards showing motifs/glyphs by default. Titles reveal on hover/focus. 2-column mobile, 3-column desktop.
+- **Footer**: Minimal, centered, with a single poetic line ("Building games under the Southern Cross.").
 
-### 5.2 Color & Contrast
+### 5.2 Minimal Copy Philosophy
+
+**"Sometimes less is more"** — The site embraces restraint and visual clarity:
+
+- **Minimal visible copy**: Reduce reading burden. Let visuals communicate where possible.
+- **One thing well at a time**: Don't overwhelm with options or information.
+- **Scrolling discipline**: Keep above-the-fold content focused. Less scrolling = better experience.
+- **Purposeful text**: Every word serves a function. No filler text.
+
+**Tone**: Peaceful, confident, welcoming. Not hype, not apology, not spiritual language. Calm, collected, reserved, humble yet stated clearly. Think: the peaceful feeling of looking at the night sky after sunset.
+
+### 5.3 Color & Contrast
 
 - **Dark theme by default**.  
 - Text must meet **WCAG AA contrast**: 4.5:1 minimum.  
 - Accent colors must never be used as text on light backgrounds.  
 - Light-on-dark or dark-on-light is strictly controlled — no gray-on-gray low contrast.
 
-### 5.3 Iconography
+### 5.4 Visual-First Game Cards
+
+Game cards prioritize visual recognition over text labels:
+
+- **Motifs**: Each game has a unique visual motif (board pattern, glyph, icon) that communicates the game type
+- **Hover reveal**: Title appears in a translucent pill on hover/focus for identification
+- **Accessibility**: Full accessible text via `aria-label` and screen-reader-only heading; keyboard focus mirrors hover
+- **Click area**: Entire card is clickable at all times (no wait for hover)
+- **Aspect ratio**: Consistent 3:2 ratio maintains grid alignment
+- **Touch targets**: 44px minimum for accessibility compliance
+
+### 5.5 Iconography
 
 - Icons must scale proportionally with text.  
-- They should not dominate cards or headlines.  
-- Default size: 1.25rem–1.5rem depending on context.
+- In game cards, motifs are decorative but semantically meaningful.
+- Visual motifs should be recognizable and distinct across games.
+- Default size: 1.25rem–1.5rem for UI icons, larger (80-120px) for game motifs.
 
-### 5.4 Interaction
+### 5.6 Interaction
 
 - All interactive elements must have clear affordances, hover/focus states, and be keyboard navigable.  
+- **Motion discipline**: Subtle lift/fade on hover/focus; immediate clickability (no delays).
 - Motion respects `prefers-reduced-motion`.  
 - Subtle transitions only — no bouncing, sliding, or rotating.
+- **Focus-visible rings**: Use constellation blue for focus indicators.
 
-### 5.5 Tone
+### 5.7 Tone & Voice
 
 - Copy is concise, neutral, and truthful.  
 - Public pages **must not** reference distant future plans like cafés or big game launches.  
-- Brand voice: clear, warm, slightly poetic, never salesy.
+- Brand voice: **peaceful, confident, welcoming**. Not hype, not anxious, not spiritual.
+- Design and copy should be **calm, collected, reserved, welcoming, humble** — stated without being shy.
+- The entire site brings a tone of **joyful zen** — like looking at the night sky and finding peace.
 
 ---
 
@@ -144,9 +171,13 @@ These intentions guide every design and UX decision:
 
 - ✅ Dark theme with correct contrast  
 - ✅ Centered layouts  
+- ✅ **Minimal copy**: Reduce text, increase visual clarity
+- ✅ **Visual-first approach**: Let imagery and motifs communicate
 - ✅ Professional tone and content honesty  
+- ✅ **Calm, peaceful aesthetic**: Not hype, not anxious, welcoming without spiritual language
 - ✅ Component reuse  
 - ✅ No random gradients, emojis, or trendy flourishes  
+- ✅ **Accessibility**: 44px touch targets, keyboard navigation, screen reader support, focus states
 - ✅ Verification > assertion — agents must check their work
 
 ---

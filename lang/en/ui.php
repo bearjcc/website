@@ -2,11 +2,11 @@
 
 return [
     // Homepage
-    'tagline' => 'Small games. Big craft.',
+    'tagline' => 'The sky is the limit.',
     'hero_headline' => 'Small games. Big craft.',
     'hero_body' => 'We build elegant, replayable games and quietly share the journey.',
-    'cta_play' => 'Play a game',
-    'cta_browse' => 'Browse all',
+    'cta_play' => 'Play',
+    'cta_browse' => 'Browse',
 
     // Available Now section
     'available_kicker' => 'Available now',
@@ -27,7 +27,7 @@ return [
     'coming_soon_placeholder_sub' => 'New games are in the works.',
 
     // Footer
-    'footer_note_primary' => 'The sky is the limit.',
+    'footer_note_primary' => 'Building games under the Southern Cross.',
     'footer_note_alt1' => 'Little Bear. Big craft.',
     'footer_note_alt2' => 'Charting small constellations.',
 

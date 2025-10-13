@@ -1,82 +1,52 @@
 <x-layouts.app>
     <x-slot:title>{{ __('ui.tagline') }} — Ursa Minor</x-slot:title>
 
-    {{-- Hero Section with increased breathing room --}}
-    <section class="pt-24 md:pt-32 pb-16 md:pb-24">
+    {{-- Hero Section - Minimal copy, centered --}}
+    <section class="pt-24 md:pt-32 pb-16 md:pb-20">
         <div class="section">
-            <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-                {{-- Left column: Full lockup and messaging --}}
-                <div class="text-center md:text-left space-y-6" data-um-hero-lockup>
-                    <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto md:mx-0" />
-                    
-                    <h1 class="h1 mt-6">{{ __('ui.hero_headline') }}</h1>
-                    
-                    <p class="text-lg text-[color:var(--ink-muted)] leading-relaxed max-w-[35em] mx-auto md:mx-0">
-                        {{ __('ui.hero_body') }}
-                    </p>
+            <div class="max-w-2xl mx-auto text-center space-y-8">
+                <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto" />
+                
+                <h1 class="h1">{{ __('ui.hero_headline') }}</h1>
 
-                    <div class="pt-4">
-                        <x-ui.cta-row
-                            :primaryHref="route('games.index')"
-                            :primaryLabel="__('ui.cta_play')"
-                            :secondaryHref="route('blog.index')"
-                            :secondaryLabel="__('ui.cta_browse')"
-                            data-um-goal="hero_play_click"
-                        />
-                    </div>
-                </div>
-
-                {{-- Right column: Decorative starfield only (CSS) --}}
-                <div class="hidden md:block relative h-80" aria-hidden="true">
-                    <div class="absolute inset-0 rounded-2xl bg-gradient-to-br from-[color:var(--space-800)] to-[color:var(--space-900)] opacity-50"></div>
+                <div class="pt-2">
+                    <x-ui.cta-row
+                        :primaryHref="route('games.index')"
+                        :primaryLabel="__('ui.cta_play')"
+                        :secondaryHref="route('games.index')"
+                        :secondaryLabel="__('ui.cta_browse')"
+                        data-um-goal="hero_play_click"
+                    />
                 </div>
             </div>
         </div>
     </section>
 
-    {{-- Available Now Section --}}
+    {{-- Available Now Section - Visual-first games grid --}}
     <section class="py-12 md:py-16">
-        <x-ui.section-header
-            :kicker="__('ui.available_kicker')"
-            :title="__('ui.available_title')"
-            :subtitle="__('ui.available_sub')"
-        />
-
-        <div class="section mt-12">
-            <div class="grid md:grid-cols-3 gap-6">
+        <div class="section">
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                 @php
-                    $publishedGames = \App\Models\Game::where('status', 'published')->limit(3)->get();
-                    $gameCount = $publishedGames->count();
-                    $placeholdersNeeded = max(0, 3 - $gameCount);
+                    $publishedGames = \App\Models\Game::where('status', 'published')->get();
+                    
+                    // Map game slugs to motifs
+                    $motifMap = [
+                        'tic-tac-toe' => 'tictactoe',
+                        'connect-4' => 'connect4',
+                        'sudoku' => 'sudoku',
+                        'minesweeper' => 'minesweeper',
+                        'snake' => 'snake',
+                        '2048' => '2048',
+                    ];
                 @endphp
 
-                {{-- Published games --}}
                 @foreach($publishedGames as $game)
-                    @php
-                        // Select icon based on game type
-                        $icon = match($game->type ?? 'puzzle') {
-                            'puzzle' => 'cube-transparent',
-                            'board' => 'rectangle-group',
-                            'card' => 'rectangle-stack',
-                            default => 'puzzle-piece',
-                        };
-                    @endphp
-                    <x-ui.card
-                        :title="$game->title"
-                        :subtitle="$game->short_description"
+                    <x-ui.game-card
                         :href="route('games.play', $game->slug)"
-                        :icon="$icon"
+                        :title="$game->title"
+                        :motif="$motifMap[$game->slug] ?? null"
                     />
                 @endforeach
-
-                {{-- Placeholders if fewer than 3 games --}}
-                @for($i = 0; $i < $placeholdersNeeded; $i++)
-                    <x-ui.card
-                        :title="__('ui.coming_soon_placeholder')"
-                        :subtitle="__('ui.coming_soon_placeholder_sub')"
-                        :disabled="true"
-                    />
-                @endfor
             </div>
         </div>
     </section>

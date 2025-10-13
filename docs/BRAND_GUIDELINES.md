@@ -4,9 +4,11 @@
 
 **Ursa Minor Games** is a game development brand inspired by the simple elegance of the night sky. We create memorable gaming experiences ranging from classic browser games to innovative board games and ambitious video game projects.
 
-**Mission**: To build a community of passionate gamers while working toward our dream of opening a board game café in New Zealand.
+**Mission**: To build elegant, replayable games and share the journey.
 
-**Tagline**: "Where games are born under the stars"
+**Tagline**: "The sky is the limit."
+
+**Alternate**: "Small games. Big craft."
 
 ## Visual Identity
 

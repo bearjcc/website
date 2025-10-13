@@ -1,21 +1,33 @@
 <div>
-    <h1 class="text-4xl font-bold text-star-yellow mb-8">Browser Games</h1>
-    
-    @if($games->count() > 0)
-        <div class="feature-grid">
-            @foreach($games as $game)
-                <x-public-card>
-                    <h3 class="text-xl font-semibold text-star-yellow mb-2">{{ $game->title }}</h3>
-                    <p class="text-sm text-white/70 mb-4">{{ $game->short_description }}</p>
-                    <a href="{{ route('games.play', $game->slug) }}" class="btn btn-primary">
-                        Play Now
-                    </a>
-                </x-public-card>
-            @endforeach
-        </div>
-    @else
-        <x-public-card>
-            <p class="text-center text-white/70">No games available yet. Check back soon!</p>
-        </x-public-card>
-    @endif
+    <div class="section">
+        <h1 class="h2 mb-8 md:mb-12 text-center">Browser Games</h1>
+        
+        @if($games->count() > 0)
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                @php
+                    // Map game slugs to motifs
+                    $motifMap = [
+                        'tic-tac-toe' => 'tictactoe',
+                        'connect-4' => 'connect4',
+                        'sudoku' => 'sudoku',
+                        'minesweeper' => 'minesweeper',
+                        'snake' => 'snake',
+                        '2048' => '2048',
+                    ];
+                @endphp
+                
+                @foreach($games as $game)
+                    <x-ui.game-card
+                        :href="route('games.play', $game->slug)"
+                        :title="$game->title"
+                        :motif="$motifMap[$game->slug] ?? null"
+                    />
+                @endforeach
+            </div>
+        @else
+            <div class="glass p-8 text-center">
+                <p class="text-[color:var(--ink-muted)]">No games available yet. Check back soon.</p>
+            </div>
+        @endif
+    </div>
 </div>
