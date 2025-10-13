@@ -230,6 +230,8 @@ For complete documentation, see the **[docs/](docs/)** folder or visit the **[Do
 **Design:**
 - **[BRAND_GUIDELINES](docs/BRAND_GUIDELINES.md)** - Design system
 - **[DESIGN_FOUNDATIONS](docs/DESIGN_FOUNDATIONS.md)** - Design philosophy
+- **[COMPONENT_PATTERNS](docs/COMPONENT_PATTERNS.md)** - Implementation patterns
+- **[COLOR_SYSTEM](docs/COLOR_SYSTEM.md)** - HSL color token reference
 
 ### Current Phase
 

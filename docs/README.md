@@ -20,6 +20,9 @@ New to the project? Start here:
 ### Design & Architecture
 - **[BRAND_GUIDELINES](BRAND_GUIDELINES.md)** - Design system and visual identity
 - **[DESIGN_FOUNDATIONS](DESIGN_FOUNDATIONS.md)** - Design philosophy and principles
+- **[COMPONENT_PATTERNS](COMPONENT_PATTERNS.md)** - Technical implementation patterns
+- **[COLOR_SYSTEM](COLOR_SYSTEM.md)** - HSL color token reference
+- **[INSIGHTS_FROM_CONVERSATION](INSIGHTS_FROM_CONVERSATION.md)** - Key UX insights captured
 - **[Component Library](../resources/views/components/ui/README.md)** - UI components documentation
 
 ### Integration Guides
@@ -52,9 +55,12 @@ website/
 └── docs/
     ├── README.md                   # This file (documentation index)
     ├── BRAND_GUIDELINES.md         # Design system and visual identity
+    ├── COLOR_SYSTEM.md             # HSL color token reference
+    ├── COMPONENT_PATTERNS.md       # Technical implementation patterns
     ├── DEPLOYMENT_GUIDE.md         # Railway deployment instructions
     ├── DESIGN_FOUNDATIONS.md       # Design philosophy and principles
     ├── FEATURE_EXTRACTION_GUIDE.md # Integration guide for existing repos
+    ├── INSIGHTS_FROM_CONVERSATION.md # Key UX insights captured
     ├── PROJECT_STRUCTURE.md        # Codebase organization
     ├── ROADMAP.md                  # Development phases and timeline
     └── TODO.md                     # Current tasks and priorities

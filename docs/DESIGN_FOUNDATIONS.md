@@ -43,8 +43,13 @@ These intentions guide every design and UX decision:
 
 ## 4. Brand Identity
 
-### 4.1 Brand Name
+### 4.1 Brand Name & Origin Story
+
 **Ursa Minor** — evokes constellations, navigation, and discovery. Quiet power, not loud spectacle.
+
+**Personal Connection**: The name comes from a deeply personal place. Growing up homeschooled, our family school was registered as "Ursa Minor Academy" with the slogan "The sky is the limit." The developer's nickname was "Little Bear," making Ursa Minor (the Little Bear constellation) a natural fit. While the Hitchhiker's Guide to the Galaxy reference is a nice bonus, this is its own story—a constellation of personal history and creative ambition.
+
+This origin story informs our approach: we're building something personal, meaningful, and quietly ambitious. Not a loud commercial venture, but a patient craft that grows under the stars.
 
 ### 4.2 Logo & Lockup
 - Custom SVG of a **bear with the Ursa Minor constellation** inside.  
@@ -132,6 +137,19 @@ Game cards prioritize visual recognition over text labels:
 - Brand voice: **peaceful, confident, welcoming**. Not hype, not anxious, not spiritual.
 - Design and copy should be **calm, collected, reserved, welcoming, humble** — stated without being shy.
 - The entire site brings a tone of **joyful zen** — like looking at the night sky and finding peace.
+
+### 5.8 The "Peaceful Chair" Philosophy
+
+**Imagine**: You've taken up a chair to look at the stars. You're enjoying yourself, peacefully present. If others want to join you they can, but you're not advertising. You're not selling. You're not demanding attention. You're just... there. Peaceful.
+
+This is the essence of Ursa Minor's web presence:
+- **No monetization pressure** - Currently no revenue model, so more visitors = higher bills. We're not incentivized to optimize engagement or retention. This keeps us honest.
+- **Craigslist-like simplicity** - Like Craigslist, the links you want are there, but no advertisements, no flashy banners, no over-complicated anything. Just what's needed.
+- **No attention demands** - There are enough things online demanding attention; this site shouldn't be one of them.
+- **Welcoming without selling** - You're invited to stay, explore, play, but never pressured or marketed to.
+- **Understated or homo-stated, never overstated** - Say what is true, clearly and simply, without embellishment.
+
+This philosophy directly informs every UX decision: less scrolling, less reading, less cognitive load, more peace.
 
 ---
 
