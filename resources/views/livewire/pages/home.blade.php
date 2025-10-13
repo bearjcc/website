@@ -54,23 +54,32 @@
                 get canGoPrev() { return this.currentIndex > 0; },
                 get canGoNext() { return this.currentIndex < this.totalPages - 1; },
                 prev() { if (this.canGoPrev) this.currentIndex--; },
-                next() { if (this.canGoNext) this.currentIndex++; }
+                next() { if (this.canGoNext) this.currentIndex++; },
+                isVisible(gameIndex) {
+                    const startIndex = this.currentIndex * this.gamesPerPage;
+                    const endIndex = startIndex + this.gamesPerPage;
+                    return gameIndex >= startIndex && gameIndex < endIndex;
+                }
             }" class="relative">
                 
                 {{-- Carousel container --}}
-                <div class="overflow-hidden">
-                    <div class="grid grid-cols-3 gap-4 md:gap-6 transition-transform duration-300 ease-out"
-                         :style="`transform: translateX(-${currentIndex * 100}%)`">
-                        @foreach($games as $game)
-                            <div class="w-full">
-                                <x-ui.game-card
-                                    :href="route('games.play', $game->slug)"
-                                    :title="$game->title"
-                                    :motif="$motifMap[$game->slug] ?? null"
-                                />
-                            </div>
-                        @endforeach
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                    @foreach($games as $index => $game)
+                        <div x-show="isVisible({{ $index }})" 
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="w-full">
+                            <x-ui.game-card
+                                :href="route('games.play', $game->slug)"
+                                :title="$game->title"
+                                :motif="$motifMap[$game->slug] ?? null"
+                            />
+                        </div>
+                    @endforeach
                 </div>
 
                 {{-- Navigation buttons - minimal, elegant --}}
