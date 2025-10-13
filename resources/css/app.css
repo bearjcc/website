@@ -392,5 +392,18 @@
             transition: none !important;
         }
     }
+
+    /* === Carousel Styles === */
+    /* Simple carousel for game cards */
+    [x-cloak] {
+        display: none !important;
+    }
+    
+    /* Reduced motion: instant carousel transitions */
+    @media (prefers-reduced-motion: reduce) {
+        .transition-transform {
+            transition: none !important;
+        }
+    }
 }
 
