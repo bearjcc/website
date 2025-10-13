@@ -3,7 +3,8 @@
 return [
     // Homepage
     'tagline' => 'Small games. Big craft.',
-    'hero_body' => 'We build elegant, replayable games and share the journey as we grow a studio under the night sky.',
+    'hero_headline' => 'Small games. Big craft.',
+    'hero_body' => 'We build elegant, replayable games and quietly share the journey.',
     'cta_play' => 'Play a game',
     'cta_browse' => 'Browse all',
 
@@ -40,4 +41,5 @@ return [
 
     // Accessibility
     'skip_to_content' => 'Skip to content',
+    'back_to_top' => 'Back to top',
 ];

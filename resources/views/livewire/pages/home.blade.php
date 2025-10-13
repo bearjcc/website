@@ -1,16 +1,16 @@
 <div>
-    {{-- Hero Section --}}
-    <section class="section pt-16 md:pt-24 pb-16" id="main-content">
+    {{-- Hero Section with increased breathing room --}}
+    <section class="section pt-24 md:pt-32 pb-16 md:pb-24" id="main-content">
         <div class="grid md:grid-cols-2 gap-16 items-center">
-            <div class="space-y-8">
+            <div class="space-y-8" data-um-hero-lockup>
                 <x-ui.logo-lockup class="w-[240px] md:w-[280px]" />
                 
                 <div class="space-y-4">
                     <p class="kicker">A small game studio</p>
-                    <h1 class="h1">{{ __('ui.tagline') }}</h1>
+                    <h1 class="h1">{{ __('ui.hero_headline') }}</h1>
                 </div>
 
-                <p class="p max-w-prose">
+                <p class="p max-w-[35em]">
                     {{ __('ui.hero_body') }}
                 </p>
 

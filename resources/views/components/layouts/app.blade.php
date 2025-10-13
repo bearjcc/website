@@ -20,11 +20,14 @@
 
     {{-- Main content wrapper with stacking context above starfield --}}
     <div id="um-app" class="relative z-10">
-        {{-- Sticky top navigation --}}
-        <header class="sticky top-0 z-50 backdrop-blur-md bg-[color:var(--space-900)]/80 border-b border-[color:var(--border)]">
+        {{-- Sticky top navigation with airy spacing --}}
+        <header id="um-header" class="sticky top-0 z-50 backdrop-blur-md bg-white/5 border-b border-white/10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
-                    <x-ui.nav-logo />
+                <div class="flex items-center justify-between py-4">
+                    {{-- Nav logo with morph target --}}
+                    <div data-um-morph="nav-logo" class="transition-all duration-200">
+                        <x-ui.nav-logo class="h-8" />
+                    </div>
                     @include('partials.nav')
                 </div>
             </div>
@@ -32,11 +35,12 @@
 
         {{-- Main content area --}}
         <main id="main-content" class="flex-1">
+            <div id="top"></div>
             {{ $slot }}
         </main>
 
         {{-- Footer --}}
-        @include('partials.footer')
+        <x-ui.horizon-footer />
     </div>
 
     @livewireScripts

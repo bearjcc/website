@@ -17,16 +17,20 @@
 @layer base {
     html,
     body {
-        height: 100%;
+        min-height: 100%;
+    }
+
+    /* Continuous vertical twilight gradient on page background - spans full document height */
+    html {
+        background: linear-gradient(180deg, var(--space-900) 0%, #0a1427 38%, #0e203d 70%, #122a50 100%);
+        background-attachment: fixed; /* Keep gradient fixed while content scrolls */
     }
 
     body {
-        /* Smooth vertical gradient from deep black to deep blue - no harsh fold line */
+        /* Subtle star dust overlay on top of the gradient */
         background:
-            radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.08) 0, transparent 60%),
-            radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.06) 0, transparent 60%),
-            linear-gradient(180deg, var(--space-900) 0%, #0a1427 40%, #0e203d 72%, #122a50 100%);
-        min-height: 100vh;
+            radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.07) 0, transparent 60%),
+            radial-gradient(1px 1px at 80% 60%, rgba(255,255,255,.05) 0, transparent 60%);
         color: var(--ink);
         font-family: 'Oswald', ui-sans-serif, system-ui, sans-serif;
     }

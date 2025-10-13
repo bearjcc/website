@@ -33,9 +33,12 @@ class StarfieldTest extends TestCase
 
         $html = $response->getContent();
 
-        // Footer should have the horizon gradient line
+        // Footer should have the sunset horizon gradient line
         $this->assertStringContainsString('bg-gradient-to-r', $html);
-        $this->assertStringContainsString('from-white/0', $html);
+        $this->assertStringContainsString('from-[rgba(255,170,120,0)]', $html);
+
+        // Should have the mountain silhouette SVG
+        $this->assertStringContainsString('viewBox="0 0 1200 40"', $html);
     }
 
     public function test_footer_uses_new_copy(): void
@@ -46,6 +49,9 @@ class StarfieldTest extends TestCase
 
         // Should use the new footer copy
         $response->assertSee('The sky is the limit.');
+
+        // Should have copyright with all rights reserved
+        $response->assertSee('All rights reserved');
 
         // Should NOT contain old Southern Cross reference
         $response->assertDontSee('Southern Cross');

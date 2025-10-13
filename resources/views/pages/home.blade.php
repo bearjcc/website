@@ -1,17 +1,17 @@
 <x-layouts.app>
     <x-slot:title>{{ __('ui.tagline') }} — Ursa Minor</x-slot:title>
 
-    {{-- Hero Section --}}
-    <section class="py-12 md:py-16">
+    {{-- Hero Section with increased breathing room --}}
+    <section class="pt-24 md:pt-32 pb-16 md:pb-24">
         <div class="section">
             <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
                 {{-- Left column: Full lockup and messaging --}}
-                <div class="text-center md:text-left space-y-6">
+                <div class="text-center md:text-left space-y-6" data-um-hero-lockup>
                     <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto md:mx-0" />
                     
-                    <h1 class="h1 mt-6">{{ __('ui.tagline') }}</h1>
+                    <h1 class="h1 mt-6">{{ __('ui.hero_headline') }}</h1>
                     
-                    <p class="text-lg text-[color:var(--ink-muted)] leading-relaxed max-w-prose mx-auto md:mx-0">
+                    <p class="text-lg text-[color:var(--ink-muted)] leading-relaxed max-w-[35em] mx-auto md:mx-0">
                         {{ __('ui.hero_body') }}
                     </p>
 
