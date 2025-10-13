@@ -823,5 +823,493 @@
             animation: none;
         }
     }
+
+    /* === Connect 4 Board === */
+    .connect4-board,
+    .game-board {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: repeat(6, 1fr);
+        gap: 8px;
+        background: hsl(var(--space-800));
+        padding: 1rem;
+        border-radius: 12px;
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .connect4-board .cell {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+        position: relative;
+    }
+
+    .connect4-board .cell.clickable {
+        cursor: pointer;
+    }
+
+    .connect4-board .cell.clickable:hover {
+        background: hsl(var(--star) / .1);
+        transform: scale(1.05);
+    }
+
+    .empty-slot {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: hsl(var(--surface) / .1);
+        border: 2px solid hsl(var(--surface) / .05);
+    }
+
+    .piece {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        animation: dropIn 0.3s ease-out;
+        box-shadow: 0 2px 8px hsl(var(--space-900) / .3);
+    }
+
+    .piece-red {
+        background: hsl(0 70% 60%);
+        border: 3px solid hsl(0 70% 50%);
+    }
+
+    .piece-yellow {
+        background: hsl(var(--star));
+        border: 3px solid hsl(48 89% 67%);
+    }
+
+    .piece.winning {
+        animation: winPulse 1s ease-in-out infinite;
+        box-shadow: 0 0 20px currentColor;
+    }
+
+    @keyframes dropIn {
+        from {
+            transform: translateY(-400%) scale(0.5);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0) scale(1);
+            opacity: 1;
+        }
+    }
+
+    @keyframes winPulse {
+        0%, 100% { 
+            transform: scale(1);
+            filter: brightness(1);
+        }
+        50% { 
+            transform: scale(1.15);
+            filter: brightness(1.3);
+        }
+    }
+
+    .column-indicators {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        max-width: 560px;
+        margin: 1rem auto 0;
+    }
+
+    .column-button {
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink) / .5);
+        border: 1px solid hsl(var(--border) / .2);
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.5rem;
+        min-height: 44px;
+    }
+
+    .column-button.available {
+        color: hsl(var(--star));
+        border-color: hsl(var(--border) / .4);
+    }
+
+    .column-button.available:hover {
+        background: hsl(var(--star) / .2);
+        border-color: hsl(var(--star));
+        transform: translateY(-2px);
+    }
+
+    .column-button:disabled {
+        cursor: not-allowed;
+        opacity: 0.3;
+    }
+
+    @media (max-width: 768px) {
+        .game-board,
+        .connect4-board {
+            max-width: 100%;
+            padding: 0.75rem;
+            gap: 6px;
+        }
+
+        .column-indicators {
+            max-width: 100%;
+            gap: 6px;
+        }
+
+        .column-button {
+            font-size: 1.2rem;
+            padding: 0.4rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .game-board,
+        .connect4-board {
+            gap: 4px;
+            padding: 0.5rem;
+        }
+
+        .column-indicators {
+            gap: 4px;
+        }
+    }
+
+    /* Respect reduced motion for Connect 4 */
+    @media (prefers-reduced-motion: reduce) {
+        .piece {
+            animation: none;
+        }
+        
+        .piece.winning {
+            animation: none;
+        }
+        
+        .cell.clickable:hover,
+        .column-button:hover {
+            transform: none;
+        }
+    }
+
+    /* === Minesweeper Board === */
+    .minesweeper-board {
+        display: grid;
+        gap: 1px;
+        background: hsl(var(--star) / .3);
+        padding: 2px;
+        border-radius: 4px;
+        width: fit-content;
+    }
+
+    .mine-cell {
+        background: hsl(var(--surface) / .1);
+        border: 1px solid hsl(var(--border) / .3);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+        width: 30px;
+        height: 30px;
+        min-height: 44px;
+    }
+
+    .mine-cell:hover:not(.revealed) {
+        background: hsl(var(--star) / .2);
+        transform: scale(1.05);
+    }
+
+    .mine-cell.revealed {
+        background: hsl(var(--space-800) / .5);
+        border-color: hsl(var(--border) / .2);
+        cursor: default;
+    }
+
+    .mine-cell.flagged {
+        background: hsl(var(--star) / .3);
+    }
+
+    .mine-cell.exploded {
+        background: hsl(0 70% 60% / .8);
+        animation: explode 0.5s ease-out;
+    }
+
+    @keyframes explode {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    .flag,
+    .mine {
+        font-size: 1.2rem;
+    }
+
+    .number {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    /* Classic Minesweeper number colors */
+    .number-1 { color: hsl(240 100% 50%); }  /* Blue */
+    .number-2 { color: hsl(120 100% 25%); }  /* Green */
+    .number-3 { color: hsl(0 100% 50%); }    /* Red */
+    .number-4 { color: hsl(240 100% 25%); }  /* Dark blue */
+    .number-5 { color: hsl(0 100% 25%); }    /* Maroon */
+    .number-6 { color: hsl(180 100% 25%); }  /* Teal */
+    .number-7 { color: hsl(var(--ink)); }    /* White */
+    .number-8 { color: hsl(var(--ink-muted)); } /* Gray */
+
+    @media (max-width: 768px) {
+        .mine-cell {
+            width: 25px;
+            height: 25px;
+            font-size: 0.9rem;
+        }
+
+        .flag, .mine {
+            font-size: 1rem;
+        }
+
+        .number {
+            font-size: 0.9rem;
+        }
+    }
+
+    /* Respect reduced motion for Minesweeper */
+    @media (prefers-reduced-motion: reduce) {
+        .mine-cell:hover {
+            transform: none;
+        }
+        
+        .mine-cell.exploded {
+            animation: none;
+        }
+    }
+
+    /* === Snake Board === */
+    .snake-board {
+        display: grid;
+        grid-template-columns: repeat(20, 1fr);
+        gap: 1px;
+        background: hsl(var(--space-800) / .8);
+        padding: 4px;
+        border-radius: 0.5rem;
+        max-width: 600px;
+        width: 100%;
+    }
+
+    .snake-cell {
+        background: hsl(var(--space-900) / .5);
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 2px;
+    }
+
+    .snake-cell.snake-head {
+        background: hsl(var(--star));
+        border-radius: 3px;
+    }
+
+    .snake-cell.snake-body {
+        background: hsl(var(--constellation));
+    }
+
+    .snake-cell.food {
+        background: hsl(0 70% 60% / .3);
+        border-radius: 50%;
+    }
+
+    .game-controls-snake {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+    }
+
+    .mobile-controls {
+        display: none;
+    }
+
+    .control-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 60px);
+        grid-template-rows: repeat(3, 60px);
+        gap: 8px;
+    }
+
+    .arrow-btn {
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink));
+        border: 2px solid hsl(var(--border) / .3);
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.5rem;
+        font-weight: bold;
+        min-height: 44px;
+    }
+
+    .arrow-btn:hover, 
+    .arrow-btn:active {
+        background: hsl(var(--star));
+        color: hsl(220 20% 10%);
+        transform: scale(1.1);
+    }
+
+    @media (max-width: 768px) {
+        .snake-board {
+            max-width: 400px;
+        }
+
+        .mobile-controls {
+            display: block;
+        }
+    }
+
+    /* Respect reduced motion for Snake */
+    @media (prefers-reduced-motion: reduce) {
+        .arrow-btn:hover,
+        .arrow-btn:active {
+            transform: none;
+        }
+    }
+
+    /* === 2048 Board === */
+    .game-board-2048 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        background: hsl(var(--space-800) / .8);
+        padding: 10px;
+        border-radius: 12px;
+        max-width: 450px;
+        width: 100%;
+        aspect-ratio: 1;
+    }
+
+    .tile-cell {
+        background: hsl(var(--surface) / .1);
+        border-radius: 0.5rem;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .tile {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        font-size: 2rem;
+        animation: tile-appear 0.2s ease-out;
+    }
+
+    @keyframes tile-appear {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    .game-controls-2048 {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .control-row {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .control-btn-2048 {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink));
+        border: 2px solid hsl(var(--border) / .3);
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        font-weight: bold;
+        min-height: 44px;
+    }
+
+    .control-btn-2048:hover:not(:disabled) {
+        background: hsl(var(--star) / .2);
+        border-color: hsl(var(--star));
+    }
+
+    .control-btn-2048:focus-visible {
+        outline: 2px solid hsl(var(--constellation));
+        outline-offset: 2px;
+    }
+
+    .control-btn-2048.new-game {
+        background: hsl(var(--star));
+        color: hsl(220 20% 10%);
+    }
+
+    .control-btn-2048:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .game-board-2048 {
+            max-width: 350px;
+        }
+
+        .tile {
+            font-size: 1.5rem;
+        }
+
+        .mobile-controls {
+            display: block;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .game-board-2048 {
+            max-width: 280px;
+        }
+
+        .tile {
+            font-size: 1.2rem;
+        }
+    }
+
+    /* Respect reduced motion for 2048 */
+    @media (prefers-reduced-motion: reduce) {
+        .tile {
+            animation: none;
+        }
+        
+        .arrow-btn:hover,
+        .arrow-btn:active,
+        .control-btn-2048:hover {
+            transform: none;
+        }
+    }
 }
 
