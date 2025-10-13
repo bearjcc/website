@@ -155,6 +155,64 @@ Technology stack, dependencies, and tooling for Ursa Minor Games.
 - Laravel-native
 - Real-time capabilities
 
+### Flux UI
+
+**Version**: 2.x
+**Package**: `livewire/flux`
+
+**What It Is**:
+- Premium UI component library for Livewire
+- Built with Tailwind CSS
+- Modern, accessible components
+- Customizable to match brand themes
+
+**Key Components**:
+- Buttons and form inputs
+- Cards and containers
+- Modals and overlays
+- Navigation elements
+- Tables and data display
+- Icons and graphics
+
+**Usage**:
+```blade
+{{-- Flux button with custom styling --}}
+<flux:button variant="primary" class="bg-star text-space-900">
+    Play Now
+</flux:button>
+
+{{-- Flux card with glass effect --}}
+<flux:card class="glass">
+    <flux:heading>Game Title</flux:heading>
+    <flux:text>Description goes here</flux:text>
+</flux:card>
+```
+
+**Integration**:
+- Installed via Composer
+- Configured in `tailwind.config.js`
+- Activated with `@fluxStyles` and `@fluxScripts`
+- Customizable with Tailwind classes
+
+**Theming with Flux**:
+- Apply custom CSS classes to Flux components
+- Use night sky colors: `text-ink`, `bg-space-900`, `border-constellation`
+- Maintain glass effects: `backdrop-blur-md`, `bg-surface/5`
+- Preserve brand buttons: Use `.btn-primary` and `.btn-secondary` classes
+
+**When to Use**:
+- For interactive forms and inputs
+- For consistent component styling
+- For accessible UI patterns
+- For rapid prototyping
+- When custom components would be complex
+
+**When NOT to Use**:
+- For simple HTML where custom CSS is sufficient
+- When brand-specific styling is simpler without Flux
+- For unique, one-off components
+- When bundle size is critical
+
 ## Build Tools
 
 ### Vite
@@ -188,7 +246,8 @@ npm run build
 
 **Key Dependencies**:
 - `laravel/framework`: Core framework
-- `livewire/livewire`: Future TALL stack component
+- `livewire/livewire`: TALL stack reactive components
+- `livewire/flux`: UI component library
 - Laravel development tools
 
 **Usage**:

@@ -203,6 +203,85 @@ Elegant horizon footer with subtle gradient line and poetic tagline:
 
 ---
 
+## Flux UI Components
+
+Flux UI enhanced components that integrate with the night sky theme.
+
+### Flux Button (`flux-button.blade.php`)
+
+Themed buttons with star/constellation colors.
+
+**Usage:**
+```blade
+<x-ui.flux-button variant="primary" href="{{ route('games.index') }}">
+    Play Games
+</x-ui.flux-button>
+
+<x-ui.flux-button variant="secondary" icon="sparkles">
+    Learn More
+</x-ui.flux-button>
+```
+
+**Props:**
+- `variant`: `primary` (star yellow), `secondary` (bordered), `ghost` (subtle)
+- `href` (optional): Makes button a link
+- `icon` (optional): Heroicon name
+- `iconPosition`: `left` or `right`
+
+### Flux Card (`flux-card.blade.php`)
+
+Glass-effect cards with night sky styling.
+
+**Usage:**
+```blade
+<x-ui.flux-card heading="Game Title" icon="puzzle-piece">
+    <p>Card content goes here.</p>
+</x-ui.flux-card>
+
+<x-ui.flux-card heading="Link Card" href="{{ route('games.show', $game) }}">
+    <p>This card is clickable.</p>
+</x-ui.flux-card>
+```
+
+**Props:**
+- `heading` (optional): Card title
+- `href` (optional): Makes card a link
+- `icon` (optional): Heroicon name
+- `interactive`: Enables hover effects without href
+
+### Flux Input (`flux-input.blade.php`)
+
+Themed form inputs with labels and validation.
+
+**Usage:**
+```blade
+<x-ui.flux-input 
+    label="Email Address"
+    type="email"
+    name="email"
+    placeholder="you@example.com"
+    hint="We'll never share your email"
+    required
+/>
+
+<x-ui.flux-input 
+    label="Username"
+    name="username"
+    error="Username is already taken"
+/>
+```
+
+**Props:**
+- `label` (optional): Input label
+- `type`: Input type (default: `text`)
+- `hint` (optional): Help text
+- `error` (optional): Error message
+- `required`: Shows asterisk
+
+**For More**: See [FLUX_INTEGRATION.md](../../../docs/FLUX_INTEGRATION.md) for detailed usage.
+
+---
+
 ## Notes
 
 - All components are **prop-validated** with sensible defaults
@@ -210,4 +289,5 @@ Elegant horizon footer with subtle gradient line and poetic tagline:
 - **Responsive** by default (mobile-first approach)
 - **Dark theme** optimized with proper contrast
 - Follow the **night sky aesthetic** consistently
+- **Flux components** available for enhanced patterns with consistent theming
 

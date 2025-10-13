@@ -3,7 +3,7 @@
     $description = 'Get in touch with Ursa Minor Games. Find us on GitHub, follow our development, and join our gaming community.';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="hero-section">
         <article>
             <h1>Get In Touch</h1>

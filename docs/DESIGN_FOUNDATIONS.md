@@ -23,7 +23,7 @@ We are playing the long game. The site we build now is not about making promises
 We are at **Stage 1 — Brand & Foundations**:
 
 - The homepage is the first focus. It sets the tone for everything else.  
-- We are using the **TALL stack** (Tailwind, Alpine, Laravel, Livewire) with additional libraries like Pint, Heroicons, MaryUI, and FluxUI if needed.  
+- We are using the **TALL stack** (Tailwind, Alpine, Laravel, Livewire) with additional libraries like Pint, Heroicons, and **Flux UI** for component consistency.  
 - Hosting is on **Railway**, targeting laptop and large tablet screens first. Mobile support will come later.  
 - All games and content are developed in-house by a single developer, with occasional contributions from close family.
 
