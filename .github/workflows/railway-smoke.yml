@@ -7,27 +7,35 @@ on:
     branches: [ main ]
 
 jobs:
-  build-image:
+  docker-build:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
       - name: Build Docker image
         run: docker build -t ursaminor:test .
-
-      - name: Verify PHP installation
+      
+      - name: Verify PHP version
         run: docker run --rm ursaminor:test php -v
-
+      
       - name: Verify Composer autoload
-        run: docker run --rm -e APP_KEY=base64:FAKEKEY12345678901234567890123456789012= ursaminor:test php artisan --version
-
-      - name: Check built assets exist
+        run: docker run --rm ursaminor:test php -r "require 'vendor/autoload.php'; echo 'Autoload works';"
+      
+      - name: Verify Artisan commands work
+        run: docker run --rm -e APP_KEY=base64:TESTKEY12345678901234567890123456789012= ursaminor:test php artisan --version
+      
+      - name: Verify built assets exist
         run: docker run --rm ursaminor:test ls -la /var/www/html/public/build
-
-      - name: Verify vendor directory
-        run: docker run --rm ursaminor:test ls -la /var/www/html/vendor
-
-      - name: Check permissions
-        run: docker run --rm ursaminor:test ls -ld /var/www/html/storage /var/www/html/bootstrap/cache
-
+      
+      - name: Check for common deployment issues
+        run: |
+          echo "Checking for writable storage directory..."
+          docker run --rm ursaminor:test test -w /var/www/html/storage
+          echo "Checking for writable bootstrap/cache..."
+          docker run --rm ursaminor:test test -w /var/www/html/bootstrap/cache
+          echo "All checks passed!"

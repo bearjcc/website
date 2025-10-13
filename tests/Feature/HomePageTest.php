@@ -63,22 +63,22 @@ class HomepageTest extends TestCase
     public function test_homepage_limits_game_cards_to_three(): void
     {
         // Create more than 3 games
-        Game::factory()->count(5)->create([
-            'status' => 'published',
-            'published_at' => now()->subDay(),
-        ]);
+        Game::factory()->count(5)->published()->create();
 
         $response = $this->get('/');
 
         $html = $response->getContent();
 
-        // Count game card links (should be maximum 3)
-        $gameCardCount = substr_count($html, 'href="'.url('/games/'));
+        // Count unique game cards by extracting unique slugs
+        // Each game card has a unique href to games.play route
+        preg_match_all('/href="[^"]*\/games\/([^"]+)"/i', $html, $matches);
+        $uniqueGames = array_unique($matches[1]);
+        $gameCardCount = count($uniqueGames);
 
         $this->assertLessThanOrEqual(
             3,
             $gameCardCount,
-            'Homepage should display maximum 3 game cards'
+            'Homepage should display maximum 3 unique game cards'
         );
     }
 
@@ -111,7 +111,6 @@ class HomepageTest extends TestCase
         // Create a published post
         Post::factory()->create([
             'status' => 'published',
-            'published_at' => now()->subDay(),
         ]);
 
         $response = $this->get('/');

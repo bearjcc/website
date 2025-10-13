@@ -31,7 +31,7 @@
         </header>
 
         {{-- Main content area --}}
-        <main class="flex-1">
+        <main id="main-content" class="flex-1">
             {{ $slot }}
         </main>
 

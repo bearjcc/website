@@ -21,6 +21,7 @@
                             :primaryLabel="__('ui.cta_play')"
                             :secondaryHref="route('blog.index')"
                             :secondaryLabel="__('ui.cta_browse')"
+                            data-um-goal="hero_play_click"
                         />
                     </div>
                 </div>
@@ -44,18 +45,27 @@
         <div class="section mt-12">
             <div class="grid md:grid-cols-3 gap-6">
                 @php
-                    $publishedGames = \App\Models\Game::where('status', 'published')->get();
+                    $publishedGames = \App\Models\Game::where('status', 'published')->limit(3)->get();
                     $gameCount = $publishedGames->count();
                     $placeholdersNeeded = max(0, 3 - $gameCount);
                 @endphp
 
                 {{-- Published games --}}
                 @foreach($publishedGames as $game)
+                    @php
+                        // Select icon based on game type
+                        $icon = match($game->type ?? 'puzzle') {
+                            'puzzle' => 'cube-transparent',
+                            'board' => 'rectangle-group',
+                            'card' => 'rectangle-stack',
+                            default => 'puzzle-piece',
+                        };
+                    @endphp
                     <x-ui.card
                         :title="$game->title"
                         :subtitle="$game->short_description"
                         :href="route('games.play', $game->slug)"
-                        icon="puzzle-piece"
+                        :icon="$icon"
                     />
                 @endforeach
 
