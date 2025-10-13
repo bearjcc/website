@@ -23,7 +23,6 @@
 
     {{-- Styles via Vite --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @fluxStyles
     @livewireStyles
 </head>
 <body class="font-sans text-ink bg-space-900 min-h-screen flex flex-col">
@@ -59,7 +58,6 @@
     </div>
 
     @livewireScripts
-    @fluxScripts
 </body>
 </html>
 

@@ -16,13 +16,22 @@
             </p>
 
             <div class="pt-2">
-                <x-ui.cta-row
-                    :primaryHref="$firstPublishedGameSlug ? route('games.play', $firstPublishedGameSlug) : route('games.index')"
-                    :primaryLabel="__('ui.cta_play')"
-                    :secondaryHref="route('games.index')"
-                    :secondaryLabel="__('ui.cta_browse')"
-                    data-um-goal="hero_play_click"
-                />
+                <div class="flex flex-wrap gap-3 justify-center">
+                    <x-ui.flux-button 
+                        variant="primary" 
+                        :href="$firstPublishedGameSlug ? route('games.play', $firstPublishedGameSlug) : route('games.index')"
+                        data-um-goal="hero_play_click"
+                    >
+                        {{ __('ui.cta_play') }}
+                    </x-ui.flux-button>
+                    
+                    <x-ui.flux-button 
+                        variant="secondary" 
+                        :href="route('games.index')"
+                    >
+                        {{ __('ui.cta_browse') }}
+                    </x-ui.flux-button>
+                </div>
             </div>
         </div>
     </section>
