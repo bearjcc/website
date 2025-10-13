@@ -51,38 +51,35 @@
         </div>
     </section>
 
-    {{-- Latest Notes Section --}}
-    <section class="py-12 md:py-16">
-        <x-ui.section-header
-            :kicker="__('ui.studio_kicker')"
-            :title="__('ui.latest_notes')"
-            :subtitle="__('ui.latest_notes_sub')"
-        />
+    {{-- Latest Notes Section - Minimal --}}
+    @php
+        $latestPosts = \App\Models\Post::where('status', 'published')
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+    @endphp
 
-        <div class="section mt-12">
-            @php
-                $latestPosts = \App\Models\Post::where('status', 'published')
-                    ->orderBy('created_at', 'desc')
-                    ->limit(3)
-                    ->get();
-            @endphp
-
-            @if($latestPosts->count() > 0)
-                <div class="space-y-4">
+    @if($latestPosts->count() > 0)
+        <section class="py-12 md:py-16">
+            <div class="section">
+                <h2 class="h5 mb-6 text-center text-[color:var(--ink-muted)]">{{ __('ui.latest_notes') }}</h2>
+                
+                <div class="max-w-xl mx-auto space-y-3">
                     @foreach($latestPosts as $post)
-                        <x-ui.card
-                            :title="$post->title"
-                            :href="route('blog.show', $post->slug)"
-                            :meta="$post->created_at->diffForHumans()"
-                            icon="document-text"
-                        />
+                        <a href="{{ route('blog.show', $post->slug) }}" 
+                           class="group block glass p-4 hover:border-[color:var(--ink)]/20 transition-all duration-150 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)]">
+                            <div class="flex items-baseline justify-between gap-4">
+                                <h3 class="text-[color:var(--ink)] group-hover:text-[color:var(--star)] transition-colors text-base">
+                                    {{ $post->title }}
+                                </h3>
+                                <time class="text-xs text-[color:var(--ink-muted)] shrink-0" datetime="{{ $post->created_at->toIso8601String() }}">
+                                    {{ $post->created_at->format('M j') }}
+                                </time>
+                            </div>
+                        </a>
                     @endforeach
                 </div>
-            @else
-                <div class="text-center text-[color:var(--ink-muted)] py-8">
-                    <p>{{ __('ui.coming_soon_sub') }}</p>
-                </div>
-            @endif
-        </div>
-    </section>
+            </div>
+        </section>
+    @endif
 </x-layouts.app>

@@ -86,12 +86,50 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should NOT have verbose section headers
+        // Should NOT have verbose section headers with kickers
         $this->assertStringNotContainsString('Available now', $html);
         $this->assertStringNotContainsString('Play in your browser', $html);
+        $this->assertStringNotContainsString('From the studio', $html);
 
-        // Should be more streamlined
+        // Should NOT have hero body text
         $this->assertStringNotContainsString('We build elegant, replayable games', $html);
+    }
+
+    public function test_blog_section_is_minimal_when_posts_exist(): void
+    {
+        // Create a test post
+        \App\Models\Post::factory()->create([
+            'title' => 'Test Post',
+            'slug' => 'test-post',
+            'status' => 'published',
+        ]);
+
+        $response = $this->get('/');
+        $html = $response->getContent();
+
+        // Should have "Latest Notes" heading
+        $response->assertSee('Latest Notes');
+
+        // Should NOT have verbose kicker/subtitle
+        $this->assertStringNotContainsString('studio_kicker', $html);
+        $this->assertStringNotContainsString('Short updates as we build', $html);
+
+        // Should NOT have icons on blog cards
+        $this->assertStringNotContainsString('heroicon-o-document-text', $html);
+
+        // Should have post title
+        $response->assertSee('Test Post');
+    }
+
+    public function test_blog_section_hidden_when_no_posts(): void
+    {
+        // Ensure no published posts
+        \App\Models\Post::query()->delete();
+
+        $response = $this->get('/');
+
+        // Section should not appear at all
+        $response->assertDontSee('Latest Notes');
     }
 
     public function test_game_cards_respect_reduced_motion(): void
