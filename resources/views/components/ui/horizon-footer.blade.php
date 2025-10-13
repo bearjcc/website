@@ -17,7 +17,8 @@
 
     {{-- Footer content --}}
     <div class="section mt-6 text-center text-sm text-ink/70">
-        <p class="mt-2 text-ink/50">&copy; {{ now()->year }} Ursa Minor Games. All rights reserved.</p>
+        <p class="mb-3 text-ink/60">{{ __('ui.footer_note_primary') }}</p>
+        <p class="text-ink/50">&copy; {{ now()->year }} Ursa Minor Games. All rights reserved.</p>
     </div>
 </footer>
 

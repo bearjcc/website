@@ -13,22 +13,10 @@
         Games
     </a>
     <a 
-        href="{{ route('blog.index') }}" 
-        class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
-    >
-        Blog
-    </a>
-    <a 
         href="{{ route('about') }}" 
         class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
     >
         About
-    </a>
-    <a 
-        href="#contact" 
-        class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
-    >
-        Contact
     </a>
 </nav>
 

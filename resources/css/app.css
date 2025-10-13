@@ -358,29 +358,37 @@
     .um-game-card {
         position: relative;
         display: block;
-        aspect-ratio: 1 / 1; /* Square cards for board games */
+        width: 100%;
+        min-height: 44px;
+        padding-bottom: 100%; /* Square aspect ratio */
     }
     
-    /* Ensure minimum touch target size on mobile */
+    /* Allow card to grow on hover */
+    .um-game-card:hover,
+    .um-game-card:focus {
+        padding-bottom: 112%; /* Grows taller to show title */
+    }
+    
+    /* Smooth transition for growth */
     .um-game-card {
-        min-height: 44px;
+        transition: padding-bottom 200ms ease-out;
     }
     
     /* Reduced motion support */
     @media (prefers-reduced-motion: reduce) {
-        .um-game-card,
-        .um-game-card .um-title {
+        .um-game-card {
             transition: none !important;
         }
         
-        .um-game-card:hover {
-            transform: none !important;
+        .um-game-card:hover,
+        .um-game-card:focus {
+            padding-bottom: 100% !important; /* No growth */
         }
         
-        /* Instant reveal instead of animation */
-        .um-game-card:hover .um-title,
-        .um-game-card:focus .um-title {
-            height: 3rem !important;
+        /* Title still shows, just instantly */
+        .um-game-card:hover .um-title-reveal,
+        .um-game-card:focus .um-title-reveal {
+            opacity: 1 !important;
             transition: none !important;
         }
     }

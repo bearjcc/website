@@ -1,4 +1,6 @@
 <div>
+    <x-slot:title>Home</x-slot:title>
+    
     {{-- Hero Section - Minimal --}}
     <section class="section pt-24 md:pt-32 pb-20 md:pb-24" id="main-content">
         <div class="max-w-2xl mx-auto text-center space-y-8">
@@ -35,6 +37,8 @@
                         'tic-tac-toe' => 'tictactoe',
                         'connect-4' => 'connect4',
                         'sudoku' => 'sudoku',
+                        'chess' => 'chess',
+                        'checkers' => 'checkers',
                         'minesweeper' => 'minesweeper',
                         'snake' => 'snake',
                         '2048' => '2048',

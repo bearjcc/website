@@ -4,14 +4,12 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Pages\About;
 use App\Livewire\Pages\AdminFeatures;
-use App\Livewire\Pages\BlogIndex;
 use App\Livewire\Pages\GamePlay;
 use App\Livewire\Pages\GamesIndex;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\LoreEdit;
 use App\Livewire\Pages\LoreIndex;
 use App\Livewire\Pages\LoreShow;
-use App\Livewire\Pages\PostShow;
 use Illuminate\Support\Facades\Route;
 
 // Health check for Railway deployment
@@ -38,11 +36,7 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
 
-// Blog routes (public)
-Route::prefix('blog')->name('blog.')->group(function () {
-    Route::get('/', BlogIndex::class)->name('index');
-    Route::get('/{post:slug}', PostShow::class)->name('show');
-});
+// Blog routes removed - blog section not needed
 
 // Contributor routes (Lore section - invisible to guests)
 Route::middleware(['auth', 'can:access-lore'])->prefix('lore')->name('lore.')->group(function () {

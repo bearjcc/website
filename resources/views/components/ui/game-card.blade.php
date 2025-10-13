@@ -10,7 +10,7 @@
 @endphp
 
 <a href="{{ $href }}"
-   class="um-game-card group relative block rounded-2xl border border-[color:var(--ink)]/10 bg-[hsl(var(--surface)/.04)] overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] transition-all duration-150 ease-out hover:border-[color:var(--ink)]/20 motion-safe:hover:-translate-y-[2px]"
+   class="um-game-card group relative block rounded-2xl glass overflow-hidden focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] transition-all duration-150 ease-out hover:border-[color:var(--ink)]/20 motion-safe:hover:-translate-y-[2px]"
    style="min-height: 44px;"
    aria-label="{{ $label }}">
     
@@ -125,15 +125,13 @@
         @endswitch
     </div>
 
-    {{-- Title reveal on hover/focus - grows upward from bottom --}}
+    {{-- Title reveal on hover/focus - card grows taller, name fades in --}}
     <h3 class="sr-only">{{ $title }}</h3>
-    <div class="um-title pointer-events-none absolute inset-x-0 bottom-0 h-0 overflow-hidden
-                group-hover:h-12 group-focus:h-12
-                transition-all duration-200 ease-out">
-        <div class="absolute bottom-0 left-0 right-0 h-12 flex items-center justify-center
-                    bg-[hsl(var(--surface)/.90)] border-t border-[color:var(--ink)]/10 
-                    text-[color:var(--ink)] text-sm font-medium backdrop-blur-sm">
-            <span>{{ $title }}</span>
+    <div class="um-title-reveal absolute inset-x-0 bottom-0 flex items-end justify-center
+                opacity-0 group-hover:opacity-100 group-focus:opacity-100
+                transition-opacity duration-200 ease-out pointer-events-none">
+        <div class="w-full text-center px-4 py-3 bg-gradient-to-t from-[hsl(var(--surface)/.95)] to-transparent backdrop-blur-sm">
+            <span class="text-[color:var(--ink)] text-sm font-medium">{{ $title }}</span>
         </div>
     </div>
 </a>

@@ -5,7 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $title ?? config('app.name', 'Ursa Minor') }}</title>
+    @php
+        $siteName = 'Ursa Minor Games';
+        $pageTitle = $title ?? 'Home';
+        $fullTitle = $pageTitle === 'Home' 
+            ? $siteName 
+            : $siteName . ' | ' . $pageTitle;
+        if (config('ui.lowercase_mode')) {
+            $fullTitle = mb_strtolower($fullTitle);
+        }
+    @endphp
+    <title>{{ $fullTitle }}</title>
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,11 +25,11 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="font-sans text-ink bg-space-900">
+<body class="font-sans text-ink bg-space-900 min-h-screen flex flex-col">
     {{-- Starfield canvas will be inserted here by starfield.js --}}
 
     {{-- Main content wrapper with stacking context above starfield --}}
-    <div id="um-app" class="relative z-10">
+    <div id="um-app" class="relative z-10 flex flex-col min-h-screen">
         {{-- Sticky top navigation with airy spacing --}}
         <header id="um-header" class="sticky top-0 z-50 backdrop-blur-md bg-ink/5 relative">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,9 +46,11 @@
         </header>
 
         {{-- Main content area --}}
-        <main id="main-content" class="flex-1">
+        <main id="main-content" class="flex-1 flex flex-col">
             <div id="top"></div>
-            {{ $slot }}
+            <div class="flex-1">
+                {{ $slot }}
+            </div>
         </main>
 
         {{-- Footer --}}
