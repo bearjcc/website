@@ -42,9 +42,9 @@
                             class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-medium' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
                         Medium AI
                     </button>
-                    <button wire:click="setGameMode('ai-hard', 'X')" 
-                            class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-hard' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
-                        Hard AI
+                    <button wire:click="setGameMode('ai-impossible', 'X')" 
+                            class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-impossible' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                        Impossible
                     </button>
                 </div>
             </div>

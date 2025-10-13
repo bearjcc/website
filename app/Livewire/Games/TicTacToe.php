@@ -16,7 +16,7 @@ class TicTacToe extends Component
 
     public bool $isDraw = false;
 
-    public string $gameMode = 'pvp'; // pvp, ai-easy, ai-medium, ai-hard
+    public string $gameMode = 'pvp'; // pvp, ai-easy, ai-medium, ai-impossible
 
     public string $playerSymbol = 'X'; // Player chooses X or O when playing AI
 
@@ -91,7 +91,7 @@ class TicTacToe extends Component
         $aiMove = match ($this->gameMode) {
             'ai-easy' => $engine->aiEasy($this->board, $this->currentPlayer),
             'ai-medium' => $engine->aiMedium($this->board, $this->currentPlayer),
-            'ai-hard' => $engine->aiHard($this->board, $this->currentPlayer),
+            'ai-impossible' => $engine->bestMoveMinimax($this->board, $this->currentPlayer),
             default => $engine->bestMoveMinimax($this->board, $this->currentPlayer),
         };
 

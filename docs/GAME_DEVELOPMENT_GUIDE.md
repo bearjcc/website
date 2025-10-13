@@ -875,51 +875,428 @@ public function redo(): void
 
 ### AI Opponents
 
-Separate AI logic into dedicated class:
+#### AI Pattern Overview
+
+AI opponents should:
+1. **Live in game engines** as pure static methods
+2. **Use `ProvidesAIOpponent` trait** in Livewire components
+3. **Offer 3 standard difficulty levels**: easy, medium, impossible
+
+#### AI Difficulty Levels
+
+**Easy AI** — Beatable, makes obvious mistakes
+- Always takes winning moves (100%)
+- Occasionally blocks opponent (30-50%)
+- Otherwise plays randomly
+- Good for casual players and children
+
+**Medium AI** — Challenging but fair
+- Always takes winning moves (100%)
+- Usually blocks opponent (80-90%)
+- Takes strategic positions (center, corners)
+- Makes occasional suboptimal moves
+
+**Impossible AI** — Perfect play
+- Uses minimax with alpha-beta pruning
+- Never loses (can only win or draw)
+- Provides ultimate challenge
+- Educational for studying optimal play
+
+#### Engine AI Methods Pattern
+
+**Add these methods to your game engine:**
 
 ```php
 <?php
 
-namespace App\Games\TicTacToe;
+namespace App\Games\YourGame;
 
-class TicTacToeAI
+class YourGameEngine
 {
-    public static function getBestMove(array $state, string $difficulty = 'medium'): array
+    /**
+     * Easy AI: Always wins, sometimes blocks, mostly random.
+     */
+    public static function aiEasy(array $state, string $player): int
     {
-        return match($difficulty) {
-            'easy' => self::getRandomMove($state),
-            'medium' => self::getDecentMove($state),
-            'hard' => self::getMiniMaxMove($state),
-            default => self::getRandomMove($state),
-        };
-    }
-
-    protected static function getRandomMove(array $state): array
-    {
-        // Get available cells
-        $available = [];
-        foreach ($state['board'] as $index => $cell) {
-            if ($cell === null) {
-                $available[] = $index;
+        $availableMoves = self::getAvailableMoves($state);
+        
+        // 1. Always try to win (100%)
+        foreach ($availableMoves as $move) {
+            $testState = self::applyMove($state, ['move' => $move, 'player' => $player]);
+            if (self::isWinning($testState, $player)) {
+                return $move;
             }
         }
         
-        return ['cell' => $available[array_rand($available)]];
+        // 2. Sometimes block opponent (30-50%)
+        if (mt_rand(1, 100) <= 40) {
+            $opponent = self::getOpponent($player);
+            foreach ($availableMoves as $move) {
+                $testState = self::applyMove($state, ['move' => $move, 'player' => $opponent]);
+                if (self::isWinning($testState, $opponent)) {
+                    return $move;
+                }
+            }
+        }
+        
+        // 3. Otherwise random
+        return $availableMoves[array_rand($availableMoves)];
     }
 
-    // ... other AI methods
+    /**
+     * Medium AI: Strategic but fallible.
+     */
+    public static function aiMedium(array $state, string $player): int
+    {
+        $opponent = self::getOpponent($player);
+        $availableMoves = self::getAvailableMoves($state);
+        
+        // 1. Always try to win
+        foreach ($availableMoves as $move) {
+            $testState = self::applyMove($state, ['move' => $move, 'player' => $player]);
+            if (self::isWinning($testState, $player)) {
+                return $move;
+            }
+        }
+        
+        // 2. Usually block opponent (80-90%)
+        if (mt_rand(1, 100) <= 85) {
+            foreach ($availableMoves as $move) {
+                $testState = self::applyMove($state, ['move' => $move, 'player' => $opponent]);
+                if (self::isWinning($testState, $opponent)) {
+                    return $move;
+                }
+            }
+        }
+        
+        // 3. Take strategic positions
+        $strategicMoves = self::getStrategicMoves($state, $availableMoves);
+        if (!empty($strategicMoves)) {
+            return $strategicMoves[array_rand($strategicMoves)];
+        }
+        
+        // 4. Fallback to random
+        return $availableMoves[array_rand($availableMoves)];
+    }
+
+    /**
+     * Impossible AI: Perfect minimax play.
+     * 
+     * This is a reference implementation for Tic-Tac-Toe.
+     * Adapt the logic for your specific game.
+     */
+    public static function aiImpossible(array $state, string $player): int
+    {
+        // Implement minimax with alpha-beta pruning
+        // See TicTacToe\Engine::bestMoveMinimax() for full example
+        
+        $bestMove = -1;
+        $bestValue = -1000;
+        
+        foreach (self::getAvailableMoves($state) as $move) {
+            $newState = self::applyMove($state, ['move' => $move, 'player' => $player]);
+            $moveValue = self::minimax($newState, self::getOpponent($player), 0, -1000, 1000, $player);
+            
+            if ($moveValue > $bestValue) {
+                $bestValue = $moveValue;
+                $bestMove = $move;
+            }
+        }
+        
+        return $bestMove;
+    }
+
+    /**
+     * Minimax algorithm with alpha-beta pruning.
+     */
+    private static function minimax(array $state, string $currentPlayer, int $depth, int $alpha, int $beta, string $maximizingPlayer): int
+    {
+        // Check terminal states
+        if (self::isGameOver($state)) {
+            return self::evaluateState($state, $maximizingPlayer, $depth);
+        }
+        
+        $availableMoves = self::getAvailableMoves($state);
+        
+        if ($currentPlayer === $maximizingPlayer) {
+            // Maximizing player
+            $maxEval = -1000;
+            foreach ($availableMoves as $move) {
+                $newState = self::applyMove($state, ['move' => $move, 'player' => $currentPlayer]);
+                $eval = self::minimax($newState, self::getOpponent($currentPlayer), $depth + 1, $alpha, $beta, $maximizingPlayer);
+                $maxEval = max($maxEval, $eval);
+                $alpha = max($alpha, $eval);
+                if ($beta <= $alpha) break; // Alpha-beta pruning
+            }
+            return $maxEval;
+        } else {
+            // Minimizing player
+            $minEval = 1000;
+            foreach ($availableMoves as $move) {
+                $newState = self::applyMove($state, ['move' => $move, 'player' => $currentPlayer]);
+                $eval = self::minimax($newState, self::getOpponent($currentPlayer), $depth + 1, $alpha, $beta, $maximizingPlayer);
+                $minEval = min($minEval, $eval);
+                $beta = min($beta, $eval);
+                if ($beta <= $alpha) break; // Alpha-beta pruning
+            }
+            return $minEval;
+        }
+    }
+
+    /**
+     * Evaluate terminal state for minimax.
+     */
+    private static function evaluateState(array $state, string $player, int $depth): int
+    {
+        $winner = self::getWinner($state);
+        
+        if ($winner === $player) {
+            return 10 - $depth; // Prefer faster wins
+        }
+        
+        if ($winner !== null) {
+            return $depth - 10; // Prefer slower losses
+        }
+        
+        return 0; // Draw
+    }
 }
 ```
 
-Use in component:
+#### Component Integration with Trait
+
+**Use the `ProvidesAIOpponent` trait:**
 
 ```php
-public function makeAIMove(): void
+<?php
+
+namespace App\Livewire\Games;
+
+use App\Games\YourGame\YourGameEngine;
+use App\Livewire\Concerns\ProvidesAIOpponent;
+use App\Livewire\Concerns\InteractsWithGameState;
+use Livewire\Component;
+
+class YourGame extends Component
 {
-    $move = TicTacToeAI::getBestMove($this->getCurrentState(), $this->aiDifficulty);
-    $this->makeMove($move['cell']);
+    use InteractsWithGameState;
+    use ProvidesAIOpponent;
+
+    public array $board = [];
+    public string $currentPlayer = 'X';
+    public bool $gameOver = false;
+    public ?string $winner = null;
+
+    public function mount(): void
+    {
+        $this->playerSymbol = 'X'; // Default for AI mode
+        $this->newGame();
+    }
+
+    public function newGame(): void
+    {
+        $state = YourGameEngine::newGame();
+        $this->syncFromEngine($state);
+        $this->resetGame();
+    }
+
+    public function makeMove($position): void
+    {
+        if ($this->gameOver) return;
+        
+        // Prevent moves during AI turn
+        if ($this->isAIMode() && $this->currentPlayer !== $this->playerSymbol) {
+            return;
+        }
+
+        // Apply player move
+        $state = YourGameEngine::applyMove(
+            $this->getCurrentState(),
+            ['move' => $position, 'player' => $this->currentPlayer]
+        );
+        
+        $this->syncFromEngine($state);
+        $this->incrementMoveCount();
+
+        // Check if game over
+        if ($state['gameOver']) {
+            $this->completeGame();
+            return;
+        }
+
+        // Switch player
+        $this->currentPlayer = $this->currentPlayer === 'X' ? 'O' : 'X';
+
+        // Trigger AI move if applicable
+        if ($this->isAITurn()) {
+            $this->makeAiMove();
+        }
+    }
+
+    protected function makeAiMove(): void
+    {
+        $engine = new YourGameEngine();
+        
+        // Select AI difficulty
+        $aiMove = match ($this->getAIDifficulty()) {
+            'easy' => $engine::aiEasy($this->board, $this->currentPlayer),
+            'medium' => $engine::aiMedium($this->board, $this->currentPlayer),
+            'impossible' => $engine::aiImpossible($this->board, $this->currentPlayer),
+            default => $engine::aiImpossible($this->board, $this->currentPlayer),
+        };
+
+        // Apply AI move
+        $state = $engine::applyMove(
+            $this->getCurrentState(),
+            ['move' => $aiMove, 'player' => $this->currentPlayer]
+        );
+        
+        $this->syncFromEngine($state);
+        $this->incrementMoveCount();
+
+        // Check if game over
+        if ($state['gameOver']) {
+            $this->completeGame();
+            return;
+        }
+
+        // Switch back to player
+        $this->currentPlayer = $this->playerSymbol;
+    }
+
+    protected function getCurrentPlayer(): string
+    {
+        return $this->currentPlayer;
+    }
+
+    protected function getCurrentState(): array
+    {
+        return [
+            'board' => $this->board,
+            'currentPlayer' => $this->currentPlayer,
+            'gameOver' => $this->gameOver,
+            'winner' => $this->winner,
+        ];
+    }
+
+    protected function syncFromEngine(array $state): void
+    {
+        $this->board = $state['board'];
+        $this->currentPlayer = $state['currentPlayer'];
+        $this->gameOver = $state['gameOver'];
+        $this->winner = $state['winner'];
+    }
+
+    public function render()
+    {
+        return view('livewire.games.your-game');
+    }
 }
 ```
+
+#### UI Pattern for AI Selection
+
+**Add mode selection to game view:**
+
+```blade
+{{-- Game Mode Selection (show before game starts) --}}
+@if($moveCount === 0)
+    <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
+        <h3 class="text-lg font-semibold text-ink">Mode</h3>
+        
+        <div class="flex flex-wrap gap-2">
+            <button wire:click="setGameMode('pvp')" 
+                    class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'pvp' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                Pass & Play
+            </button>
+            
+            <button wire:click="setGameMode('ai-easy', 'X')" 
+                    class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-easy' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                Easy
+            </button>
+            
+            <button wire:click="setGameMode('ai-medium', 'X')" 
+                    class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-medium' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                Medium
+            </button>
+            
+            <button wire:click="setGameMode('ai-impossible', 'X')" 
+                    class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-impossible' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                Impossible
+            </button>
+        </div>
+    </div>
+@endif
+
+{{-- During gameplay, show current mode --}}
+@if($gameMode !== 'pvp')
+    <p class="text-sm text-ink/60 text-center">
+        You: {{ $playerSymbol }} vs AI ({{ ucfirst(str_replace('ai-', '', $gameMode)) }})
+    </p>
+@endif
+```
+
+#### Testing AI Opponents
+
+**Test all difficulty levels:**
+
+```php
+<?php
+
+namespace Tests\Feature\Games;
+
+use App\Livewire\Games\YourGame;
+use Livewire\Livewire;
+use Tests\TestCase;
+
+class YourGameAITest extends TestCase
+{
+    public function test_easy_ai_makes_move(): void
+    {
+        Livewire::test(YourGame::class)
+            ->call('setGameMode', 'ai-easy', 'X')
+            ->call('makeMove', 0)
+            ->assertSet('moveCount', 2); // Player + AI
+    }
+
+    public function test_medium_ai_makes_move(): void
+    {
+        Livewire::test(YourGame::class)
+            ->call('setGameMode', 'ai-medium', 'X')
+            ->call('makeMove', 0)
+            ->assertSet('moveCount', 2);
+    }
+
+    public function test_impossible_ai_makes_move(): void
+    {
+        Livewire::test(YourGame::class)
+            ->call('setGameMode', 'ai-impossible', 'X')
+            ->call('makeMove', 0)
+            ->assertSet('moveCount', 2);
+    }
+
+    public function test_player_cannot_move_during_ai_turn(): void
+    {
+        Livewire::test(YourGame::class)
+            ->call('setGameMode', 'ai-easy', 'O') // AI goes first
+            ->call('makeMove', 0) // Try to move (should be ignored)
+            ->assertSet('moveCount', 1); // Only AI moved
+    }
+}
+```
+
+#### Real-World Example: Tic-Tac-Toe
+
+**See working implementation:**
+- Engine: `app/Games/TicTacToe/Engine.php`
+- Component: `app/Livewire/Games/TicTacToe.php`
+- View: `resources/views/livewire/games/tic-tac-toe.blade.php`
+
+**Key files from proven games repo** (`C:\Users\bearj\Herd\games`):
+- `app/Games/TicTacToe/Engine.php` — Complete AI implementation
+- `app/Games/Connect4/` — AI for gravity-based game
+- `app/Games/Checkers/` — AI for capture-based strategy
+- `app/Games/Chess/` — Advanced AI with piece evaluation
 
 ---
 
