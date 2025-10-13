@@ -16,6 +16,46 @@ Project-wide conventions for the Ursa Minor Games Laravel + TALL stack website.
 **Local Dev**: http://website.test/ (Laravel Herd)  
 **Deployment**: Railway (auto-deploy from main branch)
 
+## Design Motif: The Peaceful Night Sky
+
+**THIS IS THE MOST IMPORTANT PRINCIPLE FOR THIS ENTIRE PROJECT.**
+
+Our motif is: **"The peaceful quiet soothing yet joyful night sky"**
+
+Ursa Minor isn't just a theme — it's a design philosophy that treats the website like a serene night sky. Everything you add should feel like it belongs like a star in a constellation, or the horizon — never noise.
+
+### Core Feeling
+
+**Calm · Collected · Reserved · Peaceful · Welcoming · Humble · Confident (but never loud)**
+
+This site is not trying to sell or shout. It simply exists — like the night sky after sunset: still, vast, quietly inspiring. Visitors aren't pushed through funnels; they wander and discover, like stargazers tracing constellations.
+
+### Night Sky as Living Canvas
+
+**Colors**: Deep blues to near-black gradients emulate the fading twilight sky; soft whites and muted golds stand in for starlight.
+
+**Motion**: Nothing loops aggressively. Stars gently twinkle. Constellation lines fade in softly. Hover interactions feel like a star revealing itself.
+
+**Layout**: Wide spacing, uncluttered sections, centered or anchored content — like looking up, not scrolling through noise.
+
+### Minimalism with Purpose
+
+Every element earns its place:
+- Copy is sparse, clear, and stated, not hyped
+- Typography and iconography are quiet and cohesive
+- Navigation is simple — ideally a few key paths, expressed through elegant visuals or single-word labels
+- This isn't brutalist minimalism; it's joyful restraint — a clean sky where each star matters
+
+### Decision-Making Filter
+
+**Before adding ANY feature, UI element, copy, or interaction, ask:**
+- Does this feel like the peaceful night sky?
+- Does this belong like a star in a constellation, or is it noise?
+- Is this calm, collected, and welcoming?
+- Would this exist quietly and confidently, without shouting?
+
+**If the answer is no to any of these questions, don't add it.**
+
 ## Critical Rules
 
 1. **NO EMOJI in production code** - Absolutely forbidden
