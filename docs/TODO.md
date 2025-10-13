@@ -1,192 +1,128 @@
-# Ursa Minor Games - TODO
+# TODO & Roadmap
 
-**Current Phase**: Homepage & Foundation Complete
-**Last Updated**: 2025-10-12
-
----
-
-## 🎯 Current Focus
-
-### Phase 1: Foundation ✅
-
-All foundational work complete. Homepage live with:
-- Component architecture
-- Design system implemented
-- Tests passing
-- Railway deployment working
+Current tasks and development roadmap for Ursa Minor Games.
 
 ---
 
-## 📋 Next Phase: Browser Games
+## Current Phase
 
-### Phase 2: Browser Games (Ready to Start)
+**Phase 1: Foundation** ✅ Complete  
+**Phase 2: Browser Games** 🎯 Next Up
 
-**Goal**: Integrate 5-10 browser games from games repository
+---
 
-**Priority Order**:
+## Immediate Tasks
 
-1. **Sudoku** (Week 1-2)
-   - [ ] Extract Sudoku game logic
-   - [ ] Create Livewire component
-   - [ ] Add to games index
-   - [ ] Write tests
+### Documentation Cleanup ✅
+- [x] Consolidate design docs into DESIGN_BIBLE.md
+- [x] Convert technical guidance to MDC files
+- [x] Simplify docs structure
 
-2. **Connect 4** (Week 3)
-   - [ ] Extract Connect 4 game
-   - [ ] Integrate with site
-   - [ ] Tests
+### Ready to Start: Browser Games
 
-3. **Tic Tac Toe** (Week 4)
-   - [ ] Extract game
-   - [ ] Add AI opponent
-   - [ ] Tests
+**Week 1-2: Sudoku**
+- [ ] Extract from games repo
+- [ ] Create Livewire component
+- [ ] Add visual motif
+- [ ] Integrate score tracking
+- [ ] Write tests
 
-4. **Minesweeper** (Week 5-6)
-   - [ ] Extract game
-   - [ ] Integrate
-   - [ ] Tests
+**Week 3: Connect 4**
+- [ ] Extract game logic
+- [ ] Visual motif (checkerboard)
+- [ ] Tests
 
-5. **Additional Games** (Week 7-10)
-   - [ ] Snake
-   - [ ] 2048
-   - [ ] Memory game
-   - [ ] Choose 2-3 more based on complexity
+**Week 4: Tic-Tac-Toe**
+- [ ] Extract game
+- [ ] Add AI opponent
+- [ ] Visual motif (3×3 grid)
+- [ ] Tests
+
+**Week 5-6: Additional Games**
+- [ ] Minesweeper
+- [ ] Snake
+- [ ] 2048
+- [ ] Memory
 
 **Deliverables**:
-- Games lobby/index page
-- Individual game pages
-- Score tracking
-- Tests for each game
+- Games index page
+- Individual game pages using visual-first cards
+- Score tracking system
+- Night sky motif in game UI (loading, progress)
 
 ---
 
-## 🔮 Future Phases
+## Roadmap
+
+### Phase 1: Foundation ✅ (Weeks 1-2)
+- Homepage with night sky theme
+- Component architecture
+- TALL stack setup
+- Railway deployment
+- Tests and documentation
+
+### Phase 2: Browser Games 🎯 (Weeks 3-10)
+- 5-10 playable browser games
+- Games lobby/index
+- Score tracking
+- Visual-first card grid
 
 ### Phase 3: F1 Predictions (Weeks 11-18)
 - Extract from formula1predictions repo
-- Integrate prediction system
+- Prediction forms
 - Leaderboards
-- Race schedule
+- User accounts
 
 ### Phase 4: Board Games (Weeks 19-30)
-- Extract Agency card system
 - Digital prototyping platform
+- Card management
+- Multiplayer support
 - Playtesting tools
 
-### Phase 5: Wiki System (Weeks 31-40)
-- World-building wiki
-- Import Taverns & Treasures content
-- Collaboration tools
+### Phase 5: World Wiki (Weeks 31-40)
+- Lore management
+- Import Taverns & Treasures
+- Wiki features
+- Contributor roles
 
----
+### Phase 6: Polish (Weeks 41-48)
+- Performance optimization
+- Mobile support
+- Accessibility audit
+- PWA features
 
-## 📚 Documentation
-
-### Current Docs
-- [x] README.md
-- [x] CONTRIBUTING.md
-- [x] docs/BRAND_GUIDELINES.md
-- [x] docs/DEPLOYMENT_GUIDE.md
-- [x] docs/PROJECT_STRUCTURE.md
-- [x] docs/DESIGN_FOUNDATIONS.md
-- [x] docs/FEATURE_EXTRACTION_GUIDE.md
-
-### Needed
-- [ ] API documentation (when APIs added)
-- [ ] Game integration guide
-- [ ] User guide (when features warrant)
-
----
-
-## 🧪 Testing
-
-### Test Coverage
-- [x] Homepage tests passing
-- [ ] Games integration tests (Phase 2)
-- [ ] Feature tests for each game
-- [ ] E2E tests (future)
-
-**Target**: 80%+ code coverage
-
----
-
-## 🚀 Deployment
-
-- [x] Railway deployment working
-- [x] Auto-deploy on push to main
-- [x] Environment variables configured
-- [ ] Custom domain setup (optional)
-- [ ] CDN for assets (future optimization)
-
----
-
-## 🎨 Design & UI
-
-### Completed
-- [x] Night sky theme
-- [x] Component library
-- [x] Responsive design
-- [x] Brand guidelines
-
-### Future
-- [ ] Dark/light mode toggle (optional)
-- [ ] Accessibility audit
-- [ ] Performance optimization
-
----
-
-## 📊 Metrics to Track
-
-### Development
-- Test coverage percentage
-- Build times
-- Deployment success rate
-
-### User (Future)
-- Page load times
-- Games played
-- User retention
-- Error rates
-
----
-
-## 💡 Ideas / Future Features
-
-**Nice to Have**:
-- User profiles
-- Achievement system
-- Social features
-- Mobile app
-- PWA support
-
-**Monetization** (Phase 7+):
+### Phase 7: Monetization (Months 13-18+)
+- Print-and-play sales
 - Premium features
-- Board game sales
-- Print-and-play downloads
+- Path to physical café
 
 ---
 
-## 🎉 Recent Wins
+## Long-Term Vision
 
-- ✅ Homepage complete and live
-- ✅ Design system implemented
-- ✅ Component architecture built
-- ✅ Tests passing
-- ✅ Documentation consolidated
-- ✅ Railway deployment working
+**18-24 Months**: Board game café in New Zealand
 
----
-
-## 📞 Resources
-
-- **Docs**: See `docs/` folder
-- **Extraction**: See [FEATURE_EXTRACTION_GUIDE.md](FEATURE_EXTRACTION_GUIDE.md)
-- **Brand**: See [BRAND_GUIDELINES.md](BRAND_GUIDELINES.md)
-- **Deploy**: See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
+**Path**:
+1. ✅ Web presence
+2. 🎯 Build community
+3. Create content
+4. Generate revenue
+5. Physical location
 
 ---
 
-**Remember**: One feature at a time. Test thoroughly. Document as you go.
+## Recent Wins
 
-*Last updated: 2025-10-12*
+- ✅ Homepage live with night sky theme
+- ✅ Visual-first game card pattern implemented
+- ✅ Embla carousel with constellation pagination
+- ✅ Horizon footer with earth silhouette
+- ✅ HSL color system with derived tokens
+- ✅ Documentation consolidated to 3 core MD files
+- ✅ Technical guidance in MDC files
 
+---
+
+**Current Focus**: Extract and integrate first browser game (Sudoku)
+
+*Last updated: 2025-10-13*

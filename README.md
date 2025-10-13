@@ -210,33 +210,22 @@ See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed instructions an
 
 ## Documentation
 
-For complete documentation, see the **[docs/](docs/)** folder or visit the **[Documentation Index](docs/README.md)**.
+**Three core documents**:
+1. **[README.md](README.md)** (this file) — Project overview, setup, development
+2. **[DESIGN_BIBLE.md](DESIGN_BIBLE.md)** — Complete design reference
+3. **[TODO.md](docs/TODO.md)** — Current tasks and roadmap
 
-### Quick Links
+**Technical guides** (when needed):
+- **[DEPLOYMENT_GUIDE](docs/DEPLOYMENT_GUIDE.md)** — Railway deployment
+- **[FEATURE_EXTRACTION_GUIDE](docs/FEATURE_EXTRACTION_GUIDE.md)** — Integrate from other repos
+- **[docs/](docs/)** — Full index
 
-**Essential:**
-- **[README](README.md)** (this file) - Project overview
-- **[CONTRIBUTING](CONTRIBUTING.md)** - Development workflow
-- **[docs/](docs/)** - All documentation
-
-**Planning:**
-- **[ROADMAP](docs/ROADMAP.md)** - Development phases
-- **[TODO](docs/TODO.md)** - Current tasks
-
-**Technical:**
-- **[DEPLOYMENT_GUIDE](docs/DEPLOYMENT_GUIDE.md)** - Railway deployment
-- **[PROJECT_STRUCTURE](docs/PROJECT_STRUCTURE.md)** - Codebase organization
-
-**Design:**
-- **[BRAND_GUIDELINES](docs/BRAND_GUIDELINES.md)** - Design system
-- **[DESIGN_FOUNDATIONS](docs/DESIGN_FOUNDATIONS.md)** - Design philosophy
-- **[COMPONENT_PATTERNS](docs/COMPONENT_PATTERNS.md)** - Implementation patterns
-- **[COLOR_SYSTEM](docs/COLOR_SYSTEM.md)** - HSL color token reference
+**AI guidance** in `.cursor/rules/*.mdc` files
 
 ### Current Phase
 
-**Phase 1 ✅**: Foundation & Infrastructure (Complete)
-**Phase 2 🎯**: Browser Games (Next - See [ROADMAP](docs/ROADMAP.md))
+**Phase 1 ✅** Foundation Complete  
+**Phase 2 🎯** Browser Games — See [TODO.md](docs/TODO.md)
 
 ## Contributing
 

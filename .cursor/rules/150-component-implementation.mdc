@@ -1,0 +1,208 @@
+---
+description: "Technical implementation patterns for UI components"
+globs: "resources/views/components/**/*,resources/js/**/*"
+---
+
+# Component Implementation Patterns
+
+Technical reference for implementing Ursa Minor's UI components.
+
+## Embla Carousel + Constellation Pagination
+
+**Install**: `npm install embla-carousel`
+
+**Component Structure**:
+```blade
+{{-- Viewport with overflow hidden --}}
+<div data-embla-viewport class="overflow-hidden">
+    <div class="flex gap-4 md:gap-6">
+        {{ $slot }}
+    </div>
+</div>
+
+{{-- Glass navigation arrows --}}
+<button class="um-carousel-arrow-prev" @click="embla.scrollPrev()">
+    <x-heroicon-o-chevron-left class="w-5 h-5"/>
+</button>
+
+{{-- Constellation pagination: dots + lines --}}
+<div class="flex items-center gap-3">
+    <span class="um-carousel-dot" :class="active && 'um-carousel-dot-active'"></span>
+    <span class="um-constellation-line"></span>
+</div>
+```
+
+**CSS Classes** (already in app.css):
+- `.um-carousel-arrow` — glass buttons
+- `.um-carousel-dot` — star dots (8px)
+- `.um-carousel-dot-active` — lit star (scale 1.4, star color, glow)
+- `.um-constellation-line` — connecting line (24px × 1px)
+
+**Alpine Integration** (`resources/js/embla-carousel.js`):
+```javascript
+window.emblaCarousel = () => ({
+    embla: null,
+    init(el) {
+        const viewport = el.querySelector('[data-embla-viewport]')
+        this.embla = EmblaCarousel(viewport, { loop: false, align: 'start' })
+    }
+})
+```
+
+---
+
+## Visual-First Game Cards
+
+**Pattern**: Motif-based recognition, hover reveals title
+
+**Component** (`game-card.blade.php`):
+```blade
+@props(['href', 'title', 'motif' => 'sparkles'])
+
+<a :href="$href" class="um-game-card group" aria-label="Play {{ $title }}">
+    {{-- Visual motif (SVG or icon) --}}
+    <div class="um-motif">
+        @switch($motif)
+            @case('tictactoe')
+                {{-- 3x3 grid SVG --}}
+            @case('chess')
+                <x-heroicon-o-square-3-stack-3d class="w-16 h-16 text-ink/70" />
+        @endswitch
+    </div>
+    
+    {{-- Screen reader title --}}
+    <h3 class="sr-only">{{ $title }}</h3>
+    
+    {{-- Hover reveal --}}
+    <div class="um-title group-hover:opacity-100 group-focus:opacity-100">
+        <span>{{ $title }}</span>
+        <x-heroicon-o-chevron-right class="w-4 h-4" />
+    </div>
+    
+    {{-- Aspect ratio box --}}
+    <div class="pt-[70%]"></div>
+</a>
+```
+
+**Requirements**:
+- Full `aria-label="Play {title}"`
+- `<h3 class="sr-only">` for screen readers
+- Keyboard focus mirrors hover
+- Entire card clickable immediately
+- 44px minimum target (card exceeds this)
+
+---
+
+## Starfield Background
+
+**Purpose**: Page-height aware twinkling stars
+
+**Key Specs**:
+- Canvas width = `window.innerWidth`
+- Canvas height = `document.documentElement.scrollHeight` (full page, not viewport)
+- Star count: `clamp(120, area * 0.00015, 350)`
+- Twinkle: `baseAlpha + sin(time * speed + phase) * 0.12`
+- Frequency: 0.1-0.3Hz
+- Static render when `prefers-reduced-motion`
+
+**CSS Positioning**:
+```css
+#um-starfield {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+```
+
+**Resize Handling**: Debounce 150ms, regenerate stars only if dimensions change ≥16px
+
+---
+
+## Horizon Footer
+
+**Structure**: Sunset line + earth silhouette + back-to-top
+
+**Component**:
+```blade
+<footer class="relative mt-20 md:mt-24">
+    {{-- Sunset line (1px warm gradient) --}}
+    <div class="um-horizon-line" aria-hidden="true"></div>
+    
+    {{-- Earth silhouette (36px dark band) --}}
+    <div class="um-horizon-silhouette" aria-hidden="true"></div>
+    
+    {{-- Back to top (on sky side, above horizon) --}}
+    <a href="#top" class="um-top-btn" aria-label="Back to top">
+        <x-heroicon-o-star class="w-4 h-4" />
+    </a>
+    
+    <div class="section mt-6 text-center text-sm text-ink/70">
+        <p>&copy; {{ now()->year }} Ursa Minor Games</p>
+    </div>
+</footer>
+```
+
+**Spacing**:
+- Above footer: 80-96px (use `mt-20 md:mt-24`)
+- Internal padding: 24-32px
+- Button position: `-top-5` (sits on sky, not straddling)
+
+---
+
+## Night Sky Motif in Games
+
+**Loading States** — stars appearing in sequence:
+```html
+<div class="um-game-loading">
+    <div class="um-star" style="animation-delay: 0s"></div>
+    <div class="um-star" style="animation-delay: 0.2s"></div>
+    <div class="um-star" style="animation-delay: 0.4s"></div>
+</div>
+```
+
+**Progress Indicators** — constellation forming:
+```html
+<div class="um-constellation-progress">
+    <div class="um-progress-star lit"></div>
+    <div class="um-progress-line lit"></div>
+    <div class="um-progress-star"></div>
+</div>
+```
+
+**Game Backgrounds** — subtle starfield:
+```css
+.game-board {
+    background: 
+        radial-gradient(1px 1px at 20% 30%, hsl(var(--ink) / .08), transparent),
+        hsl(var(--space-900));
+}
+```
+
+---
+
+## Constellation Lines as UI Connectors
+
+Instead of dividers, use faint lines connecting "stars":
+
+```html
+{{-- Between elements --}}
+<div class="flex items-center gap-4">
+    <button>Home</button>
+    <div class="h-px w-12 bg-ink/20"></div>
+    <button>Games</button>
+</div>
+```
+
+**Use sparingly** — should feel intentional, not decorative
+
+---
+
+## Questions?
+
+When implementing:
+- Use HSL tokens, never hardcoded hex
+- Respect `prefers-reduced-motion`
+- Maintain 8-pt spacing rhythm
+- Keep motif subtle and cohesive
+- Test accessibility (keyboard nav, screen readers, contrast)

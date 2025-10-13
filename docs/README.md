@@ -1,79 +1,73 @@
-# Documentation Index
+# Documentation
 
-Organized documentation for Ursa Minor Games.
+Simplified documentation structure for Ursa Minor Games.
 
-## Getting Started
+## Essential Documents (Human-Readable)
 
-New to the project? Start here:
+### 1. Project Readme
+**[README.md](../README.md)** (root) — Project overview, setup, quick start
 
-1. **[Main README](../README.md)** - Project overview and quick start
-2. **[ROADMAP](../ROADMAP.md)** - Development phases and timeline
-3. **[BRAND_GUIDELINES](../BRAND_GUIDELINES.md)** - Design system and visual identity
+### 2. Design Bible
+**[DESIGN_BIBLE.md](../DESIGN_BIBLE.md)** (root) — Complete design reference: brand story, philosophy, visual identity, colors, typography, layout, tone, accessibility
 
-## For Developers
+### 3. Task Tracking
+**[TODO.md](TODO.md)** — Current tasks and roadmap
 
-### Setup & Deployment
-- **[DEPLOYMENT_GUIDE](DEPLOYMENT_GUIDE.md)** - Complete Railway deployment guide
-- **[CONTRIBUTING](../CONTRIBUTING.md)** - Development workflow and conventions (root level)
-- **[PROJECT_STRUCTURE](PROJECT_STRUCTURE.md)** - Codebase organization
+### 4. Technical Guides
 
-### Design & Architecture
-- **[DESIGN_FOUNDATIONS](DESIGN_FOUNDATIONS.md)** - Design philosophy and principles
-- **[DESIGN_IMPLEMENTATION_BRIDGE](DESIGN_IMPLEMENTATION_BRIDGE.md)** - Theory to code mapping
-- **[BRAND_GUIDELINES](BRAND_GUIDELINES.md)** - Design system and visual identity
-- **[COMPONENT_PATTERNS](COMPONENT_PATTERNS.md)** - Technical implementation patterns
-- **[COLOR_SYSTEM](COLOR_SYSTEM.md)** - HSL color token reference
-- **[INSIGHTS_FROM_CONVERSATION](INSIGHTS_FROM_CONVERSATION.md)** - Key UX insights captured
-- **[Component Library](../resources/views/components/ui/README.md)** - UI components documentation
+**Deployment**:
+- **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** — Railway deployment with Docker
 
-### Integration Guides
-- **[FEATURE_EXTRACTION_GUIDE](FEATURE_EXTRACTION_GUIDE.md)** - How to extract features from existing repositories
+**Integration**:
+- **[FEATURE_EXTRACTION_GUIDE.md](FEATURE_EXTRACTION_GUIDE.md)** — Extract features from other repos
+- **[FLUX_INTEGRATION.md](FLUX_INTEGRATION.md)** — Flux UI component usage
 
-## Planning
+**Architecture**:
+- **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** — Codebase organization
+- **[DEPENDENCIES.md](DEPENDENCIES.md)** — Package management
 
-- **[ROADMAP](ROADMAP.md)** - Long-term vision and phases
-- **[TODO](TODO.md)** - Current tasks and priorities
+---
 
-## Quick Links
+## AI-Consumable Rules (.cursor/rules/)
 
-### External Resources
-- **Repository**: https://github.com/bearjcc/website
-- **Production**: Railway (auto-deploys from main)
-- **Local**: http://tavernsandtreasures.test/
+Technical implementation guidance lives in `.cursor/rules/*.mdc` for AI agents:
 
-### Technologies
-- **Framework**: Laravel 12.x
-- **Frontend**: TALL Stack (Tailwind, Alpine, Laravel, Livewire)
-- **Database**: SQLite (local), PostgreSQL (production)
-- **Hosting**: Railway
+### Core Rules
+- `001-core-project-conventions.mdc` — Project layout, naming, workflow
+- `002-development-workflow.mdc` — Dev process, testing, commits
+- `030-code-standards.mdc` — Code quality, PHP standards
+- `040-commit-standards.mdc` — Conventional commits
 
-## Documentation Structure
+### Design Rules
+- `100-ui-ux-patterns.mdc` — UI/UX patterns, accessibility
+- `110-minimal-copy.mdc` — Minimal copy philosophy
+- `120-lowercase-mode.mdc` — Lowercase feature flag
+- `150-component-implementation.mdc` — Component technical patterns
 
-```
-website/
-├── README.md                       # Main project readme
-├── CONTRIBUTING.md                 # Contribution guidelines
-└── docs/
-    ├── README.md                   # This file (documentation index)
-    ├── BRAND_GUIDELINES.md         # Design system and visual identity
-    ├── COLOR_SYSTEM.md             # HSL color token reference
-    ├── COMPONENT_PATTERNS.md       # Technical implementation patterns
-    ├── DEPLOYMENT_GUIDE.md         # Railway deployment instructions
-    ├── DESIGN_FOUNDATIONS.md       # Design philosophy and principles
-    ├── FEATURE_EXTRACTION_GUIDE.md # Integration guide for existing repos
-    ├── INSIGHTS_FROM_CONVERSATION.md # Key UX insights captured
-    ├── PROJECT_STRUCTURE.md        # Codebase organization
-    ├── ROADMAP.md                  # Development phases and timeline
-    └── TODO.md                     # Current tasks and priorities
-```
+### Domain Rules
+- `200-domain-guidelines.mdc` — Business logic, game engines
+- `300-testing-and-guardrails.mdc` — Testing requirements, content validation
 
-## Need Help?
+---
 
-- Check relevant documentation above
-- Review existing code for patterns
-- See contribution guidelines for workflow
+## Quick Reference
+
+**Starting a new feature?** → Read DESIGN_BIBLE.md  
+**Need setup help?** → README.md  
+**What's next?** → TODO.md  
+**Deploying?** → DEPLOYMENT_GUIDE.md  
+**Integrating code?** → FEATURE_EXTRACTION_GUIDE.md
+
+---
+
+## Documentation Philosophy
+
+**Less is more**:
+- 3 core MD files for humans (README, DESIGN_BIBLE, TODO)
+- Technical guides for specific tasks
+- MDC files for AI agent guidance
+- No redundancy, no verbosity
 
 ---
 
 **Built under the stars** | **© Ursa Minor Games**
-
