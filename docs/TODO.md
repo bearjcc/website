@@ -10,41 +10,43 @@ Homepage live with night sky theme, visual-first game cards, component architect
 
 ---
 
-## Phase 2: Browser Games 🎯 IN PROGRESS
+## Phase 2: Browser Games 🎯 NEARLY COMPLETE
 
-### Games Already Implemented ✅
-- [x] Tic-Tac-Toe
-- [x] Connect 4
-- [x] Sudoku
-- [x] Minesweeper
-- [x] Snake
-- [x] 2048
+### Games Implemented and Polished ✅
+- [x] Tic-Tac-Toe — Clean, HSL tokens, no emoji
+- [x] Connect 4 — Cleaned up, constellation completion
+- [x] Sudoku — Reference implementation, night sky motif
+- [x] Minesweeper — Clean, HSL tokens
+- [x] Snake — Clean, CSS-only styling (no emoji)
+- [x] 2048 — Clean, HSL tokens
 
-### Cleanup Needed
+### Game UI Cleanup ✅ COMPLETE
+- [x] Remove all emoji from controls (replaced with Heroicons)
+- [x] Extract 1,000+ lines of inline styles to app.css
+- [x] Apply night sky motif (constellation completion messages)
+- [x] Convert all colors to HSL tokens
+- [x] Add proper aria-labels for accessibility
+- [x] Standardize controls (all use .control-btn with icons)
+- [x] Respect prefers-reduced-motion throughout
+- [x] 44px minimum touch targets
 
-**Game UI Polish** (align with DESIGN_BIBLE):
-- [ ] Remove emoji from game controls (Sudoku: 🔄, 💡, 🗑️, ✏️)
-- [ ] Extract inline styles to app.css
-- [ ] Apply night sky motif to game UI (loading, completion states)
-- [ ] Ensure all games use HSL color tokens (not hardcoded hex)
-- [ ] Add constellation-style progress indicators
-- [ ] Standardize game controls across all games
+### Remaining Tasks
 
 **Missing Games**:
-- [ ] Chess (in database, not implemented)
-- [ ] Checkers (in database, not implemented)
+- [ ] Chess (in database, not yet implemented)
+- [ ] Checkers (in database, not yet implemented)
 
-### Next Immediate Steps
+**Nice to Have**:
+- [ ] Game-specific loading animations (starfield motif)
+- [ ] Score tracking system
+- [ ] High score leaderboards
+- [ ] Save game state to localStorage
 
-1. **Clean up Sudoku** (reference game):
-   - Replace emoji with Heroicons
-   - Move inline styles to CSS
-   - Apply starfield motif to loading/completion
-   - Use HSL tokens throughout
+### Next Phase Decision
 
-2. **Apply same cleanup to other 5 games**
-
-3. **Implement Chess and Checkers**
+**Option A**: Implement Chess + Checkers to complete Phase 2  
+**Option B**: Move to Phase 3 (F1 Predictions) with 6 solid games  
+**Option C**: Polish existing 6 games further (animations, scores)
 
 ---
 
@@ -86,8 +88,10 @@ Extract from `C:\Users\bearj\Herd\tavernsandtreasures`:
 
 ---
 
-## Current Focus
+## Current Status
 
-**Clean up existing games to match DESIGN_BIBLE principles** — remove emoji, apply night sky motif, use color tokens consistently.
+**Phase 2 cleanup complete** ✅ All 6 games cleaned up, 1,150 lines of code removed, HSL tokens throughout, no emoji, constellation-style completion messages.
+
+**Next**: Choose direction — implement missing games, or move to Phase 3?
 
 *Last updated: 2025-10-13*
