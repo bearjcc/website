@@ -18,13 +18,21 @@
     <div class="um-motif absolute inset-0 grid place-items-center pointer-events-none">
         @switch($motif)
             @case('tictactoe')
-                {{-- 3x3 grid --}}
+                {{-- 3x3 grid with some X's and O's --}}
                 <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
                     <g stroke="currentColor" stroke-width="3" stroke-linecap="round">
+                        {{-- Grid --}}
                         <line x1="40" y1="10" x2="40" y2="110" />
                         <line x1="80" y1="10" x2="80" y2="110" />
                         <line x1="10" y1="40" x2="110" y2="40" />
                         <line x1="10" y1="80" x2="110" y2="80" />
+                        {{-- X in center --}}
+                        <line x1="50" y1="50" x2="70" y2="70" opacity="0.6" />
+                        <line x1="70" y1="50" x2="50" y2="70" opacity="0.6" />
+                        {{-- O in top-left --}}
+                        <circle cx="25" cy="25" r="12" fill="none" opacity="0.6" />
+                        {{-- O in bottom-right --}}
+                        <circle cx="95" cy="95" r="12" fill="none" opacity="0.6" />
                     </g>
                 </svg>
                 @break
