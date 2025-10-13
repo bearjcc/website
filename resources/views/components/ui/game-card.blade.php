@@ -125,19 +125,16 @@
         @endswitch
     </div>
 
-    {{-- Title reveal on hover/focus --}}
+    {{-- Title reveal on hover/focus - grows upward from bottom --}}
     <h3 class="sr-only">{{ $title }}</h3>
-    <div class="um-title pointer-events-none absolute left-4 right-4 bottom-4 translate-y-3 opacity-0
-                group-hover:translate-y-0 group-hover:opacity-100
-                group-focus:translate-y-0 group-focus:opacity-100
-                transition-all duration-150 ease-out">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[hsl(var(--surface)/.24)] border border-[color:var(--ink)]/10 text-[color:var(--ink)] text-sm backdrop-blur-sm">
+    <div class="um-title pointer-events-none absolute inset-x-0 bottom-0 h-0 overflow-hidden
+                group-hover:h-12 group-focus:h-12
+                transition-all duration-200 ease-out">
+        <div class="absolute bottom-0 left-0 right-0 h-12 flex items-center justify-center
+                    bg-[hsl(var(--surface)/.90)] border-t border-[color:var(--ink)]/10 
+                    text-[color:var(--ink)] text-sm font-medium backdrop-blur-sm">
             <span>{{ $title }}</span>
-            <x-heroicon-o-chevron-right class="w-4 h-4 text-[color:var(--ink)]/80" aria-hidden="true" />
         </div>
     </div>
-
-    {{-- Aspect ratio box --}}
-    <div class="pt-[70%] md:pt-[66%]"></div>
 </a>
 

@@ -55,31 +55,44 @@ Simplicity should not diminish the night sky theme — they should **comingle** 
 
 ### Homepage Hero
 
-**Before**: Logo + headline + body paragraph + two CTAs  
-**After**: Logo + headline + two one-word CTAs
+**Before**: Logo + kicker ("A small game studio") + headline + body paragraph + two CTAs  
+**After**: Logo + tagline ("The sky is the limit") + two one-word CTAs
 
 **Removed**:
-- Hero body text ("We build elegant, replayable games...")
+- Kicker text ("A small game studio")
+- Headline ("Small games. Big craft" - too self-aggrandizing)
+- Hero body text ("We build elegant, replayable games..." - too internal)
 - Descriptive labels on buttons ("Play a game" → "Play")
 - Decorative right column
 
-**Result**: Immediate clarity. Visitors know exactly what they can do.
+**Added**:
+- Tagline respects lowercase mode feature flag
+- Even simpler, more peaceful presentation
+
+**Result**: Ultimate simplicity. Just logo, tagline, and actions.
 
 ---
 
 ### Games Grid
 
 **Before**: Cards with title, description, icon, "Play Now" button  
-**After**: Visual motifs only, titles on hover/focus
+**After**: **Square** visual motifs only, titles grow upward on hover/focus
 
 **Approach**:
+- **Square cards** (1:1 aspect ratio) - most games are square-based (tic-tac-toe, chess, sudoku, etc.)
 - Each game has a **distinct visual motif** (board pattern, glyph, icon)
 - Motifs are **recognizable without labels**
-- Hovering/focusing reveals the title in a subtle pill
+- Hovering/focusing **grows a bar upward from the bottom** showing the title
 - Entire card is clickable — no hunting for buttons
 - Screen readers get full accessible text via `aria-label`
+- **No descriptions** - show, don't tell
 
-**Result**: Visual recognition first. Less cognitive load. Immediate action.
+**Grid Layout**:
+- 2 columns on mobile
+- 3 columns on tablet (sm)
+- 4 columns on desktop (lg)
+
+**Result**: Pure visual recognition. Show the game, don't describe it. Immediate action.
 
 ---
 
@@ -87,17 +100,20 @@ Simplicity should not diminish the night sky theme — they should **comingle** 
 
 ### What We Removed
 
-❌ **Tagline moved**: "The sky is the limit" moved from hero to page title/footer  
-❌ **Section descriptions**: Removed "Available now" kicker and subtitle  
+❌ **Kicker text**: "A small game studio" (too self-defining)
+❌ **Hero headline**: "Small games. Big craft." (too self-aggrandizing)  
+❌ **Body text**: "We build elegant, replayable games..." (too internal, belongs in docs)
+❌ **Section descriptions**: Removed "Available now" kicker and subtitle (too demanding)
 ❌ **Verbose CTAs**: "Play a game" became "Play"  
-❌ **Body text**: Removed hero paragraph on homepage
+❌ **Game descriptions**: Show the game visually, don't describe it
+❌ **Blog section**: Removed entirely (user unsure about blog)
 
 ### What We Kept
 
-✅ **Hero headline**: "Small games. Big craft." (core message)  
+✅ **Tagline**: "The sky is the limit" (respects lowercase mode)
 ✅ **Game titles**: Available on hover/focus for identification  
-✅ **Footer note**: Single poetic line remains  
 ✅ **Accessibility text**: Full context for screen readers
+✅ **Footer note**: Single poetic line
 
 ### Writing Principles
 

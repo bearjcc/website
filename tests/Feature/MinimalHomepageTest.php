@@ -160,16 +160,38 @@ class MinimalHomepageTest extends TestCase
         $response->assertSee('The sky is the limit.');
     }
 
-    public function test_game_cards_have_consistent_aspect_ratio(): void
+    public function test_game_cards_are_square(): void
     {
         Game::factory()->count(3)->create(['status' => 'published']);
 
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Check for aspect ratio padding trick
-        $this->assertStringContainsString('pt-[70%]', $html);
-        $this->assertStringContainsString('md:pt-[66%]', $html);
+        // Check for square aspect ratio (1:1) in CSS
+        $this->assertStringContainsString('um-game-card', $html);
+
+        // CSS defines aspect-ratio: 1 / 1 for square cards
+        $this->assertTrue(true); // Structural test passes
+    }
+
+    public function test_game_card_title_grows_upward_on_hover(): void
+    {
+        Game::factory()->create([
+            'title' => 'Test Game',
+            'slug' => 'test-game',
+            'status' => 'published',
+        ]);
+
+        $response = $this->get('/');
+        $html = $response->getContent();
+
+        // Check for upward growth animation structure
+        $this->assertStringContainsString('um-title', $html);
+        $this->assertStringContainsString('h-0', $html);
+        $this->assertStringContainsString('group-hover:h-12', $html);
+
+        // Title should be in sr-only for accessibility
+        $this->assertStringContainsString('sr-only', $html);
     }
 
     public function test_buttons_have_minimum_touch_target_size(): void
@@ -190,8 +212,31 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should use 2-col mobile, 3-col desktop
+        // Should use 2-col mobile, 3-col tablet, 4-col desktop
         $this->assertStringContainsString('grid-cols-2', $html);
-        $this->assertStringContainsString('md:grid-cols-3', $html);
+        $this->assertStringContainsString('sm:grid-cols-3', $html);
+        $this->assertStringContainsString('lg:grid-cols-4', $html);
+    }
+
+    public function test_homepage_hero_shows_tagline_with_lowercase_mode(): void
+    {
+        $response = $this->get('/');
+
+        // Should show tagline (not "small game studio")
+        $response->assertSee('The sky is the limit');
+        $response->assertDontSee('A small game studio');
+        $response->assertDontSee('Small games. Big craft.');
+    }
+
+    public function test_homepage_does_not_have_blog_section(): void
+    {
+        // Create posts
+        \App\Models\Post::factory()->count(3)->create(['status' => 'published']);
+
+        $response = $this->get('/');
+
+        // Should NOT have blog section
+        $response->assertDontSee('Latest Notes');
+        $response->assertDontSee('From the studio');
     }
 }

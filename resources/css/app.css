@@ -358,13 +358,7 @@
     .um-game-card {
         position: relative;
         display: block;
-        aspect-ratio: 3 / 2;
-    }
-
-    @media (min-width: 768px) {
-        .um-game-card {
-            aspect-ratio: 3 / 2;
-        }
+        aspect-ratio: 1 / 1; /* Square cards for board games */
     }
     
     /* Ensure minimum touch target size on mobile */
@@ -381,6 +375,13 @@
         
         .um-game-card:hover {
             transform: none !important;
+        }
+        
+        /* Instant reveal instead of animation */
+        .um-game-card:hover .um-title,
+        .um-game-card:focus .um-title {
+            height: 3rem !important;
+            transition: none !important;
         }
     }
 }
