@@ -33,13 +33,12 @@ class StarfieldTest extends TestCase
 
         $html = $response->getContent();
 
-        // Footer should have the sunset horizon gradient line using Tailwind tokens
-        $this->assertStringContainsString('bg-gradient-to-r', $html);
-        $this->assertStringContainsString('from-transparent', $html);
-        $this->assertStringContainsString('via-sunset/45', $html);
+        // Footer should have the sunset horizon gradient line (inline style for full width)
+        $this->assertStringContainsString('linear-gradient(90deg', $html);
+        $this->assertStringContainsString('hsl(28, 100%, 78%, 0.45)', $html);
 
-        // Should have opaque earth-toned footer background using Tailwind token
-        $this->assertStringContainsString('bg-earth', $html);
+        // Should have opaque earth-toned footer background (inline style)
+        $this->assertStringContainsString('hsl(135, 15%, 18%)', $html);
     }
 
     public function test_footer_uses_new_copy(): void

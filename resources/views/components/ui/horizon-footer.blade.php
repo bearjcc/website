@@ -1,7 +1,7 @@
 {{-- Horizon footer: opaque earth-toned ground with sunset horizon line --}}
-<footer class="mt-16 md:mt-24 relative w-full isolate" style="background-color: hsl(135, 10%, 12%);">
-    {{-- Horizon line - last light between sky and earth --}}
-    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-sunset/45 to-transparent" aria-hidden="true"></div>
+<footer class="mt-16 md:mt-24 relative w-full isolate" style="background-color: hsl(135, 15%, 18%);">
+    {{-- Sunset horizon line - full width across the screen (last light) --}}
+    <div class="absolute inset-x-0 top-0 h-[2px] w-full" style="background: linear-gradient(90deg, transparent 0%, hsl(28, 100%, 78%, 0.45) 50%, transparent 100%);" aria-hidden="true"></div>
 
     {{-- Subtle mountain ridge silhouette at horizon (darker earth tone) --}}
     <div class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-earth-dark to-transparent opacity-50" aria-hidden="true"></div>
@@ -32,13 +32,9 @@
 
     {{-- Footer content on the earth/ground - compact like header --}}
     <div class="section">
-        <div class="flex items-center justify-center gap-6 py-6 text-center">
-            <p class="text-sm text-ink/60 leading-relaxed">
-                {{ __('ui.footer_note_primary') }}
-            </p>
-            <span class="text-ink/20">•</span>
+        <div class="flex items-center justify-center gap-6 py-6 pt-12 text-center">
             <p class="text-sm text-ink/40">
-                &copy; {{ date('Y') }} Ursa Minor Games. All rights reserved.
+                &copy; {{ date('Y') }} Ursa Minor &nbsp;&nbsp; All rights reserved.
             </p>
         </div>
     </div>

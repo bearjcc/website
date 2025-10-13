@@ -24,10 +24,10 @@
     --border: var(--ink);          /* use with / 0.10 for borders */
 
     /* --- Earth & horizon (footer ground) --- */
-    --earth: 135 10% 12%;          /* #1a1f1a  footer ground */
-    --earth-dark: 135 12% 9%;      /* #141814  silhouette */
-    --earth-button: 135 9% 18%;    /* #2a2f2a  button base */
-    --earth-button-hover: 135 8% 22%; /* #343a34  button hover */
+    --earth: 135 15% 18%;          /* lighter brownish-green ground */
+    --earth-dark: 135 18% 14%;     /* silhouette with more saturation */
+    --earth-button: 135 12% 24%;   /* button base */
+    --earth-button-hover: 135 10% 28%; /* button hover */
 
     /* --- Sunset glint at horizon --- */
     --sunset: 28 100% 78%;         /* warm line at horizon */

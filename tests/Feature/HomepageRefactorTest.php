@@ -53,8 +53,8 @@ class HomepageRefactorTest extends TestCase
         $this->assertStringContainsString('id="um-back-to-top"', $html);
         $this->assertStringContainsString('aria-label="Back to top"', $html);
 
-        // Should have sunset gradient line (via class)
-        $this->assertStringContainsString('bg-gradient-to-r', $html);
+        // Should have sunset gradient line (inline style for full-width)
+        $this->assertStringContainsString('linear-gradient(90deg', $html);
 
         // Should have star rocket SVG icon
         $this->assertStringContainsString('<svg', $html);
