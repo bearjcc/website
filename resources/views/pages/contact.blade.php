@@ -91,5 +91,5 @@
             </p>
         </article>
     </section>
-</x-layout>
+</x-layouts.app>
 

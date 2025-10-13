@@ -3,7 +3,7 @@
     $description = 'Learn about Ursa Minor Games, our journey from web platform to board game café in New Zealand, and our passion for creating memorable gaming experiences.';
 @endphp
 
-<x-layout :title="$title" :description="$description">
+<x-layouts.app :title="$title" :description="$description">
     <section class="hero-section">
         <article>
             <h1>About Ursa Minor Games</h1>
@@ -98,5 +98,5 @@
             </p>
         </article>
     </section>
-</x-layout>
+</x-layouts.app>
 
