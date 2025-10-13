@@ -32,8 +32,8 @@ class HomepageTest extends TestCase
         $response->assertSee(__('ui.available_kicker'));
         $response->assertSee(__('ui.available_title'));
 
-        // Footer
-        $response->assertSee(__('ui.footer_note_primary'));
+        // Footer copyright
+        $response->assertSee('All rights reserved');
     }
 
     public function test_homepage_has_no_banned_words(): void

@@ -50,11 +50,8 @@ export default {
         'earth': {
           DEFAULT: 'hsl(var(--earth) / <alpha-value>)',
           'dark': 'hsl(var(--earth-dark) / <alpha-value>)',
-          'button': 'hsl(var(--earth-button) / <alpha-value>)',
-          'button-hover': 'hsl(var(--earth-button-hover) / <alpha-value>)',
         },
         'sunset': 'hsl(var(--sunset) / <alpha-value>)',
-        'sunset-border': 'hsl(var(--sunset-border) / <alpha-value>)',
       },
     },
   },

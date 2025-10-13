@@ -49,14 +49,14 @@ class HomepageRefactorTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should have back to top button
-        $this->assertStringContainsString('id="um-back-to-top"', $html);
+        // Should have back to top button with correct class
+        $this->assertStringContainsString('class="um-top-btn"', $html);
         $this->assertStringContainsString('aria-label="Back to top"', $html);
 
-        // Should have sunset gradient line (inline style for full-width)
-        $this->assertStringContainsString('linear-gradient(90deg', $html);
+        // Should have horizon footer
+        $this->assertStringContainsString('class="relative w-full isolate um-horizon-footer"', $html);
 
-        // Should have star rocket SVG icon
+        // Should have star icon (heroicon-o-star)
         $this->assertStringContainsString('<svg', $html);
     }
 
@@ -106,6 +106,8 @@ class HomepageRefactorTest extends TestCase
         $response->assertSee(__('ui.hero_headline'));
         $response->assertSee(__('ui.hero_body'));
         $response->assertSee(__('ui.cta_play'));
-        $response->assertSee(__('ui.footer_note_primary'));
+        
+        // Footer uses simple copyright text (no i18n key)
+        $response->assertSee('All rights reserved');
     }
 }

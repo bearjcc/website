@@ -24,14 +24,11 @@
     --border: var(--ink);          /* use with / 0.10 for borders */
 
     /* --- Earth & horizon (footer ground) --- */
-    --earth: 135 15% 18%;          /* lighter brownish-green ground */
-    --earth-dark: 135 18% 14%;     /* silhouette with more saturation */
-    --earth-button: 135 12% 24%;   /* button base */
-    --earth-button-hover: 135 10% 28%; /* button hover */
+    --earth: 135 10% 12%;          /* dark desaturated earth */
+    --earth-dark: 135 12% 9%;      /* darker silhouette */
 
     /* --- Sunset glint at horizon --- */
     --sunset: 28 100% 78%;         /* warm line at horizon */
-    --sunset-border: 28 100% 78%;  /* use with / 0.3 for borders */
 }
 
 @layer base {
@@ -244,5 +241,114 @@
     /* Inter-group spacing (larger, between sections) */
     .space-inter { gap: 2rem; }      /* 32px - between groups */
     .space-inter-lg { gap: 3rem; }   /* 48px - large section gaps */
+    
+    /* === Lowercase Mode === */
+    /* Global text transformation controlled by URSA_LOWERCASE_MODE env variable */
+    .lowercase-mode {
+        text-transform: lowercase;
+    }
+
+    /* === Horizon Footer Components === */
+    /* Breathing room above footer */
+    .um-horizon-footer {
+        margin-top: 5rem; /* 80px gap from preceding content */
+        padding: 1.5rem 0; /* 24px internal padding top/bottom */
+        background: linear-gradient(
+            to bottom, 
+            hsl(var(--earth) / .96), 
+            hsl(var(--earth-dark) / 1)
+        );
+    }
+
+    @media (min-width: 768px) {
+        .um-horizon-footer {
+            margin-top: 6rem; /* 96px gap on larger screens */
+            padding: 2rem 0; /* 32px internal padding */
+        }
+    }
+
+    /* Sunset horizon line */
+    .um-horizon-line {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: linear-gradient(
+            90deg,
+            hsl(var(--sunset) / 0) 0%,
+            hsl(var(--sunset) / .45) 50%,
+            hsl(var(--sunset) / 0) 100%
+        );
+    }
+
+    /* Earth silhouette ridge */
+    .um-horizon-silhouette {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 36px;
+        background: linear-gradient(
+            to bottom, 
+            hsl(var(--earth-dark) / .8), 
+            transparent
+        );
+        pointer-events: none;
+    }
+
+    /* Back to top button */
+    .um-top-btn {
+        position: absolute;
+        left: 50%;
+        top: -1.25rem; /* ~20px above horizon, on sky side */
+        transform: translateX(-50%);
+        z-index: 10;
+        
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        
+        border-radius: 9999px;
+        background: hsl(var(--surface) / .08);
+        border: 1px solid hsl(var(--border) / .12);
+        color: hsl(var(--ink));
+        backdrop-filter: blur(4px);
+        
+        transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease;
+    }
+
+    .um-top-btn:hover {
+        transform: translateX(-50%) scale(1.02);
+        box-shadow: 0 0 0 6px hsl(var(--surface) / .04);
+    }
+
+    .um-top-btn:focus-visible {
+        outline: 2px solid hsl(var(--constellation));
+        outline-offset: 2px;
+    }
+
+    /* Optional subtle rays on hover (desktop only, respects reduced motion) */
+    @media (prefers-reduced-motion: no-preference) {
+        .um-top-btn::after {
+            content: "";
+            position: absolute;
+            inset: -6px;
+            background: radial-gradient(
+                closest-side, 
+                hsl(var(--ink) / .12), 
+                transparent 70%
+            );
+            opacity: 0;
+            transition: opacity .2s ease;
+            border-radius: 9999px;
+            pointer-events: none;
+        }
+
+        .um-top-btn:hover::after {
+            opacity: 1;
+        }
+    }
 }
 
