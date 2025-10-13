@@ -18,8 +18,9 @@ New to the project? Start here:
 - **[PROJECT_STRUCTURE](PROJECT_STRUCTURE.md)** - Codebase organization
 
 ### Design & Architecture
-- **[BRAND_GUIDELINES](BRAND_GUIDELINES.md)** - Design system and visual identity
 - **[DESIGN_FOUNDATIONS](DESIGN_FOUNDATIONS.md)** - Design philosophy and principles
+- **[DESIGN_IMPLEMENTATION_BRIDGE](DESIGN_IMPLEMENTATION_BRIDGE.md)** - Theory to code mapping
+- **[BRAND_GUIDELINES](BRAND_GUIDELINES.md)** - Design system and visual identity
 - **[COMPONENT_PATTERNS](COMPONENT_PATTERNS.md)** - Technical implementation patterns
 - **[COLOR_SYSTEM](COLOR_SYSTEM.md)** - HSL color token reference
 - **[INSIGHTS_FROM_CONVERSATION](INSIGHTS_FROM_CONVERSATION.md)** - Key UX insights captured
