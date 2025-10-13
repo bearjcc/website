@@ -1,72 +1,57 @@
-<div class="sudoku-game" x-data="{ showRules: false, hintPulsing: false }" 
+<div class="section py-12 md:py-16" x-data="{ hintPulsing: false }" 
      @hint-used.window="hintPulsing = true; setTimeout(() => hintPulsing = false, 2000)">
-    
-    <!-- Game Header -->
-    <div class="game-header">
-        <h2>Sudoku</h2>
-        <button @click="showRules = !showRules" class="rules-button">
-            <span x-show="!showRules">Show Rules</span>
-            <span x-show="showRules">Hide Rules</span>
-        </button>
-    </div>
-
-    <!-- Rules (toggleable) -->
-    <div x-show="showRules" x-transition class="game-rules">
-        <p><strong>How to Play:</strong></p>
-        <ul>
-            <li>Fill the 9×9 grid so each row, column, and 3×3 box contains digits 1-9 exactly once</li>
-            <li>Click a cell to select it, then click a number (1-9) or use keyboard</li>
-            <li>Toggle Notes mode to mark possible candidates in cells</li>
-            <li>Use hints when stuck (limited based on difficulty)</li>
-            <li>Invalid entries will be highlighted in red</li>
-        </ul>
-    </div>
-
-    <!-- Difficulty Selection -->
-    @if($showDifficultySelector && !$gameStarted)
-        <div class="difficulty-selection">
-            <h3>Select Difficulty</h3>
-            <div class="difficulty-buttons">
-                <button wire:click="selectDifficulty('beginner')" class="difficulty-btn">
-                    Beginner<br><small>45 clues</small>
-                </button>
-                <button wire:click="selectDifficulty('easy')" class="difficulty-btn">
-                    Easy<br><small>38 clues</small>
-                </button>
-                <button wire:click="selectDifficulty('medium')" class="difficulty-btn">
-                    Medium<br><small>30 clues</small>
-                </button>
-                <button wire:click="selectDifficulty('hard')" class="difficulty-btn">
-                    Hard<br><small>24 clues</small>
-                </button>
-                <button wire:click="selectDifficulty('expert')" class="difficulty-btn">
-                    Expert<br><small>18 clues</small>
-                </button>
-            </div>
+    <div class="max-w-4xl mx-auto space-y-8">
+        {{-- Back nav --}}
+        <div class="flex items-center gap-4">
+            <a href="{{ route('games.index') }}" 
+               class="inline-flex items-center gap-2 text-ink/70 hover:text-ink transition-colors"
+               aria-label="{{ __('ui.back_to_games') }}">
+                <x-heroicon-o-arrow-left class="w-5 h-5" />
+                <span class="hidden sm:inline">{{ __('ui.nav_games') }}</span>
+            </a>
+            <h1 class="h2 text-ink">Sudoku</h1>
         </div>
-    @endif
 
-    <!-- Game Status -->
-    <div class="game-status">
-        @if($gameComplete)
-            <p class="winner-message">Puzzle complete.</p>
-        @else
-            <div class="status-grid">
-                <div class="status-item">
-                    <span class="label">Difficulty:</span>
-                    <span class="value">{{ ucfirst($difficulty) }}</span>
-                </div>
-                <div class="status-item">
-                    <span class="label">Hints:</span>
-                    <span class="value">{{ $hintsUsed }}/{{ $maxHints }}</span>
-                </div>
-                <div class="status-item">
-                    <span class="label">Mistakes:</span>
-                    <span class="value {{ $mistakes > 0 ? 'text-warning' : '' }}">{{ $mistakes }}/{{ $maxMistakes }}</span>
+        {{-- Rules --}}
+        <details class="glass rounded-xl border border-[hsl(var(--border)/.1)] overflow-hidden">
+            <summary class="px-6 py-3 cursor-pointer text-ink/80 hover:text-ink hover:bg-[hsl(var(--surface)/.08)] transition-colors list-none flex items-center justify-between">
+                <span>Rules</span>
+                <x-heroicon-o-chevron-down class="w-5 h-5" />
+            </summary>
+            <div class="px-6 py-4 border-t border-[hsl(var(--border)/.1)] space-y-2 text-ink/70 text-sm">
+                <p>Fill the 9×9 grid so each row, column, and 3×3 box contains digits 1-9 exactly once.</p>
+                <p>Click a cell, then a number. Toggle Notes mode for candidates. Use hints when stuck.</p>
+            </div>
+        </details>
+
+        {{-- Difficulty Selection --}}
+        @if($showDifficultySelector && !$gameStarted)
+            <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
+                <h3 class="text-lg font-semibold text-ink">Difficulty</h3>
+                <div class="flex flex-wrap gap-2">
+                    @foreach(['beginner' => 45, 'easy' => 38, 'medium' => 30, 'hard' => 24, 'expert' => 18] as $level => $clues)
+                        <button wire:click="selectDifficulty('{{ $level }}')" 
+                                class="px-4 py-2 rounded-lg border transition-all bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star">
+                            <div class="font-semibold">{{ ucfirst($level) }}</div>
+                            <div class="text-xs text-ink/60">{{ $clues }} clues</div>
+                        </button>
+                    @endforeach
                 </div>
             </div>
         @endif
-    </div>
+
+        {{-- Game Status --}}
+        @if($gameComplete)
+            <div class="glass rounded-xl border border-star/40 bg-star/5 p-4 text-center">
+                <p class="text-lg font-semibold text-star">Puzzle complete.</p>
+            </div>
+        @else
+            <div class="flex justify-center gap-8 text-sm text-ink/70">
+                <div><span class="text-ink/50">Difficulty:</span> <strong class="text-ink">{{ ucfirst($difficulty) }}</strong></div>
+                <div><span class="text-ink/50">Hints:</span> <strong class="text-ink">{{ $hintsUsed }}/{{ $maxHints }}</strong></div>
+                <div><span class="text-ink/50">Mistakes:</span> <strong class="{{ $mistakes > 0 ? 'text-star' : 'text-ink' }}">{{ $mistakes }}/{{ $maxMistakes }}</strong></div>
+            </div>
+        @endif
 
     <!-- Sudoku Board -->
     <div class="board-container">
@@ -505,4 +490,5 @@
             }
         }
     </style>
+    </div>
 </div>

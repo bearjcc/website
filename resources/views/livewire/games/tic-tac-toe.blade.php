@@ -1,405 +1,105 @@
-<div class="tic-tac-toe-game" x-data="{ showRules: false }">
-    <!-- Game Header -->
-    <div class="game-header">
-        <h2>Tic-Tac-Toe</h2>
-        <button @click="showRules = !showRules" class="rules-button">
-            <span x-show="!showRules">Show Rules</span>
-            <span x-show="showRules">Hide Rules</span>
-        </button>
-    </div>
+<div class="section py-12 md:py-16" x-data="{ showRules: false }">
+    <div class="max-w-2xl mx-auto space-y-8">
+        {{-- Back nav --}}
+        <div class="flex items-center gap-4">
+            <a href="{{ route('games.index') }}" 
+               class="inline-flex items-center gap-2 text-ink/70 hover:text-ink transition-colors"
+               aria-label="{{ __('ui.back_to_games') }}">
+                <x-heroicon-o-arrow-left class="w-5 h-5" />
+                <span class="hidden sm:inline">{{ __('ui.nav_games') }}</span>
+            </a>
+            <h1 class="h2 text-ink">Tic-Tac-Toe</h1>
+        </div>
 
-    <!-- Rules (toggleable) -->
-    <div x-show="showRules" x-transition class="game-rules">
-        <p><strong>How to Play:</strong></p>
-        <ul>
-            <li>Get three of your symbols in a row (horizontal, vertical, or diagonal) to win</li>
-            <li>Take turns placing your symbol (X or O) in an empty square</li>
-            <li>If all squares are filled and no one has won, it's a draw</li>
-            <li>Choose to play against a friend or challenge the AI at three difficulty levels</li>
-        </ul>
-    </div>
+        {{-- Rules (toggleable) --}}
+        <details x-data="{ open: false }" @toggle="open = $el.open" class="glass rounded-xl border border-[hsl(var(--border)/.1)] overflow-hidden">
+            <summary class="px-6 py-3 cursor-pointer text-ink/80 hover:text-ink hover:bg-[hsl(var(--surface)/.08)] transition-colors list-none flex items-center justify-between">
+                <span>Rules</span>
+                <x-heroicon-o-chevron-down class="w-5 h-5 transition-transform" ::class="{ 'rotate-180': open }" />
+            </summary>
+            <div class="px-6 py-4 border-t border-[hsl(var(--border)/.1)] space-y-2 text-ink/70 text-sm">
+                <p>Get three in a row (horizontal, vertical, or diagonal) to win.</p>
+                <p>Play against a friend or challenge the AI at three difficulty levels.</p>
+            </div>
+        </details>
 
-    <!-- Game Mode Selection -->
-    @if($movesCount === 0)
-        <div class="mode-selection">
-            <h3>Select Game Mode</h3>
-            
-            <div class="mode-options">
-                <button wire:click="setGameMode('pvp')" 
-                        class="mode-button {{ $gameMode === 'pvp' ? 'active' : '' }}">
-                    Player vs Player
-                </button>
+        {{-- Game Mode Selection --}}
+        @if($movesCount === 0)
+            <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
+                <h3 class="text-lg font-semibold text-ink">Mode</h3>
                 
-                <div class="ai-modes">
+                <div class="flex flex-wrap gap-2">
+                    <button wire:click="setGameMode('pvp')" 
+                            class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'pvp' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                        Pass & Play
+                    </button>
+                    
                     <button wire:click="setGameMode('ai-easy', 'X')" 
-                            class="mode-button {{ $gameMode === 'ai-easy' ? 'active' : '' }}">
-                        AI - Easy
+                            class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-easy' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                        Easy AI
                     </button>
                     <button wire:click="setGameMode('ai-medium', 'X')" 
-                            class="mode-button {{ $gameMode === 'ai-medium' ? 'active' : '' }}">
-                        AI - Medium
+                            class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-medium' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                        Medium AI
                     </button>
                     <button wire:click="setGameMode('ai-hard', 'X')" 
-                            class="mode-button {{ $gameMode === 'ai-hard' ? 'active' : '' }}">
-                        AI - Hard
+                            class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-hard' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
+                        Hard AI
                     </button>
                 </div>
             </div>
-        </div>
-    @endif
-
-    <!-- Game Status -->
-    <div class="game-status">
-        @if($winner)
-            <p class="winner-message">Player {{ $winner }} wins.</p>
-        @elseif($isDraw)
-            <p class="draw-message">Draw.</p>
-        @else
-            <p class="turn-message">
-                Current turn: <strong>{{ $currentPlayer }}</strong>
-                @if($gameMode !== 'pvp')
-                    <span class="player-indicator">
-                        (You are {{ $playerSymbol }})
-                    </span>
-                @endif
-            </p>
         @endif
-    </div>
 
-    <!-- Game Board -->
-    <div class="board-container">
-        <div class="game-board">
+        {{-- Game Status --}}
+        @if($winner || $isDraw)
+            <div class="glass rounded-xl border p-4 text-center {{ $winner ? 'border-star/40 bg-star/5' : 'border-constellation/40 bg-constellation/5' }}">
+                @if($winner)
+                    <p class="text-lg font-semibold text-star">Player {{ $winner }} wins.</p>
+                @else
+                    <p class="text-lg font-semibold text-constellation">Draw.</p>
+                @endif
+            </div>
+        @else
+            <div class="text-center">
+                <p class="text-ink text-sm">
+                    Current turn: <strong class="text-star">{{ $currentPlayer }}</strong>
+                    @if($gameMode !== 'pvp')
+                        <span class="text-ink/60">(You: {{ $playerSymbol }})</span>
+                    @endif
+                </p>
+            </div>
+        @endif
+
+        {{-- Game Board --}}
+        <div class="grid grid-cols-3 gap-2 max-w-md mx-auto aspect-square">
             @foreach($board as $index => $cell)
                 <button 
                     wire:click="makeMove({{ $index }})"
-                    class="cell {{ $cell !== null ? 'filled' : '' }} {{ $cell === 'X' ? 'x-mark' : ($cell === 'O' ? 'o-mark' : '') }}"
+                    class="bg-[hsl(var(--surface)/.05)] border-2 border-[hsl(var(--border)/.3)] rounded-xl flex items-center justify-center text-5xl font-bold transition-all hover:border-star hover:bg-[hsl(var(--surface)/.1)] hover:-translate-y-1 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:border-[hsl(var(--border)/.3)]"
                     @disabled($cell !== null || $winner !== null || $isDraw)
+                    aria-label="Cell {{ $index + 1 }}{{ $cell ? ', ' . $cell : ', empty' }}"
                 >
                     @if($cell === 'X')
-                        <span class="mark x">X</span>
+                        <span class="animate-in fade-in zoom-in duration-150" style="color: hsl(0 70% 70%);">X</span>
                     @elseif($cell === 'O')
-                        <span class="mark o">O</span>
+                        <span class="animate-in fade-in zoom-in duration-150" style="color: hsl(var(--constellation));">O</span>
                     @endif
                 </button>
             @endforeach
         </div>
+
+        {{-- Controls --}}
+        <div class="flex justify-center gap-4">
+            <button wire:click="newGame" 
+                    class="px-6 py-3 rounded-lg bg-star text-space-900 font-semibold hover:-translate-y-1 hover:shadow-lg hover:shadow-star/20 transition-all">
+                New Game
+            </button>
+        </div>
+
+        {{-- Stats --}}
+        <div class="text-center text-sm text-ink/60 space-y-1">
+            <p>Moves: {{ $movesCount }}</p>
+        </div>
     </div>
-
-    <!-- Game Controls -->
-    <div class="game-controls">
-        <button wire:click="newGame" class="new-game-button">
-            New Game
-        </button>
-        
-        @if($movesCount === 0 && $gameMode !== 'pvp')
-            <div class="symbol-choice">
-                <p>Choose your symbol:</p>
-                <button wire:click="setGameMode('{{ $gameMode }}', 'X')" 
-                        class="symbol-button {{ $playerSymbol === 'X' ? 'active' : '' }}">
-                    X (goes first)
-                </button>
-                <button wire:click="setGameMode('{{ $gameMode }}', 'O')" 
-                        class="symbol-button {{ $playerSymbol === 'O' ? 'active' : '' }}">
-                    O (goes second)
-                </button>
-            </div>
-        @endif
-    </div>
-
-    <!-- Game Stats -->
-    <div class="game-stats">
-        <p>Moves: {{ $movesCount }}</p>
-        <p>Mode: 
-            @if($gameMode === 'pvp')
-                Player vs Player
-            @else
-                vs AI ({{ ucfirst(str_replace('ai-', '', $gameMode)) }})
-            @endif
-        </p>
-    </div>
-
-    <style>
-        .tic-tac-toe-game {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        .game-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .game-header h2 {
-            color: hsl(var(--star));
-            margin: 0;
-            font-size: 2rem;
-        }
-
-        .rules-button {
-            background: hsl(var(--surface) / .1);
-            color: hsl(var(--ink));
-            border: 1px solid hsl(var(--border) / .3);
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .rules-button:hover {
-            background: hsl(var(--surface) / .2);
-            border-color: hsl(var(--star));
-        }
-
-        .game-rules {
-            background: hsl(var(--surface) / .3);
-            backdrop-filter: blur(10px);
-            padding: 24px;
-            border-radius: 12px;
-            border-left: 4px solid hsl(var(--star));
-            margin-bottom: 32px;
-        }
-
-        .game-rules ul {
-            margin: 8px 0 0 24px;
-        }
-
-        .game-rules li {
-            margin: 8px 0;
-        }
-
-        .mode-selection {
-            background: hsl(var(--surface) / .05);
-            backdrop-filter: blur(5px);
-            padding: 24px;
-            border-radius: 12px;
-            margin-bottom: 32px;
-        }
-
-        .mode-selection h3 {
-            color: hsl(var(--star));
-            margin: 0 0 16px 0;
-            font-size: 1.3rem;
-        }
-
-        .mode-options {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .ai-modes {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .mode-button {
-            background: hsl(var(--surface) / .1);
-            color: hsl(var(--ink));
-            border: 2px solid hsl(var(--border) / .3);
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            font-size: 1rem;
-        }
-
-        .mode-button:hover {
-            background: hsl(var(--surface) / .2);
-            border-color: hsl(var(--star));
-        }
-
-        .mode-button.active {
-            background: hsl(var(--star));
-            color: hsl(220 20% 10%);
-            border-color: hsl(var(--star));
-        }
-
-        .game-status {
-            text-align: center;
-            margin-bottom: 32px;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .winner-message {
-            color: hsl(var(--star));
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .draw-message {
-            color: hsl(var(--constellation));
-            font-size: 1.3rem;
-        }
-
-        .turn-message {
-            color: hsl(var(--ink));
-            font-size: 1.2rem;
-        }
-
-        .player-indicator {
-            color: hsl(var(--star));
-        }
-
-        .board-container {
-            margin-bottom: 32px;
-        }
-
-        .game-board {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-width: 400px;
-            margin: 0 auto;
-            aspect-ratio: 1;
-        }
-
-        .cell {
-            background: hsl(var(--surface) / .05);
-            border: 2px solid hsl(var(--border) / .3);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            font-size: 3rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100px;
-        }
-
-        .cell:not(.filled):not(:disabled):hover {
-            background: hsl(var(--surface) / .1);
-            border-color: hsl(var(--star));
-            transform: translateY(-2px);
-        }
-
-        .cell:disabled {
-            cursor: not-allowed;
-        }
-
-        .cell.filled {
-            cursor: not-allowed;
-        }
-
-        .mark {
-            animation: scaleIn 0.15s ease-out;
-        }
-
-        .mark.x {
-            color: hsl(0 70% 70%);
-        }
-
-        .mark.o {
-            color: hsl(var(--constellation));
-        }
-
-        @keyframes scaleIn {
-            from {
-                transform: scale(0);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .game-controls {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
-        .new-game-button {
-            background: hsl(var(--star));
-            color: hsl(220 20% 10%);
-            border: none;
-            padding: 16px 32px;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s ease;
-        }
-
-        .new-game-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px hsl(var(--star) / .4);
-        }
-
-        .symbol-choice {
-            margin-top: 16px;
-            padding: 16px;
-            background: hsl(var(--surface) / .05);
-            border-radius: 8px;
-        }
-
-        .symbol-choice p {
-            margin: 0 0 8px 0;
-            color: hsl(var(--ink));
-        }
-
-        .symbol-button {
-            background: hsl(var(--surface) / .1);
-            color: hsl(var(--ink));
-            border: 2px solid hsl(var(--border) / .3);
-            padding: 8px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin: 0 8px;
-            transition: all 0.15s ease;
-        }
-
-        .symbol-button:hover {
-            background: hsl(var(--surface) / .2);
-            border-color: hsl(var(--star));
-        }
-
-        .symbol-button.active {
-            background: hsl(var(--star));
-            color: hsl(220 20% 10%);
-            border-color: hsl(var(--star));
-        }
-
-        .game-stats {
-            text-align: center;
-            color: hsl(var(--ink-muted));
-            font-size: 0.9rem;
-        }
-
-        .game-stats p {
-            margin: 8px 0;
-        }
-
-        @media (max-width: 768px) {
-            .game-board {
-                max-width: 300px;
-            }
-
-            .cell {
-                font-size: 2rem;
-                min-height: 80px;
-            }
-
-            .game-header h2 {
-                font-size: 1.5rem;
-            }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .cell:hover,
-            .new-game-button:hover {
-                transform: none;
-            }
-            .mark {
-                animation: none;
-            }
-        }
-    </style>
 </div>
+
