@@ -49,16 +49,15 @@ class HomepageRefactorTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should have back to top link
-        $this->assertStringContainsString('href="#top"', $html);
+        // Should have back to top button
+        $this->assertStringContainsString('id="um-back-to-top"', $html);
         $this->assertStringContainsString('aria-label="Back to top"', $html);
 
         // Should have sunset gradient line (via class)
         $this->assertStringContainsString('bg-gradient-to-r', $html);
 
-        // Should have silhouette SVG
+        // Should have star rocket SVG icon
         $this->assertStringContainsString('<svg', $html);
-        $this->assertStringContainsString('viewBox="0 0 1200 40"', $html);
     }
 
     public function test_homepage_has_proper_spacing(): void

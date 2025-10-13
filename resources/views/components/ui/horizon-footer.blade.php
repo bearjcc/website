@@ -1,56 +1,131 @@
 {{-- Horizon footer: opaque earth-toned ground with sunset horizon line --}}
-<footer class="mt-16 md:mt-24 relative bg-[#1a1f1a] w-full">
+<footer class="mt-16 md:mt-24 relative bg-[#1a1f1a] w-full isolate">
     {{-- Horizon line - last light between sky and earth --}}
-    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-[rgba(255,170,120,0)] via-[rgba(255,190,140,.45)] to-[rgba(255,170,120,0)]" aria-hidden="true"></div>
+    <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-transparent via-[rgba(255,190,140,.45)] to-transparent" aria-hidden="true"></div>
 
-    {{-- Subtle mountain ridge silhouette at horizon --}}
-    <svg 
-        class="w-full h-8 md:h-10 text-[#141814] absolute top-0 left-0"
-        viewBox="0 0 1200 40" 
-        fill="currentColor" 
-        preserveAspectRatio="none"
-        aria-hidden="true"
-    >
-        <path d="M0,40 L0,20 Q200,8 400,18 T800,15 Q1000,10 1200,25 L1200,40 Z" opacity="0.4"/>
-        <path d="M0,40 L0,28 Q150,18 300,22 Q450,26 600,20 Q750,14 900,24 Q1050,32 1200,28 L1200,40 Z" opacity="0.6"/>
-    </svg>
+    {{-- Subtle mountain ridge silhouette at horizon (darker earth tone) --}}
+    <div class="absolute inset-x-0 top-0 h-6 bg-gradient-to-b from-[#141814] to-transparent opacity-50" aria-hidden="true"></div>
 
-    {{-- Back to top button positioned at horizon apex --}}
-    <a 
-        href="#top"
+    {{-- Back to top star rocket button --}}
+    <button 
+        id="um-back-to-top"
         aria-label="{{ __('ui.back_to_top') ?? 'Back to top' }}"
         class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10
                w-11 h-11 rounded-full 
-               bg-[#2a2f2a] border border-[rgba(255,190,140,.3)] backdrop-blur-md
+               bg-[#2a2f2a] border border-[rgba(255,190,140,.3)]
                flex items-center justify-center
                transition-all duration-200
-               hover:bg-[#343a34] hover:border-[rgba(255,190,140,.5)] hover:-translate-y-[calc(50%+2px)]
+               hover:bg-[#343a34] hover:border-[rgba(255,190,140,.5)] hover:scale-110
                focus-visible:outline-2 focus-visible:outline-[color:var(--star)] focus-visible:outline-offset-2
-               group"
-        @click.prevent="window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })"
+               group cursor-pointer"
     >
+        {{-- Star rocket icon --}}
         <svg 
-            class="w-5 h-5 text-[rgba(255,190,140,.7)] group-hover:text-[rgba(255,190,140,.9)] group-hover:scale-110 transition-all" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor" 
-            stroke-width="2"
+            class="w-5 h-5 text-[var(--star)] transition-all group-hover:scale-110" 
+            fill="currentColor" 
+            viewBox="0 0 24 24"
             aria-hidden="true"
         >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            <path d="M12 2L9 9l-7 3 7 3 3 7 3-7 7-3-7-3-3-7z"/>
         </svg>
-    </a>
+    </button>
 
-    {{-- Footer content on the earth/ground --}}
+    {{-- Footer content on the earth/ground - compact like header --}}
     <div class="section">
-        <div class="text-center space-y-3 pt-16 md:pt-20 pb-8">
+        <div class="flex items-center justify-center gap-6 py-6 text-center">
             <p class="text-sm text-white/60 leading-relaxed">
                 {{ __('ui.footer_note_primary') }}
             </p>
-            <p class="text-xs text-white/40">
+            <span class="text-white/20">•</span>
+            <p class="text-sm text-white/40">
                 &copy; {{ date('Y') }} Ursa Minor Games. All rights reserved.
             </p>
         </div>
     </div>
 </footer>
+
+{{-- Star rocket launch animation script --}}
+<script>
+(function() {
+    'use strict';
+    
+    const button = document.getElementById('um-back-to-top');
+    if (!button) return;
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (prefersReducedMotion) {
+            // Instant scroll for reduced motion
+            window.scrollTo({ top: 0, behavior: 'auto' });
+            return;
+        }
+        
+        // Create star trail particles
+        const particles = [];
+        const buttonRect = button.getBoundingClientRect();
+        const startX = buttonRect.left + buttonRect.width / 2;
+        const startY = buttonRect.top + buttonRect.height / 2;
+        
+        for (let i = 0; i < 8; i++) {
+            const particle = document.createElement('div');
+            particle.style.cssText = `
+                position: fixed;
+                left: ${startX}px;
+                top: ${startY}px;
+                width: 4px;
+                height: 4px;
+                background: var(--star);
+                border-radius: 50%;
+                pointer-events: none;
+                z-index: 9999;
+                opacity: 0.8;
+            `;
+            document.body.appendChild(particle);
+            particles.push(particle);
+            
+            // Animate particle downward (rocket exhaust)
+            const angle = (Math.PI / 4) + (Math.random() - 0.5) * (Math.PI / 6);
+            const distance = 20 + Math.random() * 30;
+            const duration = 300 + Math.random() * 200;
+            
+            particle.animate([
+                { transform: 'translate(0, 0) scale(1)', opacity: 0.8 },
+                { 
+                    transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`, 
+                    opacity: 0 
+                }
+            ], {
+                duration: duration,
+                easing: 'ease-out'
+            }).onfinish = () => particle.remove();
+        }
+        
+        // Accelerating scroll animation
+        const duration = 1000;
+        const start = window.pageYOffset;
+        const startTime = performance.now();
+        
+        function animateScroll(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Ease-in-out cubic for smooth acceleration/deceleration
+            const eased = progress < 0.5
+                ? 4 * progress * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+            
+            window.scrollTo(0, start * (1 - eased));
+            
+            if (progress < 1) {
+                requestAnimationFrame(animateScroll);
+            }
+        }
+        
+        requestAnimationFrame(animateScroll);
+    });
+})();
+</script>
 

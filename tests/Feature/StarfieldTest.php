@@ -35,10 +35,11 @@ class StarfieldTest extends TestCase
 
         // Footer should have the sunset horizon gradient line
         $this->assertStringContainsString('bg-gradient-to-r', $html);
-        $this->assertStringContainsString('from-[rgba(255,170,120,0)]', $html);
+        $this->assertStringContainsString('from-transparent', $html);
+        $this->assertStringContainsString('via-[rgba(255,190,140,.45)]', $html);
 
-        // Should have the mountain silhouette SVG
-        $this->assertStringContainsString('viewBox="0 0 1200 40"', $html);
+        // Should have opaque earth-toned footer background
+        $this->assertStringContainsString('bg-[#1a1f1a]', $html);
     }
 
     public function test_footer_uses_new_copy(): void
