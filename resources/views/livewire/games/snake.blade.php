@@ -69,7 +69,7 @@
     @if(!$gameStarted)
         <div class="start-message">
             <button wire:click="startGame" class="start-button">
-                🎮 Start Game
+                Start
             </button>
             <p>Use arrow keys or WASD to move!</p>
         </div>

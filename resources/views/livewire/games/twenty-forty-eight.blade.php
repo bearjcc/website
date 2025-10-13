@@ -51,12 +51,12 @@
     <!-- Game Status -->
     @if($isWon && !$isOver)
         <div class="game-message win-message">
-            <p>🎉 You reached 2048! 🎉</p>
-            <p class="subtitle">Keep playing to increase your score!</p>
+            <p>You reached 2048.</p>
+            <p class="subtitle">Keep playing to increase your score.</p>
         </div>
     @elseif($isOver)
         <div class="game-message game-over-message">
-            <p>Game Over!</p>
+            <p>Game over.</p>
             <p class="subtitle">Final Score: {{ number_format($score) }}</p>
         </div>
     @endif

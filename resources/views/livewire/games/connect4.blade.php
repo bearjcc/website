@@ -22,15 +22,15 @@
     <div class="game-status">
         @if($state['gameOver'])
             @if($state['winner'] === 'draw')
-                <p class="draw-message">It's a Draw! 🤝</p>
+                <p class="draw-message">Draw.</p>
             @else
                 <p class="winner-message">
-                    🎉 {{ ucfirst($state['winner']) }} Player Wins! 🎉
+                    {{ ucfirst($state['winner']) }} player wins.
                 </p>
             @endif
         @else
             <p class="turn-message">
-                Current Turn: <strong class="player-{{ $state['currentPlayer'] }}">{{ ucfirst($state['currentPlayer']) }} Player</strong>
+                Current turn: <strong class="player-{{ $state['currentPlayer'] }}">{{ ucfirst($state['currentPlayer']) }} player</strong>
             </p>
         @endif
     </div>

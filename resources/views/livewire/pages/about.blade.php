@@ -1,22 +1,30 @@
-<div class="max-w-2xl mx-auto">
-    <h1 class="text-4xl font-bold text-star-yellow mb-6">About Ursa Minor</h1>
-    
-    <div class="card prose">
-        <p>
-            Ursa Minor is a creative project focused on building memorable gaming experiences
-            and exploring interesting ideas through interactive media.
-        </p>
-        
-        <p>
-            Our browser games are designed to be accessible, fun, and engaging. Whether you're
-            looking for a quick puzzle or a strategic challenge, we're building something for everyone.
-        </p>
-        
-        <h2>What We Offer</h2>
-        <ul>
-            <li>Browser-based games that work on any device</li>
-            <li>Regular updates and new content</li>
-            <li>A growing collection of creative projects</li>
-        </ul>
+<div class="section py-20 md:py-24">
+    <div class="max-w-2xl space-y-16">
+        {{-- About Section --}}
+        <div>
+            <h1 class="h1 mb-8">About</h1>
+            
+            <div class="space-y-6 text-ink/80 leading-relaxed">
+                <p>
+                    Ursa Minor makes small games. We build at our own pace, share what we make, and keep things simple.
+                </p>
+                
+                <p>
+                    This site holds browser games — puzzles, strategy, classics. Play in your browser. No sign-up needed.
+                </p>
+                
+                <p>
+                    We're building experience and frameworks, one game at a time.
+                </p>
+            </div>
+        </div>
+
+        {{-- Contact Section --}}
+        <div class="pt-8 border-t border-[hsl(var(--border)/.1)]">
+            <h2 class="h2 mb-4">Contact</h2>
+            <p class="text-ink/70">
+                Questions or feedback? Reach us at <a href="mailto:hello@ursaminor.games" class="text-constellation hover:text-star transition-colors">hello@ursaminor.games</a>
+            </p>
+        </div>
     </div>
 </div>

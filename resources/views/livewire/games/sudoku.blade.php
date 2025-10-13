@@ -49,7 +49,7 @@
     <!-- Game Status -->
     <div class="game-status">
         @if($gameComplete)
-            <p class="winner-message">🎉 Puzzle Complete! 🎉</p>
+            <p class="winner-message">Puzzle complete.</p>
         @else
             <div class="status-grid">
                 <div class="status-item">

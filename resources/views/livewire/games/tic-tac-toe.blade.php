@@ -51,12 +51,12 @@
     <!-- Game Status -->
     <div class="game-status">
         @if($winner)
-            <p class="winner-message">🎉 Player {{ $winner }} Wins! 🎉</p>
+            <p class="winner-message">Player {{ $winner }} wins.</p>
         @elseif($isDraw)
-            <p class="draw-message">It's a Draw! 🤝</p>
+            <p class="draw-message">Draw.</p>
         @else
             <p class="turn-message">
-                Current Turn: <strong>{{ $currentPlayer }}</strong>
+                Current turn: <strong>{{ $currentPlayer }}</strong>
                 @if($gameMode !== 'pvp')
                     <span class="player-indicator">
                         (You are {{ $playerSymbol }})
@@ -129,149 +129,143 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 24px;
         }
 
         .game-header h2 {
-            color: var(--color-star-yellow, #fff89a);
+            color: hsl(var(--star));
             margin: 0;
             font-size: 2rem;
         }
 
         .rules-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 1px solid rgba(255, 248, 154, 0.3);
-            padding: 0.5rem 1rem;
+            background: hsl(var(--surface) / .1);
+            color: hsl(var(--ink));
+            border: 1px solid hsl(var(--border) / .3);
+            padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.15s ease;
         }
 
         .rules-button:hover {
-            background: rgba(255, 248, 154, 0.2);
-            border-color: var(--color-star-yellow, #fff89a);
+            background: hsl(var(--surface) / .2);
+            border-color: hsl(var(--star));
         }
 
         .game-rules {
-            background: rgba(0, 0, 0, 0.3);
+            background: hsl(var(--surface) / .3);
             backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--color-star-yellow, #fff89a);
-            margin-bottom: 2rem;
+            padding: 24px;
+            border-radius: 12px;
+            border-left: 4px solid hsl(var(--star));
+            margin-bottom: 32px;
         }
 
         .game-rules ul {
-            margin: 0.5rem 0 0 1.5rem;
+            margin: 8px 0 0 24px;
         }
 
         .game-rules li {
-            margin: 0.5rem 0;
+            margin: 8px 0;
         }
 
         .mode-selection {
-            background: rgba(255, 255, 255, 0.05);
+            background: hsl(var(--surface) / .05);
             backdrop-filter: blur(5px);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-bottom: 2rem;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 32px;
         }
 
         .mode-selection h3 {
-            color: var(--color-star-yellow, #fff89a);
-            margin: 0 0 1rem 0;
+            color: hsl(var(--star));
+            margin: 0 0 16px 0;
             font-size: 1.3rem;
         }
 
         .mode-options {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 16px;
         }
 
         .ai-modes {
             display: flex;
-            gap: 0.5rem;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .mode-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid rgba(255, 248, 154, 0.3);
-            padding: 0.75rem 1.5rem;
+            background: hsl(var(--surface) / .1);
+            color: hsl(var(--ink));
+            border: 2px solid hsl(var(--border) / .3);
+            padding: 12px 24px;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.15s ease;
             font-size: 1rem;
         }
 
         .mode-button:hover {
-            background: rgba(255, 248, 154, 0.2);
-            border-color: var(--color-star-yellow, #fff89a);
+            background: hsl(var(--surface) / .2);
+            border-color: hsl(var(--star));
         }
 
         .mode-button.active {
-            background: var(--color-star-yellow, #fff89a);
-            color: #000;
-            border-color: var(--color-star-yellow, #fff89a);
+            background: hsl(var(--star));
+            color: hsl(220 20% 10%);
+            border-color: hsl(var(--star));
         }
 
         .game-status {
             text-align: center;
-            margin-bottom: 2rem;
-            min-height: 3rem;
+            margin-bottom: 32px;
+            min-height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .winner-message {
-            color: var(--color-star-yellow, #fff89a);
+            color: hsl(var(--star));
             font-size: 1.5rem;
-            font-weight: bold;
-            animation: pulse 1s ease-in-out infinite;
+            font-weight: 600;
         }
 
         .draw-message {
-            color: #fff;
+            color: hsl(var(--constellation));
             font-size: 1.3rem;
         }
 
         .turn-message {
-            color: #fff;
+            color: hsl(var(--ink));
             font-size: 1.2rem;
         }
 
         .player-indicator {
-            color: var(--color-star-yellow, #fff89a);
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            color: hsl(var(--star));
         }
 
         .board-container {
-            margin-bottom: 2rem;
+            margin-bottom: 32px;
         }
 
         .game-board {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
             max-width: 400px;
             margin: 0 auto;
             aspect-ratio: 1;
         }
 
         .cell {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 248, 154, 0.3);
-            border-radius: 10px;
+            background: hsl(var(--surface) / .05);
+            border: 2px solid hsl(var(--border) / .3);
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.15s ease;
             font-size: 3rem;
             font-weight: bold;
             display: flex;
@@ -281,9 +275,9 @@
         }
 
         .cell:not(.filled):not(:disabled):hover {
-            background: rgba(255, 248, 154, 0.1);
-            border-color: var(--color-star-yellow, #fff89a);
-            transform: scale(1.05);
+            background: hsl(var(--surface) / .1);
+            border-color: hsl(var(--star));
+            transform: translateY(-2px);
         }
 
         .cell:disabled {
@@ -295,15 +289,15 @@
         }
 
         .mark {
-            animation: scaleIn 0.3s ease-out;
+            animation: scaleIn 0.15s ease-out;
         }
 
         .mark.x {
-            color: #ff6b6b;
+            color: hsl(0 70% 70%);
         }
 
         .mark.o {
-            color: #4ecdc4;
+            color: hsl(var(--constellation));
         }
 
         @keyframes scaleIn {
@@ -319,68 +313,68 @@
 
         .game-controls {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 24px;
         }
 
         .new-game-button {
-            background: var(--color-star-yellow, #fff89a);
-            color: #000;
+            background: hsl(var(--star));
+            color: hsl(220 20% 10%);
             border: none;
-            padding: 1rem 2rem;
+            padding: 16px 32px;
             border-radius: 8px;
             font-size: 1.1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.15s ease;
         }
 
         .new-game-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255, 248, 154, 0.4);
+            box-shadow: 0 4px 12px hsl(var(--star) / .4);
         }
 
         .symbol-choice {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
+            margin-top: 16px;
+            padding: 16px;
+            background: hsl(var(--surface) / .05);
             border-radius: 8px;
         }
 
         .symbol-choice p {
-            margin: 0 0 0.5rem 0;
-            color: #fff;
+            margin: 0 0 8px 0;
+            color: hsl(var(--ink));
         }
 
         .symbol-button {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            border: 2px solid rgba(255, 248, 154, 0.3);
-            padding: 0.5rem 1.5rem;
+            background: hsl(var(--surface) / .1);
+            color: hsl(var(--ink));
+            border: 2px solid hsl(var(--border) / .3);
+            padding: 8px 24px;
             border-radius: 8px;
             cursor: pointer;
-            margin: 0 0.5rem;
-            transition: all 0.3s ease;
+            margin: 0 8px;
+            transition: all 0.15s ease;
         }
 
         .symbol-button:hover {
-            background: rgba(255, 248, 154, 0.2);
-            border-color: var(--color-star-yellow, #fff89a);
+            background: hsl(var(--surface) / .2);
+            border-color: hsl(var(--star));
         }
 
         .symbol-button.active {
-            background: var(--color-star-yellow, #fff89a);
-            color: #000;
-            border-color: var(--color-star-yellow, #fff89a);
+            background: hsl(var(--star));
+            color: hsl(220 20% 10%);
+            border-color: hsl(var(--star));
         }
 
         .game-stats {
             text-align: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: hsl(var(--ink-muted));
             font-size: 0.9rem;
         }
 
         .game-stats p {
-            margin: 0.5rem 0;
+            margin: 8px 0;
         }
 
         @media (max-width: 768px) {
@@ -395,6 +389,16 @@
 
             .game-header h2 {
                 font-size: 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .cell:hover,
+            .new-game-button:hover {
+                transform: none;
+            }
+            .mark {
+                animation: none;
             }
         }
     </style>

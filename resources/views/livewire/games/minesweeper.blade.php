@@ -48,23 +48,23 @@
     <div class="game-status">
         <div class="status-grid">
             <div class="status-item">
-                <span class="label">💣 Mines:</span>
+                <span class="label">Mines:</span>
                 <span class="value">{{ $mineCount - $flagsUsed }}</span>
             </div>
             <div class="status-item">
-                <span class="label">🚩 Flags:</span>
+                <span class="label">Flags:</span>
                 <span class="value">{{ $flagsUsed }}</span>
             </div>
             <div class="status-item">
-                <span class="label">📊 Revealed:</span>
+                <span class="label">Revealed:</span>
                 <span class="value">{{ $squaresRevealed }}</span>
             </div>
         </div>
         
         @if($gameWon)
-            <p class="winner-message">🎉 You Won! All mines found! 🎉</p>
+            <p class="winner-message">You won. All mines found.</p>
         @elseif($gameOver && !$gameWon)
-            <p class="game-over-message">💥 Game Over! You hit a mine! 💥</p>
+            <p class="game-over-message">Game over. Mine detonated.</p>
         @endif
     </div>
 

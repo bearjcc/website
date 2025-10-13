@@ -8,14 +8,19 @@ return [
     'cta_play' => 'Play',
     'cta_browse' => 'Browse',
 
-    // === Games Section ===
-    'coming_soon_title' => 'Coming soon',
+    // === Games Page ===
+    'games_kicker' => 'AVAILABLE NOW',
+    'games_title' => 'Games',
+    'games_subtitle' => 'Play in your browser. No sign-up required.',
+    'games_empty' => 'New constellations are taking shape.',
+    'play_game' => 'Play :game',
 
     // === Navigation ===
     'nav_games' => 'Games',
     'nav_about' => 'About',
     'nav_dashboard' => 'Dashboard',
     'nav_login' => 'Login',
+    'back_to_games' => 'Back to games',
 
     // === Accessibility ===
     'skip_to_content' => 'Skip to content',
