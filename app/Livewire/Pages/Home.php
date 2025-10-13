@@ -51,7 +51,7 @@ class Home extends Component
     private function getGamesSafely()
     {
         try {
-            return Game::published()->latest()->limit(3)->get();
+            return Game::published()->latest()->get();
         } catch (\Exception $e) {
             return collect();
         }

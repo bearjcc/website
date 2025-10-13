@@ -30,12 +30,24 @@
                 @break
             
             @case('connect4')
-                {{-- Connect 4 grid --}}
+                {{-- Connect 4 grid with some filled pieces --}}
                 <svg width="120" height="100" viewBox="0 0 120 100" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
-                    <g stroke="currentColor" stroke-width="2" fill="none">
+                    <g stroke="currentColor" stroke-width="2">
                         @for($row = 0; $row < 6; $row++)
                             @for($col = 0; $col < 7; $col++)
-                                <circle cx="{{ 10 + $col * 16 }}" cy="{{ 10 + $row * 16 }}" r="6" />
+                                @php
+                                    // Fill some bottom pieces to show gameplay
+                                    $filled = ($row === 5 && in_array($col, [1, 3, 4])) 
+                                           || ($row === 4 && in_array($col, [1, 3]))
+                                           || ($row === 3 && $col === 3);
+                                @endphp
+                                <circle 
+                                    cx="{{ 10 + $col * 16 }}" 
+                                    cy="{{ 10 + $row * 16 }}" 
+                                    r="6" 
+                                    fill="{{ $filled ? 'currentColor' : 'none' }}"
+                                    opacity="{{ $filled ? '0.4' : '1' }}"
+                                />
                             @endfor
                         @endfor
                     </g>
@@ -43,7 +55,7 @@
                 @break
             
             @case('sudoku')
-                {{-- Sudoku grid --}}
+                {{-- Sudoku grid with some prefilled numbers --}}
                 <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
                     <g stroke="currentColor" stroke-linecap="round">
                         {{-- Thin lines --}}
@@ -69,29 +81,33 @@
                             <line x1="76.67" y1="10" x2="76.67" y2="110" />
                         </g>
                     </g>
+                    {{-- Some prefilled numbers --}}
+                    <g fill="currentColor" font-size="12" font-weight="600" text-anchor="middle" opacity="0.5">
+                        <text x="20" y="25">5</text>
+                        <text x="60" y="25">3</text>
+                        <text x="100" y="25">7</text>
+                        <text x="40" y="45">6</text>
+                        <text x="80" y="65">9</text>
+                        <text x="20" y="85">4</text>
+                        <text x="100" y="105">2</text>
+                    </g>
                 </svg>
                 @break
             
             @case('chess')
-                {{-- Chess board 8x8 grid --}}
+                {{-- Simple 2x2 checkerboard with rook icon --}}
                 <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
-                    <g stroke="currentColor" stroke-width="2" fill="none">
-                        <rect x="10" y="10" width="100" height="100" />
-                        {{-- 8x8 grid --}}
-                        <line x1="22.5" y1="10" x2="22.5" y2="110" />
-                        <line x1="35" y1="10" x2="35" y2="110" />
-                        <line x1="47.5" y1="10" x2="47.5" y2="110" />
-                        <line x1="60" y1="10" x2="60" y2="110" />
-                        <line x1="72.5" y1="10" x2="72.5" y2="110" />
-                        <line x1="85" y1="10" x2="85" y2="110" />
-                        <line x1="97.5" y1="10" x2="97.5" y2="110" />
-                        <line x1="10" y1="22.5" x2="110" y2="22.5" />
-                        <line x1="10" y1="35" x2="110" y2="35" />
-                        <line x1="10" y1="47.5" x2="110" y2="47.5" />
-                        <line x1="10" y1="60" x2="110" y2="60" />
-                        <line x1="10" y1="72.5" x2="110" y2="72.5" />
-                        <line x1="10" y1="85" x2="110" y2="85" />
-                        <line x1="10" y1="97.5" x2="110" y2="97.5" />
+                    {{-- 2x2 Checkerboard pattern --}}
+                    <rect x="30" y="30" width="30" height="30" fill="currentColor" opacity="0.2" />
+                    <rect x="60" y="60" width="30" height="30" fill="currentColor" opacity="0.2" />
+                    <rect x="30" y="30" width="60" height="60" stroke="currentColor" stroke-width="2" fill="none" />
+                    {{-- Rook silhouette in center --}}
+                    <g transform="translate(60, 60)">
+                        <rect x="-10" y="-15" width="20" height="25" fill="currentColor" opacity="0.6" />
+                        <rect x="-12" y="-18" width="4" height="3" fill="currentColor" opacity="0.6" />
+                        <rect x="-4" y="-18" width="4" height="3" fill="currentColor" opacity="0.6" />
+                        <rect x="4" y="-18" width="4" height="3" fill="currentColor" opacity="0.6" />
+                        <rect x="-12" y="10" width="24" height="3" fill="currentColor" opacity="0.6" />
                     </g>
                 </svg>
                 @break
@@ -117,18 +133,32 @@
                 @break
             
             @case('minesweeper')
-                {{-- Mine glyph --}}
-                <svg width="80" height="80" viewBox="0 0 80 80" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
-                    <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <circle cx="40" cy="40" r="12" fill="none" />
-                        <line x1="40" y1="16" x2="40" y2="24" />
-                        <line x1="40" y1="56" x2="40" y2="64" />
-                        <line x1="16" y1="40" x2="24" y2="40" />
-                        <line x1="56" y1="40" x2="64" y2="40" />
-                        <line x1="23" y1="23" x2="29" y2="29" />
-                        <line x1="51" y1="51" x2="57" y2="57" />
-                        <line x1="57" y1="23" x2="51" y2="29" />
-                        <line x1="29" y1="51" x2="23" y2="57" />
+                {{-- Grid with numbers showing nearby mines --}}
+                <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
+                    <g stroke="currentColor" stroke-width="2">
+                        {{-- 4x4 grid --}}
+                        <rect x="20" y="20" width="80" height="80" fill="none" />
+                        <line x1="40" y1="20" x2="40" y2="100" />
+                        <line x1="60" y1="20" x2="60" y2="100" />
+                        <line x1="80" y1="20" x2="80" y2="100" />
+                        <line x1="20" y1="40" x2="100" y2="40" />
+                        <line x1="20" y1="60" x2="100" y2="60" />
+                        <line x1="20" y1="80" x2="100" y2="80" />
+                    </g>
+                    {{-- Numbers showing mine proximity --}}
+                    <g fill="currentColor" font-size="14" font-weight="700" text-anchor="middle">
+                        <text x="30" y="35" opacity="0.5">1</text>
+                        <text x="50" y="35" opacity="0.5">2</text>
+                        <text x="30" y="55" opacity="0.5">3</text>
+                        <text x="90" y="75" opacity="0.5">1</text>
+                    </g>
+                    {{-- Small mine in one square --}}
+                    <g transform="translate(70, 50)" opacity="0.4">
+                        <circle cx="0" cy="0" r="6" fill="currentColor" />
+                        <line x1="-8" y1="0" x2="-7" y2="0" stroke="currentColor" stroke-width="1.5" />
+                        <line x1="7" y1="0" x2="8" y2="0" stroke="currentColor" stroke-width="1.5" />
+                        <line x1="0" y1="-8" x2="0" y2="-7" stroke="currentColor" stroke-width="1.5" />
+                        <line x1="0" y1="7" x2="0" y2="8" stroke="currentColor" stroke-width="1.5" />
                     </g>
                 </svg>
                 @break
@@ -147,7 +177,7 @@
                 @break
             
             @case('2048')
-                {{-- 2048 tiles --}}
+                {{-- 2048 tiles with some numbers --}}
                 <svg width="120" height="120" viewBox="0 0 120 120" class="opacity-80 text-[color:var(--ink)]/70" aria-hidden="true">
                     <g stroke="currentColor" stroke-width="2" fill="none">
                         <rect x="10" y="10" width="25" height="25" rx="3" />
@@ -159,6 +189,13 @@
                         <rect x="10" y="70" width="25" height="25" rx="3" />
                         <rect x="40" y="70" width="25" height="25" rx="3" />
                         <rect x="70" y="70" width="25" height="25" rx="3" />
+                    </g>
+                    {{-- Numbers in some tiles --}}
+                    <g fill="currentColor" font-size="11" font-weight="700" text-anchor="middle">
+                        <text x="22.5" y="27" opacity="0.5">2</text>
+                        <text x="52.5" y="27" opacity="0.5">4</text>
+                        <text x="82.5" y="57" opacity="0.5">8</text>
+                        <text x="22.5" y="87" opacity="0.5">16</text>
                     </g>
                 </svg>
                 @break
