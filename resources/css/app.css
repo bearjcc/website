@@ -584,5 +584,244 @@
             display: none;
         }
     }
+
+    /* === Game UI Styles === */
+    
+    /* Sudoku Board */
+    .board-container {
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: center;
+    }
+
+    .sudoku-board {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 1px;
+        background: hsl(var(--star));
+        border: 3px solid hsl(var(--star));
+        max-width: 500px;
+        width: 100%;
+        aspect-ratio: 1;
+    }
+
+    .sudoku-cell {
+        background: hsl(var(--space-900) / .6);
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        font-size: 1.5rem;
+        font-weight: bold;
+        min-height: 45px;
+    }
+
+    .sudoku-cell:not(.original):hover {
+        background: hsl(var(--star) / .2);
+    }
+
+    .sudoku-cell.selected {
+        background: hsl(var(--star) / .3) !important;
+        box-shadow: inset 0 0 0 2px hsl(var(--star));
+    }
+
+    .sudoku-cell.original {
+        background: hsl(var(--space-800) / .8);
+    }
+
+    .sudoku-cell.conflict {
+        background: hsl(0 70% 60% / .3) !important;
+    }
+
+    .sudoku-cell.hint-cell {
+        background: hsl(var(--constellation) / .3) !important;
+        animation: hint-pulse 0.5s ease-in-out 3;
+    }
+
+    .border-right-thick {
+        border-right: 2px solid hsl(var(--star)) !important;
+    }
+
+    .border-bottom-thick {
+        border-bottom: 2px solid hsl(var(--star)) !important;
+    }
+
+    .cell-number {
+        font-size: 1.8rem;
+    }
+
+    .original-number {
+        color: hsl(var(--ink));
+        font-weight: 700;
+    }
+
+    .player-number {
+        color: hsl(var(--star));
+        font-weight: 600;
+    }
+
+    .cell-notes {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 1px;
+        width: 100%;
+        height: 100%;
+        font-size: 0.6rem;
+        padding: 2px;
+    }
+
+    .note {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: hsl(var(--star) / .6);
+    }
+
+    .note.empty {
+        visibility: hidden;
+    }
+
+    /* Number input pad */
+    .number-input {
+        margin-bottom: 1.5rem;
+    }
+
+    .number-buttons {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        gap: 0.5rem;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .number-btn {
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink));
+        border: 2px solid hsl(var(--border) / .3);
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.2rem;
+        font-weight: bold;
+        min-height: 44px;
+    }
+
+    .number-btn:hover {
+        background: hsl(var(--star));
+        color: hsl(220 20% 10%);
+        transform: translateY(-2px);
+    }
+
+    /* Game controls */
+    .game-controls {
+        margin-top: 2rem;
+    }
+
+    .control-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .control-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink));
+        border: 2px solid hsl(var(--border) / .3);
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1rem;
+        min-height: 44px;
+    }
+
+    .control-btn:hover:not(:disabled) {
+        background: hsl(var(--star) / .2);
+        border-color: hsl(var(--star));
+    }
+
+    .control-btn:focus-visible {
+        outline: 2px solid hsl(var(--constellation));
+        outline-offset: 2px;
+    }
+
+    .control-btn.active {
+        background: hsl(var(--star));
+        color: hsl(220 20% 10%);
+        border-color: hsl(var(--star));
+    }
+
+    .control-btn.new-game {
+        background: hsl(var(--star));
+        color: hsl(220 20% 10%);
+        font-weight: 600;
+    }
+
+    .control-btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    /* Game animations */
+    @keyframes hint-pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    /* Responsive game board */
+    @media (max-width: 768px) {
+        .sudoku-board {
+            max-width: 350px;
+        }
+
+        .cell-number {
+            font-size: 1.2rem;
+        }
+
+        .number-buttons {
+            grid-template-columns: repeat(9, 1fr);
+            gap: 0.25rem;
+        }
+
+        .number-btn {
+            padding: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .control-buttons {
+            flex-direction: column;
+        }
+
+        .control-btn {
+            width: 100%;
+        }
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+        .sudoku-cell,
+        .number-btn,
+        .control-btn {
+            transition: none;
+        }
+        
+        .number-btn:hover,
+        .sudoku-cell:hover {
+            transform: none;
+        }
+        
+        .hint-pulse {
+            animation: none;
+        }
+    }
 }
 
