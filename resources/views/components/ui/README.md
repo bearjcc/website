@@ -1,360 +1,361 @@
 # UI Components
 
-Reusable Blade components for the Ursa Minor homepage and site-wide use.
-
-## Carousel
-
-Constellation-themed carousel component powered by Embla Carousel.
-
-### Basic Usage
-
-```blade
-<x-ui.carousel>
-    {{-- Your slides here --}}
-    <div class="flex-[0_0_100%] min-w-0">
-        <div class="glass p-6">Slide 1</div>
-    </div>
-    <div class="flex-[0_0_100%] min-w-0">
-        <div class="glass p-6">Slide 2</div>
-    </div>
-    <div class="flex-[0_0_100%] min-w-0">
-        <div class="glass p-6">Slide 3</div>
-    </div>
-</x-ui.carousel>
-```
-
-### Props
-
-- `showDots` (boolean, default: true) - Display constellation pagination dots
-- `showArrows` (boolean, default: true) - Display navigation arrows
-
-### Examples
-
-```blade
-{{-- Without navigation arrows --}}
-<x-ui.carousel :show-arrows="false">
-    {{-- slides --}}
-</x-ui.carousel>
-
-{{-- Without pagination dots --}}
-<x-ui.carousel :show-dots="false">
-    {{-- slides --}}
-</x-ui.carousel>
-
-{{-- Minimal (no controls) --}}
-<x-ui.carousel :show-arrows="false" :show-dots="false">
-    {{-- slides --}}
-</x-ui.carousel>
-```
-
-### Responsive Slides
-
-Use Tailwind's flex utilities for responsive slide widths:
-
-```blade
-<x-ui.carousel>
-    {{-- Full width mobile, 50% tablet, 33% desktop --}}
-    <div class="flex-[0_0_100%] min-w-0 md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1rem)]">
-        <div class="glass p-6">Responsive slide</div>
-    </div>
-</x-ui.carousel>
-```
-
-### Features
-
-- **Constellation pagination**: Star dots connected by lines
-- **Glass navigation buttons**: Subtle backdrop blur with hover effects
-- **Loop mode**: Infinite scrolling
-- **Keyboard accessible**: Tab navigation and ARIA labels
-- **Reduced motion support**: Respects user preferences
-- **Touch/swipe enabled**: Works on mobile devices
-
-## Components
-
-### Logo Lockup (`logo-lockup.blade.php`)
-Displays the Ursa Minor logo (bear constellation) with text.
-
-**Usage:**
-```blade
-<x-ui.logo-lockup class="w-[260px] md:w-[320px]" />
-```
-
-**Props:**
-- `class` (optional): Custom classes for sizing (default: `w-[260px] md:w-[320px] h-auto`)
+Reusable Blade components for Ursa Minor Games.
 
 ---
-
-### Section Header (`section-header.blade.php`)
-Displays kicker text, title, and subtitle for content sections.
-
-**Usage:**
-```blade
-<x-ui.section-header 
-    kicker="Featured"
-    title="Available Games"
-    subtitle="Browser-based games ready to play now"
-/>
-```
-
-**Props:**
-- `kicker` (optional): Small uppercase label above title
-- `title` (optional): Main heading (h2)
-- `subtitle` (optional): Descriptive text below title
-
----
-
-### Card (`card.blade.php`)
-Interactive card component for links, games, or feature displays.
-
-**Usage:**
-```blade
-<x-ui.card
-    title="Sudoku"
-    subtitle="Classic number puzzle game"
-    href="{{ route('games.play', 'sudoku') }}"
-    icon="puzzle-piece"
-    meta="Play now"
-/>
-```
-
-**Props:**
-- `title` (required): Card heading
-- `subtitle` (optional): Description text
-- `href` (optional): Link destination (makes card clickable)
-- `icon` (optional): Heroicon name (without `heroicon-o-` prefix)
-- `meta` (optional): Small metadata text
-- `disabled` (optional): Disables interaction (default: false)
-
-**Features:**
-- Uses `.glass` styling (translucent background with blur)
-- Heroicons scale at 1.5rem (w-6 h-6)
-- Hover states for interactive cards
-- Chevron indicator for linked cards
-- Proper focus-visible styles
-
----
-
-### CTA Row (`cta-row.blade.php`)
-Row of call-to-action buttons (primary and optional secondary).
-
-**Usage:**
-```blade
-<x-ui.cta-row
-    primaryHref="{{ route('games.index') }}"
-    primaryLabel="Play Games"
-    secondaryHref="{{ route('about') }}"
-    secondaryLabel="Learn More"
-/>
-```
-
-**Props:**
-- `primaryHref` (required): Primary button link
-- `primaryLabel` (required): Primary button text
-- `secondaryHref` (optional): Secondary button link
-- `secondaryLabel` (optional): Secondary button text
-
-**Button Styles:**
-- `.btn-primary`: Star yellow background (--star)
-- `.btn-secondary`: Transparent with border
-- Both have `:focus-visible` styles for accessibility
-
----
-
-## Design Tokens
-
-All components use CSS custom properties from the night sky design system:
-
-```css
---ink: #f2f4f8           /* Primary text */
---ink-muted: #aeb6c2     /* Muted text */
---space-900: #050914     /* Deep space background */
---space-800: #0b1a33     /* Midnight blue */
---star: #f6e08f          /* Accent yellow */
---constellation: #9ec7ff /* Constellation blue */
---surface: rgba(255, 255, 255, 0.04)  /* Glass background */
---border: rgba(255, 255, 255, 0.10)   /* Subtle borders */
-```
-
-## Accessibility
-
-All components follow WCAG AA standards:
-- Semantic HTML elements
-- Proper ARIA labels
-- Focus-visible indicators (2px solid --star)
-- Keyboard navigable
-- Icons sized 1.25-1.5rem (w-5/w-6)
-- Minimum contrast ratios met
-
-## Icon Usage
-
-Components use Heroicons (outline style):
-```blade
-<x-heroicon-o-puzzle-piece class="w-6 h-6" />
-```
-
-**Available sizes:**
-- `w-5 h-5`: 1.25rem (inline with text)
-- `w-6 h-6`: 1.5rem (cards, buttons)
-
-**Do not** use sizes larger than 1.5rem in these components to maintain visual balance.
 
 ## Layout Components
 
-### App Layout (`layouts/app.blade.php`)
-Main application layout with sticky navigation.
+### `<x-layouts.app>`
 
-**Usage:**
+Main application layout with nav, footer, starfield.
+
 ```blade
-<x-layouts.app title="Page Title">
-    <div class="section">
-        <!-- Your content -->
-    </div>
+<x-layouts.app>
+    <x-slot:title>Page Title</x-slot:title>
+    
+    {{-- Content --}}
 </x-layouts.app>
 ```
 
-**Features:**
-- Sticky top navigation with logo
-- Dark theme with starfield background
-- Centered content with max-width
-- Footer with tagline
+---
 
-### Navigation Partial (`partials/nav.blade.php`)
-Simple navigation links for the main nav.
+## Game Components
 
-**Links:**
-- Home
-- Games
-- Blog
-- About
-- Contact
+### `<x-ui.game-wrapper>`
 
-### Footer Partial (`partials/footer.blade.php`)
-Elegant horizon footer with subtle gradient line and poetic tagline:
-> "The sky is the limit."
+Standard game page structure (header, back nav, rules, controls).
+
+**Props**:
+- `title` — Game name (string, required)
+- `rules` — Array of rule strings or HTML (optional)
+- `showControls` — Whether to render controls slot (bool, default true)
+
+**Usage**:
+```blade
+<x-ui.game-wrapper 
+    title="Chess"
+    :rules="['Get three in a row', 'No diagonal moves']">
+    
+    {{-- Game status, board, etc. --}}
+    
+    <x-slot:controls>
+        <button wire:click="newGame" class="control-btn new-game">
+            <x-heroicon-o-arrow-path class="w-4 h-4" />
+            <span>New</span>
+        </button>
+    </x-slot:controls>
+</x-ui.game-wrapper>
+```
+
+### `<x-ui.game-card>`
+
+Visual-first game card for homepage/lobby.
+
+**Props**:
+- `href` — Link to game (string, required)
+- `title` — Game name (string, required)
+- `motif` — Visual motif type (string: 'tictactoe', 'chess', 'sudoku', etc.)
+- `aria` — Custom aria-label (string, optional)
+
+**Usage**:
+```blade
+<x-ui.game-card
+    :href="route('games.play', 'chess')"
+    title="Chess"
+    motif="chess"
+/>
+```
+
+**Available Motifs**:
+- `tictactoe` — 3×3 grid
+- `chess` — Knight piece
+- `checkers` — Checkerboard pattern
+- `connect4` — Connect 4 grid with circles
+- `sudoku` / `puzzle` — Sudoku grid
+- `minesweeper` — Grid with flag
+- `snake` — Snake path
+- `2048` — 4×4 tile grid
+- `cards` / `solitaire` — Playing cards stack
+- `memory` — Memory card pairs
+- `board` — Generic board (fallback)
+- `sparkles` — Generic fallback
 
 ---
 
-## Examples
+## UI Elements
 
-### Full Section Example
+### `<x-ui.logo-lockup>`
+
+Ursa Minor logo (bear + constellation).
+
+**Props**:
+- `class` — Additional CSS classes (string, optional)
+
+**Usage**:
 ```blade
-<section class="section space-y-12">
-    <x-ui.section-header 
-        kicker="Browse"
-        title="Available Games"
-        subtitle="Classic games reimagined for the web"
-    />
-    
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <x-ui.card
-            title="Sudoku"
-            subtitle="Number puzzle challenge"
-            href="{{ route('games.play', 'sudoku') }}"
-            icon="squares-2x2"
-        />
-        
-        <x-ui.card
-            title="Connect 4"
-            subtitle="Strategic disc-dropping game"
-            href="{{ route('games.play', 'connect4') }}"
-            icon="circle-stack"
-        />
-    </div>
-    
-    <x-ui.cta-row
-        primaryHref="{{ route('games.index') }}"
-        primaryLabel="View All Games"
-    />
-</section>
+<x-ui.logo-lockup class="w-[280px] md:w-[360px]" />
+```
+
+### `<x-ui.nav-logo>`
+
+Compact logo for navigation.
+
+**Usage**:
+```blade
+<x-ui.nav-logo />
+```
+
+### `<x-ui.horizon-footer>`
+
+Footer with sunset line, earth silhouette, back-to-top.
+
+**Usage**:
+```blade
+<x-ui.horizon-footer />
+```
+
+---
+
+## Content Components
+
+### `<x-ui.section-header>`
+
+Section header with kicker, title, subtitle.
+
+**Props**:
+- `kicker` — Small label above title (string, optional)
+- `title` — Main heading (string, optional)
+- `subtitle` — Body text below title (string, optional)
+
+**Usage**:
+```blade
+<x-ui.section-header
+    kicker="Available now"
+    title="Play in your browser"
+    subtitle="No sign-up required."
+/>
+```
+
+### `<x-ui.card>`
+
+General purpose content card.
+
+**Props**:
+- `title` — Card title (string, required)
+- `subtitle` — Description (string, optional)
+- `href` — Link URL (string, optional)
+- `icon` — Heroicon name (string, optional)
+- `meta` — Right-aligned metadata (string, optional)
+
+**Usage**:
+```blade
+<x-ui.card
+    title="Latest Update"
+    subtitle="New features added"
+    href="/blog/update"
+    icon="newspaper"
+    meta="2 days ago"
+/>
+```
+
+### `<x-ui.cta-row>`
+
+CTA buttons (primary + secondary).
+
+**Props**:
+- `primaryHref` — Primary button URL (string, required)
+- `primaryLabel` — Primary button text (string, required)
+- `secondaryHref` — Secondary button URL (string, optional)
+- `secondaryLabel` — Secondary button text (string, optional)
+
+**Usage**:
+```blade
+<x-ui.cta-row
+    :primaryHref="route('games.index')"
+    primaryLabel="Play"
+    :secondaryHref="route('about')"
+    secondaryLabel="Learn"
+/>
 ```
 
 ---
 
 ## Flux UI Components
 
-Flux UI enhanced components that integrate with the night sky theme.
+### `<x-ui.flux-button>`
 
-### Flux Button (`flux-button.blade.php`)
+Flux UI button wrapper.
 
-Themed buttons with star/constellation colors.
+**Variants**: `primary`, `secondary`
 
-**Usage:**
+**Usage**:
 ```blade
-<x-ui.flux-button variant="primary" href="{{ route('games.index') }}">
-    Play Games
-</x-ui.flux-button>
-
-<x-ui.flux-button variant="secondary" icon="sparkles">
-    Learn More
+<x-ui.flux-button variant="primary">
+    Click me
 </x-ui.flux-button>
 ```
 
-**Props:**
-- `variant`: `primary` (star yellow), `secondary` (bordered), `ghost` (subtle)
-- `href` (optional): Makes button a link
-- `icon` (optional): Heroicon name
-- `iconPosition`: `left` or `right`
+### `<x-ui.flux-card>`
 
-### Flux Card (`flux-card.blade.php`)
+Flux UI card wrapper.
 
-Glass-effect cards with night sky styling.
+### `<x-ui.flux-input>`
 
-**Usage:**
-```blade
-<x-ui.flux-card heading="Game Title" icon="puzzle-piece">
-    <p>Card content goes here.</p>
-</x-ui.flux-card>
-
-<x-ui.flux-card heading="Link Card" href="{{ route('games.show', $game) }}">
-    <p>This card is clickable.</p>
-</x-ui.flux-card>
-```
-
-**Props:**
-- `heading` (optional): Card title
-- `href` (optional): Makes card a link
-- `icon` (optional): Heroicon name
-- `interactive`: Enables hover effects without href
-
-### Flux Input (`flux-input.blade.php`)
-
-Themed form inputs with labels and validation.
-
-**Usage:**
-```blade
-<x-ui.flux-input 
-    label="Email Address"
-    type="email"
-    name="email"
-    placeholder="you@example.com"
-    hint="We'll never share your email"
-    required
-/>
-
-<x-ui.flux-input 
-    label="Username"
-    name="username"
-    error="Username is already taken"
-/>
-```
-
-**Props:**
-- `label` (optional): Input label
-- `type`: Input type (default: `text`)
-- `hint` (optional): Help text
-- `error` (optional): Error message
-- `required`: Shows asterisk
-
-**For More**: See [FLUX_INTEGRATION.md](../../../docs/FLUX_INTEGRATION.md) for detailed usage.
+Flux UI input wrapper.
 
 ---
 
-## Notes
+## Carousel
 
-- All components are **prop-validated** with sensible defaults
-- Components use **minimal markup** - no inline scripts/styles
-- **Responsive** by default (mobile-first approach)
-- **Dark theme** optimized with proper contrast
-- Follow the **night sky aesthetic** consistently
-- **Flux components** available for enhanced patterns with consistent theming
+### `<x-ui.carousel>`
 
+Embla carousel with constellation pagination.
+
+**Usage**:
+```blade
+<x-ui.carousel>
+    @foreach($items as $item)
+        <div>{{ $item->name }}</div>
+    @endforeach
+</x-ui.carousel>
+```
+
+**Features**:
+- Glass navigation arrows
+- Constellation-style dots with connecting lines
+- Active dot highlighted with star glow
+- Keyboard accessible
+- Respects `prefers-reduced-motion`
+
+---
+
+## CSS Utility Classes
+
+### Layout
+- `.section` — Max-width 960px container, centered
+- `.glass` — Glass morphism effect
+
+### Typography
+- `.h1`, `.h2`, `.h3`, `.h4`, `.h5`, `.h6` — Heading scales
+- `.p`, `.body` — Body text
+- `.kicker` — Small uppercase label
+
+### Buttons
+- `.btn-primary` — Star-yellow primary action
+- `.btn-secondary` — Glass outline button
+- `.control-btn` — Game control button
+- `.control-btn.new-game` — Primary game button
+- `.control-btn.active` — Active state
+
+### Game UI
+- `.board-container` — Centers game board
+- `.sudoku-board` — Sudoku 9×9 grid
+- `.connect4-board` / `.game-board` — Connect 4 7×6 grid
+- `.minesweeper-board` — Minesweeper grid
+- `.snake-board` — Snake 20×15 grid
+- `.game-board-2048` — 2048 4×4 grid
+- `.number-buttons` — Number input grid
+- `.control-buttons` — Control button row
+
+---
+
+## Common Game UI Patterns
+
+### Constellation Completion Message
+
+```blade
+@if($gameComplete)
+    <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
+        <div class="flex items-center justify-center gap-2">
+            <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
+            <p class="text-lg font-semibold text-star">Puzzle complete.</p>
+            <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
+        </div>
+        <div class="flex items-center justify-center gap-3 text-sm text-ink/70">
+            <span>{{ ucfirst($difficulty) }}</span>
+            <span class="w-1 h-1 rounded-full bg-ink/40"></span>
+            <span>{{ $moveCount }} moves</span>
+        </div>
+    </div>
+@endif
+```
+
+### Standard Control Buttons
+
+```blade
+<div class="game-controls">
+    <div class="control-buttons">
+        <button wire:click="newGame" 
+                class="control-btn new-game"
+                aria-label="Start new game">
+            <x-heroicon-o-arrow-path class="w-4 h-4" />
+            <span>New</span>
+        </button>
+    </div>
+</div>
+```
+
+### Status Display
+
+```blade
+<div class="flex justify-center gap-8 text-sm text-ink/70">
+    <div><span class="text-ink/50">Label:</span> <strong class="text-ink">Value</strong></div>
+</div>
+```
+
+---
+
+## Developer Guidelines
+
+### Creating New Components
+
+1. **Location**: `resources/views/components/ui/`
+2. **Naming**: `kebab-case.blade.php`
+3. **Props**: Use `@props()` directive
+4. **Defaults**: Provide sensible defaults
+5. **Documentation**: Add to this README
+
+### Using Components
+
+```blade
+{{-- Self-closing if no slot --}}
+<x-ui.logo-lockup />
+
+{{-- With content --}}
+<x-ui.card title="Title">
+    Content here
+</x-ui.card>
+
+{{-- With named slots --}}
+<x-ui.game-wrapper title="Game">
+    Content
+    
+    <x-slot:controls>
+        Controls here
+    </x-slot:controls>
+</x-ui.game-wrapper>
+```
+
+### Component Standards
+
+**DO**:
+- Use HSL color tokens
+- Provide proper aria-labels
+- Meet 44px touch targets
+- Respect `prefers-reduced-motion`
+- Keep minimal and focused
+
+**DON'T**:
+- Use inline styles
+- Use emoji
+- Use hardcoded colors
+- Duplicate markup across components
+
+---
+
+## Questions?
+
+**Where is X component?** Check this file  
+**How to use Y?** See usage examples above  
+**Need new component?** Follow create guidelines and add to this README

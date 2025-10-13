@@ -22,6 +22,10 @@ Simplified documentation structure for Ursa Minor Games.
 - **[FEATURE_EXTRACTION_GUIDE.md](FEATURE_EXTRACTION_GUIDE.md)** — Extract features from other repos
 - **[FLUX_INTEGRATION.md](FLUX_INTEGRATION.md)** — Flux UI component usage
 
+**Development**:
+- **[GAME_DEVELOPMENT_GUIDE.md](GAME_DEVELOPMENT_GUIDE.md)** — Building games framework & patterns
+- **[Component Library](../resources/views/components/ui/README.md)** — Available UI components
+
 **Architecture**:
 - **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** — Codebase organization
 - **[DEPENDENCIES.md](DEPENDENCIES.md)** — Package management
@@ -45,14 +49,17 @@ Technical implementation guidance lives in `.cursor/rules/*.mdc` for AI agents:
 - `150-component-implementation.mdc` — Component technical patterns
 
 ### Domain Rules
-- `200-domain-guidelines.mdc` — Business logic, game engines
+- `200-domain-guidelines.mdc` — Business logic, general architecture
+- `210-game-development-patterns.mdc` — Game development framework
 - `300-testing-and-guardrails.mdc` — Testing requirements, content validation
 
 ---
 
 ## Quick Reference
 
-**Starting a new feature?** → Read DESIGN_BIBLE.md  
+**Starting a new feature?** → DESIGN_BIBLE.md  
+**Building a game?** → GAME_DEVELOPMENT_GUIDE.md  
+**Need UI component?** → Component Library README  
 **Need setup help?** → README.md  
 **What's next?** → TODO.md  
 **Deploying?** → DEPLOYMENT_GUIDE.md  

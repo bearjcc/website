@@ -1,0 +1,356 @@
+---
+description: "Game development patterns and framework guidelines for Ursa Minor Games"
+globs: "app/Games/**/*,app/Livewire/Games/**/*,resources/views/livewire/games/**/*,tests/Feature/Games/**/*,tests/Unit/Games/**/*"
+---
+
+# Game Development Patterns
+
+Guidelines for building games using the Ursa Minor framework.
+
+## Critical Rules
+
+1. **ENGINES ARE PURE** — Static methods, no side effects, immutable state
+2. **THREE-LAYER PATTERN** — Livewire Component → Game Engine → State
+3. **USE TRAITS** — Common behaviors in `InteractsWithGameState` trait
+4. **USE WRAPPER** — All games use `<x-ui.game-wrapper>` component
+5. **NO EMOJI** — Use Heroicons for all icons
+6. **HSL TOKENS ONLY** — No hardcoded colors
+7. **CONSTELLATION COMPLETION** — Standard pattern for game-over messages
+8. **TEST ENGINES** — Unit tests for all engine methods
+
+## Architecture Pattern
+
+### Three Layers
+
+**1. Livewire Component** (UI State):
+- Manages UI-specific state (selected cells, etc.)
+- Handles user interaction
+- Delegates logic to engine
+- Thin coordination layer
+
+**2. Game Engine** (Pure Logic):
+- Static methods only
+- No side effects
+- Returns new state (immutable)
+- Easily testable
+- Lives in `app/Games/{GameName}/`
+
+**3. Game State** (Data):
+- Plain arrays or value objects
+- Serializable for localStorage
+- Passed immutably through engine
+
+## Engine Pattern
+
+```php
+<?php
+
+namespace App\Games\YourGame;
+
+class YourGameEngine
+{
+    // Constants for configuration
+    public const DIFFICULTIES = [
+        'easy' => ['config' => 'value'],
+    ];
+
+    /**
+     * Initialize new game state.
+     */
+    public static function newGame(array $config = []): array
+    {
+        return [
+            'board' => self::getInitialBoard(),
+            'currentPlayer' => 'player1',
+            'moves' => [],
+            'gameOver' => false,
+            'winner' => null,
+        ];
+    }
+
+    /**
+     * Apply move and return new state (PURE FUNCTION).
+     */
+    public static function applyMove(array $state, array $move): array
+    {
+        if (!self::isValidMove($state, $move)) {
+            return $state; // Return unchanged
+        }
+
+        $newState = $state; // Copy state
+        $newState['board'] = self::updateBoard($state['board'], $move);
+        $newState['moves'][] = $move;
+
+        if (self::isWinningState($newState)) {
+            $newState['gameOver'] = true;
+            $newState['winner'] = $state['currentPlayer'];
+        }
+
+        return $newState;
+    }
+
+    /**
+     * Check if game is over.
+     */
+    public static function isGameOver(array $state): bool
+    {
+        return $state['gameOver'] ?? false;
+    }
+
+    // ... other pure methods
+}
+```
+
+**DO**:
+- Static methods
+- Return new state
+- No mutations
+- No side effects
+- Document with PHPDoc
+
+**DON'T**:
+- Instance methods
+- Mutate input
+- Use database, session, logs
+- Have side effects
+
+## Component Pattern
+
+```php
+<?php
+
+namespace App\Livewire\Games;
+
+use App\Games\YourGame\YourGameEngine;
+use App\Livewire\Concerns\InteractsWithGameState;
+use Livewire\Component;
+
+class YourGame extends Component
+{
+    use InteractsWithGameState;
+
+    // State properties
+    public array $board = [];
+    public bool $gameOver = false;
+
+    public function mount(): void
+    {
+        $this->newGame();
+    }
+
+    public function newGame(): void
+    {
+        $state = YourGameEngine::newGame();
+        $this->syncFromEngine($state);
+        $this->resetGame();
+    }
+
+    public function makeMove($moveData): void
+    {
+        if ($this->gameOver) return;
+
+        $newState = YourGameEngine::applyMove(
+            $this->getCurrentState(),
+            $moveData
+        );
+
+        $this->syncFromEngine($newState);
+        $this->incrementMoveCount();
+        $this->saveState();
+
+        if ($newState['gameOver']) {
+            $this->completeGame();
+        }
+    }
+
+    protected function getCurrentState(): array
+    {
+        return ['board' => $this->board, 'gameOver' => $this->gameOver];
+    }
+
+    protected function syncFromEngine(array $state): void
+    {
+        $this->board = $state['board'];
+        $this->gameOver = $state['gameOver'];
+    }
+
+    public function render()
+    {
+        return view('livewire.games.your-game');
+    }
+}
+```
+
+## UI Pattern
+
+```blade
+<x-ui.game-wrapper :title="'Game Name'" :rules="['Rule 1', 'Rule 2']">
+    {{-- Status --}}
+    @if($gameOver)
+        <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
+            <div class="flex items-center justify-center gap-2">
+                <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
+                <p class="text-lg font-semibold text-star">Game complete.</p>
+                <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
+            </div>
+            <div class="flex items-center justify-center gap-3 text-sm text-ink/70">
+                <span>{{ $moveCount }} moves</span>
+            </div>
+        </div>
+    @endif
+
+    {{-- Board --}}
+    <div class="board-container">
+        <div class="your-game-board">
+            {{-- Board rendering --}}
+        </div>
+    </div>
+
+    {{-- Controls --}}
+    <div class="game-controls">
+        <div class="control-buttons">
+            <button wire:click="newGame" class="control-btn new-game" aria-label="Start new game">
+                <x-heroicon-o-arrow-path class="w-4 h-4" />
+                <span>New</span>
+            </button>
+        </div>
+    </div>
+</x-ui.game-wrapper>
+```
+
+## Styling Pattern
+
+All game styles in `resources/css/app.css`:
+
+```css
+/* === Your Game Board === */
+.your-game-board {
+    display: grid;
+    grid-template-columns: repeat(N, 1fr);
+    gap: 8px;
+    background: hsl(var(--space-800));
+    padding: 1rem;
+    border-radius: 0.75rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.your-game-cell {
+    background: hsl(var(--surface) / .1);
+    border: 1px solid hsl(var(--border) / .3);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 44px;
+}
+
+.your-game-cell:hover:not(:disabled) {
+    background: hsl(var(--star) / .2);
+    transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .your-game-cell:hover {
+        transform: none;
+    }
+}
+```
+
+**Use HSL tokens**:
+- `hsl(var(--star))` — Primary accent
+- `hsl(var(--constellation))` — Secondary accent
+- `hsl(var(--ink))` — Text
+- `hsl(var(--space-900))` — Deep background
+- `hsl(var(--surface) / .1)` — Glass surfaces
+- `hsl(var(--border) / .3)` — Borders
+
+## Testing Pattern
+
+### Engine Tests (Unit)
+
+```php
+<?php
+
+namespace Tests\Unit\Games;
+
+use App\Games\YourGame\YourGameEngine;
+use PHPUnit\Framework\TestCase;
+
+class YourGameEngineTest extends TestCase
+{
+    public function test_new_game_initializes_correctly(): void
+    {
+        $state = YourGameEngine::newGame();
+
+        $this->assertArrayHasKey('board', $state);
+        $this->assertFalse($state['gameOver']);
+    }
+
+    public function test_valid_move_changes_state(): void
+    {
+        $state = YourGameEngine::newGame();
+        
+        $newState = YourGameEngine::applyMove($state, ['action' => 'move']);
+
+        $this->assertNotEquals($state, $newState);
+    }
+}
+```
+
+### Component Tests (Feature)
+
+```php
+<?php
+
+namespace Tests\Feature\Games;
+
+use App\Livewire\Games\YourGame;
+use Livewire\Livewire;
+use Tests\TestCase;
+
+class YourGameTest extends TestCase
+{
+    public function test_component_renders(): void
+    {
+        Livewire::test(YourGame::class)
+            ->assertStatus(200);
+    }
+
+    public function test_new_game_works(): void
+    {
+        Livewire::test(YourGame::class)
+            ->call('newGame')
+            ->assertSet('gameOver', false);
+    }
+}
+```
+
+## Available Tools
+
+### Traits
+- `App\Livewire\Concerns\InteractsWithGameState` — Common game behaviors
+
+### Components
+- `<x-ui.game-wrapper>` — Standard game page structure
+- `<x-ui.game-card>` — Visual-first card for game selection
+
+### CSS Classes
+- `.control-btn` — Standard game control button
+- `.control-btn.new-game` — Primary action button
+- `.control-btn.active` — Active state
+- `.glass` — Glass morphism effect
+- `.board-container` — Centers game board
+
+### Utilities (from app.css)
+- `.section` — Max-width container
+- `.h1`, `.h2` — Typography scale
+- `.p`, `.kicker` — Body text styles
+
+## Questions?
+
+When building games:
+- Start with engine (pure logic first)
+- Write tests for engine
+- Use trait for common behaviors
+- Use wrapper for consistent UI
+- Keep it calm and minimal (night sky motif)
+- Make code exemplary for learning
