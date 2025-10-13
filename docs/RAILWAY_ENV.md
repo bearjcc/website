@@ -42,30 +42,27 @@ LOG_LEVEL=info
 ### Automatic Migrations & Seeding
 
 ```env
-# Auto-run migrations on deploy
+# Auto-run migrations AND seed production data on deploy
+# Production seeder is idempotent (safe to run repeatedly)
 RUN_MIGRATIONS=1
-
-# Optional: Auto-seed production data
-# Note: Only use with idempotent seeders
-# DB_SEED=1
 ```
+
+**What happens when `RUN_MIGRATIONS=1`:**
+1. Runs `php artisan migrate --force`
+2. Automatically runs `ProductionSeeder` to ensure games exist
+3. Seeder is idempotent - uses `updateOrCreate()`, safe to run repeatedly
+4. Logs output to stderr for visibility in Railway logs
 
 ## Initial Setup Steps
 
-After deployment, if database is empty:
+After deployment:
 
-1. **Verify PostgreSQL Plugin** is connected
+1. **Add PostgreSQL Plugin** to your Railway project
 2. **Set** `RUN_MIGRATIONS=1` in environment variables
-3. **Trigger redeploy** (push to main or manually redeploy)
-4. **Seed production data**:
-   ```bash
-   # Via Railway CLI
-   railway run php artisan db:seed --class=ProductionSeeder
-   
-   # Or via Railway shell
-   # Open shell in Railway dashboard, then run:
-   php artisan db:seed --class=ProductionSeeder
-   ```
+3. **Trigger deploy** (push to main or manually redeploy)
+4. **Verify in logs**: Should see "Seeding production data..." and "Production data seeded successfully."
+
+**That's it!** Games will automatically be available after first deploy.
 
 ## How to Set Variables in Railway
 

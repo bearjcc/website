@@ -30,6 +30,12 @@ php artisan view:cache
 # Optional: run migrations if you want auto-apply
 if [ "${RUN_MIGRATIONS:-0}" = "1" ]; then
   php artisan migrate --force
+  
+  # Seed essential production data (idempotent - safe to run repeatedly)
+  # This ensures games are always present after migration
+  echo "Seeding production data..." >&2
+  php artisan db:seed --class=ProductionSeeder --force
+  echo "Production data seeded successfully." >&2
 fi
 
 # Write logs to stderr for Railway visibility
