@@ -1,128 +1,93 @@
-# TODO & Roadmap
+# TODO
 
-Current tasks and development roadmap for Ursa Minor Games.
-
----
-
-## Current Phase
-
-**Phase 1: Foundation** ✅ Complete  
-**Phase 2: Browser Games** 🎯 Next Up
+Current tasks and roadmap for Ursa Minor Games.
 
 ---
 
-## Immediate Tasks
+## Phase 1: Foundation ✅ COMPLETE
 
-### Documentation Cleanup ✅
-- [x] Consolidate design docs into DESIGN_BIBLE.md
-- [x] Convert technical guidance to MDC files
-- [x] Simplify docs structure
-
-### Ready to Start: Browser Games
-
-**Week 1-2: Sudoku**
-- [ ] Extract from games repo
-- [ ] Create Livewire component
-- [ ] Add visual motif
-- [ ] Integrate score tracking
-- [ ] Write tests
-
-**Week 3: Connect 4**
-- [ ] Extract game logic
-- [ ] Visual motif (checkerboard)
-- [ ] Tests
-
-**Week 4: Tic-Tac-Toe**
-- [ ] Extract game
-- [ ] Add AI opponent
-- [ ] Visual motif (3×3 grid)
-- [ ] Tests
-
-**Week 5-6: Additional Games**
-- [ ] Minesweeper
-- [ ] Snake
-- [ ] 2048
-- [ ] Memory
-
-**Deliverables**:
-- Games index page
-- Individual game pages using visual-first cards
-- Score tracking system
-- Night sky motif in game UI (loading, progress)
+Homepage live with night sky theme, visual-first game cards, component architecture, tests passing, Railway deployment working.
 
 ---
 
-## Roadmap
+## Phase 2: Browser Games 🎯 IN PROGRESS
 
-### Phase 1: Foundation ✅ (Weeks 1-2)
-- Homepage with night sky theme
-- Component architecture
-- TALL stack setup
-- Railway deployment
-- Tests and documentation
+### Games Already Implemented ✅
+- [x] Tic-Tac-Toe
+- [x] Connect 4
+- [x] Sudoku
+- [x] Minesweeper
+- [x] Snake
+- [x] 2048
 
-### Phase 2: Browser Games 🎯 (Weeks 3-10)
-- 5-10 playable browser games
-- Games lobby/index
-- Score tracking
-- Visual-first card grid
+### Cleanup Needed
 
-### Phase 3: F1 Predictions (Weeks 11-18)
-- Extract from formula1predictions repo
-- Prediction forms
-- Leaderboards
-- User accounts
+**Game UI Polish** (align with DESIGN_BIBLE):
+- [ ] Remove emoji from game controls (Sudoku: 🔄, 💡, 🗑️, ✏️)
+- [ ] Extract inline styles to app.css
+- [ ] Apply night sky motif to game UI (loading, completion states)
+- [ ] Ensure all games use HSL color tokens (not hardcoded hex)
+- [ ] Add constellation-style progress indicators
+- [ ] Standardize game controls across all games
 
-### Phase 4: Board Games (Weeks 19-30)
-- Digital prototyping platform
-- Card management
-- Multiplayer support
-- Playtesting tools
+**Missing Games**:
+- [ ] Chess (in database, not implemented)
+- [ ] Checkers (in database, not implemented)
 
-### Phase 5: World Wiki (Weeks 31-40)
-- Lore management
-- Import Taverns & Treasures
-- Wiki features
-- Contributor roles
+### Next Immediate Steps
 
-### Phase 6: Polish (Weeks 41-48)
-- Performance optimization
-- Mobile support
-- Accessibility audit
-- PWA features
+1. **Clean up Sudoku** (reference game):
+   - Replace emoji with Heroicons
+   - Move inline styles to CSS
+   - Apply starfield motif to loading/completion
+   - Use HSL tokens throughout
 
-### Phase 7: Monetization (Months 13-18+)
-- Print-and-play sales
-- Premium features
-- Path to physical café
+2. **Apply same cleanup to other 5 games**
+
+3. **Implement Chess and Checkers**
 
 ---
 
-## Long-Term Vision
+## Phase 3: F1 Predictions (Planned, Weeks 11-18)
 
-**18-24 Months**: Board game café in New Zealand
-
-**Path**:
-1. ✅ Web presence
-2. 🎯 Build community
-3. Create content
-4. Generate revenue
-5. Physical location
+Extract from `C:\Users\bearj\Herd\formula1predictions` repo:
+- [ ] Race schedule system
+- [ ] Prediction forms
+- [ ] Scoring engine
+- [ ] Leaderboards
+- [ ] User accounts
 
 ---
 
-## Recent Wins
+## Phase 4: Board Games (Planned, Weeks 19-30)
 
-- ✅ Homepage live with night sky theme
-- ✅ Visual-first game card pattern implemented
-- ✅ Embla carousel with constellation pagination
-- ✅ Horizon footer with earth silhouette
-- ✅ HSL color system with derived tokens
-- ✅ Documentation consolidated to 3 core MD files
-- ✅ Technical guidance in MDC files
+Extract from `C:\Users\bearj\Herd\agency` repo:
+- [ ] Card system
+- [ ] Deck builder
+- [ ] Game engine
+- [ ] Multiplayer
 
 ---
 
-**Current Focus**: Extract and integrate first browser game (Sudoku)
+## Phase 5: Lore Wiki (Planned, Weeks 31-40)
+
+Extract from `C:\Users\bearj\Herd\tavernsandtreasures`:
+- [ ] Wiki system
+- [ ] Lore content
+- [ ] Contributor tools
+
+---
+
+## Documentation ✅ COMPLETE
+
+- [x] Consolidate to 3 core MD files (README, DESIGN_BIBLE, TODO)
+- [x] Create technical MDC files for AI guidance
+- [x] Remove redundant docs (reduced 18 → 10 files, 3,779 lines cut)
+
+---
+
+## Current Focus
+
+**Clean up existing games to match DESIGN_BIBLE principles** — remove emoji, apply night sky motif, use color tokens consistently.
 
 *Last updated: 2025-10-13*
