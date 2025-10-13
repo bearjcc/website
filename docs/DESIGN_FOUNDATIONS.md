@@ -78,8 +78,8 @@ These intentions guide every design and UX decision:
 - **Max width**: All main content centered in a `.section` container, max width ~960 px.  
 - **Responsiveness**: Laptop and large tablet are first-class citizens; content should gracefully center on widescreens.  
 - **Hero**: Centered, minimal copy approach. Logo + headline + two one-word CTAs only. No body text unless essential.
-- **Card grid**: Visual-first game cards showing motifs/glyphs by default. Titles reveal on hover/focus. 2-column mobile, 3-column desktop.
-- **Footer**: Minimal, centered, with a single poetic line ("Building games under the Southern Cross.").
+- **Card grid**: Visual-first game cards showing motifs/glyphs by default. Titles reveal on hover/focus. Carousel on homepage, grid on games index.
+- **Footer**: Truly minimal - just copyright line. Horizon line with back-to-top button.
 
 ### 5.2 Minimal Copy Philosophy
 

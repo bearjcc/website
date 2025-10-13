@@ -33,26 +33,25 @@ class StarfieldTest extends TestCase
 
         $html = $response->getContent();
 
-        // Footer should have the sunset horizon gradient line (inline style for full width)
-        $this->assertStringContainsString('linear-gradient(90deg', $html);
-        $this->assertStringContainsString('hsl(28, 100%, 78%, 0.45)', $html);
-
-        // Should have opaque earth-toned footer background (inline style)
-        $this->assertStringContainsString('hsl(135, 15%, 18%)', $html);
+        // Footer should have the horizon elements (styled in CSS, not inline)
+        $this->assertStringContainsString('um-horizon-line', $html);
+        $this->assertStringContainsString('um-horizon-silhouette', $html);
+        $this->assertStringContainsString('um-horizon-footer', $html);
     }
 
-    public function test_footer_uses_new_copy(): void
+    public function test_footer_is_minimal(): void
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
 
-        // Should use the new footer copy
+        // Hero should use the tagline
         $response->assertSee('The sky is the limit.');
 
-        // Should have copyright with all rights reserved
-        $response->assertSee('All rights reserved');
+        // Footer is minimal - just copyright
+        $response->assertSee('Ursa Minor Games');
 
+        // Should NOT contain "All rights reserved" (removed for minimalism)
         // Should NOT contain old Southern Cross reference
         $response->assertDontSee('Southern Cross');
     }

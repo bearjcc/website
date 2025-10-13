@@ -2,7 +2,7 @@
     'class' => 'w-[260px] md:w-[320px] h-auto'
 ])
 
-<div {{ $attributes->merge(['class' => $class]) }}>
+<div data-um-hero-lockup {{ $attributes->merge(['class' => $class]) }}>
     <div class="flex items-center gap-3">
         <img 
             src="{{ asset('bear.svg') }}" 

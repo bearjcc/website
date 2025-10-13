@@ -10,14 +10,14 @@ class MinimalHomepageTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_homepage_has_minimal_hero_with_headline_and_ctas(): void
+    public function test_homepage_has_minimal_hero_with_tagline_and_ctas(): void
     {
         $response = $this->get('/');
 
         $response->assertStatus(200);
 
-        // Hero headline present
-        $response->assertSee('Small games. Big craft.');
+        // Hero tagline present
+        $response->assertSee('The sky is the limit.');
 
         // CTAs present with one-word labels
         $response->assertSee('Play');
@@ -86,51 +86,16 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should NOT have verbose section headers with kickers
+        // Should NOT have verbose section headers
         $this->assertStringNotContainsString('Available now', $html);
         $this->assertStringNotContainsString('Play in your browser', $html);
-        $this->assertStringNotContainsString('From the studio', $html);
 
-        // Should NOT have hero body text
+        // Should NOT have hero body text or headlines
         $this->assertStringNotContainsString('We build elegant, replayable games', $html);
+        $this->assertStringNotContainsString('Small games. Big craft.', $html);
     }
 
-    public function test_blog_section_is_minimal_when_posts_exist(): void
-    {
-        // Create a test post
-        \App\Models\Post::factory()->create([
-            'title' => 'Test Post',
-            'slug' => 'test-post',
-            'status' => 'published',
-        ]);
-
-        $response = $this->get('/');
-        $html = $response->getContent();
-
-        // Should have "Latest Notes" heading
-        $response->assertSee('Latest Notes');
-
-        // Should NOT have verbose kicker/subtitle
-        $this->assertStringNotContainsString('studio_kicker', $html);
-        $this->assertStringNotContainsString('Short updates as we build', $html);
-
-        // Should NOT have icons on blog cards
-        $this->assertStringNotContainsString('heroicon-o-document-text', $html);
-
-        // Should have post title
-        $response->assertSee('Test Post');
-    }
-
-    public function test_blog_section_hidden_when_no_posts(): void
-    {
-        // Ensure no published posts
-        \App\Models\Post::query()->delete();
-
-        $response = $this->get('/');
-
-        // Section should not appear at all
-        $response->assertDontSee('Latest Notes');
-    }
+    // Blog section completely removed - not part of minimal homepage
 
     public function test_game_cards_respect_reduced_motion(): void
     {
@@ -149,14 +114,14 @@ class MinimalHomepageTest extends TestCase
         $this->assertTrue(true); // Structural test passes
     }
 
-    public function test_footer_uses_correct_tagline(): void
+    public function test_footer_is_truly_minimal(): void
     {
         $response = $this->get('/');
 
-        // New footer tagline
-        $response->assertSee('Building games under the Southern Cross.');
+        // Just copyright, no motto
+        $response->assertSee('Ursa Minor Games');
 
-        // Old tagline moved to page title
+        // Hero has tagline
         $response->assertSee('The sky is the limit.');
     }
 
@@ -174,25 +139,7 @@ class MinimalHomepageTest extends TestCase
         $this->assertTrue(true); // Structural test passes
     }
 
-    public function test_game_card_title_grows_upward_on_hover(): void
-    {
-        Game::factory()->create([
-            'title' => 'Test Game',
-            'slug' => 'test-game',
-            'status' => 'published',
-        ]);
-
-        $response = $this->get('/');
-        $html = $response->getContent();
-
-        // Check for upward growth animation structure
-        $this->assertStringContainsString('um-title', $html);
-        $this->assertStringContainsString('h-0', $html);
-        $this->assertStringContainsString('group-hover:h-12', $html);
-
-        // Title should be in sr-only for accessibility
-        $this->assertStringContainsString('sr-only', $html);
-    }
+    // Card hover behavior tested in game card component structure
 
     public function test_buttons_have_minimum_touch_target_size(): void
     {
@@ -205,38 +152,28 @@ class MinimalHomepageTest extends TestCase
         $this->assertStringContainsString('btn-secondary', $html);
     }
 
-    public function test_homepage_grid_uses_responsive_columns(): void
+    public function test_homepage_uses_embla_carousel(): void
     {
         Game::factory()->count(6)->create(['status' => 'published']);
 
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should use 2-col mobile, 3-col tablet, 4-col desktop
-        $this->assertStringContainsString('grid-cols-2', $html);
-        $this->assertStringContainsString('sm:grid-cols-3', $html);
-        $this->assertStringContainsString('lg:grid-cols-4', $html);
+        // Should use Embla carousel component
+        $this->assertStringContainsString('um-carousel', $html);
+
+        // Should have constellation pagination
+        $this->assertStringContainsString('um-carousel-dot', $html);
     }
 
-    public function test_homepage_hero_shows_tagline_with_lowercase_mode(): void
+    public function test_homepage_hero_shows_tagline(): void
     {
         $response = $this->get('/');
 
-        // Should show tagline (not "small game studio")
+        // Should show tagline
         $response->assertSee('The sky is the limit');
+
+        // Should not have verbose headlines
         $response->assertDontSee('A small game studio');
-        $response->assertDontSee('Small games. Big craft.');
-    }
-
-    public function test_homepage_does_not_have_blog_section(): void
-    {
-        // Create posts
-        \App\Models\Post::factory()->count(3)->create(['status' => 'published']);
-
-        $response = $this->get('/');
-
-        // Should NOT have blog section
-        $response->assertDontSee('Latest Notes');
-        $response->assertDontSee('From the studio');
     }
 }

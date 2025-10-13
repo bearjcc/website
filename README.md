@@ -14,18 +14,24 @@ This repository contains the main homepage and will serve as the hub for all Urs
 
 ## Current Features
 
-- Animated starfield background with blinking stars
-- Ursa Minor branding with smooth scroll animations
-- Responsive design for all screen sizes
-- Fast, simple, and elegant night sky aesthetic
+- **Night Sky Design System**: Calm, minimal aesthetic with starfield background
+- **Embla Carousel**: Visual-first game cards with constellation pagination
+- **Responsive Design**: Laptop/tablet first, gracefully scales to desktop
+- **Accessibility**: WCAG AA compliant, keyboard navigation, screen reader support
+- **Horizon Footer**: Minimal footer with back-to-top navigation
+- **Production Ready**: Deployed on Railway with Docker multi-stage builds
 
 ## Tech Stack
 
 - **Framework**: Laravel 12.x
-- **PHP**: 8.3+
-- **Hosting**: Railway
-- **Frontend**: HTML, CSS, JavaScript (vanilla)
-- **Future**: TALL Stack (Tailwind, Alpine.js, Laravel, Livewire)
+- **PHP**: 8.4
+- **Frontend**: TALL Stack (Tailwind CSS, Alpine.js, Laravel, Livewire)
+- **UI Components**: Flux UI (free tier) + custom components
+- **Icons**: Heroicons via Blade Heroicons
+- **Build Tool**: Vite
+- **Carousel**: Embla Carousel
+- **Database**: SQLite (local), PostgreSQL (production)
+- **Hosting**: Railway with Docker
 
 ## Development
 
@@ -35,7 +41,9 @@ This repository contains the main homepage and will serve as the hub for all Urs
 - Composer
 - Git
 
-### Local Setup
+### Local Setup with Laravel Herd
+
+This project uses Laravel Herd for local development:
 
 ```powershell
 # Clone the repository
@@ -44,37 +52,57 @@ cd website
 
 # Install dependencies
 composer install
+npm install
 
 # Set up environment
 Copy-Item -Path ".env.example" -Destination ".env"
 php artisan key:generate
 
-# Run local development server
-php artisan serve
+# Run database migrations
+php artisan migrate
+
+# Seed initial data
+php artisan db:seed --class=ProductionSeeder
+
+# Start Vite dev server (in background)
+npm run dev
 ```
 
-Visit http://localhost:8000 to view the site.
+Visit http://tavernsandtreasures.test/ (Laravel Herd automatically serves the site).
 
 ### Project Structure
 
 ```
 website/
-├── app/                 # Application logic
-├── public/             # Static assets (CSS, JS, SVGs)
-│   ├── bear.svg       # Ursa Minor logo
-│   ├── GRADIENT BG.svg
-│   ├── style.css      # Main styles
-│   ├── script.js      # Starfield animation
-│   └── scroll.js      # Header scroll behavior
+├── app/
+│   ├── Games/          # Game engine logic (Connect4, Sudoku, etc.)
+│   ├── Livewire/       # Livewire page & UI components
+│   ├── Models/         # Eloquent models
+│   └── Policies/       # Authorization policies
 ├── resources/
+│   ├── css/
+│   │   └── app.css    # Tailwind + custom styles
+│   ├── js/
+│   │   ├── app.js     # Main JS entry
+│   │   ├── starfield.js    # Starfield animation
+│   │   ├── nav-morph.js    # Nav logo morphing
+│   │   └── embla-carousel.js  # Carousel helper
 │   └── views/
-│       └── welcome.blade.php  # Homepage
-├── routes/
-│   └── web.php        # Application routes
-├── tests/              # Test suite
-│   ├── Feature/       # Feature/integration tests
+│       ├── components/ # Blade components (UI, layouts)
+│       └── livewire/   # Livewire component views
+├── public/
+│   ├── bear.svg       # Ursa Minor logo
+│   └── build/         # Vite compiled assets
+├── database/
+│   ├── migrations/    # Database schema
+│   └── seeders/       # Data seeders
+├── tests/             # Test suite (33 tests passing)
+│   ├── Feature/       # Feature tests
 │   └── Unit/          # Unit tests
-└── nixpacks.toml      # Railway deployment config
+├── docs/              # Project documentation
+├── .cursor/rules/     # Cursor AI rules
+├── Dockerfile         # Multi-stage Docker build
+└── deploy/            # Railway deployment configs
 ```
 
 ## Testing

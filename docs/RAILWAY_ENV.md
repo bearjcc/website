@@ -39,21 +39,33 @@ LOG_CHANNEL=stderr
 LOG_LEVEL=info
 ```
 
-### Optional: Run Migrations Automatically
+### Automatic Migrations & Seeding
 
 ```env
+# Auto-run migrations on deploy
 RUN_MIGRATIONS=1
+
+# Optional: Auto-seed production data
+# Note: Only use with idempotent seeders
+# DB_SEED=1
 ```
 
-## Current Issue
+## Initial Setup Steps
 
-**Error**: `Database file at path [/var/www/html/database/database.sqlite] does not exist`
+After deployment, if database is empty:
 
-**Cause**: Sessions are trying to use SQLite (default connection) instead of PostgreSQL.
-
-**Fix**: Set these in Railway dashboard:
-1. `DB_CONNECTION=pgsql`
-2. `SESSION_CONNECTION=pgsql` (optional, but recommended)
+1. **Verify PostgreSQL Plugin** is connected
+2. **Set** `RUN_MIGRATIONS=1` in environment variables
+3. **Trigger redeploy** (push to main or manually redeploy)
+4. **Seed production data**:
+   ```bash
+   # Via Railway CLI
+   railway run php artisan db:seed --class=ProductionSeeder
+   
+   # Or via Railway shell
+   # Open shell in Railway dashboard, then run:
+   php artisan db:seed --class=ProductionSeeder
+   ```
 
 ## How to Set Variables in Railway
 

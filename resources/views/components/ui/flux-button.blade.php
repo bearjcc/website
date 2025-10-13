@@ -8,11 +8,12 @@
 @php
     $baseClasses = 'inline-flex items-center justify-center gap-2 px-6 py-3 min-h-[44px] font-semibold text-base rounded-lg transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2';
     
+    // Include btn-{variant} class for compatibility with existing CSS utilities
     $variantClasses = match($variant) {
-        'primary' => 'bg-star text-space-900 hover:bg-star/92 focus-visible:outline-star motion-safe:hover:-translate-y-0.5',
-        'secondary' => 'bg-transparent text-ink border border-border/10 hover:border-ink/30 hover:bg-ink/5 focus-visible:outline-star',
+        'primary' => 'btn-primary bg-star text-space-900 hover:bg-star/92 focus-visible:outline-star motion-safe:hover:-translate-y-0.5',
+        'secondary' => 'btn-secondary bg-transparent text-ink border border-border/10 hover:border-ink/30 hover:bg-ink/5 focus-visible:outline-star',
         'ghost' => 'bg-transparent text-ink hover:bg-ink/5 focus-visible:outline-constellation',
-        default => 'bg-star text-space-900 hover:bg-star/92 focus-visible:outline-star',
+        default => 'btn-primary bg-star text-space-900 hover:bg-star/92 focus-visible:outline-star',
     };
     
     $tag = $href ? 'a' : 'button';

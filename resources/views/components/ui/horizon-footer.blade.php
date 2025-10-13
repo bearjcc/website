@@ -15,9 +15,10 @@
         <x-heroicon-o-star class="w-4 h-4" />
     </a>
 
-    {{-- Footer content --}}
+    {{-- Minimal footer content - just copyright --}}
     <div class="section mt-6 text-center text-sm text-ink/70">
-        <p class="text-ink/50">&copy; {{ now()->year }} Ursa Minor Games. All rights reserved.</p>
+        <p class="text-ink/50">&copy; {{ now()->year }} Ursa Minor Games</p>
+        {{-- Future links: Privacy | Attributions --}}
     </div>
 </footer>
 

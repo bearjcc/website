@@ -2,6 +2,73 @@
 
 Reusable Blade components for the Ursa Minor homepage and site-wide use.
 
+## Carousel
+
+Constellation-themed carousel component powered by Embla Carousel.
+
+### Basic Usage
+
+```blade
+<x-ui.carousel>
+    {{-- Your slides here --}}
+    <div class="flex-[0_0_100%] min-w-0">
+        <div class="glass p-6">Slide 1</div>
+    </div>
+    <div class="flex-[0_0_100%] min-w-0">
+        <div class="glass p-6">Slide 2</div>
+    </div>
+    <div class="flex-[0_0_100%] min-w-0">
+        <div class="glass p-6">Slide 3</div>
+    </div>
+</x-ui.carousel>
+```
+
+### Props
+
+- `showDots` (boolean, default: true) - Display constellation pagination dots
+- `showArrows` (boolean, default: true) - Display navigation arrows
+
+### Examples
+
+```blade
+{{-- Without navigation arrows --}}
+<x-ui.carousel :show-arrows="false">
+    {{-- slides --}}
+</x-ui.carousel>
+
+{{-- Without pagination dots --}}
+<x-ui.carousel :show-dots="false">
+    {{-- slides --}}
+</x-ui.carousel>
+
+{{-- Minimal (no controls) --}}
+<x-ui.carousel :show-arrows="false" :show-dots="false">
+    {{-- slides --}}
+</x-ui.carousel>
+```
+
+### Responsive Slides
+
+Use Tailwind's flex utilities for responsive slide widths:
+
+```blade
+<x-ui.carousel>
+    {{-- Full width mobile, 50% tablet, 33% desktop --}}
+    <div class="flex-[0_0_100%] min-w-0 md:flex-[0_0_calc(50%-1rem)] lg:flex-[0_0_calc(33.333%-1rem)]">
+        <div class="glass p-6">Responsive slide</div>
+    </div>
+</x-ui.carousel>
+```
+
+### Features
+
+- **Constellation pagination**: Star dots connected by lines
+- **Glass navigation buttons**: Subtle backdrop blur with hover effects
+- **Loop mode**: Infinite scrolling
+- **Keyboard accessible**: Tab navigation and ARIA labels
+- **Reduced motion support**: Respects user preferences
+- **Touch/swipe enabled**: Works on mobile devices
+
 ## Components
 
 ### Logo Lockup (`logo-lockup.blade.php`)

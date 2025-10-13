@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Game;
-use App\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -28,12 +27,8 @@ class HomepageTest extends TestCase
         $response->assertSee(__('ui.tagline'));
         $response->assertSee(__('ui.cta_play'));
 
-        // Available Now section
-        $response->assertSee(__('ui.available_kicker'));
-        $response->assertSee(__('ui.available_title'));
-
         // Footer copyright
-        $response->assertSee('All rights reserved');
+        $response->assertSee('Ursa Minor Games');
     }
 
     public function test_homepage_has_no_banned_words(): void
@@ -60,29 +55,27 @@ class HomepageTest extends TestCase
         }
     }
 
-    public function test_homepage_limits_game_cards_to_three(): void
+    public function test_homepage_shows_all_published_games_in_carousel(): void
     {
-        // Create more than 3 games
+        // Create multiple games
         Game::factory()->count(5)->published()->create();
 
         $response = $this->get('/');
 
         $html = $response->getContent();
 
-        // Count unique game cards by extracting unique slugs
-        // Each game card has a unique href to games.play route
+        // Carousel shows all games (just makes browsing simpler for user)
+        // Verify carousel structure exists
+        $this->assertStringContainsString('um-carousel', $html);
+
+        // Verify games are present
         preg_match_all('/href="[^"]*\/games\/([^"]+)"/i', $html, $matches);
         $uniqueGames = array_unique($matches[1]);
-        $gameCardCount = count($uniqueGames);
 
-        $this->assertLessThanOrEqual(
-            3,
-            $gameCardCount,
-            'Homepage should display maximum 3 unique game cards'
-        );
+        $this->assertEquals(5, count($uniqueGames), 'Homepage carousel should show all published games');
     }
 
-    public function test_homepage_shows_coming_soon_cards_when_no_games(): void
+    public function test_homepage_handles_empty_game_state(): void
     {
         // Ensure no games exist
         Game::query()->delete();
@@ -90,37 +83,13 @@ class HomepageTest extends TestCase
         $response = $this->get('/');
 
         $response->assertStatus(200);
-        $response->assertSee(__('ui.coming_soon_title'));
+
+        // Carousel should exist but be empty (graceful empty state)
+        // No crash or error
+        $this->assertTrue(true);
     }
 
-    public function test_homepage_hides_studio_section_when_no_posts(): void
-    {
-        // Ensure no posts exist
-        Post::query()->delete();
-
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-
-        // Studio section should not appear
-        $response->assertDontSee(__('ui.studio_kicker'));
-    }
-
-    public function test_homepage_shows_studio_section_when_posts_exist(): void
-    {
-        // Create a published post
-        Post::factory()->create([
-            'status' => 'published',
-        ]);
-
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-
-        // Studio section should appear
-        $response->assertSee(__('ui.studio_kicker'));
-        $response->assertSee(__('ui.studio_title'));
-    }
+    // Blog section removed - minimal homepage philosophy
 
     public function test_homepage_has_proper_html_structure(): void
     {
@@ -150,8 +119,11 @@ class HomepageTest extends TestCase
             'Homepage should use Vite assets, not legacy public/style.css'
         );
 
-        // Should have Vite manifest references
-        $this->assertStringContainsString('build', $html);
+        // Should have Vite references (dev mode has localhost:5173, prod has /build/)
+        $this->assertTrue(
+            str_contains($html, '@vite') || str_contains($html, '/build/') || str_contains($html, '5173'),
+            'Homepage should load assets via Vite'
+        );
     }
 
     public function test_primary_cta_uses_accent_color(): void

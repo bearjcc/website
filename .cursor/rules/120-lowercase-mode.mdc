@@ -1,0 +1,254 @@
+---
+description: "Lowercase mode feature flag documentation for Ursa Minor Games"
+globs: "resources/views/**/*,config/ui.php,lang/**/*"
+---
+
+# Lowercase Mode Feature Flag
+
+Documentation for the all-lowercase text transformation feature flag.
+
+## What It Is
+
+A global CSS text transformation controlled by a single environment variable that allows experimenting with an all-lowercase aesthetic while keeping i18n strings properly capitalized.
+
+## How It Works
+
+### Environment Variable
+
+```env
+# .env
+URSA_LOWERCASE_MODE=false  # Default
+URSA_LOWERCASE_MODE=true   # Enable lowercase mode
+```
+
+### Configuration
+
+Defined in `config/ui.php`:
+
+```php
+return [
+    'lowercase_mode' => env('URSA_LOWERCASE_MODE', false),
+];
+```
+
+### Implementation
+
+The lowercase mode is applied via CSS class on the `<html>` element:
+
+**Layout (`resources/views/components/layouts/app.blade.php`)**:
+
+```blade
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" 
+      class="{{ config('ui.lowercase_mode') ? 'lowercase-mode' : '' }}">
+```
+
+**CSS (`resources/css/app.css`)**:
+
+```css
+.lowercase-mode {
+    text-transform: lowercase;
+}
+```
+
+### Result
+
+When enabled:
+- All text renders in lowercase via CSS
+- i18n strings remain properly capitalized in source
+- No code changes needed to experiment with the aesthetic
+- Instant toggle by changing env variable
+
+## Usage Guidelines
+
+### When to Enable
+
+**Experimentation**:
+- Testing visual aesthetic of all-lowercase design
+- Evaluating readability and brand feel
+- Temporary local development experiments
+
+**Production** (if desired):
+- Set `URSA_LOWERCASE_MODE=true` in Railway environment variables
+- Entire site renders in lowercase
+
+### When to Disable
+
+**Default state** (recommended):
+- Production deployments (unless intentionally using lowercase aesthetic)
+- When proper capitalization improves readability
+- For formal content (legal pages, official communications)
+
+## i18n String Best Practices
+
+### Always Write Strings with Proper Capitalization
+
+Even if lowercase mode is enabled, write i18n strings correctly:
+
+```php
+// ✅ CORRECT - Proper capitalization in source
+'tagline' => 'The Sky Is the Limit.',
+'cta_play' => 'Play',
+'nav_about' => 'About',
+
+// ❌ WRONG - Don't pre-lowercase strings
+'tagline' => 'the sky is the limit.',
+'cta_play' => 'play',
+```
+
+**Why**: Lowercase mode can be toggled on/off. Strings should always be correct when mode is disabled.
+
+## Exceptions
+
+### Exclude Specific Elements
+
+If certain elements should never be lowercased (logos, acronyms, proper nouns), add a class:
+
+```css
+.no-lowercase {
+    text-transform: none !important;
+}
+```
+
+```blade
+{{-- Example --}}
+<span class="no-lowercase">NASA</span>
+<span class="no-lowercase">API</span>
+```
+
+Currently, no exceptions are defined. The entire site lowercases when enabled.
+
+## Testing Considerations
+
+### Tests Should Use i18n Keys
+
+Tests should check for the actual i18n string value, not assume case:
+
+```php
+// ✅ CORRECT
+$response->assertSee(__('ui.tagline'));
+
+// ⚠️ AVOID - May break if lowercase mode changes
+$response->assertSee('the sky is the limit.');
+```
+
+### Lowercase Mode in Tests
+
+Tests run with whatever value is in `.env` or config. For consistent testing:
+
+**Option A**: Tests run with mode disabled (default)
+- Set `URSA_LOWERCASE_MODE=false` in `.env` for tests
+- Tests expect proper capitalization
+
+**Option B**: Tests respect current mode
+- Read `config('ui.lowercase_mode')` in tests
+- Adjust assertions based on mode
+
+Currently, project uses **Option A** (mode disabled in tests).
+
+## Implementation Details
+
+### Title Tag
+
+The page title also respects lowercase mode:
+
+```php
+$fullTitle = $pageTitle === 'Home' 
+    ? $siteName 
+    : $siteName . ' | ' . $pageTitle;
+    
+if (config('ui.lowercase_mode')) {
+    $fullTitle = mb_strtolower($fullTitle);
+}
+```
+
+Result when enabled:
+- Normal: "Ursa Minor Games | About"
+- Lowercase: "ursa minor games | about"
+
+### Specific Lowercasing
+
+For elements that should always be lowercase regardless of global mode:
+
+```blade
+{{-- Force lowercase on specific element --}}
+<p class="lowercase">{{ $text }}</p>
+
+{{-- Example: Tagline specifically lowercased --}}
+<p class="{{ config('ui.lowercase_mode') ? 'lowercase' : '' }}">
+    {{ __('ui.tagline') }}
+</p>
+```
+
+## Visual Aesthetic Considerations
+
+### When Lowercase Works
+
+- Minimal, modern aesthetic
+- Calm, understated vibe
+- Design-forward brands
+- When visual hierarchy is strong (doesn't rely on caps)
+
+### When to Avoid
+
+- Formal content (legal, terms)
+- When readability is compromised
+- For proper nouns that lose meaning
+- Headings that need visual weight
+
+## Future Enhancements
+
+### Potential Features (Not Implemented)
+
+**Per-Element Control**:
+
+```blade
+@props(['forceLowercase' => null])
+
+@php
+$lowercaseClass = match($forceLowercase) {
+    true => 'lowercase',
+    false => 'normal-case',
+    null => config('ui.lowercase_mode') ? 'lowercase' : '',
+};
+@endphp
+
+<p class="{{ $lowercaseClass }}">{{ $slot }}</p>
+```
+
+**User Preference**:
+- Allow users to toggle lowercase mode themselves
+- Store preference in session or cookie
+- Accessibility consideration for user control
+
+## Examples
+
+### Lowercase Mode Enabled
+
+```
+ursa minor games | home
+
+the sky is the limit.
+
+play    browse
+
+© 2025 ursa minor games
+```
+
+### Lowercase Mode Disabled (Default)
+
+```
+Ursa Minor Games | Home
+
+The sky is the limit.
+
+Play    Browse
+
+© 2025 Ursa Minor Games
+```
+
+## Questions?
+
+- **How do I enable it?** Set `URSA_LOWERCASE_MODE=true` in `.env`
+- **Does it affect i18n strings?** No, strings remain capitalized in source
+- **Can I exclude certain text?** Add `.no-lowercase` class (define in CSS if needed)
+- **Should I use it in production?** Your choice - it's a stylistic decision

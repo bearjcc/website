@@ -362,6 +362,124 @@
         }
     }
 
+    /* === Carousel Styles === */
+    /* Embla carousel with constellation pagination */
+    .um-carousel {
+        position: relative;
+        max-width: 100%;
+    }
+
+    /* Navigation arrows - glass effect */
+    .um-carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        
+        border-radius: 9999px;
+        background: hsl(var(--surface) / .14);
+        border: 1px solid hsl(var(--border) / .12);
+        color: hsl(var(--ink) / .8);
+        backdrop-filter: blur(8px);
+        
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .um-carousel-arrow:hover {
+        background: hsl(var(--surface) / .2);
+        color: hsl(var(--ink));
+        border-color: hsl(var(--border) / .2);
+    }
+
+    .um-carousel-arrow:focus-visible {
+        outline: 2px solid hsl(var(--constellation));
+        outline-offset: 2px;
+    }
+
+    .um-carousel-arrow-prev {
+        left: -1rem;
+    }
+
+    .um-carousel-arrow-next {
+        right: -1rem;
+    }
+
+    @media (min-width: 768px) {
+        .um-carousel-arrow-prev {
+            left: -1.5rem;
+        }
+        
+        .um-carousel-arrow-next {
+            right: -1.5rem;
+        }
+    }
+
+    /* Carousel dots - constellation theme */
+    .um-carousel-dots {
+        user-select: none;
+    }
+
+    .um-carousel-dot {
+        position: relative;
+        width: 8px;
+        height: 8px;
+        padding: 0;
+        border: none;
+        border-radius: 9999px;
+        background: hsl(var(--ink) / .3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .um-carousel-dot:hover {
+        background: hsl(var(--ink) / .5);
+        transform: scale(1.2);
+    }
+
+    .um-carousel-dot:focus-visible {
+        outline: 2px solid hsl(var(--constellation));
+        outline-offset: 2px;
+    }
+
+    /* Active dot - brighter star */
+    .um-carousel-dot-active {
+        background: hsl(var(--star));
+        transform: scale(1.4);
+        box-shadow: 0 0 8px hsl(var(--star) / .4);
+    }
+
+    .um-carousel-dot-active:hover {
+        background: hsl(var(--star));
+        transform: scale(1.5);
+    }
+
+    /* Constellation connecting line */
+    .um-constellation-line {
+        display: block;
+        width: 24px;
+        height: 1px;
+        background: hsl(var(--ink) / .2);
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        .um-carousel-arrow,
+        .um-carousel-dot {
+            transition: none;
+        }
+        
+        .um-carousel-dot:hover,
+        .um-carousel-dot-active {
+            transform: none;
+        }
+    }
+
     /* === Game Card Styles === */
     /* Visual-first game cards with hover reveals */
     .um-game-card {

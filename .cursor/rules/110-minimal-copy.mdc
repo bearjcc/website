@@ -1,0 +1,378 @@
+---
+description: "Minimal copy philosophy and content guidelines for Ursa Minor Games"
+globs: "resources/views/**/*,lang/**/*,tests/**/*"
+---
+
+# Minimal Copy Philosophy
+
+Guidelines for implementing the "less is more" content philosophy across the Ursa Minor site.
+
+## Core Principle
+
+**"Sometimes less is more"**
+
+The site embraces restraint and visual clarity. Every word must earn its place. No filler text, no verbose explanations, no marketing hype. Just peaceful, confident, welcoming presence.
+
+## Critical Rules
+
+1. **HERO SECTION**: Logo + tagline only. No headline, no body text
+2. **CTA LABELS**: One word only ("Play", "Browse", "Learn")
+3. **SECTION HEADERS**: Avoid verbose kickers and subtitles
+4. **GAME CARDS**: Visual-first, titles reveal on hover
+5. **FOOTER**: Just copyright line, no mottos
+6. **NAVIGATION**: Single-word labels
+
+## Tone Guidelines
+
+**Design and copy must be**:
+- Calm, collected, reserved
+- Welcoming, peaceful, humble
+- Stated clearly (not shy, anxious, or nervous)
+- Never spiritual, never hype, never apologetic
+
+**Think of it as**: The peaceful feeling of looking at the night sky after sunset. Just there, quietly, confidently. No demands, no noise.
+
+## Hero Section Rules
+
+### Maximum Content
+
+```blade
+{{-- ✅ CORRECT - Minimal hero --}}
+<section class="hero">
+    <x-ui.logo-lockup />
+    <p>{{ __('ui.tagline') }}</p>  {{-- One short phrase only --}}
+    <x-ui.flux-button>{{ __('ui.cta_play') }}</x-ui.flux-button>
+</section>
+
+{{-- ❌ WRONG - Too verbose --}}
+<section class="hero">
+    <h1>Small games. Big craft. Amazing adventures.</h1>
+    <p>We're a small indie studio building incredible gaming experiences...</p>
+    <p>Join us on our journey as we create...</p>
+    <button>Start Playing Amazing Games Now!</button>
+</section>
+```
+
+### Tagline Guidelines
+
+- Maximum 6 words
+- No marketing speak
+- Peaceful and stated
+- Examples:
+  - ✅ "The sky is the limit."
+  - ✅ "Little Bear. Big craft."
+  - ❌ "The Ultimate Gaming Experience Awaits!"
+  - ❌ "Join Our Amazing Community Today!"
+
+## CTA (Call-to-Action) Rules
+
+### One-Word Labels
+
+**DO**:
+- Play
+- Browse
+- Learn
+- Explore
+- Start
+
+**DON'T**:
+- "Start Playing Now!"
+- "Browse All Games"
+- "Learn More About Us"
+- "Get Started Today"
+
+### Accessibility
+
+While visible text is minimal, provide full context via ARIA:
+
+```blade
+<x-ui.flux-button 
+    variant="primary"
+    aria-label="Play browser games"
+>
+    Play
+</x-ui.flux-button>
+```
+
+## Section Headers
+
+### Avoid Verbose Headers
+
+```blade
+{{-- ✅ CORRECT - No section header at all, or ultra-minimal --}}
+<section>
+    <x-ui.carousel>
+        {{-- Games directly --}}
+    </x-ui.carousel>
+</section>
+
+{{-- ❌ WRONG - Verbose kickers and subtitles --}}
+<x-ui.section-header
+    kicker="Available now"
+    title="Play in your browser"
+    subtitle="No sign-up required. Works great on laptops and large tablets."
+/>
+```
+
+### When Headers Are Needed
+
+If a section absolutely needs a header (for structure or clarity):
+- Keep it to a simple H2 with 2-4 words
+- No kicker text
+- No subtitle/body text
+
+```blade
+{{-- Acceptable when needed --}}
+<h2>Latest Notes</h2>
+```
+
+## Visual-First Game Cards
+
+### Implementation
+
+Game cards should rely on visual motifs, not text labels:
+
+```blade
+<x-ui.game-card
+    :href="route('games.play', $game->slug)"
+    :title="$game->title"
+    :motif="'tictactoe'"
+    {{-- Title appears only on hover/focus --}}
+    {{-- Accessibility via aria-label="Play Tic-Tac-Toe" --}}
+/>
+```
+
+### Content Rules
+
+- No visible title by default
+- Visual motif communicates game type
+- Title in `<h3 class="sr-only">` for accessibility
+- Title reveals on hover/focus in translucent pill
+- Entire card is clickable immediately (no wait for animation)
+
+## Footer Rules
+
+### Minimal Footer Content
+
+**Current standard**: Just copyright line
+
+```blade
+<footer class="um-horizon-footer">
+    {{-- Horizon line and silhouette (visual elements) --}}
+    {{-- Back to top button --}}
+    <p>&copy; {{ now()->year }} Ursa Minor Games</p>
+    {{-- Future: Privacy | Attributions (when needed) --}}
+</footer>
+```
+
+**DON'T**:
+- No mottos or taglines in footer
+- No random poetic phrases
+- No "All rights reserved" (implied by copyright)
+- Keep for future: Privacy, Attributions links when needed
+
+## Navigation Rules
+
+### Single-Word Labels
+
+```blade
+{{-- ✅ CORRECT --}}
+<nav>
+    <a href="/">Home</a>
+    <a href="/games">Games</a>
+    <a href="/about">About</a>
+</nav>
+
+{{-- ❌ WRONG --}}
+<nav>
+    <a href="/">Back to Homepage</a>
+    <a href="/games">Browse All Games</a>
+    <a href="/about">Learn About Us</a>
+</nav>
+```
+
+## Content Guidelines by Page Type
+
+### Homepage
+- Logo lockup
+- One tagline (max 6 words)
+- Two CTAs (one word each)
+- Visual-first game carousel
+- Minimal footer
+
+### Games Index
+- Optional: Simple heading ("Games" or no header at all)
+- Visual-first card grid
+- No introductory paragraphs
+
+### Game Detail Pages
+- Game title
+- Minimal rules (collapsible or very brief)
+- Play area
+- Minimal controls
+
+### About Page
+- This is the ONE place where slightly more copy is acceptable
+- Still keep it concise and structured
+- Focus on current state, not future promises
+
+## i18n String Organization
+
+Keep `lang/en/ui.php` minimal and organized:
+
+```php
+return [
+    // === Hero Section ===
+    'tagline' => 'The sky is the limit.',
+    'cta_play' => 'Play',
+    'cta_browse' => 'Browse',
+
+    // === Navigation ===
+    'nav_games' => 'Games',
+    'nav_about' => 'About',
+
+    // === Accessibility ===
+    'back_to_top' => 'Back to top',
+];
+```
+
+**Remove**:
+- Unused strings
+- Duplicate entries
+- Verbose section headers
+- Body text strings that shouldn't exist
+
+## Testing Guidelines
+
+### Test for Minimalism
+
+Tests should verify minimal copy is maintained:
+
+```php
+public function test_homepage_has_minimal_sections(): void
+{
+    $response = $this->get('/');
+    $html = $response->getContent();
+
+    // Should NOT have verbose section headers
+    $this->assertStringNotContainsString('Available now', $html);
+    $this->assertStringNotContainsString('Play in your browser', $html);
+    
+    // Should NOT have hero body text
+    $this->assertStringNotContainsString('We build elegant', $html);
+}
+```
+
+## Examples
+
+### Good: Minimal Homepage
+
+```blade
+{{-- Hero: Just essentials --}}
+<section>
+    <x-ui.logo-lockup />
+    <p>The sky is the limit.</p>
+    <x-ui.flux-button variant="primary">Play</x-ui.flux-button>
+    <x-ui.flux-button variant="secondary">Browse</x-ui.flux-button>
+</section>
+
+{{-- Games: Visual-first carousel --}}
+<section>
+    <x-ui.carousel>
+        @foreach($games as $game)
+            <x-ui.game-card :game="$game" />
+        @endforeach
+    </x-ui.carousel>
+</section>
+
+{{-- Footer: Just copyright --}}
+<footer>
+    <p>&copy; 2025 Ursa Minor Games</p>
+</footer>
+```
+
+### Bad: Verbose Homepage
+
+```blade
+{{-- ❌ Too much copy --}}
+<section class="hero">
+    <h1>Welcome to Ursa Minor Games!</h1>
+    <h2>Small games. Big craft. Amazing adventures.</h2>
+    <p>We're a passionate indie game studio creating incredible...</p>
+    <p>Join us on our journey as we build amazing experiences...</p>
+    <button>Start Your Gaming Adventure Now!</button>
+</section>
+
+<section>
+    <div>
+        <span>AVAILABLE NOW</span>
+        <h2>Play in your browser</h2>
+        <p>No sign-up required. Works great on all devices. Start playing today!</p>
+    </div>
+    {{-- Verbose cards with descriptions --}}
+</section>
+
+<footer>
+    <p>Building games under the stars with love and passion.</p>
+    <p>The journey of a thousand miles begins with a single step.</p>
+    <p>&copy; 2025 Ursa Minor Games. All rights reserved worldwide.</p>
+</footer>
+```
+
+## Scrolling Discipline
+
+**"How much people have to scroll = less is more"**
+
+- Keep above-the-fold content focused
+- Don't force scrolling to find essential actions
+- Use vertical space wisely (generous but not excessive)
+- Primary CTA should be visible without scrolling
+
+## Reading Burden
+
+**"How much they have to read = less is more"**
+
+- Reduce cognitive load
+- Let visuals communicate where possible
+- Users should understand the page in seconds, not minutes
+- Prefer icons, motifs, and visual hierarchy over text explanations
+
+## Purpose of Every Element
+
+**"Everything on the site should serve a purpose"**
+
+Before adding any text:
+1. Does this text serve a specific purpose?
+2. Can a visual element communicate this instead?
+3. Is this the minimum text needed?
+4. Does removing this hurt clarity?
+
+If you can't articulate the purpose, don't add the text.
+
+## Exceptions
+
+### About Page
+More copy is acceptable here for:
+- Mission explanation
+- Background/history
+- Contact information
+- Long-term vision (brief mention)
+
+### Help/Rules Pages
+Game rules need enough copy to be clear, but:
+- Keep instructions concise
+- Use bullet points
+- Prefer diagrams/examples over paragraphs
+
+### Legal Pages (Future)
+Privacy policy, terms, etc. will need standard legal copy.
+
+## Questions?
+
+When writing copy:
+- Is this the minimum text needed?
+- Can a visual replace this?
+- Is this calm and welcoming, not hype?
+- Does every word serve a purpose?
+
+**If in doubt, use less.**
