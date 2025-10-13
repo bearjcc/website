@@ -28,7 +28,7 @@
     </section>
 
     {{-- Games Carousel - Visual First --}}
-    <section class="py-12 md:py-16">
+    <section class="py-12 md:py-16 pb-20">
         <div class="section">
             @php
                 // Map game slugs to motifs
@@ -50,73 +50,89 @@
                 currentIndex: 0,
                 gamesPerPage: 3,
                 totalGames: {{ $totalGames }},
+                isAnimating: false,
                 get totalPages() { return Math.ceil(this.totalGames / this.gamesPerPage); },
                 get canGoPrev() { return this.currentIndex > 0; },
                 get canGoNext() { return this.currentIndex < this.totalPages - 1; },
-                prev() { if (this.canGoPrev) this.currentIndex--; },
-                next() { if (this.canGoNext) this.currentIndex++; },
+                prev() { 
+                    if (this.canGoPrev && !this.isAnimating) {
+                        this.isAnimating = true;
+                        this.currentIndex--;
+                        setTimeout(() => this.isAnimating = false, 500);
+                    }
+                },
+                next() { 
+                    if (this.canGoNext && !this.isAnimating) {
+                        this.isAnimating = true;
+                        this.currentIndex++;
+                        setTimeout(() => this.isAnimating = false, 500);
+                    }
+                },
                 isVisible(gameIndex) {
                     const startIndex = this.currentIndex * this.gamesPerPage;
                     const endIndex = startIndex + this.gamesPerPage;
                     return gameIndex >= startIndex && gameIndex < endIndex;
+                },
+                getCardClass(gameIndex) {
+                    const startIndex = this.currentIndex * this.gamesPerPage;
+                    const endIndex = startIndex + this.gamesPerPage;
+                    const isVisible = gameIndex >= startIndex && gameIndex < endIndex;
+                    return isVisible ? 'carousel-card-active' : 'carousel-card-hidden';
                 }
-            }" class="relative">
+            }" class="relative flex items-center gap-4">
                 
-                {{-- Carousel container --}}
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-                    @foreach($games as $index => $game)
-                        <div x-show="isVisible({{ $index }})" 
-                             x-transition:enter="transition ease-out duration-300"
-                             x-transition:enter-start="opacity-0 scale-95"
-                             x-transition:enter-end="opacity-100 scale-100"
-                             x-transition:leave="transition ease-in duration-200"
-                             x-transition:leave-start="opacity-100 scale-100"
-                             x-transition:leave-end="opacity-0 scale-95"
-                             class="w-full">
-                            <x-ui.game-card
-                                :href="route('games.play', $game->slug)"
-                                :title="$game->title"
-                                :motif="$motifMap[$game->slug] ?? null"
-                            />
-                        </div>
-                    @endforeach
+                {{-- Previous button - far left --}}
+                @if($totalGames > 3)
+                    <button 
+                        @click="prev"
+                        :disabled="!canGoPrev"
+                        :class="{ 'opacity-30 cursor-not-allowed': !canGoPrev }"
+                        class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] disabled:hover:border-[color:var(--ink)]/10"
+                        aria-label="Previous games">
+                        <x-heroicon-o-chevron-left class="w-5 h-5 md:w-6 md:h-6 text-[color:var(--ink)]" />
+                    </button>
+                @endif
+
+                {{-- Carousel container with overflow hidden --}}
+                <div class="flex-1 overflow-hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                        @foreach($games as $index => $game)
+                            <div :class="getCardClass({{ $index }})" 
+                                 class="w-full transition-all duration-500 ease-in-out">
+                                <x-ui.game-card
+                                    :href="route('games.play', $game->slug)"
+                                    :title="$game->title"
+                                    :motif="$motifMap[$game->slug] ?? null"
+                                />
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
 
-                {{-- Navigation buttons - minimal, elegant --}}
+                {{-- Next button - far right --}}
                 @if($totalGames > 3)
-                    <div class="flex items-center justify-center gap-3 mt-6">
-                        {{-- Previous button --}}
-                        <button 
-                            @click="prev"
-                            :disabled="!canGoPrev"
-                            :class="{ 'opacity-30 cursor-not-allowed': !canGoPrev }"
-                            class="w-10 h-10 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] disabled:hover:border-[color:var(--ink)]/10"
-                            aria-label="Previous games">
-                            <x-heroicon-o-chevron-left class="w-5 h-5 text-[color:var(--ink)]" />
-                        </button>
+                    <button 
+                        @click="next"
+                        :disabled="!canGoNext"
+                        :class="{ 'opacity-30 cursor-not-allowed': !canGoNext }"
+                        class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] disabled:hover:border-[color:var(--ink)]/10"
+                        aria-label="Next games">
+                        <x-heroicon-o-chevron-right class="w-5 h-5 md:w-6 md:h-6 text-[color:var(--ink)]" />
+                    </button>
+                @endif
 
-                        {{-- Page indicators --}}
-                        <div class="flex gap-2" role="tablist" aria-label="Game carousel pages">
-                            <template x-for="page in totalPages" :key="page">
-                                <button 
-                                    @click="currentIndex = page - 1"
-                                    :class="currentIndex === page - 1 ? 'bg-[color:var(--star)]' : 'bg-[color:var(--ink)]/20'"
-                                    class="w-2 h-2 rounded-full transition-all duration-150 hover:bg-[color:var(--ink)]/40"
-                                    :aria-label="`Go to page ${page}`"
-                                    :aria-selected="currentIndex === page - 1">
-                                </button>
-                            </template>
-                        </div>
-
-                        {{-- Next button --}}
-                        <button 
-                            @click="next"
-                            :disabled="!canGoNext"
-                            :class="{ 'opacity-30 cursor-not-allowed': !canGoNext }"
-                            class="w-10 h-10 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] disabled:hover:border-[color:var(--ink)]/10"
-                            aria-label="Next games">
-                            <x-heroicon-o-chevron-right class="w-5 h-5 text-[color:var(--ink)]" />
-                        </button>
+                {{-- Page indicators at bottom --}}
+                @if($totalGames > 3)
+                    <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2" role="tablist" aria-label="Game carousel pages">
+                        <template x-for="page in totalPages" :key="page">
+                            <button 
+                                @click="currentIndex = page - 1"
+                                :class="currentIndex === page - 1 ? 'bg-[color:var(--star)]' : 'bg-[color:var(--ink)]/20'"
+                                class="w-2 h-2 rounded-full transition-all duration-150 hover:bg-[color:var(--ink)]/40"
+                                :aria-label="`Go to page ${page}`"
+                                :aria-selected="currentIndex === page - 1">
+                            </button>
+                        </template>
                     </div>
                 @endif
             </div>

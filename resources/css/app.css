@@ -403,15 +403,36 @@
     }
 
     /* === Carousel Styles === */
-    /* Simple carousel for game cards */
+    /* 3D rotating carousel for game cards */
     [x-cloak] {
         display: none !important;
     }
     
-    /* Reduced motion: instant carousel transitions */
+    /* Carousel card states with 3D rotation */
+    .carousel-card-active {
+        opacity: 1;
+        transform: perspective(1000px) rotateY(0deg) scale(1);
+        pointer-events: auto;
+    }
+    
+    .carousel-card-hidden {
+        opacity: 0;
+        transform: perspective(1000px) rotateY(90deg) scale(0.8);
+        pointer-events: none;
+        position: absolute;
+        visibility: hidden;
+    }
+    
+    /* Reduced motion: simpler transitions */
     @media (prefers-reduced-motion: reduce) {
-        .transition-transform {
-            transition: none !important;
+        .carousel-card-active,
+        .carousel-card-hidden {
+            transform: none !important;
+            transition: opacity 150ms ease !important;
+        }
+        
+        .carousel-card-hidden {
+            scale: 1 !important;
         }
     }
 }
