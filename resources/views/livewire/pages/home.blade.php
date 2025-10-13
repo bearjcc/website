@@ -47,58 +47,55 @@
             @endphp
 
             <div x-data="{ 
-                currentIndex: 0,
-                gamesPerPage: 3,
+                currentRotation: 0,
                 totalGames: {{ $totalGames }},
                 isAnimating: false,
-                get totalPages() { return Math.ceil(this.totalGames / this.gamesPerPage); },
-                get canGoPrev() { return this.currentIndex > 0; },
-                get canGoNext() { return this.currentIndex < this.totalPages - 1; },
+                get anglePerCard() { 
+                    return 360 / this.totalGames; 
+                },
                 prev() { 
-                    if (this.canGoPrev && !this.isAnimating) {
+                    if (!this.isAnimating) {
                         this.isAnimating = true;
-                        this.currentIndex--;
-                        setTimeout(() => this.isAnimating = false, 500);
+                        this.currentRotation += this.anglePerCard;
+                        setTimeout(() => this.isAnimating = false, 600);
                     }
                 },
                 next() { 
-                    if (this.canGoNext && !this.isAnimating) {
+                    if (!this.isAnimating) {
                         this.isAnimating = true;
-                        this.currentIndex++;
-                        setTimeout(() => this.isAnimating = false, 500);
+                        this.currentRotation -= this.anglePerCard;
+                        setTimeout(() => this.isAnimating = false, 600);
                     }
                 },
-                isVisible(gameIndex) {
-                    const startIndex = this.currentIndex * this.gamesPerPage;
-                    const endIndex = startIndex + this.gamesPerPage;
-                    return gameIndex >= startIndex && gameIndex < endIndex;
+                getCardRotation(index) {
+                    return index * this.anglePerCard;
                 },
-                getCardClass(gameIndex) {
-                    const startIndex = this.currentIndex * this.gamesPerPage;
-                    const endIndex = startIndex + this.gamesPerPage;
-                    const isVisible = gameIndex >= startIndex && gameIndex < endIndex;
-                    return isVisible ? 'carousel-card-active' : 'carousel-card-hidden';
+                isCardVisible(index) {
+                    const normalizedRotation = ((this.currentRotation % 360) + 360) % 360;
+                    const cardAngle = ((this.getCardRotation(index) + normalizedRotation) % 360 + 360) % 360;
+                    // Show cards that are roughly front-facing (within ~60 degrees of center)
+                    return cardAngle < 60 || cardAngle > 300;
                 }
-            }" class="relative flex items-center gap-4">
+            }" class="relative flex items-center gap-4 md:gap-6">
                 
                 {{-- Previous button - far left --}}
                 @if($totalGames > 3)
                     <button 
                         @click="prev"
-                        :disabled="!canGoPrev"
-                        :class="{ 'opacity-30 cursor-not-allowed': !canGoPrev }"
-                        class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] disabled:hover:border-[color:var(--ink)]/10"
+                        class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)]"
                         aria-label="Previous games">
                         <x-heroicon-o-chevron-left class="w-5 h-5 md:w-6 md:h-6 text-[color:var(--ink)]" />
                     </button>
                 @endif
 
-                {{-- Carousel container with overflow hidden --}}
-                <div class="flex-1 overflow-hidden">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                {{-- 3D Carousel container --}}
+                <div class="flex-1 carousel-viewport">
+                    <div class="carousel-3d" 
+                         :style="`transform: translateZ(-400px) rotateY(${currentRotation}deg)`">
                         @foreach($games as $index => $game)
-                            <div :class="getCardClass({{ $index }})" 
-                                 class="w-full transition-all duration-500 ease-in-out">
+                            <div class="carousel-item"
+                                 :style="`transform: rotateY(${getCardRotation({{ $index }})}deg) translateZ(400px)`"
+                                 :class="{ 'carousel-item-hidden': !isCardVisible({{ $index }}) }">
                                 <x-ui.game-card
                                     :href="route('games.play', $game->slug)"
                                     :title="$game->title"
@@ -113,27 +110,10 @@
                 @if($totalGames > 3)
                     <button 
                         @click="next"
-                        :disabled="!canGoNext"
-                        :class="{ 'opacity-30 cursor-not-allowed': !canGoNext }"
-                        class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)] disabled:hover:border-[color:var(--ink)]/10"
+                        class="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full glass grid place-items-center transition-all duration-150 hover:border-[color:var(--ink)]/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--constellation)]"
                         aria-label="Next games">
                         <x-heroicon-o-chevron-right class="w-5 h-5 md:w-6 md:h-6 text-[color:var(--ink)]" />
                     </button>
-                @endif
-
-                {{-- Page indicators at bottom --}}
-                @if($totalGames > 3)
-                    <div class="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2" role="tablist" aria-label="Game carousel pages">
-                        <template x-for="page in totalPages" :key="page">
-                            <button 
-                                @click="currentIndex = page - 1"
-                                :class="currentIndex === page - 1 ? 'bg-[color:var(--star)]' : 'bg-[color:var(--ink)]/20'"
-                                class="w-2 h-2 rounded-full transition-all duration-150 hover:bg-[color:var(--ink)]/40"
-                                :aria-label="`Go to page ${page}`"
-                                :aria-selected="currentIndex === page - 1">
-                            </button>
-                        </template>
-                    </div>
                 @endif
             </div>
         </div>
