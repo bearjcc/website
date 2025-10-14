@@ -1,5 +1,25 @@
-<div class="section py-12 md:py-16" x-data="{ hintPulsing: false }" 
-     @hint-used.window="hintPulsing = true; setTimeout(() => hintPulsing = false, 2000)">
+<div class="section py-12 md:py-16" 
+     x-data="{ 
+         hoverCell: null,
+         showNumberPicker: false,
+         pickerRow: null,
+         pickerCol: null,
+         setHover(row, col) {
+             if (@js($originalPuzzle)[row][col] === 0) {
+                 this.hoverCell = [row, col];
+                 this.showNumberPicker = true;
+                 this.pickerRow = row;
+                 this.pickerCol = col;
+             }
+         },
+         clearHover() {
+             this.hoverCell = null;
+             this.showNumberPicker = false;
+             this.pickerRow = null;
+             this.pickerCol = null;
+         }
+     }">
+    
     <div class="max-w-4xl mx-auto space-y-8">
         {{-- Back nav --}}
         <div class="flex items-center gap-4">
@@ -12,35 +32,74 @@
             <h1 class="h2 text-ink">Sudoku</h1>
         </div>
 
-        {{-- Rules --}}
-        <details class="glass rounded-xl border border-[hsl(var(--border)/.1)] overflow-hidden">
-            <summary class="px-6 py-3 cursor-pointer text-ink/80 hover:text-ink hover:bg-[hsl(var(--surface)/.08)] transition-colors list-none flex items-center justify-between">
-                <span>Rules</span>
-                <x-heroicon-o-chevron-down class="w-5 h-5" />
-            </summary>
-            <div class="px-6 py-4 border-t border-[hsl(var(--border)/.1)] space-y-2 text-ink/70 text-sm">
-                <p>Fill the 9×9 grid so each row, column, and 3×3 box contains digits 1-9 exactly once.</p>
-                <p>Click a cell, then a number. Toggle Notes mode for candidates. Use hints when stuck.</p>
-            </div>
-        </details>
-
         {{-- Difficulty Selection --}}
         @if($showDifficultySelector && !$gameStarted)
             <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
-                <h3 class="text-lg font-semibold text-ink">Difficulty</h3>
+                <h3 class="text-lg font-semibold text-ink">Select Difficulty</h3>
+                
                 <div class="flex flex-wrap gap-2">
-                    @foreach(['beginner' => 45, 'easy' => 38, 'medium' => 30, 'hard' => 24, 'expert' => 18] as $level => $clues)
-                        <button wire:click="selectDifficulty('{{ $level }}')" 
-                                class="px-4 py-2 rounded-lg border transition-all bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star">
-                            <div class="font-semibold">{{ ucfirst($level) }}</div>
-                            <div class="text-xs text-ink/60">{{ $clues }} clues</div>
+                    @foreach(\App\Games\Sudoku\SudokuEngine::DIFFICULTIES as $key => $info)
+                        <button wire:click="selectDifficulty('{{ $key }}')" 
+                                class="px-4 py-2 rounded-lg border transition-all bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star hover:bg-star/10">
+                            {{ $info['label'] }}
                         </button>
                     @endforeach
+                </div>
+
+                <div class="pt-4 border-t border-[hsl(var(--border)/.1)]">
+                    <button wire:click="toggleCustomInput" 
+                            class="px-4 py-2 rounded-lg border transition-all bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-constellation">
+                        <x-heroicon-o-document-text class="w-4 h-4 inline" />
+                        <span>Load Custom Puzzle</span>
+                    </button>
+                </div>
+            </div>
+        @endif
+
+        {{-- Custom Puzzle Input --}}
+        @if($showCustomInput)
+            <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
+                <h3 class="text-lg font-semibold text-ink">Enter Custom Puzzle</h3>
+                <p class="text-sm text-ink/70">Enter 81 digits (0 for empty cells). Paste from newspaper or app.</p>
+                
+                <textarea 
+                    wire:model="customPuzzleInput"
+                    class="w-full h-32 px-4 py-3 bg-[hsl(var(--space-900))] border border-[hsl(var(--border)/.3)] rounded-lg text-ink font-mono text-sm focus:outline-none focus:border-star resize-none"
+                    placeholder="Example: 530070000600195000098000060800060003400803001700020006060000280000419005000080079"
+                ></textarea>
+
+                <div class="flex gap-2">
+                    <button wire:click="loadCustomPuzzle" 
+                            class="px-6 py-2 rounded-lg bg-star text-space-900 font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-star/20 transition-all">
+                        Load Puzzle
+                    </button>
+                    <button wire:click="toggleCustomInput" 
+                            class="px-6 py-2 rounded-lg border border-[hsl(var(--border)/.3)] text-ink hover:border-ink transition-all">
+                        Cancel
+                    </button>
                 </div>
             </div>
         @endif
 
         {{-- Game Status --}}
+        @if($gameStarted && !$showDifficultySelector)
+            <div class="flex flex-wrap justify-center gap-4 text-sm">
+                <div class="px-4 py-2 glass rounded-lg border border-[hsl(var(--border)/.1)]">
+                    <span class="text-ink/60">Difficulty:</span>
+                    <strong class="text-star ml-2">{{ ucfirst($difficulty) }}</strong>
+                </div>
+                <div class="px-4 py-2 glass rounded-lg border border-[hsl(var(--border)/.1)]">
+                    <span class="text-ink/60">Hints:</span>
+                    <strong class="text-ink ml-2">{{ $hintsUsed }}/{{ $maxHints }}</strong>
+                </div>
+                <div class="px-4 py-2 glass rounded-lg border border-[hsl(var(--border)/.1)]">
+                    <span class="text-ink/60">Mistakes:</span>
+                    <strong class="text-ink ml-2">{{ $mistakes }}/{{ $maxMistakes }}</strong>
+                </div>
+            </div>
+        @endif
+
+        {{-- Completion Message --}}
         @if($gameComplete)
             <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
                 <div class="flex items-center justify-center gap-2">
@@ -56,105 +115,116 @@
                     <span>{{ $mistakes }} mistakes</span>
                 </div>
             </div>
-        @else
-            <div class="flex justify-center gap-8 text-sm text-ink/70">
-                <div><span class="text-ink/50">Difficulty:</span> <strong class="text-ink">{{ ucfirst($difficulty) }}</strong></div>
-                <div><span class="text-ink/50">Hints:</span> <strong class="text-ink">{{ $hintsUsed }}/{{ $maxHints }}</strong></div>
-                <div><span class="text-ink/50">Mistakes:</span> <strong class="{{ $mistakes > 0 ? 'text-star' : 'text-ink' }}">{{ $mistakes }}/{{ $maxMistakes }}</strong></div>
+        @endif
+
+        {{-- Sudoku Board --}}
+        @if($gameStarted || !$showDifficultySelector)
+            <div class="sudoku-board-container">
+                <div class="sudoku-board">
+                    @for($row = 0; $row < 9; $row++)
+                        @for($col = 0; $col < 9; $col++)
+                            @php
+                                $value = $board[$row][$col];
+                                $isOriginal = $originalPuzzle[$row][$col] !== 0;
+                                $isSelected = $selectedCell && $selectedCell[0] === $row && $selectedCell[1] === $col;
+                                $isConflict = $this->isConflict($row, $col);
+                                $isHint = $this->isLastHint($row, $col);
+                                $cellNotes = $notes[$row][$col] ?? [];
+                            @endphp
+
+                            <div class="sudoku-cell 
+                                        {{ $isOriginal ? 'original' : '' }}
+                                        {{ $isSelected ? 'selected' : '' }}
+                                        {{ $isConflict ? 'conflict' : '' }}
+                                        {{ $isHint ? 'hint' : '' }}"
+                                 @if(!$isOriginal)
+                                     @mouseenter="setHover({{ $row }}, {{ $col }})"
+                                     @mouseleave="clearHover()"
+                                 @endif
+                                 wire:click="selectCell({{ $row }}, {{ $col }})"
+                                 tabindex="0"
+                                 aria-label="Cell {{ $row + 1 }}, {{ $col + 1 }}{{ $value ? ', value ' . $value : ', empty' }}">
+                                
+                                @if($value !== 0)
+                                    <span class="cell-number">{{ $value }}</span>
+                                @elseif(!empty($cellNotes))
+                                    <div class="cell-notes">
+                                        @for($n = 1; $n <= 9; $n++)
+                                            <span class="{{ in_array($n, $cellNotes) ? 'note-active' : 'note-empty' }}">
+                                                {{ in_array($n, $cellNotes) ? $n : '' }}
+                                            </span>
+                                        @endfor
+                                    </div>
+                                @endif
+
+                                {{-- Hover Number Picker --}}
+                                @if(!$isOriginal)
+                                    <div x-show="showNumberPicker && pickerRow === {{ $row }} && pickerCol === {{ $col }}"
+                                         x-transition.opacity.duration.200ms
+                                         @click.stop
+                                         class="number-picker">
+                                        @for($n = 1; $n <= 9; $n++)
+                                            <button class="picker-number"
+                                                    @click.left="$wire.placeNumberAt({{ $row }}, {{ $col }}, {{ $n }}); clearHover()"
+                                                    @click.right.prevent="$wire.toggleNoteAt({{ $row }}, {{ $col }}, {{ $n }}); $event.stopPropagation()"
+                                                    @contextmenu.prevent
+                                                    aria-label="Place {{ $n }}">
+                                                {{ $n }}
+                                            </button>
+                                        @endfor
+                                    </div>
+                                @endif
+                            </div>
+                        @endfor
+                    @endfor
+                </div>
             </div>
         @endif
 
-    <!-- Sudoku Board -->
-    <div class="board-container">
-        <div class="sudoku-board">
-            @for($row = 0; $row < 9; $row++)
-                @for($col = 0; $col < 9; $col++)
-                    @php
-                        $number = $board[$row][$col];
-                        $isOriginal = $originalPuzzle[$row][$col] !== 0;
-                        $isSelected = $selectedCell && $selectedCell[0] === $row && $selectedCell[1] === $col;
-                        $isConflict = $this->isConflict($row, $col);
-                        $isHint = $this->isLastHint($row, $col);
-                        $cellNotes = $notes[$row][$col] ?? [];
-                        $boxBorder = '';
-                        if ($row % 3 === 2 && $row !== 8) $boxBorder .= ' border-bottom-thick';
-                        if ($col % 3 === 2 && $col !== 8) $boxBorder .= ' border-right-thick';
-                    @endphp
-                    
-                    <button
-                        wire:click="selectCell({{ $row }}, {{ $col }})"
-                        class="sudoku-cell {{ $isOriginal ? 'original' : 'editable' }} 
-                               {{ $isSelected ? 'selected' : '' }}
-                               {{ $isConflict ? 'conflict' : '' }}
-                               {{ $isHint ? 'hint-cell' : '' }}
-                               {{ $boxBorder }}"
-                        @disabled($gameComplete)
-                    >
-                        @if($number > 0)
-                            <span class="cell-number {{ $isOriginal ? 'original-number' : 'player-number' }}">
-                                {{ $number }}
-                            </span>
-                        @elseif(!empty($cellNotes))
-                            <div class="cell-notes">
-                                @for($n = 1; $n <= 9; $n++)
-                                    <span class="note {{ in_array($n, $cellNotes) ? 'active' : 'empty' }}">
-                                        {{ in_array($n, $cellNotes) ? $n : '' }}
-                                    </span>
-                                @endfor
-                            </div>
-                        @endif
+        {{-- Controls --}}
+        @if($gameStarted && !$gameComplete)
+            <div class="space-y-4">
+                <div class="flex flex-wrap justify-center gap-2">
+                    <button wire:click="useHint"
+                            @disabled($hintsUsed >= $maxHints)
+                            class="px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2 {{ $hintsUsed >= $maxHints ? 'opacity-40 cursor-not-allowed' : 'hover:border-star hover:bg-star/10' }} bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)]"
+                            aria-label="Use hint ({{ $maxHints - $hintsUsed }} remaining)">
+                        <x-heroicon-o-light-bulb class="w-4 h-4" />
+                        <span>Hint</span>
                     </button>
-                @endfor
-            @endfor
-        </div>
-    </div>
 
-    <!-- Number Input -->
-    @if($selectedCell && !$gameComplete)
-        <div class="number-input">
-            <div class="number-buttons">
-                @for($num = 1; $num <= 9; $num++)
-                    <button wire:click="placeNumber({{ $num }})" class="number-btn">
-                        {{ $num }}
+                    <button wire:click="toggleNotesMode"
+                            class="px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2 {{ $notesMode ? 'bg-star/20 border-star' : 'bg-[hsl(var(--surface)/.1)] border-[hsl(var(--border)/.3)] hover:border-star' }} text-ink"
+                            aria-label="Toggle notes mode">
+                        <x-heroicon-o-pencil class="w-4 h-4" />
+                        <span>Notes</span>
                     </button>
-                @endfor
+
+                    <button wire:click="clearCell"
+                            class="px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2 bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star"
+                            aria-label="Clear selected cell">
+                        <x-heroicon-o-backspace class="w-4 h-4" />
+                        <span>Clear</span>
+                    </button>
+
+                    <button wire:click="autoSolve"
+                            class="px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2 bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-constellation"
+                            aria-label="Auto-solve puzzle">
+                        <x-heroicon-o-bolt class="w-4 h-4" />
+                        <span>Solve</span>
+                    </button>
+                </div>
+
+                <div class="flex justify-center">
+                    <button wire:click="newGame"
+                            class="px-6 py-2 rounded-lg bg-star text-space-900 font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-star/20 transition-all"
+                            aria-label="Start new game">
+                        <x-heroicon-o-arrow-path class="w-4 h-4 inline" />
+                        <span>New Game</span>
+                    </button>
+                </div>
             </div>
-        </div>
-    @endif
-
-    <!-- Game Controls -->
-    <div class="game-controls">
-        <div class="control-buttons">
-            <button wire:click="toggleNotesMode" 
-                    class="control-btn {{ $notesMode ? 'active' : '' }}"
-                    aria-label="Toggle notes mode">
-                <x-heroicon-o-pencil class="w-4 h-4" />
-                <span>{{ $notesMode ? 'Notes On' : 'Notes' }}</span>
-            </button>
-            
-            <button wire:click="clearCell" 
-                    class="control-btn"
-                    @disabled(!$selectedCell || $gameComplete)
-                    aria-label="Clear selected cell">
-                <x-heroicon-o-backspace class="w-4 h-4" />
-                <span>Clear</span>
-            </button>
-            
-            <button wire:click="useHint" 
-                    class="control-btn"
-                    @disabled($hintsUsed >= $maxHints || $gameComplete)
-                    aria-label="Use hint - {{ $maxHints - $hintsUsed }} remaining">
-                <x-heroicon-o-light-bulb class="w-4 h-4" />
-                <span>Hint</span>
-            </button>
-            
-            <button wire:click="newGame" 
-                    class="control-btn new-game"
-                    aria-label="Start new game">
-                <x-heroicon-o-arrow-path class="w-4 h-4" />
-                <span>New</span>
-            </button>
-        </div>
+        @endif
     </div>
-
 </div>
+

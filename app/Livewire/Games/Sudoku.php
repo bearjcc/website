@@ -41,6 +41,10 @@ class Sudoku extends Component
 
     public ?array $lastHint = null;
 
+    public bool $showCustomInput = false;
+
+    public string $customPuzzleInput = '';
+
     public function mount()
     {
         $this->newGame();
@@ -159,6 +163,77 @@ class Sudoku extends Component
         $state = SudokuEngine::autoSolve($this->getCurrentState());
         $this->syncFromState($state);
         $this->lastHint = null;
+    }
+
+    public function toggleCustomInput()
+    {
+        $this->showCustomInput = ! $this->showCustomInput;
+        $this->customPuzzleInput = '';
+    }
+
+    public function loadCustomPuzzle()
+    {
+        try {
+            // Parse input (expecting 81 characters: 0-9, where 0 is empty)
+            $input = preg_replace('/[^0-9]/', '', $this->customPuzzleInput);
+
+            if (strlen($input) !== 81) {
+                $this->dispatch('error', 'Please enter exactly 81 digits (use 0 for empty cells)');
+
+                return;
+            }
+
+            // Convert string to 9x9 array
+            $puzzle = [];
+            for ($row = 0; $row < 9; $row++) {
+                $puzzle[$row] = [];
+                for ($col = 0; $col < 9; $col++) {
+                    $index = $row * 9 + $col;
+                    $puzzle[$row][$col] = (int) $input[$index];
+                }
+            }
+
+            // Load puzzle via engine
+            $state = SudokuEngine::loadCustomPuzzle($puzzle);
+            $this->syncFromState($state);
+
+            $this->showCustomInput = false;
+            $this->showDifficultySelector = false;
+            $this->customPuzzleInput = '';
+
+            $this->dispatch('success', 'Custom puzzle loaded successfully!');
+        } catch (\Exception $e) {
+            $this->dispatch('error', $e->getMessage());
+        }
+    }
+
+    public function placeNumberAt(int $row, int $col, int $number)
+    {
+        // Don't allow changes to original puzzle cells
+        if ($this->originalPuzzle[$row][$col] !== 0) {
+            return;
+        }
+
+        $this->selectCell($row, $col);
+        $this->placeNumber($number);
+    }
+
+    public function toggleNoteAt(int $row, int $col, int $number)
+    {
+        // Don't allow changes to original puzzle cells
+        if ($this->originalPuzzle[$row][$col] !== 0) {
+            return;
+        }
+
+        $state = $this->getCurrentState();
+        $state = SudokuEngine::applyMove($state, [
+            'action' => 'toggle_note',
+            'row' => $row,
+            'col' => $col,
+            'number' => $number,
+        ]);
+
+        $this->syncFromState($state);
     }
 
     protected function getCurrentState(): array

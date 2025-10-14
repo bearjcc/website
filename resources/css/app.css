@@ -587,134 +587,11 @@
 
     /* === Game UI Styles === */
     
-    /* Sudoku Board */
+    /* Board container (generic) */
     .board-container {
         margin-bottom: 2rem;
         display: flex;
         justify-content: center;
-    }
-
-    .sudoku-board {
-        display: grid;
-        grid-template-columns: repeat(9, 1fr);
-        gap: 1px;
-        background: hsl(var(--star));
-        border: 3px solid hsl(var(--star));
-        max-width: 500px;
-        width: 100%;
-        aspect-ratio: 1;
-    }
-
-    .sudoku-cell {
-        background: hsl(var(--space-900) / .6);
-        border: none;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        font-size: 1.5rem;
-        font-weight: bold;
-        min-height: 45px;
-    }
-
-    .sudoku-cell:not(.original):hover {
-        background: hsl(var(--star) / .2);
-    }
-
-    .sudoku-cell.selected {
-        background: hsl(var(--star) / .3) !important;
-        box-shadow: inset 0 0 0 2px hsl(var(--star));
-    }
-
-    .sudoku-cell.original {
-        background: hsl(var(--space-800) / .8);
-    }
-
-    .sudoku-cell.conflict {
-        background: hsl(0 70% 60% / .3) !important;
-    }
-
-    .sudoku-cell.hint-cell {
-        background: hsl(var(--constellation) / .3) !important;
-        animation: hint-pulse 0.5s ease-in-out 3;
-    }
-
-    .border-right-thick {
-        border-right: 2px solid hsl(var(--star)) !important;
-    }
-
-    .border-bottom-thick {
-        border-bottom: 2px solid hsl(var(--star)) !important;
-    }
-
-    .cell-number {
-        font-size: 1.8rem;
-    }
-
-    .original-number {
-        color: hsl(var(--ink));
-        font-weight: 700;
-    }
-
-    .player-number {
-        color: hsl(var(--star));
-        font-weight: 600;
-    }
-
-    .cell-notes {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        grid-template-rows: repeat(3, 1fr);
-        gap: 1px;
-        width: 100%;
-        height: 100%;
-        font-size: 0.6rem;
-        padding: 2px;
-    }
-
-    .note {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: hsl(var(--star) / .6);
-    }
-
-    .note.empty {
-        visibility: hidden;
-    }
-
-    /* Number input pad */
-    .number-input {
-        margin-bottom: 1.5rem;
-    }
-
-    .number-buttons {
-        display: grid;
-        grid-template-columns: repeat(9, 1fr);
-        gap: 0.5rem;
-        max-width: 500px;
-        margin: 0 auto;
-    }
-
-    .number-btn {
-        background: hsl(var(--surface) / .1);
-        color: hsl(var(--ink));
-        border: 2px solid hsl(var(--border) / .3);
-        padding: 0.75rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 1.2rem;
-        font-weight: bold;
-        min-height: 44px;
-    }
-
-    .number-btn:hover {
-        background: hsl(var(--star));
-        color: hsl(220 20% 10%);
-        transform: translateY(-2px);
     }
 
     /* Game controls */
@@ -769,59 +646,6 @@
     .control-btn:disabled {
         opacity: 0.4;
         cursor: not-allowed;
-    }
-
-    /* Game animations */
-    @keyframes hint-pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-
-    /* Responsive game board */
-    @media (max-width: 768px) {
-        .sudoku-board {
-            max-width: 350px;
-        }
-
-        .cell-number {
-            font-size: 1.2rem;
-        }
-
-        .number-buttons {
-            grid-template-columns: repeat(9, 1fr);
-            gap: 0.25rem;
-        }
-
-        .number-btn {
-            padding: 0.5rem;
-            font-size: 1rem;
-        }
-
-        .control-buttons {
-            flex-direction: column;
-        }
-
-        .control-btn {
-            width: 100%;
-        }
-    }
-
-    /* Respect reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-        .sudoku-cell,
-        .number-btn,
-        .control-btn {
-            transition: none;
-        }
-        
-        .number-btn:hover,
-        .sudoku-cell:hover {
-            transform: none;
-        }
-        
-        .hint-pulse {
-            animation: none;
-        }
     }
 
     /* === Connect 4 Board === */
@@ -1308,6 +1132,193 @@
         .arrow-btn:hover,
         .arrow-btn:active,
         .control-btn-2048:hover {
+            transform: none;
+        }
+    }
+
+    /* === Sudoku Board (Enhanced with CSS Grid) === */
+    .sudoku-board-container {
+        display: flex;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .sudoku-board {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(9, 1fr);
+        gap: 1px;
+        background: hsl(var(--border) / .3);
+        border: 3px solid hsl(var(--border) / .5);
+        border-radius: 0.5rem;
+        max-width: 600px;
+        width: 100%;
+        aspect-ratio: 1;
+        overflow: hidden;
+    }
+
+    .sudoku-cell {
+        position: relative;
+        background: hsl(var(--space-900));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(1.25rem, 4vw, 1.75rem);
+        font-weight: 600;
+        color: hsl(var(--ink));
+        cursor: pointer;
+        transition: all 0.15s ease;
+        min-height: 44px;
+    }
+
+    /* 3x3 box borders (heavier lines every 3 cells) */
+    .sudoku-cell:nth-child(3n) {
+        border-right: 2px solid hsl(var(--border) / .5);
+    }
+
+    .sudoku-cell:nth-child(n+19):nth-child(-n+27),
+    .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+        border-bottom: 2px solid hsl(var(--border) / .5);
+    }
+
+    /* Cell states */
+    .sudoku-cell.original {
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--star));
+        cursor: default;
+        font-weight: 700;
+    }
+
+    .sudoku-cell.selected {
+        background: hsl(var(--star) / .15);
+        box-shadow: inset 0 0 0 2px hsl(var(--star));
+    }
+
+    .sudoku-cell.conflict {
+        background: hsl(0 70% 50% / .2);
+        color: hsl(0 70% 60%);
+    }
+
+    .sudoku-cell.hint {
+        background: hsl(var(--constellation) / .2);
+        animation: hint-pulse 1s ease-in-out 2;
+    }
+
+    @keyframes hint-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+    }
+
+    .sudoku-cell:not(.original):hover {
+        background: hsl(var(--star) / .08);
+    }
+
+    .sudoku-cell:focus-visible {
+        outline: 2px solid hsl(var(--star));
+        outline-offset: -2px;
+        z-index: 1;
+    }
+
+    /* Cell content */
+    .cell-number {
+        font-size: inherit;
+        user-select: none;
+    }
+
+    /* Notes (small 3x3 grid within cell) */
+    .cell-notes {
+        position: absolute;
+        inset: 2px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 1px;
+        font-size: 0.5rem;
+        font-weight: 500;
+        color: hsl(var(--ink) / .5);
+    }
+
+    .cell-notes span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .note-active {
+        color: hsl(var(--constellation));
+    }
+
+    .note-empty {
+        visibility: hidden;
+    }
+
+    /* Hover Number Picker (3x3 grid) */
+    .number-picker {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 2px;
+        background: hsl(var(--space-800));
+        border: 2px solid hsl(var(--star));
+        border-radius: 0.25rem;
+        padding: 2px;
+        z-index: 10;
+        box-shadow: 0 4px 12px hsl(0 0% 0% / .4);
+    }
+
+    .picker-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink));
+        font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+        font-weight: 600;
+        border: 1px solid hsl(var(--border) / .2);
+        border-radius: 0.25rem;
+        cursor: pointer;
+        transition: all 0.1s ease;
+        user-select: none;
+    }
+
+    .picker-number:hover {
+        background: hsl(var(--star));
+        color: hsl(220 20% 10%);
+        transform: scale(1.05);
+    }
+
+    .picker-number:active {
+        transform: scale(0.95);
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 640px) {
+        .sudoku-board {
+            max-width: 100%;
+        }
+
+        .cell-notes {
+            font-size: 0.4rem;
+        }
+
+        .picker-number {
+            font-size: 0.75rem;
+        }
+    }
+
+    /* Respect reduced motion for Sudoku */
+    @media (prefers-reduced-motion: reduce) {
+        .sudoku-cell {
+            transition: none;
+        }
+
+        .sudoku-cell.hint {
+            animation: none;
+        }
+
+        .picker-number:hover {
             transform: none;
         }
     }
