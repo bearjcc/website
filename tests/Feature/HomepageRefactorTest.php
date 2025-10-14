@@ -69,8 +69,8 @@ class HomepageRefactorTest extends TestCase
         $this->assertStringContainsString('pt-24', $html);
         $this->assertStringContainsString('md:pt-32', $html);
 
-        // Nav should have py-4 (32px vertical padding)
-        $this->assertStringContainsString('py-4', $html);
+        // Nav should have py-6 (48px vertical padding for breathing room)
+        $this->assertStringContainsString('py-6', $html);
     }
 
     public function test_homepage_has_accessibility_features(): void

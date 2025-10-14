@@ -4,7 +4,10 @@
     {{-- Hero Section - Minimal --}}
     <section class="section pt-24 md:pt-32 pb-20 md:pb-24" id="main-content">
         <div class="max-w-2xl mx-auto text-center space-y-8">
-            <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto" />
+            <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto" data-um-lockup="hero" />
+            
+            {{-- H1 for accessibility (visually hidden since logo serves as brand identity) --}}
+            <h1 class="sr-only">Ursa Minor Games</h1>
             
             @php
                 $tagline = __('ui.tagline');

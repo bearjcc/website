@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+/* === Global Page Gradient === */
+html, body {
+    min-height: 100%;
+}
+
+body {
+    /* Continuous vertical twilight gradient spanning entire document - no fold lines */
+    background:
+        radial-gradient(2px 2px at 20% 30%, hsl(var(--ink) / .07) 0, transparent 60%),
+        radial-gradient(1px 1px at 80% 60%, hsl(var(--ink) / .05) 0, transparent 60%),
+        linear-gradient(180deg,
+            hsl(var(--space-900)) 0%,
+            hsl(var(--space-700)) 38%,
+            hsl(var(--space-600)) 70%,
+            hsl(var(--space-500)) 100%);
+    background-attachment: fixed;
+}
+
 /* Starlight Design Tokens - HSL-based for opacity modifiers */
 :root {
     /* --- Neutrals (2 core) --- */
@@ -76,6 +94,19 @@
 }
 
 @layer components {
+    /* === Accessibility Utilities === */
+    .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+    }
+
     /* === Layout Utilities === */
     .section {
         max-width: 960px;

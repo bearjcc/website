@@ -30,10 +30,10 @@
 
     {{-- Main content wrapper with stacking context above starfield --}}
     <div id="um-app" class="relative z-10 flex flex-col min-h-screen">
-        {{-- Sticky top navigation with airy spacing --}}
+        {{-- Sticky top navigation with generous spacing --}}
         <header id="um-header" class="sticky top-0 z-50 backdrop-blur-md bg-ink/5 relative">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between py-4">
+                <div class="flex items-center justify-between py-6">
                     {{-- Nav logo with morph target --}}
                     <div data-um-morph="nav-logo" class="transition-all duration-200">
                         <x-ui.nav-logo class="h-8" />

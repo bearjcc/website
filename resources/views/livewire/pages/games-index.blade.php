@@ -2,9 +2,8 @@
     {{-- Hero / Page intro --}}
     <section class="section pt-24 md:pt-32 pb-16 md:pb-20">
         <div class="max-w-2xl">
-            <p class="kicker">{{ __('ui.games_kicker') }}</p>
-            <h1 class="h1 mt-2">{{ __('ui.games_title') }}</h1>
-            <p class="p mt-4 max-w-prose">{{ __('ui.games_subtitle') }}</p>
+            <h1 class="h1">{{ __('ui.games_title') }}</h1>
+            <p class="p mt-4 max-w-prose text-ink/70">{{ __('ui.games_subtitle') }}</p>
         </div>
     </section>
 
