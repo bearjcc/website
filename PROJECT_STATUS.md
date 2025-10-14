@@ -202,11 +202,19 @@ Framework capabilities demonstrated:
 
 **Foundation is solid.** Homepage, design system, component architecture, deployment — all working well.
 
-**Phase 2 game cleanup complete.** All 6 games now follow DESIGN_BIBLE: no emoji, HSL tokens throughout, 1,000+ lines of inline CSS extracted, constellation-style completions, consistent controls.
+**Phase 2 complete.** All 6 games polished with framework architecture:
+- Game UI cleanup (no emoji, HSL tokens, -1,150 lines inline CSS)
+- Framework architecture (traits, components, patterns)
+- AI opponent system (3 difficulties, minimax algorithm)
+- Advanced Sudoku UX (CSS Grid, hover picker, custom puzzles)
 
-**All 69 tests passing.**
+**Framework Showcases**:
+- **Tic-Tac-Toe**: AI opponents (easy, medium, impossible)
+- **Sudoku**: Advanced UX (hover picker, custom input, 5 difficulties, hints, auto-solve)
 
-**Next Ready**: Chess or Checkers can now reuse AI framework. Or move to Phase 3 (F1 Predictions).
+**All 88 tests passing** (249 assertions, +19 new Sudoku tests)
+
+**Next Ready**: Chess or Checkers can reuse AI+minimax framework. Or move to Phase 3 (F1 Predictions).
 
 ---
 
