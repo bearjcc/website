@@ -48,8 +48,17 @@ Homepage live with night sky theme, visual-first game cards, component architect
 - [ ] Chess (in database, not yet implemented)
 - [ ] Checkers (in database, not yet implemented)
 
+**Sudoku Enhancements** ✅ COMPLETE:
+- [x] CSS Grid layout with 3x3 box borders
+- [x] Hover number picker (left click place, right click note)
+- [x] Custom puzzle input (paste from newspaper)
+- [x] 5 difficulty levels
+- [x] Hint system
+- [x] Auto-solve
+- [x] Notes mode for deduction
+
 **Future Enhancements**:
-- [ ] Apply trait to existing games (optional refactor)
+- [ ] Apply state management trait to existing games (optional refactor)
 - [ ] Game-specific loading animations (starfield motif)
 - [ ] Score tracking system integration
 - [ ] High score leaderboards
@@ -104,15 +113,19 @@ Extract from `C:\Users\bearj\Herd\tavernsandtreasures`:
 ## Current Status
 
 **Phase 2 complete** ✅ 
-- 6 games cleaned and polished
-- 1,150 lines inline CSS removed
+- 6 games cleaned and polished  
 - Framework architecture created
+- AI opponent system (easy, medium, impossible)
+- Sudoku enhanced (CSS Grid, hover picker, custom puzzles, auto-solve)
 - Developer patterns documented
+- 1,150 lines inline CSS removed
 - localStorage persistence ready
 - Reusable abstractions in place
 
-**Framework now ready** for complex future games (Chess, Card games, Multiplayer, etc.)
+**Framework showcase**:
+- Tic-Tac-Toe: AI opponents (3 difficulty levels)
+- Sudoku: Advanced UX (hover picker, custom input, 5 difficulties)
 
-**Next**: Phase 3 (F1 Predictions) recommended — foundation is solid, time for community features
+**Next**: Foundation is solid. Chess/Checkers AI-ready, or move to Phase 3 (F1 Predictions)?
 
 *Last updated: 2025-10-13*
