@@ -47,6 +47,15 @@ body {
 
     /* --- Sunset glint at horizon --- */
     --sunset: 28 100% 78%;         /* warm line at horizon */
+
+    /* --- Game-specific colors --- */
+    --game-red: 0 70% 60%;         /* #e74c3c - Connect 4 red, Minesweeper mine */
+    --game-yellow: 48 89% 77%;     /* #f6e08f - Connect 4 yellow, same as star */
+    --game-green: 120 60% 50%;     /* #27ae60 - Snake head, success states */
+    --game-blue: 210 100% 50%;     /* #3498db - Minesweeper numbers */
+    --game-orange: 25 100% 60%;    /* #f39c12 - 2048 tiles, warning states */
+    --game-purple: 280 60% 60%;    /* #9b59b6 - 2048 high tiles */
+    --game-dark: 0 0% 20%;         /* #333333 - 2048 dark tiles */
 }
 
 @layer base {
@@ -518,35 +527,12 @@ body {
         display: block;
         width: 100%;
         min-height: 44px;
-        padding-bottom: 100%; /* Square aspect ratio */
-    }
-    
-    /* Allow card to grow on hover */
-    .um-game-card:hover,
-    .um-game-card:focus {
-        padding-bottom: 112%; /* Grows taller to show title */
-    }
-    
-    /* Smooth transition for growth */
-    .um-game-card {
-        transition: padding-bottom 200ms ease-out;
+        /* Aspect ratio enforced by child div with pt-[100%] */
     }
     
     /* Reduced motion support */
     @media (prefers-reduced-motion: reduce) {
         .um-game-card {
-            transition: none !important;
-        }
-        
-        .um-game-card:hover,
-        .um-game-card:focus {
-            padding-bottom: 100% !important; /* No growth */
-        }
-        
-        /* Title still shows, just instantly */
-        .um-game-card:hover .um-title-reveal,
-        .um-game-card:focus .um-title-reveal {
-            opacity: 1 !important;
             transition: none !important;
         }
     }
@@ -1351,6 +1337,392 @@ body {
 
         .picker-number:hover {
             transform: none;
+        }
+    }
+
+    /* === Tic-Tac-Toe Game Pieces === */
+    /* Beautiful CSS shapes instead of plain letters */
+    
+    .game-piece {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: piece-appear 0.3s ease-out;
+    }
+
+    @keyframes piece-appear {
+        from {
+            transform: scale(0) rotate(180deg);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1) rotate(0deg);
+            opacity: 1;
+        }
+    }
+
+    /* X Piece - Stylized cross with rounded ends */
+    .piece-x {
+        position: relative;
+        width: 60%;
+        height: 60%;
+    }
+
+    .piece-x::before,
+    .piece-x::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 8px;
+        background: hsl(0 70% 70%);
+        border-radius: 4px;
+        transform-origin: center;
+        box-shadow: 
+            0 0 8px hsl(0 70% 70% / 0.4),
+            inset 0 1px 2px hsl(0 70% 80% / 0.3);
+    }
+
+    .piece-x::before {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .piece-x::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    /* O Piece - Stylized circle with gradient and inner glow */
+    .piece-o {
+        position: relative;
+        width: 60%;
+        height: 60%;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            hsl(var(--constellation) / 0.9) 0%,
+            hsl(var(--constellation) / 0.7) 50%,
+            hsl(var(--constellation) / 0.9) 100%
+        );
+        border: 4px solid hsl(var(--constellation));
+        box-shadow: 
+            0 0 12px hsl(var(--constellation) / 0.5),
+            inset 0 2px 4px hsl(var(--constellation) / 0.3),
+            inset 0 -2px 4px hsl(var(--constellation) / 0.1);
+    }
+
+    .piece-o::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 30%;
+        height: 30%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            hsl(var(--constellation) / 0.4) 0%,
+            transparent 70%
+        );
+        transform: translate(-50%, -50%);
+    }
+
+    /* Alternative X design - more geometric */
+    .piece-x-alt {
+        position: relative;
+        width: 60%;
+        height: 60%;
+    }
+
+    .piece-x-alt::before,
+    .piece-x-alt::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(
+            90deg,
+            hsl(0 70% 60%) 0%,
+            hsl(0 70% 80%) 50%,
+            hsl(0 70% 60%) 100%
+        );
+        border-radius: 3px;
+        transform-origin: center;
+        box-shadow: 0 2px 4px hsl(0 70% 50% / 0.3);
+    }
+
+    .piece-x-alt::before {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .piece-x-alt::after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    /* Alternative O design - more dimensional */
+    .piece-o-alt {
+        position: relative;
+        width: 60%;
+        height: 60%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            hsl(var(--constellation) / 0.8) 0%,
+            hsl(var(--constellation) / 0.6) 40%,
+            hsl(var(--constellation) / 0.4) 100%
+        );
+        border: 3px solid hsl(var(--constellation));
+        box-shadow: 
+            0 4px 8px hsl(var(--constellation) / 0.3),
+            inset 0 2px 4px hsl(var(--constellation) / 0.2),
+            inset 0 -2px 4px hsl(var(--constellation) / 0.1);
+    }
+
+    /* Hover effects for game pieces */
+    .game-piece:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+
+    /* Respect reduced motion for game pieces */
+    @media (prefers-reduced-motion: reduce) {
+        .game-piece {
+            animation: none;
+        }
+        
+        .game-piece:hover {
+            transform: none;
+            filter: none;
+        }
+    }
+
+    /* === Moon & Star Game Pieces === */
+    /* Beautiful celestial pieces for space theme */
+    
+    /* Moon Piece - Beautiful crescent moon like in paintings */
+    .piece-moon {
+        position: relative;
+        width: 60%;
+        height: 60%;
+    }
+
+    .piece-moon::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at 25% 25%,
+            hsl(var(--ink) / 0.95) 0%,
+            hsl(var(--ink) / 0.8) 40%,
+            hsl(var(--ink) / 0.6) 70%,
+            hsl(var(--ink) / 0.3) 100%
+        );
+        transform: translate(-50%, -50%);
+        box-shadow: 
+            0 0 15px hsl(var(--ink) / 0.5),
+            inset 0 3px 6px hsl(var(--ink) / 0.3);
+    }
+
+    /* Beautiful crescent shadow - like a proper moon phase */
+    .piece-moon::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: hsl(var(--space-900) / 0.98);
+        transform: translate(-20%, -50%);
+        clip-path: circle(60% at 20% 50%);
+        box-shadow: inset 0 2px 4px hsl(var(--space-800) / 0.4);
+    }
+
+    /* Star Piece - Beautiful painterly Bethlehem Star */
+    .piece-star {
+        position: relative;
+        width: 60%;
+        height: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Central brilliant light - like James Webb core */
+    .piece-star::before {
+        content: '';
+        position: absolute;
+        width: 30%;
+        height: 30%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at center,
+            hsl(60 100% 100%) 0%,     /* Pure white center */
+            hsl(60 100% 98%) 20%,
+            hsl(var(--star) / 0.95) 40%,
+            hsl(var(--star) / 0.8) 60%,
+            hsl(var(--star) / 0.5) 80%,
+            transparent 100%
+        );
+        box-shadow: 
+            0 0 12px hsl(60 100% 95% / 1),
+            0 0 24px hsl(var(--star) / 0.7),
+            0 0 36px hsl(var(--star) / 0.4);
+        z-index: 3;
+    }
+
+    /* Beautiful cross pattern - like the paintings */
+    .piece-star::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: 
+            /* Vertical ray - longest and brightest */
+            linear-gradient(90deg, 
+                transparent 47%, 
+                hsl(var(--star) / 0.1) 48%, 
+                hsl(var(--star) / 0.8) 49%, 
+                hsl(var(--star) / 0.9) 50%, 
+                hsl(var(--star) / 0.8) 51%, 
+                hsl(var(--star) / 0.1) 52%, 
+                transparent 53%),
+            /* Horizontal ray - medium length */
+            linear-gradient(0deg, 
+                transparent 47%, 
+                hsl(var(--star) / 0.1) 48%, 
+                hsl(var(--star) / 0.7) 49%, 
+                hsl(var(--star) / 0.8) 50%, 
+                hsl(var(--star) / 0.7) 51%, 
+                hsl(var(--star) / 0.1) 52%, 
+                transparent 53%),
+            /* Diagonal rays - shorter and more subtle */
+            linear-gradient(45deg, 
+                transparent 47%, 
+                hsl(var(--star) / 0.05) 48%, 
+                hsl(var(--star) / 0.5) 49%, 
+                hsl(var(--star) / 0.6) 50%, 
+                hsl(var(--star) / 0.5) 51%, 
+                hsl(var(--star) / 0.05) 52%, 
+                transparent 53%),
+            linear-gradient(-45deg, 
+                transparent 47%, 
+                hsl(var(--star) / 0.05) 48%, 
+                hsl(var(--star) / 0.5) 49%, 
+                hsl(var(--star) / 0.6) 50%, 
+                hsl(var(--star) / 0.5) 51%, 
+                hsl(var(--star) / 0.05) 52%, 
+                transparent 53%);
+        background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+        background-position: 0 0, 0 0, 0 0, 0 0;
+        background-repeat: no-repeat;
+        filter: blur(0.8px);
+        z-index: 2;
+    }
+
+    /* Alternative moon design - more stylized */
+    .piece-moon-alt {
+        position: relative;
+        width: 60%;
+        height: 60%;
+    }
+
+    .piece-moon-alt::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at 30% 30%,
+            hsl(var(--ink) / 0.8) 0%,
+            hsl(var(--ink) / 0.6) 40%,
+            hsl(var(--ink) / 0.4) 100%
+        );
+        transform: translate(-50%, -50%);
+        box-shadow: 
+            0 4px 8px hsl(var(--ink) / 0.3),
+            inset 0 2px 4px hsl(var(--ink) / 0.2),
+            inset 0 -2px 4px hsl(var(--ink) / 0.1);
+    }
+
+    .piece-moon-alt::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 65%;
+        height: 65%;
+        border-radius: 50%;
+        background: hsl(var(--space-900) / 0.9);
+        transform: translate(-25%, -50%);
+        box-shadow: inset 0 2px 4px hsl(var(--space-800) / 0.3);
+    }
+
+    /* Alternative star design - more geometric */
+    .piece-star-alt {
+        position: relative;
+        width: 60%;
+        height: 60%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .piece-star-alt::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            45deg,
+            hsl(var(--star) / 0.9) 0%,
+            hsl(var(--star) / 0.7) 50%,
+            hsl(var(--star) / 0.5) 100%
+        );
+        clip-path: polygon(
+            50% 0%,     /* top point */
+            61% 35%,    /* top-right */
+            100% 35%,   /* right point */
+            68% 57%,    /* bottom-right */
+            79% 91%,    /* bottom point */
+            50% 70%,    /* bottom-center */
+            21% 91%,    /* bottom-left */
+            32% 57%,    /* top-left */
+            0% 35%,     /* left point */
+            39% 35%     /* top-left */
+        );
+        box-shadow: 
+            0 0 12px hsl(var(--star) / 0.4),
+            inset 0 2px 4px hsl(var(--star) / 0.2),
+            inset 0 -2px 4px hsl(var(--star) / 0.1);
+        transform: rotate(22.5deg);
+    }
+
+    /* Hover effects for celestial pieces */
+    .piece-moon:hover,
+    .piece-star:hover {
+        transform: scale(1.05);
+        filter: brightness(1.1);
+    }
+
+    /* Respect reduced motion for celestial pieces */
+    @media (prefers-reduced-motion: reduce) {
+        .piece-moon:hover,
+        .piece-star:hover {
+            transform: none;
+            filter: none;
         }
     }
 }

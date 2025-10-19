@@ -64,9 +64,9 @@ class HomepageTest extends TestCase
 
         $html = $response->getContent();
 
-        // Carousel shows all games (just makes browsing simpler for user)
-        // Verify carousel structure exists
-        $this->assertStringContainsString('um-carousel', $html);
+        // Games grid shows all games (just makes browsing simpler for user)
+        // Verify games grid structure exists
+        $this->assertStringContainsString('Free Games to Play', $html);
 
         // Verify games are present
         preg_match_all('/href="[^"]*\/games\/([^"]+)"/i', $html, $matches);

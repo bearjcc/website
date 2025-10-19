@@ -4,10 +4,15 @@ namespace App\Livewire\Games;
 
 use App\Games\TicTacToe\Engine;
 use App\Games\TicTacToe\TicTacToeGame;
+use App\Models\Game;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layouts.app')]
 class TicTacToe extends Component
 {
+    public Game $game;
+
     public array $board = [];
 
     public string $currentPlayer = 'X';
@@ -24,6 +29,7 @@ class TicTacToe extends Component
 
     public function mount()
     {
+        $this->game = Game::where('slug', 'tic-tac-toe')->firstOrFail();
         $this->newGame();
     }
 

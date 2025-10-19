@@ -33,6 +33,7 @@ Route::middleware('guest')->group(function () {
 // Games routes (public)
 Route::prefix('games')->name('games.')->group(function () {
     Route::get('/', GamesIndex::class)->name('index');
+    Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe');
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
 

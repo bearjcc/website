@@ -39,34 +39,36 @@
         </div>
     </section>
 
-    {{-- Games Carousel - Visual First with Embla --}}
+    {{-- Games Section - Clear and obvious --}}
     <section class="py-12 md:py-16 pb-20">
         <div class="section">
-            @php
-                // Map game slugs to motifs
-                $motifMap = [
-                    'tic-tac-toe' => 'tictactoe',
-                    'connect-4' => 'connect4',
-                    'sudoku' => 'sudoku',
-                    'chess' => 'chess',
-                    'checkers' => 'checkers',
-                    'minesweeper' => 'minesweeper',
-                    'snake' => 'snake',
-                    '2048' => '2048',
-                ];
-            @endphp
+            <div class="max-w-4xl mx-auto">
+                <h2 class="h3 text-center text-ink mb-8">Free Games to Play</h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    @php
+                        // Map game slugs to motifs
+                        $motifMap = [
+                            'tic-tac-toe' => 'tictactoe',
+                            'connect-4' => 'connect4',
+                            'sudoku' => 'sudoku',
+                            'chess' => 'chess',
+                            'checkers' => 'checkers',
+                            'minesweeper' => 'minesweeper',
+                            'snake' => 'snake',
+                            'twenty-forty-eight' => '2048',
+                        ];
+                    @endphp
 
-            <x-ui.carousel>
-                @foreach($games as $game)
-                    <div class="flex-[0_0_100%] min-w-0 sm:flex-[0_0_50%] md:flex-[0_0_33.333%]">
+                    @foreach($games as $game)
                         <x-ui.game-card
                             :href="route('games.play', $game->slug)"
                             :title="$game->title"
                             :motif="$motifMap[$game->slug] ?? null"
                         />
-                    </div>
-                @endforeach
-            </x-ui.carousel>
+                    @endforeach
+                </div>
+            </div>
         </div>
     </section>
 </div>

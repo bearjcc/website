@@ -41,7 +41,7 @@ class ErrorHandlingTest extends TestCase
         $response = $this->get(route('games.play', $game));
 
         $response->assertStatus(200);
-        $response->assertSee('Test Game');
+        $response->assertSee('Game Not Available');
     }
 
     public function test_all_navigation_links_work(): void

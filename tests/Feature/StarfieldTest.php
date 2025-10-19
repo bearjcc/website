@@ -12,9 +12,10 @@ class StarfieldTest extends TestCase
 
         $response->assertStatus(200);
 
-        // Starfield should be loaded via app.js bundle
+        // Starfield should be loaded via Vite bundle (hashed filename)
         $html = $response->getContent();
-        $this->assertStringContainsString('app.js', $html);
+        $this->assertStringContainsString('app-', $html);
+        $this->assertStringContainsString('.js', $html);
     }
 
     public function test_homepage_has_app_wrapper_for_layering(): void

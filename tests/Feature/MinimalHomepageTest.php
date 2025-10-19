@@ -159,11 +159,11 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should use Embla carousel component
-        $this->assertStringContainsString('um-carousel', $html);
-
-        // Should have constellation pagination
-        $this->assertStringContainsString('um-carousel-dot', $html);
+        // Should use games grid instead of carousel
+        $this->assertStringContainsString('Free Games to Play', $html);
+        
+        // Should have game cards in grid layout
+        $this->assertStringContainsString('um-game-card', $html);
     }
 
     public function test_homepage_hero_shows_tagline(): void

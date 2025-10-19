@@ -54,17 +54,30 @@
         @if($winner || $isDraw)
             <div class="glass rounded-xl border p-4 text-center {{ $winner ? 'border-star/40 bg-star/5' : 'border-constellation/40 bg-constellation/5' }}">
                 @if($winner)
-                    <p class="text-lg font-semibold text-star">Player {{ $winner }} wins.</p>
+                    <p class="text-lg font-semibold text-star">
+                        @if($winner === 'X')
+                            🌙 Moon wins!
+                        @else
+                            ⭐ Star wins!
+                        @endif
+                    </p>
                 @else
-                    <p class="text-lg font-semibold text-constellation">Draw.</p>
+                    <p class="text-lg font-semibold text-constellation">🌙⭐ Draw!</p>
                 @endif
             </div>
         @else
             <div class="text-center">
                 <p class="text-ink text-sm">
-                    Current turn: <strong class="text-star">{{ $currentPlayer }}</strong>
+                    Current turn: 
+                    @if($currentPlayer === 'X')
+                        <strong class="text-ink">🌙 Moon</strong>
+                    @else
+                        <strong class="text-star">⭐ Star</strong>
+                    @endif
                     @if($gameMode !== 'pvp')
-                        <span class="text-ink/60">(You: {{ $playerSymbol }})</span>
+                        <span class="text-ink/60">
+                            (You: @if($playerSymbol === 'X')🌙@else⭐@endif)
+                        </span>
                     @endif
                 </p>
             </div>
@@ -80,9 +93,9 @@
                     aria-label="Cell {{ $index + 1 }}{{ $cell ? ', ' . $cell : ', empty' }}"
                 >
                     @if($cell === 'X')
-                        <span class="animate-in fade-in zoom-in duration-150" style="color: hsl(0 70% 70%);">X</span>
+                        <div class="game-piece piece-moon" aria-label="Moon"></div>
                     @elseif($cell === 'O')
-                        <span class="animate-in fade-in zoom-in duration-150" style="color: hsl(var(--constellation));">O</span>
+                        <div class="game-piece piece-star" aria-label="Star"></div>
                     @endif
                 </button>
             @endforeach
