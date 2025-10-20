@@ -1,9 +1,10 @@
 @props([
-    'class' => 'w-[260px] md:w-[320px] h-auto'
+    'class' => 'w-auto h-auto'
 ])
 
 <div data-um-hero-lockup {{ $attributes->merge(['class' => $class]) }}>
     <div class="flex items-center gap-3">
+        <span class="text-3xl md:text-4xl font-bold tracking-tight text-ink">ursa</span>
         <img 
             src="{{ asset('bear.svg') }}" 
             alt="Ursa Minor bear constellation" 
@@ -11,10 +12,7 @@
             loading="eager"
             decoding="async"
         />
-        <div class="flex flex-col">
-            <span class="text-3xl md:text-4xl font-bold tracking-tight text-ink">ursa</span>
-            <span class="text-2xl md:text-3xl font-light tracking-wide text-ink-muted">minor</span>
-        </div>
+        <span class="text-3xl md:text-4xl font-bold tracking-tight text-ink">minor</span>
     </div>
 </div>
 

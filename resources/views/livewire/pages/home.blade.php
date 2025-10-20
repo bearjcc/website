@@ -2,12 +2,14 @@
     <x-slot:title>Home</x-slot:title>
     
     {{-- Hero Section - Minimal --}}
-    <section class="section pt-24 md:pt-32 pb-20 md:pb-24" id="main-content">
+    <section class="pt-8 pl-8 pb-20 md:pb-24" id="main-content">
         <div class="max-w-2xl mx-auto text-center space-y-8">
-            <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto" data-um-lockup="hero" />
+            <div class="flex justify-start mb-8">
+                <x-ui.logo-lockup data-um-lockup="hero" />
+            </div>
             
             {{-- H1 for accessibility (visually hidden since logo serves as brand identity) --}}
-            <h1 class="sr-only">Ursa Minor Games</h1>
+            <h1 class="sr-only">Ursa Minor</h1>
             
             @php
                 $tagline = __('ui.tagline');
@@ -18,24 +20,6 @@
                 {{ $tagline }}
             </p>
 
-            <div class="pt-2">
-                <div class="flex flex-wrap gap-3 justify-center">
-                    <x-ui.flux-button 
-                        variant="primary" 
-                        :href="$firstPublishedGameSlug ? route('games.play', $firstPublishedGameSlug) : route('home')"
-                        data-um-goal="hero_play_click"
-                    >
-                        {{ __('ui.cta_play') }}
-                    </x-ui.flux-button>
-                    
-                    <x-ui.flux-button 
-                        variant="secondary" 
-                        :href="route('home')"
-                    >
-                        {{ __('ui.cta_browse') }}
-                    </x-ui.flux-button>
-                </div>
-            </div>
         </div>
     </section>
 
@@ -45,7 +29,7 @@
             <div class="max-w-4xl mx-auto">
                 <h2 class="h3 text-center text-ink mb-8">Free Games to Play</h2>
                 
-                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                     @php
                         // Map game slugs to motifs
                         $motifMap = [
