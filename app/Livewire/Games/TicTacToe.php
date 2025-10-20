@@ -84,7 +84,8 @@ class TicTacToe extends Component
 
             // AI turn (if applicable)
             if ($this->gameMode !== 'pvp' && $this->currentPlayer !== $this->playerSymbol) {
-                $this->makeAiMove();
+                // Add a delay to let the player's move animation complete
+                $this->dispatch('ai-move-delay');
             }
         }
     }

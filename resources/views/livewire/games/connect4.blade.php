@@ -2,7 +2,7 @@
     <div class="max-w-2xl mx-auto space-y-8">
         {{-- Back nav --}}
         <div class="flex items-center gap-4">
-            <a href="{{ route('games.index') }}" 
+            <a href="{{ route('home') }}" 
                class="inline-flex items-center gap-2 text-ink/70 hover:text-ink transition-colors"
                aria-label="{{ __('ui.back_to_games') }}">
                 <x-heroicon-o-arrow-left class="w-5 h-5" />

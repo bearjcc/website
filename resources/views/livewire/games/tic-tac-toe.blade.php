@@ -1,8 +1,14 @@
-<div class="section py-12 md:py-16" x-data="{ showRules: false }">
+<div class="section py-12 md:py-16" x-data="{ showRules: false }" x-init="
+    $wire.on('ai-move-delay', () => {
+        setTimeout(() => {
+            $wire.makeAiMove();
+        }, 800); // 800ms delay to let player move animation complete
+    });
+">
     <div class="max-w-2xl mx-auto space-y-8">
         {{-- Back nav --}}
         <div class="flex items-center gap-4">
-            <a href="{{ route('games.index') }}" 
+            <a href="{{ route('home') }}" 
                class="inline-flex items-center gap-2 text-ink/70 hover:text-ink transition-colors"
                aria-label="{{ __('ui.back_to_games') }}">
                 <x-heroicon-o-arrow-left class="w-5 h-5" />
@@ -93,9 +99,9 @@
                     aria-label="Cell {{ $index + 1 }}{{ $cell ? ', ' . $cell : ', empty' }}"
                 >
                     @if($cell === 'X')
-                        <div class="game-piece piece-moon" aria-label="Moon"></div>
+                        <div class="game-piece piece-x" aria-label="X"></div>
                     @elseif($cell === 'O')
-                        <div class="game-piece piece-star" aria-label="Star"></div>
+                        <div class="game-piece piece-o" aria-label="O"></div>
                     @endif
                 </button>
             @endforeach

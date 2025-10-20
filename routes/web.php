@@ -5,7 +5,6 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Pages\About;
 use App\Livewire\Pages\AdminFeatures;
 use App\Livewire\Pages\GamePlay;
-use App\Livewire\Pages\GamesIndex;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\LoreEdit;
 use App\Livewire\Pages\LoreIndex;
@@ -32,8 +31,12 @@ Route::middleware('guest')->group(function () {
 
 // Games routes (public)
 Route::prefix('games')->name('games.')->group(function () {
-    Route::get('/', GamesIndex::class)->name('index');
     Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe');
+    Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('connect-4');
+    Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('sudoku');
+    Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('twenty-forty-eight');
+    Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('minesweeper');
+    Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake');
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
 

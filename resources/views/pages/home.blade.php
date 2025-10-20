@@ -11,9 +11,9 @@
 
                 <div class="pt-2">
                     <x-ui.cta-row
-                        :primaryHref="route('games.index')"
+                        :primaryHref="route('home')"
                         :primaryLabel="__('ui.cta_play')"
-                        :secondaryHref="route('games.index')"
+                        :secondaryHref="route('home')"
                         :secondaryLabel="__('ui.cta_browse')"
                         data-um-goal="hero_play_click"
                     />

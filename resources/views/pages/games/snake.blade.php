@@ -6,7 +6,7 @@
 <x-layouts.app :title="$title" :description="$description">
     <section class="game-page">
         <div class="game-breadcrumb">
-            <a href="{{ route('games.index') }}">← Back to Games</a>
+            <a href="{{ route('home') }}">← Back to Games</a>
         </div>
 
         <livewire:games.snake />

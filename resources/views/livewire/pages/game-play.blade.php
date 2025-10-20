@@ -13,7 +13,7 @@
 @endphp
 
 @if($componentName)
-    @livewire($componentName, ['game' => $game], key($game->slug))
+    @livewire($componentName, ['game' => $game], key('game-' . $game->slug . '-' . $game->id))
 @else
     @include('livewire.pages.game-not-found')
 @endif

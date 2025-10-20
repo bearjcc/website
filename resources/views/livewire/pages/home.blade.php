@@ -22,7 +22,7 @@
                 <div class="flex flex-wrap gap-3 justify-center">
                     <x-ui.flux-button 
                         variant="primary" 
-                        :href="$firstPublishedGameSlug ? route('games.play', $firstPublishedGameSlug) : route('games.index')"
+                        :href="$firstPublishedGameSlug ? route('games.play', $firstPublishedGameSlug) : route('home')"
                         data-um-goal="hero_play_click"
                     >
                         {{ __('ui.cta_play') }}
@@ -30,7 +30,7 @@
                     
                     <x-ui.flux-button 
                         variant="secondary" 
-                        :href="route('games.index')"
+                        :href="route('home')"
                     >
                         {{ __('ui.cta_browse') }}
                     </x-ui.flux-button>

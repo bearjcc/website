@@ -111,26 +111,25 @@
                 @break
 
             @case('chess')
-                {{-- Chess knight --}}
-                <svg width="60" height="60" viewBox="0 0 100 100" class="opacity-70 text-ink/70" aria-hidden="true">
-                    <path d="M50 20 L35 35 L40 50 L30 70 L70 70 L60 50 L65 35 Z" 
-                          fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
-                    <circle cx="55" cy="30" r="4" fill="currentColor"/>
-                </svg>
+                {{-- Chess knight from Kenney assets --}}
+                <img src="{{ asset('images/games/chess_knight.png') }}" 
+                     alt="Chess Knight" 
+                     class="w-16 h-16 opacity-70 filter brightness-0 invert" 
+                     style="filter: brightness(0) invert(1) opacity(0.7);" />
                 @break
 
             @case('checkers')
-                {{-- Checkerboard pattern --}}
-                <svg width="80" height="80" viewBox="0 0 120 120" class="opacity-70 text-ink/70" aria-hidden="true">
-                    <rect x="10" y="10" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="60" y="10" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="35" y="35" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="85" y="35" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="10" y="60" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="60" y="60" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="35" y="85" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                    <rect x="85" y="85" width="25" height="25" fill="currentColor" opacity="0.6"/>
-                </svg>
+                {{-- Checkers pawns from Kenney assets --}}
+                <div class="flex items-center justify-center gap-1 opacity-70">
+                    <img src="{{ asset('images/games/pawn.png') }}" 
+                         alt="Checkers Pawn" 
+                         class="w-8 h-8 filter brightness-0 invert" 
+                         style="filter: brightness(0) invert(1) opacity(0.7);" />
+                    <img src="{{ asset('images/games/chess_pawn.png') }}" 
+                         alt="Checkers Pawn" 
+                         class="w-8 h-8 filter brightness-0 invert" 
+                         style="filter: brightness(0) invert(1) opacity(0.7);" />
+                </div>
                 @break
 
             @case('connect4')
