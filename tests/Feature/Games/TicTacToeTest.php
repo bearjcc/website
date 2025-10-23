@@ -136,4 +136,64 @@ class TicTacToeTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Tic-Tac-Toe');
     }
+
+    public function test_game_mode_initialization_works(): void
+    {
+        Livewire::test(TicTacToe::class)
+            ->assertSet('gameMode', 'pvp')
+            ->assertSet('playerSymbol', 'X')
+            ->assertSet('movesCount', 0)
+            ->assertSet('winner', null)
+            ->assertSet('isDraw', false);
+    }
+
+    public function test_ai_difficulty_display_works(): void
+    {
+        Livewire::test(TicTacToe::class)
+            ->call('setGameMode', 'ai-medium', 'X')
+            ->assertSet('aiDifficulty', 'Medium')
+            ->assertSet('gameMode', 'ai-medium');
+    }
+
+    public function test_game_completes_with_statistics(): void
+    {
+        $component = Livewire::test(TicTacToe::class)
+            ->set('board', ['X', 'X', null, null, null, null, null, null, null])
+            ->set('currentPlayer', 'X')
+            ->set('movesCount', 2) // Two X's already placed
+            ->call('makeMove', 2);
+
+        // Should trigger game completion event with stats
+        $component->assertSet('movesCount', 3);
+        $component->assertSet('winner', 'X');
+    }
+
+    public function test_ai_modes_have_correct_difficulty_labels(): void
+    {
+        // Test Easy AI
+        $component = Livewire::test(TicTacToe::class)
+            ->call('setGameMode', 'ai-easy', 'X');
+        $component->assertSet('aiDifficulty', 'Easy')
+            ->assertSet('gameMode', 'ai-easy');
+
+        // Test Medium AI
+        $component = Livewire::test(TicTacToe::class)
+            ->call('setGameMode', 'ai-medium', 'X');
+        $component->assertSet('aiDifficulty', 'Medium')
+            ->assertSet('gameMode', 'ai-medium');
+
+        // Test Impossible AI
+        $component = Livewire::test(TicTacToe::class)
+            ->call('setGameMode', 'ai-impossible', 'X');
+        $component->assertSet('aiDifficulty', 'Impossible')
+            ->assertSet('gameMode', 'ai-impossible');
+    }
+
+    public function test_symbol_selection_updates_correctly(): void
+    {
+        Livewire::test(TicTacToe::class)
+            ->call('setGameMode', 'ai-easy', 'O')
+            ->assertSet('gameMode', 'ai-easy')
+            ->assertSet('playerSymbol', 'O');
+    }
 }

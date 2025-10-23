@@ -1710,11 +1710,168 @@ body {
         transform: rotate(22.5deg);
     }
 
-    /* Hover effects for celestial pieces */
+    /* Responsive sizing for celestial pieces */
+    .piece-moon.text-xs,
+    .piece-star.text-xs {
+        width: 12px;
+        height: 12px;
+        font-size: 12px;
+    }
+
+    .piece-moon.text-sm,
+    .piece-star.text-sm {
+        width: 16px;
+        height: 16px;
+        font-size: 16px;
+    }
+
+    .piece-moon.text-base,
+    .piece-star.text-base {
+        width: 20px;
+        height: 20px;
+        font-size: 20px;
+    }
+
+    .piece-moon.text-lg,
+    .piece-star.text-lg {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+    }
+
+    .piece-moon.text-xl,
+    .piece-star.text-xl {
+        width: 28px;
+        height: 28px;
+        font-size: 28px;
+    }
+
+    .piece-moon.text-2xl,
+    .piece-star.text-2xl {
+        width: 32px;
+        height: 32px;
+        font-size: 32px;
+    }
+
+    .piece-moon.text-3xl,
+    .piece-star.text-3xl {
+        width: 36px;
+        height: 36px;
+        font-size: 36px;
+    }
+
+    .piece-moon.text-4xl,
+    .piece-star.text-4xl {
+        width: 40px;
+        height: 40px;
+        font-size: 40px;
+    }
+
+    .piece-moon.text-5xl,
+    .piece-star.text-5xl {
+        width: 44px;
+        height: 44px;
+        font-size: 44px;
+    }
+
+    .piece-moon.text-6xl,
+    .piece-star.text-6xl {
+        width: 48px;
+        height: 48px;
+        font-size: 48px;
+    }
+
+    /* Specific sizing for different contexts */
+    .piece-moon.w-4.h-4,
+    .piece-star.w-4.h-4 {
+        width: 16px;
+        height: 16px;
+    }
+
+    .piece-moon.w-5.h-5,
+    .piece-star.w-5.h-5 {
+        width: 20px;
+        height: 20px;
+    }
+
+    .piece-moon.w-6.h-6,
+    .piece-star.w-6.h-6 {
+        width: 24px;
+        height: 24px;
+    }
+
+    /* Enhanced animations for celestial pieces */
     .piece-moon:hover,
     .piece-star:hover {
         transform: scale(1.05);
         filter: brightness(1.1);
+    }
+
+    /* Winning piece animation */
+    .piece-moon.winning,
+    .piece-star.winning {
+        animation: winning-celebration 1.2s ease-in-out infinite;
+    }
+
+    @keyframes winning-celebration {
+        0%, 100% {
+            transform: scale(1) rotate(0deg);
+            filter: brightness(1);
+        }
+        25% {
+            transform: scale(1.1) rotate(5deg);
+            filter: brightness(1.3) drop-shadow(0 0 12px currentColor);
+        }
+        50% {
+            transform: scale(1.15) rotate(-3deg);
+            filter: brightness(1.4) drop-shadow(0 0 16px currentColor);
+        }
+        75% {
+            transform: scale(1.1) rotate(2deg);
+            filter: brightness(1.3) drop-shadow(0 0 12px currentColor);
+        }
+    }
+
+    /* AI thinking pulse animation */
+    .piece-moon.animate-pulse,
+    .piece-star.animate-pulse {
+        animation: ai-thinking 1.5s ease-in-out infinite;
+    }
+
+    @keyframes ai-thinking {
+        0%, 100% {
+            opacity: 0.7;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+    }
+
+    /* Game board cell hover enhancement */
+    .game-board-cell:hover {
+        background: radial-gradient(circle at center, hsl(var(--star) / 0.1) 0%, transparent 70%);
+    }
+
+    /* Victory line animation */
+    .victory-line {
+        position: absolute;
+        background: linear-gradient(90deg, transparent, hsl(var(--star)) 20%, hsl(var(--star)) 80%, transparent);
+        border-radius: 4px;
+        animation: victory-glow 2s ease-in-out infinite;
+        z-index: 1;
+    }
+
+    @keyframes victory-glow {
+        0%, 100% {
+            opacity: 0.5;
+            transform: scaleX(0.8);
+        }
+        50% {
+            opacity: 1;
+            transform: scaleX(1.1);
+        }
     }
 
     /* Respect reduced motion for celestial pieces */
@@ -1723,6 +1880,20 @@ body {
         .piece-star:hover {
             transform: none;
             filter: none;
+        }
+
+        .piece-moon.winning,
+        .piece-star.winning {
+            animation: none;
+        }
+
+        .piece-moon.animate-pulse,
+        .piece-star.animate-pulse {
+            animation: none;
+        }
+
+        .victory-line {
+            animation: none;
         }
     }
 }
