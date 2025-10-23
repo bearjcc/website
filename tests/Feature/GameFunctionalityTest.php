@@ -173,7 +173,15 @@ class GameFunctionalityTest extends TestCase
         $response = $this->get('/games/minesweeper');
 
         $response->assertStatus(200);
-        $response->assertSee('Minesweeper');
+        $response->assertSee('Galaxy Mapper');
+    }
+
+    public function galaxy_mapper_route_works(): void
+    {
+        $response = $this->get('/games/galaxy-mapper');
+
+        $response->assertStatus(200);
+        $response->assertSee('Galaxy Mapper');
     }
 
     /** @test */
@@ -230,12 +238,12 @@ class GameFunctionalityTest extends TestCase
     }
 
     /** @test */
-    public function first_2048_link_shows_not_found(): void
+    public function twenty_forty_eight_game_works(): void
     {
-        $response = $this->get('/games/2048');
+        $response = $this->get('/games/twenty-forty-eight');
 
         $response->assertStatus(200);
-        $response->assertSee('Game Not Found');
+        $response->assertSee('2048');
     }
 
     /** @test */
@@ -329,7 +337,7 @@ class GameFunctionalityTest extends TestCase
 
         // Test cell reveal
         $component->call('revealCell', 0, 0);
-        $component->assertSet('revealed.0.0', true);
+        $component->assertSet('board.0.0.revealed', true);
 
         // Test new game
         $component->call('newGame');

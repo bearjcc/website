@@ -128,7 +128,21 @@ class TwentyFortyEightEngine
      */
     public function canMove(array $board): bool
     {
-        // Check for empty cells
+        // Check if there are any non-empty tiles
+        $hasTiles = false;
+        foreach ($board as $tile) {
+            if ($tile > 0) {
+                $hasTiles = true;
+                break;
+            }
+        }
+
+        // If no tiles, no moves possible
+        if (!$hasTiles) {
+            return false;
+        }
+
+        // Check for empty cells (can move if there are spaces)
         if (in_array(0, $board)) {
             return true;
         }
@@ -137,7 +151,7 @@ class TwentyFortyEightEngine
         for ($row = 0; $row < 4; $row++) {
             for ($col = 0; $col < 3; $col++) {
                 $idx = $row * 4 + $col;
-                if ($board[$idx] === $board[$idx + 1]) {
+                if ($board[$idx] === $board[$idx + 1] && $board[$idx] > 0) {
                     return true;
                 }
             }
@@ -147,7 +161,7 @@ class TwentyFortyEightEngine
         for ($row = 0; $row < 3; $row++) {
             for ($col = 0; $col < 4; $col++) {
                 $idx = $row * 4 + $col;
-                if ($board[$idx] === $board[$idx + 4]) {
+                if ($board[$idx] === $board[$idx + 4] && $board[$idx] > 0) {
                     return true;
                 }
             }

@@ -1264,16 +1264,54 @@ body {
         }
     }
 
+    /* 2048 celebration effect */
+    .game-2048.celebration {
+        animation: celebrate 2s ease-in-out;
+    }
+
+    @keyframes celebrate {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.02) rotate(1deg); }
+        50% { transform: scale(1.05) rotate(0deg); }
+        75% { transform: scale(1.02) rotate(-1deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .game-2048.celebration .tile {
+        animation: tile-glow 0.6s ease-in-out infinite alternate;
+    }
+
+    .game-2048.celebration .win-message .tile {
+        animation: win-tile-glow 0.8s ease-in-out infinite alternate;
+        box-shadow: 0 0 15px hsl(var(--star)), 0 0 30px hsl(var(--star) / .5);
+    }
+
+    @keyframes tile-glow {
+        from { box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
+        to { box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 25px rgba(255, 255, 255, 0.3); }
+    }
+
+    @keyframes win-tile-glow {
+        from { box-shadow: 0 0 15px hsl(var(--star)), 0 0 30px hsl(var(--star) / .5); }
+        to { box-shadow: 0 0 25px hsl(var(--star)), 0 0 40px hsl(var(--star) / .3); }
+    }
+
     /* Respect reduced motion for 2048 */
     @media (prefers-reduced-motion: reduce) {
         .tile {
             animation: none;
         }
-        
+
         .arrow-btn:hover,
         .arrow-btn:active,
         .control-btn-2048:hover {
             transform: none;
+        }
+
+        .game-2048.celebration,
+        .game-2048.celebration .tile,
+        .game-2048.celebration .win-message .tile {
+            animation: none;
         }
     }
 

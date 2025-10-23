@@ -46,18 +46,55 @@
             <div class="score-label">Best</div>
             <div class="score-value">{{ number_format($bestScore) }}</div>
         </div>
+        @if($gameStarted)
+            <div class="score-box">
+                <div class="score-label">Moves</div>
+                <div class="score-value">{{ $moveCount }}</div>
+            </div>
+            <div class="score-box">
+                <div class="score-label">Time</div>
+                <div class="score-value">
+                    @php
+                        $elapsed = $this->getElapsedTime();
+                        $minutes = floor($elapsed / 60);
+                        $seconds = $elapsed % 60;
+                        echo sprintf('%d:%02d', $minutes, $seconds);
+                    @endphp
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Game Status -->
     @if($isWon && !$isOver)
         <div class="game-message win-message">
-            <p>You reached 2048.</p>
+            <div class="flex items-center justify-center gap-2">
+                <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
+                <p>You reached 2048!</p>
+                <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
+            </div>
             <p class="subtitle">Keep playing to increase your score.</p>
         </div>
     @elseif($isOver)
         <div class="game-message game-over-message">
-            <p>Game over.</p>
-            <p class="subtitle">Final Score: {{ number_format($score) }}</p>
+            <div class="flex items-center justify-center gap-2">
+                <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-red-400" />
+                <p>Game Over</p>
+                <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-red-400" />
+            </div>
+            <div class="space-y-2 text-sm">
+                <p class="subtitle">Final Score: {{ number_format($score) }}</p>
+                <p class="subtitle">Max Tile: {{ number_format(max($board)) }}</p>
+                <p class="subtitle">Moves: {{ $moveCount }}</p>
+                <p class="subtitle">Time:
+                    @php
+                        $elapsed = $this->getElapsedTime();
+                        $minutes = floor($elapsed / 60);
+                        $seconds = $elapsed % 60;
+                        echo sprintf('%d:%02d', $minutes, $seconds);
+                    @endphp
+                </p>
+            </div>
         </div>
     @endif
 
@@ -116,3 +153,20 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('livewire:init', function () {
+    Livewire.on('game-completed', (event) => {
+        // Add celebration effect
+        const gameContainer = document.querySelector('.game-2048');
+        if (gameContainer) {
+            gameContainer.classList.add('celebration');
+            setTimeout(() => {
+                gameContainer.classList.remove('celebration');
+            }, 2000);
+        }
+    });
+});
+</script>
+@endpush
