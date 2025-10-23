@@ -40,6 +40,15 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
 
+// Sudoku API routes
+Route::prefix('api/sudoku')->name('api.sudoku.')->group(function () {
+    Route::post('/generate', [\App\Http\Controllers\SudokuController::class, 'generate'])->name('generate');
+    Route::post('/solve', [\App\Http\Controllers\SudokuController::class, 'solve'])->name('solve');
+    Route::post('/validate', [\App\Http\Controllers\SudokuController::class, 'validate'])->name('validate');
+    Route::post('/hint', [\App\Http\Controllers\SudokuController::class, 'hint'])->name('hint');
+    Route::post('/rate', [\App\Http\Controllers\SudokuController::class, 'rate'])->name('rate');
+});
+
 // Blog routes removed - blog section not needed
 
 // Contributor routes (Lore section - invisible to guests)

@@ -3,10 +3,17 @@
 namespace App\Livewire\Games;
 
 use App\Games\Snake\SnakeEngine;
+use App\Livewire\Concerns\InteractsWithGameState;
+use App\Models\Game;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Snake extends Component
 {
+    use InteractsWithGameState;
+
+    public Game $game;
+
     public array $snake = [];
 
     public string $direction = 'right';
@@ -33,25 +40,38 @@ class Snake extends Component
 
     public function mount()
     {
+        $this->game = Game::where('slug', 'snake')->firstOrFail();
         $this->newGame();
     }
 
     public function newGame()
     {
-        $state = SnakeEngine::newGame();
+        $state = SnakeEngine::applyMove($this->getCurrentState(), [
+            'action' => 'new_game'
+        ]);
         $this->syncFromState($state);
+        $this->resetGame();
     }
 
     public function changeDirection(string $newDirection)
     {
-        $state = $this->getCurrentState();
-        $state = SnakeEngine::changeDirection($state, $newDirection);
+        $state = SnakeEngine::applyMove($this->getCurrentState(), [
+            'action' => 'change_direction',
+            'direction' => $newDirection
+        ]);
         $this->syncFromState($state);
+        $this->incrementMoveCount();
+        $this->saveState();
     }
 
     public function startGame()
     {
-        $this->gameStarted = true;
+        $state = SnakeEngine::applyMove($this->getCurrentState(), [
+            'action' => 'start_game'
+        ]);
+        $this->syncFromState($state);
+        $this->startTimer();
+        $this->saveState();
     }
 
     public function tick()
@@ -60,15 +80,37 @@ class Snake extends Component
             return;
         }
 
-        $state = $this->getCurrentState();
-        $state = SnakeEngine::gameTick($state);
+        $state = SnakeEngine::applyMove($this->getCurrentState(), [
+            'action' => 'tick'
+        ]);
         $this->syncFromState($state);
+        $this->incrementMoveCount();
+        $this->saveState();
+
+        if ($state['gameOver']) {
+            $this->completeGame();
+
+            // Dispatch completion event for celebration
+            $this->dispatch('game-completed', [
+                'winner' => 'snake',
+                'score' => $this->score,
+                'level' => $this->level,
+                'moves' => $this->moveCount,
+                'time' => $this->getElapsedTime(),
+                'length' => count($this->snake)
+            ]);
+        }
     }
 
     public function togglePause()
     {
         if ($this->gameStarted && ! $this->gameOver) {
-            $this->paused = ! $this->paused;
+            $action = $this->paused ? 'resume_game' : 'pause_game';
+            $state = SnakeEngine::applyMove($this->getCurrentState(), [
+                'action' => $action
+            ]);
+            $this->syncFromState($state);
+            $this->saveState();
         }
     }
 
@@ -86,8 +128,10 @@ class Snake extends Component
             'level' => $this->level,
             'foodEaten' => $this->foodEaten,
             'highScore' => $this->highScore,
-            'gameTime' => 0,
+            'gameTime' => $this->getElapsedTime(),
             'paused' => $this->paused,
+            'moveCount' => $this->moveCount,
+            'startTime' => $this->startTime,
         ];
     }
 
@@ -105,6 +149,49 @@ class Snake extends Component
         $this->foodEaten = $state['foodEaten'];
         $this->highScore = $state['highScore'];
         $this->paused = $state['paused'];
+
+        // Update trait properties
+        $this->moveCount = $state['moveCount'] ?? 0;
+        $this->startTime = $state['startTime'] ?? null;
+    }
+
+    protected function getStateForStorage(): array
+    {
+        return [
+            'snake' => $this->snake,
+            'direction' => $this->direction,
+            'nextDirection' => $this->nextDirection,
+            'food' => $this->food,
+            'score' => $this->score,
+            'gameOver' => $this->gameOver,
+            'gameStarted' => $this->gameStarted,
+            'speed' => $this->speed,
+            'level' => $this->level,
+            'foodEaten' => $this->foodEaten,
+            'highScore' => $this->highScore,
+            'gameTime' => $this->getElapsedTime(),
+            'paused' => $this->paused,
+            'moveCount' => $this->moveCount,
+            'startTime' => $this->startTime,
+        ];
+    }
+
+    protected function restoreFromState(array $state): void
+    {
+        $this->snake = $state['snake'] ?? [];
+        $this->direction = $state['direction'] ?? 'right';
+        $this->nextDirection = $state['nextDirection'] ?? 'right';
+        $this->food = $state['food'] ?? [];
+        $this->score = $state['score'] ?? 0;
+        $this->gameOver = $state['gameOver'] ?? false;
+        $this->gameStarted = $state['gameStarted'] ?? false;
+        $this->speed = $state['speed'] ?? 150;
+        $this->level = $state['level'] ?? 1;
+        $this->foodEaten = $state['foodEaten'] ?? 0;
+        $this->highScore = $state['highScore'] ?? 0;
+        $this->paused = $state['paused'] ?? false;
+        $this->moveCount = $state['moveCount'] ?? 0;
+        $this->startTime = $state['startTime'] ?? null;
     }
 
     public function render()

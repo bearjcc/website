@@ -665,6 +665,31 @@ body {
         cursor: not-allowed;
     }
 
+    /* Game controls container */
+    .game-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .control-buttons {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .control-btn.reset {
+        background: hsl(var(--surface) / .15);
+        color: hsl(var(--ink) / .8);
+        border: 1px solid hsl(var(--border) / .3);
+    }
+
+    .control-btn.reset:hover:not(:disabled) {
+        background: hsl(var(--constellation) / .2);
+        border-color: hsl(var(--constellation));
+        color: hsl(var(--ink));
+    }
+
     /* === Connect 4 Board === */
     .connect4-board,
     .game-board {
@@ -835,6 +860,16 @@ body {
     }
 
     /* === Minesweeper Board === */
+    .minesweeper-board-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        background: hsl(var(--space-800) / .2);
+        border-radius: 1rem;
+        border: 1px solid hsl(var(--border) / .1);
+    }
+
     .minesweeper-board {
         display: grid;
         gap: 1px;
@@ -842,6 +877,7 @@ body {
         padding: 2px;
         border-radius: 4px;
         width: fit-content;
+        box-shadow: 0 4px 6px -1px hsl(var(--space-900) / .1);
     }
 
     .mine-cell {
@@ -857,11 +893,18 @@ body {
         width: 30px;
         height: 30px;
         min-height: 44px;
+        position: relative;
     }
 
-    .mine-cell:hover:not(.revealed) {
+    .mine-cell:hover:not(.revealed):not(:disabled) {
         background: hsl(var(--star) / .2);
-        transform: scale(1.05);
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px hsl(var(--space-900) / .1);
+    }
+
+    .mine-cell:focus-visible {
+        outline: 2px solid hsl(var(--star));
+        outline-offset: 2px;
     }
 
     .mine-cell.revealed {
@@ -872,11 +915,13 @@ body {
 
     .mine-cell.flagged {
         background: hsl(var(--star) / .3);
+        border-color: hsl(var(--star) / .5);
     }
 
     .mine-cell.exploded {
-        background: hsl(0 70% 60% / .8);
+        background: hsl(var(--constellation) / .8);
         animation: explode 0.5s ease-out;
+        border-color: hsl(var(--constellation));
     }
 
     @keyframes explode {
@@ -890,18 +935,60 @@ body {
         font-size: 1.2rem;
     }
 
+    /* Black hole styling */
+    .black-hole {
+        width: 16px;
+        height: 16px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .black-hole-core {
+        width: 8px;
+        height: 8px;
+        background: radial-gradient(circle, hsl(var(--space-900)) 0%, hsl(var(--space-900)) 70%, transparent 70%);
+        border-radius: 50%;
+        position: relative;
+        z-index: 2;
+    }
+
+    .black-hole-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 16px;
+        height: 16px;
+        border: 1px solid hsl(var(--constellation) / .6);
+        border-radius: 50%;
+        animation: black-hole-pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes black-hole-pulse {
+        0%, 100% {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0.6;
+        }
+        50% {
+            transform: translate(-50%, -50%) scale(1.2);
+            opacity: 0.3;
+        }
+    }
+
     .number {
         font-size: 1.1rem;
         font-weight: bold;
     }
 
     /* Classic Minesweeper number colors */
-    .number-1 { color: hsl(240 100% 50%); }  /* Blue */
-    .number-2 { color: hsl(120 100% 25%); }  /* Green */
+    .number-1 { color: hsl(210 100% 50%); }  /* Blue */
+    .number-2 { color: hsl(120 100% 30%); }  /* Green */
     .number-3 { color: hsl(0 100% 50%); }    /* Red */
-    .number-4 { color: hsl(240 100% 25%); }  /* Dark blue */
-    .number-5 { color: hsl(0 100% 25%); }    /* Maroon */
-    .number-6 { color: hsl(180 100% 25%); }  /* Teal */
+    .number-4 { color: hsl(240 100% 30%); }  /* Dark blue */
+    .number-5 { color: hsl(0 100% 30%); }    /* Maroon */
+    .number-6 { color: hsl(180 100% 30%); }  /* Teal */
     .number-7 { color: hsl(var(--ink)); }    /* White */
     .number-8 { color: hsl(var(--ink-muted)); } /* Gray */
 
@@ -1014,11 +1101,48 @@ body {
         }
     }
 
+    /* Snake celebration effect */
+    .snake-game.celebration {
+        animation: celebrate 2s ease-in-out;
+    }
+
+    @keyframes celebrate {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.02) rotate(1deg); }
+        50% { transform: scale(1.05) rotate(0deg); }
+        75% { transform: scale(1.02) rotate(-1deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .snake-game.celebration .snake-cell.food {
+        animation: food-glow 0.6s ease-in-out infinite alternate;
+    }
+
+    .snake-game.celebration .snake-cell.snake-head {
+        animation: head-glow 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes food-glow {
+        from { box-shadow: 0 0 5px hsl(0 70% 60%), 0 0 10px hsl(0 70% 60% / .5); }
+        to { box-shadow: 0 0 10px hsl(0 70% 60%), 0 0 20px hsl(0 70% 60% / .3); }
+    }
+
+    @keyframes head-glow {
+        from { box-shadow: 0 0 5px hsl(var(--star)), 0 0 10px hsl(var(--star) / .5); }
+        to { box-shadow: 0 0 10px hsl(var(--star)), 0 0 20px hsl(var(--star) / .3); }
+    }
+
     /* Respect reduced motion for Snake */
     @media (prefers-reduced-motion: reduce) {
         .arrow-btn:hover,
         .arrow-btn:active {
             transform: none;
+        }
+
+        .snake-game.celebration,
+        .snake-game.celebration .snake-cell.food,
+        .snake-game.celebration .snake-cell.snake-head {
+            animation: none;
         }
     }
 
@@ -1502,130 +1626,101 @@ body {
     }
 
     /* === Moon & Star Game Pieces === */
-    /* Beautiful celestial pieces for space theme */
-    
-    /* Moon Piece - Beautiful crescent moon like in paintings */
+    /* Clean, simple celestial pieces for space theme */
+
+    /* Moon Piece - Clean crescent moon */
     .piece-moon {
         position: relative;
-        width: 60%;
-        height: 60%;
-    }
-
-    .piece-moon::before {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        background: radial-gradient(
-            circle at 25% 25%,
-            hsl(var(--ink) / 0.95) 0%,
-            hsl(var(--ink) / 0.8) 40%,
-            hsl(var(--ink) / 0.6) 70%,
-            hsl(var(--ink) / 0.3) 100%
-        );
-        transform: translate(-50%, -50%);
-        box-shadow: 
-            0 0 15px hsl(var(--ink) / 0.5),
-            inset 0 3px 6px hsl(var(--ink) / 0.3);
-    }
-
-    /* Beautiful crescent shadow - like a proper moon phase */
-    .piece-moon::after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        background: hsl(var(--space-900) / 0.98);
-        transform: translate(-20%, -50%);
-        clip-path: circle(60% at 20% 50%);
-        box-shadow: inset 0 2px 4px hsl(var(--space-800) / 0.4);
-    }
-
-    /* Star Piece - Beautiful painterly Bethlehem Star */
-    .piece-star {
-        position: relative;
-        width: 60%;
-        height: 60%;
+        width: 80%;
+        height: 80%;
         display: flex;
         align-items: center;
         justify-content: center;
     }
 
-    /* Central brilliant light - like James Webb core */
-    .piece-star::before {
-        content: '';
-        position: absolute;
-        width: 30%;
-        height: 30%;
-        border-radius: 50%;
-        background: radial-gradient(
-            circle at center,
-            hsl(60 100% 100%) 0%,     /* Pure white center */
-            hsl(60 100% 98%) 20%,
-            hsl(var(--star) / 0.95) 40%,
-            hsl(var(--star) / 0.8) 60%,
-            hsl(var(--star) / 0.5) 80%,
-            transparent 100%
-        );
-        box-shadow: 
-            0 0 12px hsl(60 100% 95% / 1),
-            0 0 24px hsl(var(--star) / 0.7),
-            0 0 36px hsl(var(--star) / 0.4);
-        z-index: 3;
-    }
-
-    /* Beautiful cross pattern - like the paintings */
-    .piece-star::after {
+    .piece-moon::before {
         content: '';
         position: absolute;
         width: 100%;
         height: 100%;
-        background: 
-            /* Vertical ray - longest and brightest */
-            linear-gradient(90deg, 
-                transparent 47%, 
-                hsl(var(--star) / 0.1) 48%, 
-                hsl(var(--star) / 0.8) 49%, 
-                hsl(var(--star) / 0.9) 50%, 
-                hsl(var(--star) / 0.8) 51%, 
-                hsl(var(--star) / 0.1) 52%, 
-                transparent 53%),
-            /* Horizontal ray - medium length */
-            linear-gradient(0deg, 
-                transparent 47%, 
-                hsl(var(--star) / 0.1) 48%, 
-                hsl(var(--star) / 0.7) 49%, 
-                hsl(var(--star) / 0.8) 50%, 
-                hsl(var(--star) / 0.7) 51%, 
-                hsl(var(--star) / 0.1) 52%, 
-                transparent 53%),
-            /* Diagonal rays - shorter and more subtle */
-            linear-gradient(45deg, 
-                transparent 47%, 
-                hsl(var(--star) / 0.05) 48%, 
-                hsl(var(--star) / 0.5) 49%, 
-                hsl(var(--star) / 0.6) 50%, 
-                hsl(var(--star) / 0.5) 51%, 
-                hsl(var(--star) / 0.05) 52%, 
-                transparent 53%),
-            linear-gradient(-45deg, 
-                transparent 47%, 
-                hsl(var(--star) / 0.05) 48%, 
-                hsl(var(--star) / 0.5) 49%, 
-                hsl(var(--star) / 0.6) 50%, 
-                hsl(var(--star) / 0.5) 51%, 
-                hsl(var(--star) / 0.05) 52%, 
-                transparent 53%);
-        background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%;
-        background-position: 0 0, 0 0, 0 0, 0 0;
-        background-repeat: no-repeat;
-        filter: blur(0.8px);
+        border-radius: 50%;
+        background: linear-gradient(135deg,
+            hsl(var(--star) / 0.9) 0%,
+            hsl(var(--star) / 0.8) 50%,
+            hsl(var(--star) / 0.6) 100%);
+        box-shadow:
+            0 2px 8px hsl(var(--ink) / 0.3),
+            inset 0 1px 2px hsl(var(--star) / 0.3),
+            inset 0 -1px 2px hsl(var(--ink) / 0.1);
+    }
+
+    /* Clean crescent shadow - subtle and visible */
+    .piece-moon::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: linear-gradient(135deg,
+            hsl(var(--space-800) / 0.7) 0%,
+            hsl(var(--space-900) / 0.5) 100%);
+        clip-path: circle(65% at 35% 50%);
+        box-shadow: inset 0 1px 2px hsl(var(--space-800) / 0.4);
+    }
+
+    /* Star Piece - Clean, simple star */
+    .piece-star {
+        position: relative;
+        width: 80%;
+        height: 80%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .piece-star::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(45deg,
+            transparent 20%,
+            hsl(var(--star) / 0.9) 35%,
+            hsl(var(--star) / 0.95) 50%,
+            hsl(var(--star) / 0.9) 65%,
+            transparent 80%
+        );
+        clip-path: polygon(
+            50% 0%,     /* top point */
+            61% 35%,    /* top-right */
+            100% 35%,   /* right point */
+            68% 57%,    /* bottom-right */
+            79% 91%,    /* bottom point */
+            50% 70%,    /* bottom-center */
+            21% 91%,    /* bottom-left */
+            32% 57%,    /* top-left */
+            0% 35%,     /* left point */
+            39% 35%     /* top-left */
+        );
+        box-shadow:
+            0 2px 8px hsl(var(--ink) / 0.3),
+            inset 0 1px 2px hsl(var(--star) / 0.3);
+        transform: rotate(22.5deg);
+    }
+
+    .piece-star::after {
+        content: '';
+        position: absolute;
+        width: 40%;
+        height: 40%;
+        border-radius: 50%;
+        background: radial-gradient(
+            circle at center,
+            hsl(60 100% 100%) 0%,
+            hsl(var(--star) / 0.8) 60%,
+            transparent 100%
+        );
+        box-shadow: 0 0 8px hsl(var(--star) / 0.6);
         z-index: 2;
     }
 
@@ -1748,37 +1843,37 @@ body {
 
     .piece-moon.text-2xl,
     .piece-star.text-2xl {
+        width: 28px;
+        height: 28px;
+        font-size: 28px;
+    }
+
+    .piece-moon.text-3xl,
+    .piece-star.text-3xl {
         width: 32px;
         height: 32px;
         font-size: 32px;
     }
 
-    .piece-moon.text-3xl,
-    .piece-star.text-3xl {
+    .piece-moon.text-4xl,
+    .piece-star.text-4xl {
         width: 36px;
         height: 36px;
         font-size: 36px;
     }
 
-    .piece-moon.text-4xl,
-    .piece-star.text-4xl {
+    .piece-moon.text-5xl,
+    .piece-star.text-5xl {
         width: 40px;
         height: 40px;
         font-size: 40px;
     }
 
-    .piece-moon.text-5xl,
-    .piece-star.text-5xl {
+    .piece-moon.text-6xl,
+    .piece-star.text-6xl {
         width: 44px;
         height: 44px;
         font-size: 44px;
-    }
-
-    .piece-moon.text-6xl,
-    .piece-star.text-6xl {
-        width: 48px;
-        height: 48px;
-        font-size: 48px;
     }
 
     /* Specific sizing for different contexts */

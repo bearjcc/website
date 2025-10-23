@@ -41,6 +41,7 @@ class SnakeEngine
             'highScore' => 0,
             'gameTime' => 0,
             'paused' => false,
+            'moveCount' => 0,
         ];
     }
 
@@ -85,6 +86,7 @@ class SnakeEngine
 
             case 'start_game':
                 $state['gameStarted'] = true;
+                $state['moveCount'] = 0;
 
                 return $state;
 
@@ -134,6 +136,7 @@ class SnakeEngine
         if (self::checkCollision($newHead, $state['snake'])) {
             $state['gameOver'] = true;
             $state['highScore'] = max($state['highScore'], $state['score']);
+            $state['moveCount']++;
 
             return $state;
         }
@@ -158,6 +161,7 @@ class SnakeEngine
         }
 
         $state['gameTime']++;
+        $state['moveCount']++;
 
         return $state;
     }

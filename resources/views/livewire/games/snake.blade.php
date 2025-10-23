@@ -63,6 +63,23 @@
             <div class="score-label">Best</div>
             <div class="score-value">{{ $highScore }}</div>
         </div>
+        @if($gameStarted)
+            <div class="score-box">
+                <div class="score-label">Moves</div>
+                <div class="score-value">{{ $moveCount }}</div>
+            </div>
+            <div class="score-box">
+                <div class="score-label">Time</div>
+                <div class="score-value">
+                    @php
+                        $elapsed = $this->getElapsedTime();
+                        $minutes = floor($elapsed / 60);
+                        $seconds = $elapsed % 60;
+                        echo sprintf('%d:%02d', $minutes, $seconds);
+                    @endphp
+                </div>
+            </div>
+        @endif
     </div>
 
     <!-- Game Status -->
@@ -75,9 +92,25 @@
         </div>
     @elseif($gameOver)
         <div class="game-message game-over-message">
-            <p>Game Over!</p>
-            <p class="subtitle">Final Score: {{ $score }}</p>
-            <p class="subtitle">Length: {{ count($snake) }}</p>
+            <div class="flex items-center justify-center gap-2">
+                <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-red-400" />
+                <p>Game Over!</p>
+                <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-red-400" />
+            </div>
+            <div class="space-y-2 text-sm">
+                <p class="subtitle">Final Score: {{ $score }}</p>
+                <p class="subtitle">Snake Length: {{ count($snake) }}</p>
+                <p class="subtitle">Level Reached: {{ $level }}</p>
+                <p class="subtitle">Moves: {{ $moveCount }}</p>
+                <p class="subtitle">Time:
+                    @php
+                        $elapsed = $this->getElapsedTime();
+                        $minutes = floor($elapsed / 60);
+                        $seconds = $elapsed % 60;
+                        echo sprintf('%d:%02d', $minutes, $seconds);
+                    @endphp
+                </p>
+            </div>
         </div>
     @elseif($paused)
         <div class="game-message pause-message">
@@ -118,15 +151,15 @@
 
     <!-- Game Controls -->
     <div class="game-controls-snake">
-        <button wire:click="newGame" 
+        <button wire:click="newGame"
                 class="control-btn new-game"
                 aria-label="Start new game">
             <x-heroicon-o-arrow-path class="w-4 h-4" />
             <span>New</span>
         </button>
-        
+
         @if($gameStarted && !$gameOver)
-            <button wire:click="togglePause" 
+            <button wire:click="togglePause"
                     class="control-btn"
                     aria-label="{{ $paused ? 'Resume game' : 'Pause game' }}">
                 @if($paused)
@@ -138,7 +171,7 @@
                 @endif
             </button>
         @endif
-        
+
         <div class="mobile-controls">
             <div class="control-grid">
                 <div></div>
@@ -154,3 +187,20 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('livewire:init', function () {
+    Livewire.on('game-completed', (event) => {
+        // Add celebration effect
+        const gameContainer = document.querySelector('.snake-game');
+        if (gameContainer) {
+            gameContainer.classList.add('celebration');
+            setTimeout(() => {
+                gameContainer.classList.remove('celebration');
+            }, 2000);
+        }
+    });
+});
+</script>
+@endpush
