@@ -25,26 +25,58 @@
         </details>
 
         {{-- Game Status --}}
+        @if($gameStarted)
+            <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-4">
+                <div class="flex items-center justify-center gap-4 text-sm">
+                    <span>Turn: <strong class="text-ink">{{ ucfirst($state['currentPlayer']) }}</strong></span>
+                    <span>Moves: <strong class="text-ink">{{ $moveCount }}</strong></span>
+                    <span>Time:
+                        @php
+                            $elapsed = $this->getElapsedTime();
+                            $minutes = floor($elapsed / 60);
+                            $seconds = $elapsed % 60;
+                            echo sprintf('%d:%02d', $minutes, $seconds);
+                        @endphp
+                    </span>
+                </div>
+            </div>
+        @endif
+
         @if($state['gameOver'])
             <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
                 <div class="flex items-center justify-center gap-2">
-                    <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
-                    <p class="text-lg font-semibold text-star">
-                        @if($state['winner'] === 'draw')
-                            Draw.
-                        @else
-                            {{ ucfirst($state['winner']) }} wins.
-                        @endif
-                    </p>
-                    <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
+                    @if($state['winner'] === 'draw')
+                        <x-heroicon-o-scale class="w-5 h-5 text-ink" />
+                        <p class="text-lg font-semibold text-star">Draw Game</p>
+                        <x-heroicon-o-scale class="w-5 h-5 text-ink" />
+                    @else
+                        <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
+                        <p class="text-lg font-semibold text-star">{{ ucfirst($state['winner']) }} wins!</p>
+                        <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
+                    @endif
                 </div>
-                <div class="flex items-center justify-center gap-3 text-sm text-ink/70">
-                    <span>{{ $state['moves'] }} moves</span>
+                <div class="space-y-2 text-sm text-ink/70">
+                    <div class="flex items-center justify-center gap-6">
+                        <span>Moves: {{ $moveCount }}</span>
+                        <span>Time:
+                            @php
+                                $elapsed = $this->getElapsedTime();
+                                $minutes = floor($elapsed / 60);
+                                $seconds = $elapsed % 60;
+                                echo sprintf('%d:%02d', $minutes, $seconds);
+                            @endphp
+                        </span>
+                    </div>
+                    @if(isset($state['score']))
+                        <div class="flex items-center justify-center gap-4">
+                            @foreach(['red', 'yellow'] as $player)
+                                @if(isset($state['score'][$player]))
+                                    <span>{{ ucfirst($player) }}: {{ $state['score'][$player] }}</span>
+                                @endif
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
-            </div>
-        @else
-            <div class="text-center text-sm text-ink/70">
-                Current turn: <strong class="text-ink">{{ ucfirst($state['currentPlayer']) }}</strong>
             </div>
         @endif
 
@@ -91,7 +123,7 @@
 
         {{-- Game Controls --}}
         <div class="game-controls">
-            <button wire:click="newGame" 
+            <button wire:click="newGame"
                     class="control-btn new-game"
                     aria-label="Start new game">
                 <x-heroicon-o-arrow-path class="w-4 h-4" />
@@ -100,4 +132,21 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+document.addEventListener('livewire:init', function () {
+    Livewire.on('game-completed', (event) => {
+        // Add celebration effect
+        const gameContainer = document.querySelector('.section');
+        if (gameContainer) {
+            gameContainer.classList.add('celebration');
+            setTimeout(() => {
+                gameContainer.classList.remove('celebration');
+            }, 2000);
+        }
+    });
+});
+</script>
+@endpush
 

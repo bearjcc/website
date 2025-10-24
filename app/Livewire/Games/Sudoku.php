@@ -3,7 +3,29 @@
 namespace App\Livewire\Games;
 
 use App\Games\Sudoku\SudokuEngine;
+use App\Services\Sudoku\{SudokuBoard, SudokuGenerator, HumanSolver, SudokuSolver};
+use App\Enums\Difficulty;
 use Livewire\Component;
+
+/**
+ * Interactive Sudoku Game Component
+ *
+ * This Livewire component provides a full-featured Sudoku gaming experience
+ * with multiple difficulty levels, intelligent hints, custom puzzle loading,
+ * and comprehensive validation.
+ *
+ * Features:
+ * - Real-time puzzle solving with conflict detection
+ * - Human-style hints with technique explanations
+ * - Custom puzzle input with validation
+ * - Notes mode for candidate tracking
+ * - Adaptive hint limits based on difficulty
+ * - Performance scoring system
+ * - Responsive design for all devices
+ *
+ * The component integrates with advanced Sudoku services for reliable
+ * puzzle generation, solving, and educational hinting.
+ */
 
 class Sudoku extends Component
 {
@@ -14,6 +36,8 @@ class Sudoku extends Component
     public array $solution = [];
 
     public array $notes = [];
+
+    public array $eliminations = [];
 
     public ?array $selectedCell = null;
 
@@ -40,6 +64,7 @@ class Sudoku extends Component
     public bool $showDifficultySelector = true;
 
     public ?array $lastHint = null;
+    public ?array $hintStep = null;
 
     public bool $showCustomInput = false;
 
@@ -56,10 +81,43 @@ class Sudoku extends Component
             $this->difficulty = $difficulty;
         }
 
-        $state = SudokuEngine::newGame($this->difficulty);
-        $this->syncFromState($state);
+        // Use new generator for better difficulty control
+        try {
+            $generator = new SudokuGenerator();
+            $result = $generator->generate(Difficulty::from($this->difficulty));
+            $board = $result['puzzle'];
+
+            $state = [
+                'board' => $board->toArray(),
+                'originalPuzzle' => $board->toArray(),
+                'solution' => $result['solution']->toArray(),
+                'notes' => array_fill(0, 9, array_fill(0, 9, [])),
+                'eliminations' => array_fill(0, 9, array_fill(0, 9, [])),
+                'selectedCell' => null,
+                'difficulty' => $this->difficulty,
+                'hintsUsed' => 0,
+                'maxHints' => $this->getMaxHintsForDifficulty($this->difficulty),
+                'mistakes' => 0,
+                'maxMistakes' => 3,
+                'gameTime' => 0,
+                'gameComplete' => false,
+                'conflicts' => [],
+                'notesMode' => false,
+                'gameStarted' => false,
+            ];
+
+            $this->syncFromState($state);
+        } catch (\Exception $e) {
+            // Fallback to old engine if new one fails
+            $state = SudokuEngine::newGame($this->difficulty);
+            // Add eliminations to old engine state too
+            $state['eliminations'] = array_fill(0, 9, array_fill(0, 9, []));
+            $this->syncFromState($state);
+        }
+
         $this->showDifficultySelector = false;
         $this->lastHint = null;
+        $this->hintStep = null;
     }
 
     public function selectDifficulty(string $difficulty)
@@ -138,24 +196,53 @@ class Sudoku extends Component
 
     public function useHint()
     {
-        if (! SudokuEngine::canUseHint($this->getCurrentState())) {
+        if (! $this->canUseHint()) {
             return;
         }
 
-        $hint = SudokuEngine::generateHint($this->getCurrentState());
+        try {
+            // Use new HumanSolver for better hints
+            $board = new SudokuBoard($this->board);
+            $humanSolver = new HumanSolver();
+            $step = $humanSolver->nextStep($board);
 
-        if (! $hint) {
-            return;
+            if ($step) {
+                $this->lastHint = [$step->focusCells[0]['r'], $step->focusCells[0]['c']];
+                $this->hintStep = [
+                    'technique' => $step->type->value,
+                    'technique_name' => $step->getTechniqueName(),
+                    'explanation' => $step->explanation,
+                    'placements' => $step->placements,
+                    'eliminations' => $step->eliminations,
+                ];
+
+                // Apply the step
+                foreach ($step->placements as $placement) {
+                    $this->board[$placement['r']][$placement['c']] = $placement['d'];
+                }
+
+                $this->hintsUsed++;
+                $this->validateBoard();
+
+                $this->dispatch('hint-used');
+            } else {
+                $this->dispatch('error', 'No more hints available!');
+            }
+        } catch (\Exception $e) {
+            // Fallback to old hint system
+            $hint = SudokuEngine::generateHint($this->getCurrentState());
+
+            if (! $hint) {
+                $this->dispatch('error', 'No more hints available!');
+                return;
+            }
+
+            $this->lastHint = [$hint['row'], $hint['col']];
+            $state = $this->getCurrentState();
+            $state = SudokuEngine::useHint($state);
+            $this->syncFromState($state);
+            $this->dispatch('hint-used');
         }
-
-        $this->lastHint = [$hint['row'], $hint['col']];
-
-        $state = $this->getCurrentState();
-        $state = SudokuEngine::useHint($state);
-        $this->syncFromState($state);
-
-        // Clear hint highlight after 2 seconds
-        $this->dispatch('hint-used');
     }
 
     public function autoSolve()
@@ -179,7 +266,6 @@ class Sudoku extends Component
 
             if (strlen($input) !== 81) {
                 $this->dispatch('error', 'Please enter exactly 81 digits (use 0 for empty cells)');
-
                 return;
             }
 
@@ -193,8 +279,59 @@ class Sudoku extends Component
                 }
             }
 
-            // Load puzzle via engine
-            $state = SudokuEngine::loadCustomPuzzle($puzzle);
+            // Use new SudokuBoard for validation
+            $board = new SudokuBoard($puzzle);
+            $validationReport = $board->getValidationReport();
+
+            // Check for validation errors
+            if (!$validationReport['isValid']) {
+                $errorMessages = $validationReport['errors'];
+                $this->dispatch('error', 'Puzzle validation failed: ' . implode(', ', $errorMessages));
+                return;
+            }
+
+            // Show warnings if any
+            if (!empty($validationReport['warnings'])) {
+                $warningMessages = $validationReport['warnings'];
+                $this->dispatch('warning', 'Puzzle loaded with warnings: ' . implode(', ', $warningMessages));
+            }
+
+            // Check if puzzle has a unique solution
+            $solver = new SudokuSolver();
+            if (!$solver->hasUniqueSolution($board)) {
+                $this->dispatch('error', 'The puzzle does not have a unique solution - it may have multiple ways to be solved');
+                return;
+            }
+
+            // Get the solution
+            $solution = $solver->solve($board);
+            if (!$solution) {
+                $this->dispatch('error', 'The puzzle cannot be solved - it may be invalid');
+                return;
+            }
+
+            // Calculate clue count
+            $clueCount = 81 - substr_count($this->customPuzzleInput, '0');
+
+            // Load puzzle with solution
+            $state = [
+                'board' => $puzzle,
+                'originalPuzzle' => $puzzle,
+                'solution' => $solution->toArray(),
+                'notes' => array_fill(0, 9, array_fill(0, 9, [])),
+                'selectedCell' => null,
+                'difficulty' => 'custom',
+                'hintsUsed' => 0,
+                'maxHints' => max(1, min(6, intval($clueCount / 10))), // Adaptive hint limit based on clue count
+                'mistakes' => 0,
+                'maxMistakes' => 3,
+                'gameTime' => 0,
+                'gameComplete' => false,
+                'conflicts' => [],
+                'notesMode' => false,
+                'gameStarted' => false,
+            ];
+
             $this->syncFromState($state);
 
             $this->showCustomInput = false;
@@ -236,6 +373,36 @@ class Sudoku extends Component
         $this->syncFromState($state);
     }
 
+    public function toggleEliminationAt(int $row, int $col, int $number)
+    {
+        // Don't allow changes to original puzzle cells
+        if ($this->originalPuzzle[$row][$col] !== 0) {
+            return;
+        }
+
+        // Don't allow eliminating if the number is already placed
+        if ($this->board[$row][$col] === $number) {
+            return;
+        }
+
+        // Toggle elimination
+        if (!isset($this->eliminations[$row][$col])) {
+            $this->eliminations[$row][$col] = [];
+        }
+
+        if (in_array($number, $this->eliminations[$row][$col])) {
+            $this->eliminations[$row][$col] = array_filter(
+                $this->eliminations[$row][$col],
+                fn($n) => $n !== $number
+            );
+        } else {
+            $this->eliminations[$row][$col][] = $number;
+        }
+
+        // Re-index array to remove gaps
+        $this->eliminations[$row][$col] = array_values($this->eliminations[$row][$col]);
+    }
+
     protected function getCurrentState(): array
     {
         return [
@@ -243,6 +410,7 @@ class Sudoku extends Component
             'originalPuzzle' => $this->originalPuzzle,
             'solution' => $this->solution,
             'notes' => $this->notes,
+            'eliminations' => $this->eliminations,
             'selectedCell' => $this->selectedCell,
             'difficulty' => $this->difficulty,
             'hintsUsed' => $this->hintsUsed,
@@ -263,6 +431,7 @@ class Sudoku extends Component
         $this->originalPuzzle = $state['originalPuzzle'];
         $this->solution = $state['solution'];
         $this->notes = $state['notes'];
+        $this->eliminations = $state['eliminations'] ?? array_fill(0, 9, array_fill(0, 9, []));
         $this->selectedCell = $state['selectedCell'];
         $this->difficulty = $state['difficulty'];
         $this->hintsUsed = $state['hintsUsed'];
@@ -290,6 +459,43 @@ class Sudoku extends Component
     public function isLastHint(int $row, int $col): bool
     {
         return $this->lastHint && $this->lastHint[0] === $row && $this->lastHint[1] === $col;
+    }
+
+    public function canUseHint(): bool
+    {
+        return $this->hintsUsed < $this->maxHints && !$this->gameComplete;
+    }
+
+    public function getMaxHintsForDifficulty(string $difficulty): int
+    {
+        return match($difficulty) {
+            'beginner' => 6,
+            'easy' => 5,
+            'medium' => 3,
+            'hard' => 2,
+            'expert' => 1,
+            default => 3,
+        };
+    }
+
+    public function getRemainingNumbers(int $row, int $col): array
+    {
+        if ($this->originalPuzzle[$row][$col] !== 0) {
+            return [];
+        }
+
+        $allNumbers = range(1, 9);
+        $eliminated = $this->eliminations[$row][$col] ?? [];
+
+        $result = array_diff($allNumbers, $eliminated);
+
+        // Ensure result is properly indexed (array_diff preserves keys which can cause issues)
+        return array_values($result);
+    }
+
+    public function hasRemainingNumbers(int $row, int $col): bool
+    {
+        return count($this->getRemainingNumbers($row, $col)) <= 8 && count($this->getRemainingNumbers($row, $col)) > 0;
     }
 
     public function render()

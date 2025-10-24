@@ -252,7 +252,7 @@ class GameFunctionalityTest extends TestCase
         $component = Livewire::test(\App\Livewire\Games\TicTacToe::class);
 
         // Test initial state
-        $component->assertSet('currentPlayer', 'moon');
+        $component->assertSet('currentPlayer', 'X');
         $component->assertSet('moves', 0);
 
         // Test mode selection
@@ -261,14 +261,14 @@ class GameFunctionalityTest extends TestCase
 
         // Test cell click
         $component->call('makeMove', 0);
-        $component->assertSet('board.0', 'moon');
-        $component->assertSet('currentPlayer', 'star');
+        $component->assertSet('board.0', 'X');
+        $component->assertSet('currentPlayer', 'O');
         $component->assertSet('moves', 1);
 
         // Test new game
         $component->call('newGame');
         $component->assertSet('moves', 0);
-        $component->assertSet('currentPlayer', 'moon');
+        $component->assertSet('currentPlayer', 'X');
     }
 
     /** @test */

@@ -262,7 +262,7 @@
         @endif
 
         {{-- Game Board --}}
-        <div class="grid grid-cols-3 gap-2 sm:gap-3 max-w-sm sm:max-w-lg mx-auto aspect-square p-3 sm:p-4 bg-[hsl(var(--space-800)/.3)] rounded-xl sm:rounded-2xl border border-[hsl(var(--border)/.2)] shadow-lg relative">
+        <div class="grid grid-cols-3 gap-1 sm:gap-2 max-w-md sm:max-w-xl lg:max-w-2xl mx-auto aspect-square p-4 sm:p-6 bg-[hsl(var(--space-800)/.3)] rounded-xl sm:rounded-2xl border-2 border-[hsl(var(--border)/.3)] shadow-lg relative" style="background-image: linear-gradient(hsl(var(--border)/.2) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border)/.2) 1px, transparent 1px); background-size: 33.33% 33.33%;">
             {{-- Victory Line Overlay --}}
             @if($winner && !empty($winningPositions))
                 <div class="absolute inset-3 sm:inset-4 pointer-events-none z-20">
@@ -289,7 +289,7 @@
             @foreach($board as $index => $cell)
                 <button
                     wire:click="makeMove({{ $index }})"
-                    class="bg-[hsl(var(--surface)/.08)] border-2 border-[hsl(var(--border)/.4)] rounded-lg sm:rounded-xl flex items-center justify-center transition-all duration-200 hover:border-star hover:bg-[hsl(var(--surface)/.15)] hover:-translate-y-1 hover:shadow-lg hover:shadow-[hsl(var(--star)/.1)] active:scale-95 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:border-[hsl(var(--border)/.4)] disabled:hover:bg-[hsl(var(--surface)/.05)] focus:outline-none focus:ring-2 focus:ring-star/50 focus:ring-offset-2 focus:ring-offset-transparent relative overflow-hidden {{ in_array($index, $winningPositions) ? 'ring-2 ring-star/60 ring-offset-1 ring-offset-transparent' : '' }}"
+                    class="bg-transparent flex items-center justify-center transition-all duration-200 hover:bg-[hsl(var(--surface)/.1)] hover:-translate-y-1 hover:shadow-lg hover:shadow-[hsl(var(--star)/.1)] active:scale-95 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-star/50 focus:ring-offset-2 focus:ring-offset-transparent relative overflow-hidden {{ in_array($index, $winningPositions) ? 'ring-2 ring-star/60 ring-offset-1 ring-offset-transparent' : '' }}"
                     @disabled($cell !== null || $winner !== null || $isDraw)
                     aria-label="Cell {{ $index + 1 }}{{ $cell ? ', ' . $cell : ', empty' }}"
                     style="min-height: 60px;"
@@ -307,15 +307,11 @@
                     ></div>
 
                     @if($cell === 'X')
-                        <div class="piece-moon {{ in_array($index, $winningPositions) ? 'winning' : '' }} text-4xl sm:text-6xl relative z-10" aria-label="Moon"></div>
+                        <div class="piece-moon {{ in_array($index, $winningPositions) ? 'winning' : '' }} text-3xl sm:text-5xl relative z-10" aria-label="Moon"></div>
                     @elseif($cell === 'O')
-                        <div class="piece-star {{ in_array($index, $winningPositions) ? 'winning' : '' }} text-4xl sm:text-6xl relative z-10" aria-label="Star"></div>
+                        <div class="piece-star {{ in_array($index, $winningPositions) ? 'winning' : '' }} text-3xl sm:text-5xl relative z-10" aria-label="Star"></div>
                     @endif
 
-                    {{-- Position indicator for empty cells --}}
-                    @if(!$cell)
-                        <div class="text-xs text-ink/30 font-mono absolute bottom-1 right-1">{{ $index + 1 }}</div>
-                    @endif
                 </button>
             @endforeach
         </div>

@@ -196,7 +196,7 @@ class MinesweeperEngine
         }
 
         $state['gameStarted'] = true;
-        if (! $state['startTime']) {
+        if ($state['startTime'] === null) {
             $state['startTime'] = time();
         }
 

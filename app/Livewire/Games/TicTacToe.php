@@ -114,7 +114,7 @@ class TicTacToe extends Component
         }
     }
 
-    protected function makeAiMove()
+    public function makeAiMove()
     {
         $engine = new Engine();
 

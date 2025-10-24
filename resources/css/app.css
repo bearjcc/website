@@ -62,6 +62,8 @@ body {
     html,
     body {
         min-height: 100%;
+        min-height: 100vh;
+        min-height: calc(var(--vh, 1vh) * 100);
     }
 
     /* Continuous vertical twilight gradient on page background - spans full document height */
@@ -114,6 +116,170 @@ body {
         clip: rect(0, 0, 0, 0);
         white-space: nowrap;
         border-width: 0;
+    }
+
+    /* === Enhanced Visual Effects === */
+    
+    /* Subtle glow effects for interactive elements */
+    .interactive-glow {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .interactive-glow::before {
+        content: '';
+        position: absolute;
+        inset: -2px;
+        background: linear-gradient(45deg, 
+            hsl(var(--star) / 0.3), 
+            hsl(var(--constellation) / 0.3), 
+            hsl(var(--star) / 0.3));
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        z-index: -1;
+    }
+
+    .interactive-glow:hover::before {
+        opacity: 1;
+    }
+
+    /* Enhanced focus states */
+    .enhanced-focus:focus-visible {
+        outline: 2px solid hsl(var(--star));
+        outline-offset: 2px;
+        box-shadow: 0 0 0 4px hsl(var(--star) / 0.2);
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+        :root {
+            --ink: 0 0% 100%;
+            --ink-muted: 0 0% 80%;
+            --star: 60 100% 50%;
+            --constellation: 200 100% 50%;
+        }
+        
+        .glass {
+            background-color: hsl(var(--space-900) / 0.9);
+            border: 2px solid hsl(var(--ink));
+        }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+        .interactive-glow::before,
+        .game-element-hover,
+        .smooth-transition {
+            transition: none !important;
+            animation: none !important;
+        }
+        
+        .interactive-glow:hover::before {
+            opacity: 0;
+        }
+        
+        .game-element-hover:hover {
+            transform: none;
+            box-shadow: none;
+        }
+    }
+
+    /* Smooth transitions for all interactive elements */
+    .smooth-transition {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Loading state animation */
+    .loading-pulse {
+        animation: loading-pulse 1.5s ease-in-out infinite;
+    }
+
+    @keyframes loading-pulse {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+    }
+
+    /* Success state animation */
+    .success-bounce {
+        animation: success-bounce 0.6s ease-out;
+    }
+
+    @keyframes success-bounce {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+
+    /* Enhanced game completion effects */
+    .game-completion {
+        animation: game-completion 2s ease-in-out;
+    }
+
+    @keyframes game-completion {
+        0% { 
+            transform: scale(1);
+            filter: brightness(1);
+        }
+        25% { 
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+        50% { 
+            transform: scale(1.05);
+            filter: brightness(1.2);
+        }
+        75% { 
+            transform: scale(1.02);
+            filter: brightness(1.1);
+        }
+        100% { 
+            transform: scale(1);
+            filter: brightness(1);
+        }
+    }
+
+    /* Tile merge animation */
+    .tile-merge {
+        animation: tile-merge 0.3s ease-out;
+    }
+
+    @keyframes tile-merge {
+        0% { 
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% { 
+            transform: scale(1.2);
+            opacity: 0.8;
+        }
+        100% { 
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Enhanced hover effects for game elements */
+    .game-element-hover {
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .game-element-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px hsl(var(--space-900) / 0.15);
+    }
+
+    /* Mobile-specific enhancements */
+    @media (max-width: 768px) {
+        .mobile-enhanced {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .mobile-enhanced:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
+        }
     }
 
     /* === Layout Utilities === */
@@ -611,6 +777,58 @@ body {
         justify-content: center;
     }
 
+    /* Enhanced mobile touch targets */
+    @media (max-width: 768px) {
+        .game-board,
+        .connect4-board,
+        .minesweeper-board,
+        .snake-board,
+        .checkers-board,
+        .chess-board,
+        .sudoku-board,
+        .game-board-2048 {
+            touch-action: manipulation;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Better touch feedback for mobile */
+        .sudoku-cell,
+        .mine-cell,
+        .snake-cell,
+        .checkers-cell,
+        .chess-square,
+        .tile-cell {
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        /* Mobile-friendly button sizing */
+        .control-btn,
+        .btn-primary,
+        .btn-secondary {
+            min-height: 48px;
+            min-width: 48px;
+            padding: 0.75rem 1rem;
+        }
+
+        /* Mobile game controls spacing */
+        .game-controls {
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .control-buttons {
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
+
     /* Game controls */
     .game-controls {
         margin-top: 2rem;
@@ -843,19 +1061,46 @@ body {
         }
     }
 
+    /* Connect4 celebration effect */
+    .section.celebration {
+        animation: celebrate 2s ease-in-out;
+    }
+
+    @keyframes celebrate {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.02) rotate(1deg); }
+        50% { transform: scale(1.05) rotate(0deg); }
+        75% { transform: scale(1.02) rotate(-1deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .section.celebration .piece.winning {
+        animation: win-glow 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes win-glow {
+        from { box-shadow: 0 0 15px currentColor, 0 0 30px currentColor; }
+        to { box-shadow: 0 0 25px currentColor, 0 0 40px currentColor; }
+    }
+
     /* Respect reduced motion for Connect 4 */
     @media (prefers-reduced-motion: reduce) {
         .piece {
             animation: none;
         }
-        
+
         .piece.winning {
             animation: none;
         }
-        
+
         .cell.clickable:hover,
         .column-button:hover {
             transform: none;
+        }
+
+        .section.celebration,
+        .section.celebration .piece.winning {
+            animation: none;
         }
     }
 
@@ -1023,86 +1268,105 @@ body {
     .snake-board {
         display: grid;
         grid-template-columns: repeat(20, 1fr);
-        gap: 1px;
-        background: hsl(var(--space-800) / .8);
-        padding: 4px;
-        border-radius: 0.5rem;
+        gap: 2px;
+        background: hsl(var(--space-800));
+        padding: 12px;
+        border-radius: 12px;
+        border: 3px solid hsl(var(--border) / .3);
         max-width: 600px;
         width: 100%;
+        box-shadow: 0 8px 32px hsl(var(--space-900) / .3);
     }
 
     .snake-cell {
-        background: hsl(var(--space-900) / .5);
+        background: hsl(var(--surface) / .05);
+        border: 1px solid hsl(var(--border) / .2);
         aspect-ratio: 1;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 2px;
+        border-radius: 4px;
+        transition: all 0.15s ease;
+    }
+
+    .snake-cell:hover {
+        background: hsl(var(--surface) / .1);
+        border-color: hsl(var(--border) / .3);
     }
 
     .snake-cell.snake-head {
-        background: hsl(var(--star));
-        border-radius: 3px;
+        background: hsl(var(--star) / .9);
+        border-color: hsl(var(--star) / .6);
+        border-radius: 6px;
+        box-shadow: 0 0 8px hsl(var(--star) / .4);
+        animation: head-glow 1s ease-in-out infinite alternate;
     }
 
     .snake-cell.snake-body {
-        background: hsl(var(--constellation));
+        background: hsl(var(--constellation) / .8);
+        border-color: hsl(var(--constellation) / .5);
+        border-radius: 4px;
     }
 
     .snake-cell.food {
-        background: hsl(0 70% 60% / .3);
+        background: radial-gradient(circle, hsl(0 70% 60% / .8) 0%, hsl(0 70% 50% / .6) 100%);
+        border-color: hsl(0 70% 60% / .6);
         border-radius: 50%;
+        animation: food-pulse 1.5s ease-in-out infinite;
+        box-shadow: 0 0 12px hsl(0 70% 60% / .4);
     }
 
-    .game-controls-snake {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        align-items: center;
+    @keyframes head-glow {
+        from { box-shadow: 0 0 8px hsl(var(--star) / .4); }
+        to { box-shadow: 0 0 16px hsl(var(--star) / .6), 0 0 24px hsl(var(--star) / .3); }
     }
 
-    .mobile-controls {
-        display: none;
-    }
-
-    .control-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 60px);
-        grid-template-rows: repeat(3, 60px);
-        gap: 8px;
-    }
-
-    .arrow-btn {
-        background: hsl(var(--surface) / .1);
-        color: hsl(var(--ink));
-        border: 2px solid hsl(var(--border) / .3);
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 1.5rem;
-        font-weight: bold;
-        min-height: 44px;
-    }
-
-    .arrow-btn:hover, 
-    .arrow-btn:active {
-        background: hsl(var(--star));
-        color: hsl(220 20% 10%);
-        transform: scale(1.1);
+    @keyframes food-pulse {
+        0%, 100% {
+            transform: scale(1);
+            box-shadow: 0 0 12px hsl(0 70% 60% / .4);
+        }
+        50% {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px hsl(0 70% 60% / .6), 0 0 32px hsl(0 70% 60% / .3);
+        }
     }
 
     @media (max-width: 768px) {
         .snake-board {
             max-width: 400px;
+            padding: 8px;
+            gap: 1px;
         }
 
+        .snake-cell {
+            border-radius: 2px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .snake-board {
+            max-width: 320px;
+            padding: 6px;
+            gap: 1px;
+        }
+        }
+
+    /* Snake Mobile Touch Controls - Hidden by default, shown on mobile */
         .mobile-controls {
-            display: block;
+        display: none;
+    }
+
+    @media (max-width: 768px) {
+        .mobile-controls {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
         }
     }
 
     /* Snake celebration effect */
-    .snake-game.celebration {
+    .section.celebration {
         animation: celebrate 2s ease-in-out;
     }
 
@@ -1114,11 +1378,11 @@ body {
         100% { transform: scale(1) rotate(0deg); }
     }
 
-    .snake-game.celebration .snake-cell.food {
+    .section.celebration .snake-cell.food {
         animation: food-glow 0.6s ease-in-out infinite alternate;
     }
 
-    .snake-game.celebration .snake-cell.snake-head {
+    .section.celebration .snake-cell.snake-head {
         animation: head-glow 0.6s ease-in-out infinite alternate;
     }
 
@@ -1134,14 +1398,486 @@ body {
 
     /* Respect reduced motion for Snake */
     @media (prefers-reduced-motion: reduce) {
-        .arrow-btn:hover,
-        .arrow-btn:active {
+        .snake-cell {
+            animation: none;
+            transition: none;
+        }
+
+        .snake-cell:hover {
+            transform: none;
+            background: hsl(var(--surface) / .05);
+        }
+
+        .section.celebration,
+        .section.celebration .snake-cell.food,
+        .section.celebration .snake-cell.snake-head {
+            animation: none;
+        }
+    }
+
+    /* === Checkers Board === */
+    .checkers-board {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        gap: 2px;
+        background: hsl(var(--space-800));
+        padding: 12px;
+        border-radius: 12px;
+        border: 3px solid hsl(var(--border) / .3);
+        max-width: 500px;
+        width: 100%;
+        box-shadow: 0 8px 32px hsl(var(--space-900) / .3);
+    }
+
+    .checkers-cell {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: all 0.15s ease;
+    }
+
+    .checkers-cell.dark {
+        background: hsl(220 15% 25%);
+        border: 1px solid hsl(var(--border) / .3);
+    }
+
+    .checkers-cell.light {
+        background: hsl(45 15% 75%);
+        border: 1px solid hsl(var(--border) / .2);
+    }
+
+    .checkers-cell:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px hsl(var(--space-900) / .2);
+    }
+
+    .checkers-cell.selected {
+        box-shadow: inset 0 0 0 3px hsl(var(--star) / .8);
+        background: hsl(var(--star) / .2) !important;
+    }
+
+    .checkers-cell.valid-move {
+        position: relative;
+    }
+
+    .checkers-cell.valid-move::after {
+        content: '';
+        position: absolute;
+        inset: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background: hsl(var(--star) / .6);
+        border-radius: 50%;
+        border: 2px solid hsl(var(--star));
+        animation: valid-move-pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes valid-move-pulse {
+        0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+        50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    }
+
+    .checkers-piece {
+        width: 85%;
+        height: 85%;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        font-weight: bold;
+        position: relative;
+        transition: all 0.15s ease;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 2px 8px hsl(var(--space-900) / .3);
+    }
+
+    .checkers-piece:hover {
+        transform: scale(1.05);
+    }
+
+    .checkers-piece.red {
+        background: radial-gradient(circle at 30% 30%, hsl(var(--star)), hsl(45 90% 60%));
+        color: hsl(var(--space-900));
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .checkers-piece.black {
+        background: radial-gradient(circle at 30% 30%, hsl(var(--constellation)), hsl(220 15% 30%));
+        color: hsl(var(--ink));
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .checkers-piece.king {
+        border: 3px solid hsl(var(--star));
+        box-shadow: 0 0 12px hsl(var(--star) / .5);
+    }
+
+    .checkers-piece.king::after {
+        content: '♔';
+        position: absolute;
+        font-size: 0.6em;
+        color: hsl(var(--star));
+        text-shadow: 0 0 4px hsl(var(--star) / .8);
+    }
+
+    .checkers-piece.red.king::after {
+        color: hsl(var(--space-900));
+        text-shadow: 0 0 4px hsl(var(--star));
+    }
+
+    .valid-move-indicator {
+        position: absolute;
+        inset: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background: hsl(var(--star) / .6);
+        border-radius: 50%;
+        border: 2px solid hsl(var(--star));
+        animation: valid-move-pulse 1s ease-in-out infinite;
+    }
+
+    @media (max-width: 768px) {
+        .checkers-board {
+            max-width: 400px;
+            padding: 8px;
+            gap: 1px;
+        }
+
+        .checkers-piece {
+            width: 90%;
+            height: 90%;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+        }
+
+        .valid-move-indicator {
+            width: 16px;
+            height: 16px;
+            border-width: 1px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .checkers-board {
+            max-width: 320px;
+            padding: 6px;
+            gap: 1px;
+        }
+
+        .checkers-piece {
+            font-size: clamp(0.8rem, 2vw, 1rem);
+        }
+
+        .valid-move-indicator {
+            width: 12px;
+            height: 12px;
+        }
+    }
+
+    /* Checkers celebration effect */
+    .section.celebration {
+        animation: celebrate 2s ease-in-out;
+    }
+
+    @keyframes celebrate {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.02) rotate(1deg); }
+        50% { transform: scale(1.05) rotate(0deg); }
+        75% { transform: scale(1.02) rotate(-1deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .section.celebration .checkers-piece {
+        animation: piece-glow 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes piece-glow {
+        from { box-shadow: 0 2px 8px hsl(var(--space-900) / .3); }
+        to { box-shadow: 0 4px 16px hsl(var(--star) / .4), 0 0 24px hsl(var(--star) / .2); }
+    }
+
+    /* Respect reduced motion for Checkers */
+    @media (prefers-reduced-motion: reduce) {
+        .checkers-cell,
+        .checkers-piece,
+        .valid-move-indicator {
+            animation: none;
+            transition: none;
+        }
+
+        .checkers-cell:hover,
+        .checkers-piece:hover {
             transform: none;
         }
 
-        .snake-game.celebration,
-        .snake-game.celebration .snake-cell.food,
-        .snake-game.celebration .snake-cell.snake-head {
+        .section.celebration,
+        .section.celebration .checkers-piece {
+            animation: none;
+        }
+    }
+
+    /* === Chess Board === */
+    .chess-board {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        grid-template-rows: repeat(9, 1fr);
+        gap: 2px;
+        background: hsl(var(--space-800));
+        padding: 12px;
+        border-radius: 12px;
+        border: 3px solid hsl(var(--border) / .3);
+        max-width: 600px;
+        width: 100%;
+        box-shadow: 0 8px 32px hsl(var(--space-900) / .3);
+        position: relative;
+    }
+
+    .chess-labels {
+        display: contents;
+    }
+
+    .chess-label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: hsl(var(--surface) / .1);
+        color: hsl(var(--ink) / .7);
+        font-weight: 600;
+        font-size: 0.875rem;
+        border: 1px solid hsl(var(--border) / .2);
+    }
+
+    .top-labels .chess-label,
+    .bottom-labels .chess-label {
+        background: hsl(var(--space-700));
+    }
+
+    .side-label {
+        background: hsl(var(--space-700));
+    }
+
+    .chess-square {
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: all 0.15s ease;
+        border: 1px solid hsl(var(--border) / .2);
+    }
+
+    .chess-square.light {
+        background: hsl(45 25% 85%);
+    }
+
+    .chess-square.dark {
+        background: hsl(25 15% 35%);
+    }
+
+    .chess-square:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px hsl(var(--space-900) / .2);
+    }
+
+    .chess-square.selected {
+        box-shadow: inset 0 0 0 3px hsl(var(--star) / .8);
+        background: hsl(var(--star) / .2) !important;
+    }
+
+    .chess-square.valid-move {
+        position: relative;
+    }
+
+    .chess-square.valid-move::after {
+        content: '';
+        position: absolute;
+        inset: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background: hsl(var(--star) / .6);
+        border-radius: 50%;
+        border: 2px solid hsl(var(--star));
+        animation: valid-move-pulse 1s ease-in-out infinite;
+    }
+
+    .chess-piece {
+        width: 85%;
+        height: 85%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        transition: all 0.15s ease;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px hsl(var(--space-900) / .3);
+    }
+
+    .chess-piece:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px hsl(var(--space-900) / .4);
+    }
+
+    /* White pieces (light colored) */
+    .chess-piece.white_king,
+    .chess-piece.white_queen,
+    .chess-piece.white_rook,
+    .chess-piece.white_bishop,
+    .chess-piece.white_knight,
+    .chess-piece.white_pawn {
+        background-image: url('/images/chess/chess_king.png');
+        filter: brightness(1.2) contrast(1.1);
+    }
+
+    .chess-piece.white_queen {
+        background-image: url('/images/chess/chess_queen.png');
+    }
+
+    .chess-piece.white_rook {
+        background-image: url('/images/chess/chess_rook.png');
+    }
+
+    .chess-piece.white_bishop {
+        background-image: url('/images/chess/chess_bishop.png');
+    }
+
+    .chess-piece.white_knight {
+        background-image: url('/images/chess/chess_knight.png');
+    }
+
+    .chess-piece.white_pawn {
+        background-image: url('/images/chess/chess_pawn.png');
+    }
+
+    /* Black pieces (dark colored) */
+    .chess-piece.black_king,
+    .chess-piece.black_queen,
+    .chess-piece.black_rook,
+    .chess-piece.black_bishop,
+    .chess-piece.black_knight,
+    .chess-piece.black_pawn {
+        background-image: url('/images/chess/chess_king.png');
+        filter: brightness(0.6) contrast(1.3);
+    }
+
+    .chess-piece.black_queen {
+        background-image: url('/images/chess/chess_queen.png');
+    }
+
+    .chess-piece.black_rook {
+        background-image: url('/images/chess/chess_rook.png');
+    }
+
+    .chess-piece.black_bishop {
+        background-image: url('/images/chess/chess_bishop.png');
+    }
+
+    .chess-piece.black_knight {
+        background-image: url('/images/chess/chess_knight.png');
+    }
+
+    .chess-piece.black_pawn {
+        background-image: url('/images/chess/chess_pawn.png');
+    }
+
+    .valid-move-indicator {
+        position: absolute;
+        inset: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        background: hsl(var(--star) / .6);
+        border-radius: 50%;
+        border: 2px solid hsl(var(--star));
+        animation: valid-move-pulse 1s ease-in-out infinite;
+    }
+
+    @media (max-width: 768px) {
+        .chess-board {
+            max-width: 450px;
+            padding: 8px;
+            gap: 1px;
+        }
+
+        .chess-piece {
+            width: 90%;
+            height: 90%;
+        }
+
+        .valid-move-indicator {
+            width: 16px;
+            height: 16px;
+            border-width: 1px;
+        }
+
+        .chess-label {
+            font-size: 0.75rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .chess-board {
+            max-width: 360px;
+            padding: 6px;
+            gap: 1px;
+        }
+
+        .chess-piece {
+            width: 95%;
+            height: 95%;
+        }
+
+        .valid-move-indicator {
+            width: 12px;
+            height: 12px;
+        }
+
+        .chess-label {
+            font-size: 0.625rem;
+        }
+    }
+
+    /* Chess celebration effect */
+    .section.celebration {
+        animation: celebrate 2s ease-in-out;
+    }
+
+    @keyframes celebrate {
+        0% { transform: scale(1); }
+        25% { transform: scale(1.02) rotate(1deg); }
+        50% { transform: scale(1.05) rotate(0deg); }
+        75% { transform: scale(1.02) rotate(-1deg); }
+        100% { transform: scale(1) rotate(0deg); }
+    }
+
+    .section.celebration .chess-piece {
+        animation: piece-glow 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes piece-glow {
+        from { box-shadow: 0 2px 8px hsl(var(--space-900) / .3); }
+        to { box-shadow: 0 4px 16px hsl(var(--star) / .4), 0 0 24px hsl(var(--star) / .2); }
+    }
+
+    /* Respect reduced motion for Chess */
+    @media (prefers-reduced-motion: reduce) {
+        .chess-square,
+        .chess-piece,
+        .valid-move-indicator {
+            animation: none;
+            transition: none;
+        }
+
+        .chess-square:hover,
+        .chess-piece:hover {
+            transform: none;
+        }
+
+        .section.celebration,
+        .section.celebration .chess-piece {
             animation: none;
         }
     }
@@ -1150,22 +1886,32 @@ body {
     .game-board-2048 {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 10px;
-        background: hsl(var(--space-800) / .8);
-        padding: 10px;
+        gap: 8px;
+        background: hsl(var(--space-800));
+        padding: 12px;
         border-radius: 12px;
+        border: 3px solid hsl(var(--border) / .3);
         max-width: 450px;
         width: 100%;
         aspect-ratio: 1;
+        box-shadow: 0 8px 32px hsl(var(--space-900) / .3);
     }
 
     .tile-cell {
-        background: hsl(var(--surface) / .1);
-        border-radius: 0.5rem;
+        background: hsl(var(--surface) / .08);
+        border: 1px solid hsl(var(--border) / .2);
+        border-radius: 8px;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+        min-height: 80px;
+        transition: all 0.15s ease;
+    }
+
+    .tile-cell:hover {
+        background: hsl(var(--surface) / .12);
+        border-color: hsl(var(--border) / .3);
     }
 
     .tile {
@@ -1174,10 +1920,18 @@ body {
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 0.5rem;
+        border-radius: 8px;
         font-weight: bold;
-        font-size: 2rem;
+        font-size: clamp(1.5rem, 4vw, 2rem);
         animation: tile-appear 0.2s ease-out;
+        box-shadow: 0 2px 8px hsl(var(--space-900) / .2);
+        border: 1px solid hsl(var(--border) / .2);
+        transition: all 0.15s ease;
+    }
+
+    .tile:hover {
+        transform: scale(1.02);
+        box-shadow: 0 4px 16px hsl(var(--space-900) / .3);
     }
 
     @keyframes tile-appear {
@@ -1191,81 +1945,76 @@ body {
         }
     }
 
-    .game-controls-2048 {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .control-row {
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .control-btn-2048 {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: hsl(var(--surface) / .1);
-        color: hsl(var(--ink));
-        border: 2px solid hsl(var(--border) / .3);
-        padding: 0.75rem 2rem;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 1rem;
-        font-weight: bold;
-        min-height: 44px;
-    }
-
-    .control-btn-2048:hover:not(:disabled) {
-        background: hsl(var(--star) / .2);
-        border-color: hsl(var(--star));
-    }
-
-    .control-btn-2048:focus-visible {
-        outline: 2px solid hsl(var(--constellation));
-        outline-offset: 2px;
-    }
-
-    .control-btn-2048.new-game {
-        background: hsl(var(--star));
-        color: hsl(220 20% 10%);
-    }
-
-    .control-btn-2048:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-    }
-
     @media (max-width: 768px) {
         .game-board-2048 {
             max-width: 350px;
+            padding: 8px;
+            gap: 6px;
+        }
+
+        .tile-cell {
+            min-height: 60px;
         }
 
         .tile {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
         }
 
         .mobile-controls {
-            display: block;
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .game-board-2048 {
+            max-width: 280px;
+            padding: 6px;
+            gap: 4px;
+        }
+
+        .tile-cell {
+            min-height: 50px;
+        }
+
+        .tile {
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+        }
+
+        .mobile-controls {
+            margin-top: 0.75rem;
+        }
+
+        .mobile-controls .grid {
+            max-width: 28px;
+            gap: 0.5px;
+        }
+
+        .mobile-controls button {
+            min-height: 40px;
+            font-size: 0.875rem;
         }
     }
 
     @media (max-width: 400px) {
         .game-board-2048 {
             max-width: 280px;
+            padding: 6px;
+            gap: 4px;
+        }
+
+        .tile-cell {
+            min-height: 50px;
         }
 
         .tile {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
         }
     }
 
     /* 2048 celebration effect */
-    .game-2048.celebration {
+    .section.celebration {
         animation: celebrate 2s ease-in-out;
     }
 
@@ -1277,18 +2026,9 @@ body {
         100% { transform: scale(1) rotate(0deg); }
     }
 
-    .game-2048.celebration .tile {
+    .section.celebration .tile {
         animation: tile-glow 0.6s ease-in-out infinite alternate;
-    }
-
-    .game-2048.celebration .win-message .tile {
-        animation: win-tile-glow 0.8s ease-in-out infinite alternate;
         box-shadow: 0 0 15px hsl(var(--star)), 0 0 30px hsl(var(--star) / .5);
-    }
-
-    @keyframes tile-glow {
-        from { box-shadow: 0 0 5px rgba(255, 255, 255, 0.3); }
-        to { box-shadow: 0 0 15px rgba(255, 255, 255, 0.6), 0 0 25px rgba(255, 255, 255, 0.3); }
     }
 
     @keyframes win-tile-glow {
@@ -1300,17 +2040,16 @@ body {
     @media (prefers-reduced-motion: reduce) {
         .tile {
             animation: none;
+            transition: none;
         }
 
-        .arrow-btn:hover,
-        .arrow-btn:active,
-        .control-btn-2048:hover {
+        .tile:hover {
             transform: none;
+            box-shadow: 0 2px 8px hsl(var(--space-900) / .2);
         }
 
-        .game-2048.celebration,
-        .game-2048.celebration .tile,
-        .game-2048.celebration .win-message .tile {
+        .section.celebration,
+        .section.celebration .tile {
             animation: none;
         }
     }
@@ -1326,19 +2065,65 @@ body {
         display: grid;
         grid-template-columns: repeat(9, 1fr);
         grid-template-rows: repeat(9, 1fr);
-        gap: 1px;
-        background: hsl(var(--border) / .3);
-        border: 3px solid hsl(var(--border) / .5);
-        border-radius: 0.5rem;
+        gap: 2px;
+        background: hsl(var(--space-800));
+        padding: 1rem;
+        border-radius: 12px;
+        border: 3px solid hsl(var(--border) / .3);
         max-width: 600px;
         width: 100%;
         aspect-ratio: 1;
+        box-shadow: 0 8px 32px hsl(var(--space-900) / .3);
+        position: relative;
         overflow: hidden;
+        touch-action: manipulation;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    /* Mobile Sudoku optimizations */
+    @media (max-width: 768px) {
+        .sudoku-board-container {
+            padding: 0.5rem;
+        }
+
+        .sudoku-board {
+            padding: 0.5rem;
+            gap: 1px;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        .sudoku-cell {
+            min-height: 32px;
+            font-size: clamp(0.875rem, 3vw, 1.125rem);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .sudoku-board-container {
+            padding: 0.25rem;
+        }
+
+        .sudoku-board {
+            padding: 0.25rem;
+            gap: 0.5px;
+        }
+
+        .sudoku-cell {
+            min-height: 28px;
+            font-size: clamp(0.75rem, 2.5vw, 1rem);
+        }
     }
 
     .sudoku-cell {
         position: relative;
-        background: hsl(var(--space-900));
+        background: hsl(var(--surface) / .05);
+        border: 1px solid hsl(var(--border) / .2);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1346,41 +2131,60 @@ body {
         font-weight: 600;
         color: hsl(var(--ink));
         cursor: pointer;
-        transition: all 0.15s ease;
+        transition: all 0.2s ease;
         min-height: 44px;
+        border-radius: 4px;
+        overflow: hidden;
     }
 
     /* 3x3 box borders (heavier lines every 3 cells) */
     .sudoku-cell:nth-child(3n) {
-        border-right: 2px solid hsl(var(--border) / .5);
+        border-right: 2px solid hsl(var(--border) / .4);
     }
 
     .sudoku-cell:nth-child(n+19):nth-child(-n+27),
     .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
-        border-bottom: 2px solid hsl(var(--border) / .5);
+        border-bottom: 2px solid hsl(var(--border) / .4);
     }
 
     /* Cell states */
     .sudoku-cell.original {
-        background: hsl(var(--surface) / .1);
+        background: hsl(var(--surface) / .15);
         color: hsl(var(--star));
         cursor: default;
         font-weight: 700;
+        border-color: hsl(var(--border) / .3);
     }
 
     .sudoku-cell.selected {
-        background: hsl(var(--star) / .15);
-        box-shadow: inset 0 0 0 2px hsl(var(--star));
+        background: hsl(var(--star) / .2);
+        box-shadow: inset 0 0 0 3px hsl(var(--star) / .6);
+        border-color: hsl(var(--star) / .5);
     }
 
     .sudoku-cell.conflict {
-        background: hsl(0 70% 50% / .2);
+        background: hsl(0 70% 50% / .15);
         color: hsl(0 70% 60%);
+        border-color: hsl(0 70% 50% / .4);
+        animation: conflict-shake 0.3s ease-in-out;
+    }
+
+    @keyframes conflict-shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-2px); }
+        75% { transform: translateX(2px); }
     }
 
     .sudoku-cell.hint {
         background: hsl(var(--constellation) / .2);
+        border-color: hsl(var(--constellation) / .5);
         animation: hint-pulse 1s ease-in-out 2;
+    }
+
+    .sudoku-cell.user-input {
+        background: hsl(var(--star) / .08);
+        color: hsl(var(--star) / .9);
+        font-weight: 500;
     }
 
     @keyframes hint-pulse {
@@ -1389,7 +2193,10 @@ body {
     }
 
     .sudoku-cell:not(.original):hover {
-        background: hsl(var(--star) / .08);
+        background: hsl(var(--star) / .12);
+        border-color: hsl(var(--star) / .4);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px hsl(var(--space-900) / .2);
     }
 
     .sudoku-cell:focus-visible {
@@ -1434,56 +2241,148 @@ body {
     /* Hover Number Picker (3x3 grid) */
     .number-picker {
         position: absolute;
-        inset: 0;
+        inset: -4px;
         display: grid;
         grid-template-columns: repeat(3, 1fr);
         grid-template-rows: repeat(3, 1fr);
-        gap: 2px;
+        gap: 3px;
         background: hsl(var(--space-800));
-        border: 2px solid hsl(var(--star));
-        border-radius: 0.25rem;
-        padding: 2px;
-        z-index: 10;
-        box-shadow: 0 4px 12px hsl(0 0% 0% / .4);
+        border: 3px solid hsl(var(--star) / .8);
+        border-radius: 8px;
+        padding: 6px;
+        z-index: 20;
+        box-shadow: 0 8px 32px hsl(var(--space-900) / .5), 0 0 0 1px hsl(var(--star) / .3);
+        backdrop-filter: blur(8px);
     }
 
     .picker-number {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: hsl(var(--surface) / .1);
+        background: hsl(var(--surface) / .15);
         color: hsl(var(--ink));
         font-size: clamp(0.875rem, 2.5vw, 1.125rem);
-        font-weight: 600;
-        border: 1px solid hsl(var(--border) / .2);
-        border-radius: 0.25rem;
+        font-weight: 700;
+        border: 2px solid hsl(var(--border) / .3);
+        border-radius: 6px;
         cursor: pointer;
-        transition: all 0.1s ease;
+        transition: all 0.15s ease;
         user-select: none;
+        position: relative;
+        min-height: 32px;
     }
 
     .picker-number:hover {
-        background: hsl(var(--star));
-        color: hsl(220 20% 10%);
-        transform: scale(1.05);
+        background: hsl(var(--star) / .9);
+        color: hsl(220 20% 8%);
+        border-color: hsl(var(--star));
+        transform: scale(1.1);
+        box-shadow: 0 4px 16px hsl(var(--star) / .4);
     }
 
     .picker-number:active {
-        transform: scale(0.95);
+        transform: scale(1.05);
+    }
+
+    .picker-number.eliminated {
+        background: hsl(0 70% 50% / .15);
+        color: hsl(0 70% 50% / .7);
+        border-color: hsl(0 70% 50% / .4);
+        text-decoration: line-through;
+        opacity: 0.6;
+    }
+
+    .picker-number.eliminated:hover {
+        background: hsl(0 70% 50% / .8);
+        color: hsl(var(--ink));
+        border-color: hsl(0 70% 50%);
+        opacity: 1;
+    }
+
+    /* Remaining numbers display (top of cell when 2+ eliminated) */
+    .remaining-numbers {
+        position: absolute;
+        top: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.6rem;
+        font-weight: 600;
+        color: hsl(var(--constellation));
+        background: hsl(var(--space-800) / .8);
+        padding: 1px 4px;
+        border-radius: 8px;
+        border: 1px solid hsl(var(--constellation) / .3);
+        white-space: nowrap;
+        z-index: 5;
+        backdrop-filter: blur(4px);
+    }
+
+    .remaining-numbers:empty {
+        display: none;
     }
 
     /* Mobile adjustments */
     @media (max-width: 640px) {
         .sudoku-board {
             max-width: 100%;
+            padding: 0.5rem;
+            gap: 1px;
+        }
+
+        .sudoku-cell {
+            min-height: 36px;
+            font-size: clamp(1rem, 3.5vw, 1.5rem);
         }
 
         .cell-notes {
             font-size: 0.4rem;
         }
 
+        .remaining-numbers {
+            font-size: 0.5rem;
+            padding: 0 2px;
+        }
+
         .picker-number {
             font-size: 0.75rem;
+            min-height: 28px;
+        }
+
+        .number-picker {
+            gap: 2px;
+            padding: 4px;
+        }
+    }
+
+    /* Extra small mobile adjustments */
+    @media (max-width: 480px) {
+        .sudoku-board {
+            padding: 0.25rem;
+            gap: 1px;
+        }
+
+        .sudoku-cell {
+            min-height: 32px;
+            font-size: clamp(0.875rem, 3vw, 1.25rem);
+        }
+
+        .cell-notes {
+            font-size: 0.35rem;
+        }
+
+        .remaining-numbers {
+            font-size: 0.45rem;
+            padding: 0 1px;
+        }
+
+        .picker-number {
+            font-size: 0.7rem;
+            min-height: 24px;
+        }
+
+        .number-picker {
+            gap: 1px;
+            padding: 3px;
         }
     }
 

@@ -39,8 +39,8 @@
                 
                 <div class="flex flex-wrap gap-2">
                     @foreach(\App\Games\Sudoku\SudokuEngine::DIFFICULTIES as $key => $info)
-                        <button wire:click="selectDifficulty('{{ $key }}')" 
-                                class="px-4 py-2 rounded-lg border transition-all bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star hover:bg-star/10">
+                        <button wire:click="selectDifficulty('{{ $key }}')"
+                                class="px-4 py-2 rounded-lg border transition-all bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star hover:bg-star/10 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-star/20">
                             {{ $info['label'] }}
                         </button>
                     @endforeach
@@ -99,20 +99,49 @@
             </div>
         @endif
 
+        {{-- Hint Explanation --}}
+        @if($hintStep)
+            <div class="glass rounded-xl border border-star/40 bg-star/5 p-4 space-y-3">
+                <div class="flex items-center gap-2">
+                    <x-heroicon-o-light-bulb class="w-5 h-5 text-star" />
+                    <h3 class="text-lg font-semibold text-star">Hint Applied</h3>
+                </div>
+                <p class="text-sm text-ink/80">{{ $hintStep['explanation'] }}</p>
+                <div class="text-xs text-ink/60">
+                    <span class="font-medium text-star">Technique:</span> {{ $hintStep['technique_name'] ?? ucfirst(str_replace('_', ' ', $hintStep['technique'])) }}
+                </div>
+                @if(!empty($hintStep['placements']))
+                    <div class="text-xs text-ink/60">
+                        <span class="font-medium text-star">Placements:</span>
+                        @foreach($hintStep['placements'] as $placement)
+                            R{{ $placement['r'] + 1 }}C{{ $placement['c'] + 1 }} = {{ $placement['d'] }}
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        @endif
+
         {{-- Completion Message --}}
         @if($gameComplete)
             <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
                 <div class="flex items-center justify-center gap-2">
-                    <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
-                    <p class="text-lg font-semibold text-star">Puzzle complete.</p>
-                    <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
+                    <x-heroicon-o-star class="w-6 h-6 text-star animate-pulse" />
+                    <p class="text-xl font-bold text-star">🎉 Congratulations!</p>
+                    <x-heroicon-o-star class="w-6 h-6 text-star animate-pulse" style="animation-delay: 0.5s" />
                 </div>
                 <div class="flex items-center justify-center gap-3 text-sm text-ink/70">
-                    <span>{{ ucfirst($difficulty) }}</span>
+                    <span class="px-2 py-1 bg-[hsl(var(--surface)/.2)] rounded">{{ ucfirst($difficulty) }} Level</span>
                     <span class="w-1 h-1 rounded-full bg-ink/40"></span>
-                    <span>{{ $hintsUsed }} hints</span>
+                    <span>{{ $hintsUsed }} hints used</span>
                     <span class="w-1 h-1 rounded-full bg-ink/40"></span>
-                    <span>{{ $mistakes }} mistakes</span>
+                    <span>{{ $mistakes }} mistakes made</span>
+                </div>
+                <div class="text-xs text-ink/60 mt-2">
+                    @php
+                        $score = 1000 - ($hintsUsed * 50) - ($mistakes * 25);
+                        $score = max(100, $score);
+                    @endphp
+                    Performance Score: <span class="font-semibold text-star">{{ $score }}</span>
                 </div>
             </div>
         @endif
@@ -129,14 +158,16 @@
                                 $isSelected = $selectedCell && $selectedCell[0] === $row && $selectedCell[1] === $col;
                                 $isConflict = $this->isConflict($row, $col);
                                 $isHint = $this->isLastHint($row, $col);
+                                $isUserInput = !$isOriginal && $value !== 0;
                                 $cellNotes = $notes[$row][$col] ?? [];
                             @endphp
 
-                            <div class="sudoku-cell 
+                            <div class="sudoku-cell
                                         {{ $isOriginal ? 'original' : '' }}
                                         {{ $isSelected ? 'selected' : '' }}
                                         {{ $isConflict ? 'conflict' : '' }}
-                                        {{ $isHint ? 'hint' : '' }}"
+                                        {{ $isHint ? 'hint' : '' }}
+                                        {{ $isUserInput ? 'user-input' : '' }}"
                                  @if(!$isOriginal)
                                      @mouseenter="setHover({{ $row }}, {{ $col }})"
                                      @mouseleave="clearHover()"
@@ -147,14 +178,28 @@
                                 
                                 @if($value !== 0)
                                     <span class="cell-number">{{ $value }}</span>
-                                @elseif(!empty($cellNotes))
-                                    <div class="cell-notes">
-                                        @for($n = 1; $n <= 9; $n++)
-                                            <span class="{{ in_array($n, $cellNotes) ? 'note-active' : 'note-empty' }}">
-                                                {{ in_array($n, $cellNotes) ? $n : '' }}
-                                            </span>
-                                        @endfor
-                                    </div>
+                                @else
+                                    {{-- Remaining numbers display (when 2+ eliminated) --}}
+                                    @php
+                                        $remainingNumbers = $this->getRemainingNumbers($row, $col);
+                                        $hasRemainingNumbers = $this->hasRemainingNumbers($row, $col);
+                                    @endphp
+                                    @if($hasRemainingNumbers && count($remainingNumbers) <= 7)
+                                        <div class="remaining-numbers">
+                                            {{ implode('', $remainingNumbers) }}
+                                        </div>
+                                    @endif
+
+                                    {{-- Notes display --}}
+                                    @if(!empty($cellNotes))
+                                        <div class="cell-notes">
+                                            @for($n = 1; $n <= 9; $n++)
+                                                <span class="{{ in_array($n, $cellNotes) ? 'note-active' : 'note-empty' }}">
+                                                    {{ in_array($n, $cellNotes) ? $n : '' }}
+                                                </span>
+                                            @endfor
+                                        </div>
+                                    @endif
                                 @endif
 
                                 {{-- Hover Number Picker --}}
@@ -164,11 +209,14 @@
                                          @click.stop
                                          class="number-picker">
                                         @for($n = 1; $n <= 9; $n++)
-                                            <button class="picker-number"
+                                            @php
+                                                $isEliminated = in_array($n, $this->eliminations[$row][$col] ?? []);
+                                            @endphp
+                                            <button class="picker-number {{ $isEliminated ? 'eliminated' : '' }}"
                                                     @click.left="$wire.placeNumberAt({{ $row }}, {{ $col }}, {{ $n }}); clearHover()"
-                                                    @click.right.prevent="$wire.toggleNoteAt({{ $row }}, {{ $col }}, {{ $n }}); $event.stopPropagation()"
+                                                    @click.right.prevent="$wire.toggleEliminationAt({{ $row }}, {{ $col }}, {{ $n }}); $event.stopPropagation()"
                                                     @contextmenu.prevent
-                                                    aria-label="Place {{ $n }}">
+                                                    aria-label="{{ $isEliminated ? 'Un-eliminate' : 'Eliminate' }} {{ $n }}">
                                                 {{ $n }}
                                             </button>
                                         @endfor

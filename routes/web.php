@@ -31,12 +31,15 @@ Route::middleware('guest')->group(function () {
 
 // Games routes (public)
 Route::prefix('games')->name('games.')->group(function () {
+    Route::get('/', \App\Livewire\Pages\GamesIndex::class)->name('index');
     Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe');
     Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('connect-4');
     Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('sudoku');
     Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('twenty-forty-eight');
     Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('minesweeper');
     Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake');
+    Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('checkers');
+    Route::get('/chess', \App\Livewire\Games\Chess::class)->name('chess');
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
 

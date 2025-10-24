@@ -48,7 +48,7 @@ class SudokuTest extends TestCase
     public function test_can_place_number_in_empty_cell(): void
     {
         $component = Livewire::test(Sudoku::class)
-            ->call('selectDifficulty', 'beginner');
+            ->call('selectDifficulty', 'easy');
 
         // Find first empty cell
         $board = $component->get('board');
@@ -79,7 +79,7 @@ class SudokuTest extends TestCase
     public function test_cannot_change_original_puzzle_cells(): void
     {
         $component = Livewire::test(Sudoku::class)
-            ->call('selectDifficulty', 'beginner');
+            ->call('selectDifficulty', 'easy');
 
         // Find an original cell
         $originalPuzzle = $component->get('originalPuzzle');
@@ -147,7 +147,7 @@ class SudokuTest extends TestCase
     public function test_can_toggle_note_at_cell(): void
     {
         $component = Livewire::test(Sudoku::class)
-            ->call('selectDifficulty', 'beginner');
+            ->call('selectDifficulty', 'easy');
 
         // Find first empty cell
         $originalPuzzle = $component->get('originalPuzzle');
@@ -176,7 +176,7 @@ class SudokuTest extends TestCase
     public function test_can_clear_cell(): void
     {
         $component = Livewire::test(Sudoku::class)
-            ->call('selectDifficulty', 'beginner');
+            ->call('selectDifficulty', 'easy');
 
         // Find first empty cell and place number
         $originalPuzzle = $component->get('originalPuzzle');
@@ -270,7 +270,7 @@ class SudokuTest extends TestCase
     public function test_game_detects_conflicts(): void
     {
         $component = Livewire::test(Sudoku::class)
-            ->call('selectDifficulty', 'beginner');
+            ->call('selectDifficulty', 'easy');
 
         // Find two empty cells in same row
         $originalPuzzle = $component->get('originalPuzzle');
@@ -305,7 +305,7 @@ class SudokuTest extends TestCase
     public function test_game_completes_when_solved(): void
     {
         $component = Livewire::test(Sudoku::class)
-            ->call('selectDifficulty', 'beginner'); // Easiest difficulty
+            ->call('selectDifficulty', 'easy'); // Easiest difficulty
 
         // Fill in the solution
         $solution = $component->get('solution');

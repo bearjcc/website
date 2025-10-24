@@ -38,7 +38,24 @@
                     <div data-um-morph="nav-logo" class="transition-all duration-200">
                         <x-ui.nav-logo class="h-8" />
                     </div>
-                    @include('partials.nav')
+
+                    {{-- Simple breadcrumb navigation for game pages --}}
+                    @hasSection('breadcrumbs')
+                        <nav aria-label="Breadcrumb navigation">
+                            @yield('breadcrumbs')
+                        </nav>
+                    @else
+                        {{-- Only show home link on non-home pages --}}
+                        @if(!request()->routeIs('home'))
+                            <a
+                                href="{{ route('home') }}"
+                                class="px-3 py-2 text-sm text-ink/70 hover:text-ink transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
+                                aria-label="Back to home"
+                            >
+                                <x-heroicon-o-home class="w-4 h-4" />
+                            </a>
+                        @endif
+                    @endif
                 </div>
             </div>
             {{-- Glass gradient border that tapers to transparency --}}

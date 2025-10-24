@@ -119,25 +119,25 @@ class TwentyFortyEight extends Component
     public function getTileColor(int $value): string
     {
         return match ($value) {
-            0 => 'rgba(255, 255, 255, 0.05)',
-            2 => '#eee4da',
-            4 => '#ede0c8',
-            8 => '#f2b179',
-            16 => '#f59563',
-            32 => '#f67c5f',
-            64 => '#f65e3b',
-            128 => '#edcf72',
-            256 => '#edcc61',
-            512 => '#edc850',
-            1024 => '#edc53f',
-            2048 => '#edc22e',
-            default => '#3c3a32',
+            0 => 'transparent',
+            2 => 'hsl(45 90% 95%)',      // Light cream
+            4 => 'hsl(45 85% 90%)',      // Slightly darker cream
+            8 => 'hsl(35 85% 85%)',      // Light orange
+            16 => 'hsl(30 85% 80%)',     // Orange
+            32 => 'hsl(25 85% 75%)',     // Darker orange
+            64 => 'hsl(20 85% 70%)',     // Red-orange
+            128 => 'hsl(40 90% 75%)',    // Gold
+            256 => 'hsl(40 85% 70%)',    // Darker gold
+            512 => 'hsl(40 80% 65%)',    // Dark gold
+            1024 => 'hsl(40 75% 60%)',   // Orange-gold
+            2048 => 'hsl(40 70% 55%)',   // Dark orange-gold
+            default => 'hsl(280 60% 40%)', // Purple for higher tiles
         };
     }
 
     public function getTileTextColor(int $value): string
     {
-        return $value > 4 ? '#ffffff' : '#776e65';
+        return $value > 4 ? 'hsl(var(--space-900))' : 'hsl(220 15% 40%)';
     }
 
     protected function getCurrentState(): array
