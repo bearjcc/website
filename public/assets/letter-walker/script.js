@@ -478,11 +478,6 @@ function submitWord() {
     return;
   }
 
-  if (gameState.foundWords.includes(word)) {
-    showMessage("Word already found!", "error");
-    return;
-  }
-
   // Check if dictionary is loaded, if not show loading indicator
   if (!gameState.dictionaryLoaded) {
     const message = document.getElementById("message");
@@ -518,19 +513,18 @@ function submitWord() {
     return;
   }
 
+  // Word is valid - game over!
   // Calculate score
   const basePoints = word.length * 10;
   const movePenalty = gameState.moves;
   const multiplier = word.length === 8 ? 2 : 1;
-  const points = Math.max(0, (basePoints - movePenalty) * multiplier);
-
-  gameState.score += points;
+  gameState.score = Math.max(0, (basePoints - movePenalty) * multiplier);
   gameState.foundWords.push(word);
 
-  showMessage(`+${points} points!`, "success");
-  clearSelection();
-  updateDisplay();
-  autoSave();
+  showMessage(`Game Over! Score: ${gameState.score}`, "success");
+
+  // Show score submission modal
+  showScoreModal();
 }
 
 // Show message
@@ -561,12 +555,12 @@ function newPuzzle() {
 
 // Share results
 function shareResults() {
+  const word = gameState.foundWords.length > 0 ? gameState.foundWords[0].toUpperCase() : "None";
   const results =
     `Letter Walker - Puzzle ${gameState.puzzleNumber}\n` +
+    `Word: ${word}\n` +
     `Score: ${gameState.score}\n` +
-    `Moves: ${gameState.moves}\n` +
-    `Words found: ${gameState.foundWords.length}\n\n` +
-    gameState.foundWords.map((w) => w.toUpperCase()).join(", ");
+    `Moves: ${gameState.moves}\n`;
 
   // Try to copy to clipboard
   if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -585,187 +579,70 @@ function shareResults() {
   }
 }
 
-// Check if user is authenticated
-function isUserLoggedIn() {
-  const metaTag = document.querySelector('meta[name="user-authenticated"]');
-  return metaTag && metaTag.content === "true";
-}
+// Show score submission modal
+function showScoreModal() {
+  const nameModal = document.getElementById("name-modal");
+  const playerNameInput = document.getElementById("player-name");
+  const saveNameBtn = document.getElementById("save-name-btn");
+  const cancelNameBtn = document.getElementById("cancel-name-btn");
 
-// Submit score to server
-async function submitScore() {
-  // If not logged in, show arcade-style name entry modal
-  if (!isUserLoggedIn()) {
-    const nameModal = document.getElementById("name-modal");
-    const playerNameInput = document.getElementById("player-name");
-    const saveNameBtn = document.getElementById("save-name-btn");
-    const cancelNameBtn = document.getElementById("cancel-name-btn");
+  // Set final score in modal
+  document.getElementById("final-score").textContent = gameState.score;
 
-    nameModal.classList.remove("hidden");
-    playerNameInput.value = "";
-    playerNameInput.focus();
+  nameModal.classList.remove("hidden");
+  playerNameInput.value = "";
+  playerNameInput.focus();
 
-    // Handle save name
-    saveNameBtn.onclick = async () => {
-      const playerName = playerNameInput.value.trim() || "Anonymous";
+  // Handle save name
+  saveNameBtn.onclick = async () => {
+    const playerName = playerNameInput.value.trim() || "Anonymous";
+    nameModal.classList.add("hidden");
+
+    try {
+      const response = await fetch("/api/letter-walker/score", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          score: gameState.score,
+          moves: gameState.moves,
+          words_found: 1,
+          puzzle_number: gameState.puzzleNumber,
+          player_name: playerName,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        showMessage("Score saved to leaderboard!", "success");
+      } else {
+        showMessage(
+          data.message || "Failed to save score. Please try again.",
+          "error",
+        );
+      }
+    } catch (error) {
+      console.error("Score submission error:", error);
+      showMessage("Error saving score. Please try again.", "error");
+    }
+  };
+
+  // Handle cancel
+  cancelNameBtn.onclick = () => {
+    nameModal.classList.add("hidden");
+  };
+
+  // Close on escape key
+  const handleEscape = (e) => {
+    if (e.key === "Escape") {
       nameModal.classList.add("hidden");
-
-      try {
-        const csrfToken = document
-          .querySelector('meta[name="csrf-token"]')
-          ?.getAttribute("content");
-
-        if (!csrfToken) {
-          showMessage("Security token missing. Please refresh the page.", "error");
-          return;
-        }
-
-        const response = await fetch("/api/letter-walker/score", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": csrfToken,
-            Accept: "application/json",
-          },
-          body: JSON.stringify({
-            score: gameState.score,
-            moves: gameState.moves,
-            words_found: gameState.foundWords.length,
-            puzzle_number: gameState.puzzleNumber,
-            player_name: playerName,
-          }),
-        });
-
-        const data = await response.json();
-
-        if (data.success) {
-          showMessage("Score submitted to high score board!", "success");
-          const submitBtn = document.getElementById("submit-score-btn");
-          if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = "Score Submitted";
-          }
-        } else {
-          showMessage(
-            data.message || "Failed to submit score. Please try again.",
-            "error",
-          );
-        }
-      } catch (error) {
-        console.error("Score submission error:", error);
-        showMessage("Error submitting score. Please try again.", "error");
-      }
-    };
-
-    // Handle cancel
-    cancelNameBtn.onclick = () => {
-      nameModal.classList.add("hidden");
-    };
-
-    // Close on escape key
-    const handleEscape = (e) => {
-      if (e.key === "Escape") {
-        nameModal.classList.add("hidden");
-        document.removeEventListener("keydown", handleEscape);
-      }
-    };
-    document.addEventListener("keydown", handleEscape);
-
-    return;
-  }
-
-  // Logged in users submit directly
-  try {
-    const csrfToken = document
-      .querySelector('meta[name="csrf-token"]')
-      ?.getAttribute("content");
-
-    if (!csrfToken) {
-      showMessage("Security token missing. Please refresh the page.", "error");
-      return;
+      document.removeEventListener("keydown", handleEscape);
     }
-
-    const response = await fetch("/api/letter-walker/score", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": csrfToken,
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        score: gameState.score,
-        moves: gameState.moves,
-        words_found: gameState.foundWords.length,
-        puzzle_number: gameState.puzzleNumber,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      showMessage("Score submitted to high score board!", "success");
-      // Optional: Disable submit button to prevent duplicate submissions
-      const submitBtn = document.getElementById("submit-score-btn");
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Score Submitted";
-      }
-    } else {
-      showMessage(
-        data.message || "Failed to submit score. Please try again.",
-        "error",
-      );
-    }
-  } catch (error) {
-    console.error("Score submission error:", error);
-    showMessage("Error submitting score. Please try again.", "error");
-  }
-}
-
-  try {
-    const csrfToken = document
-      .querySelector('meta[name="csrf-token"]')
-      ?.getAttribute("content");
-
-    if (!csrfToken) {
-      showMessage("Security token missing. Please refresh the page.", "error");
-      return;
-    }
-
-    const response = await fetch("/api/letter-walker/score", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-TOKEN": csrfToken,
-        Accept: "application/json",
-      },
-      body: JSON.stringify({
-        score: gameState.score,
-        moves: gameState.moves,
-        words_found: gameState.foundWords.length,
-        puzzle_number: gameState.puzzleNumber,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.success) {
-      showMessage("Score submitted to high score board!", "success");
-      // Optional: Disable submit button to prevent duplicate submissions
-      const submitBtn = document.getElementById("submit-score-btn");
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = "Score Submitted";
-      }
-    } else {
-      showMessage(
-        data.message || "Failed to submit score. Please try again.",
-        "error",
-      );
-    }
-  } catch (error) {
-    console.error("Score submission error:", error);
-    showMessage("Error submitting score. Please try again.", "error");
-  }
+  };
+  document.addEventListener("keydown", handleEscape);
 }
 
 // Load dictionary from txt file
@@ -841,12 +718,6 @@ function setupEventListeners() {
   document.getElementById("submit-btn").addEventListener("click", submitWord);
   document.getElementById("clear-btn").addEventListener("click", clearSelection);
 
-  // Submit score button (if it exists)
-  const submitScoreBtn = document.getElementById("submit-score-btn");
-  if (submitScoreBtn) {
-    submitScoreBtn.addEventListener("click", submitScore);
-  }
-
   // Global mouse up to end selection
   document.addEventListener("mouseup", () => {
     if (gameState.isSelecting) {
@@ -861,12 +732,4 @@ document.addEventListener("DOMContentLoaded", () => {
   initGame();
   // Start loading dictionary in background
   loadDictionary();
-
-  // Show submit score button only if logged in
-  if (!isUserLoggedIn()) {
-    const submitScoreBtn = document.getElementById("submit-score-btn");
-    if (submitScoreBtn) {
-      submitScoreBtn.style.display = "none";
-    }
-  }
 });

@@ -43,11 +43,6 @@
                 <button id="share-btn" class="btn secondary-btn">
                     Share Results
                 </button>
-                @if(auth()->check())
-                    <button id="submit-score-btn" class="btn secondary-btn">
-                        Submit Score
-                    </button>
-                @endif
             </div>
 
             <div class="game-board-wrapper">
@@ -132,11 +127,12 @@
 
             <div id="message" class="message"></div>
 
-            <!-- Arcade-style name entry modal for guest players -->
+            <!-- Arcade-style name entry modal -->
             <div id="name-modal" class="modal hidden">
                 <div class="modal-content">
-                    <h2>High Score!</h2>
-                    <p>Enter your name to save your score:</p>
+                    <h2>Game Over!</h2>
+                    <p>Score: <span id="final-score"></span></p>
+                    <p>Enter your name for the leaderboard:</p>
                     <input type="text" id="player-name" maxlength="50" placeholder="Your Name" />
                     <div class="modal-buttons">
                         <button id="save-name-btn" class="btn primary-btn">Save Score</button>
