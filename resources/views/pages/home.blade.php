@@ -31,8 +31,8 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                     @php
                         $publishedGames = \App\Models\Game::where('status', 'published')->get();
-                        
-                        // Map game slugs to motifs
+
+                        // Map game slugs to motifs (Letter Walker uses Wordle-style, not astronomical)
                         $motifMap = [
                             'tic-tac-toe' => 'tictactoe',
                             'connect-4' => 'connect4',
@@ -40,23 +40,9 @@
                             'minesweeper' => 'minesweeper',
                             'snake' => 'snake',
                             'twenty-forty-eight' => '2048',
+                            'letter-walker' => null, // No motif - uses Wordle-style
                         ];
-                    @endphp
-
-                    @foreach($publishedGames as $game)
-                        <x-ui.game-card
-                            :href="route('games.play', $game->slug)"
-                            :title="$game->title"
-                            :motif="$motifMap[$game->slug] ?? null"
-                        />
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
-
-    {{-- Latest Notes Section - Minimal --}}
-    @php
+                    @php
         $latestPosts = \App\Models\Post::where('status', 'published')
             ->orderBy('created_at', 'desc')
             ->limit(3)

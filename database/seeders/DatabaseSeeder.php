@@ -116,6 +116,16 @@ class DatabaseSeeder extends Seeder
             'options_json' => ['grid_size' => '4x4'],
         ]);
 
+        Game::create([
+            'slug' => 'letter-walker',
+            'title' => 'Letter Walker',
+            'type' => 'word',
+            'status' => 'published',
+            'short_description' => 'Slide rows and columns to find hidden words in this daily puzzle game.',
+            'rules_md' => "## Rules\n\n- Click and drag to select letters to form words\n- Click the arrow buttons to shift rows and columns\n- Find as many words as possible with limited moves\n- Words must be at least 3 letters long",
+            'options_json' => ['grid_size' => '8x8', 'dictionary_enabled' => true],
+        ]);
+
         // Create sample blog posts
         Post::create([
             'slug' => 'welcome-to-ursa-minor',
