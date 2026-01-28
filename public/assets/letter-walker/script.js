@@ -681,6 +681,38 @@ async function loadDictionary() {
 }
 
 // Setup event listeners
+// Help modal management
+function initializeHelpModal() {
+  const helpModal = document.getElementById("help-modal");
+  const helpBtn = document.getElementById("help-btn");
+  const closeHelpBtn = document.getElementById("close-help-btn");
+  const hasSeenHelp = localStorage.getItem("letterWalkerHelpSeen");
+
+  // Show help on first visit
+  if (!hasSeenHelp) {
+    helpModal.classList.remove("hidden");
+  }
+
+  // Help button click
+  helpBtn.addEventListener("click", () => {
+    helpModal.classList.remove("hidden");
+  });
+
+  // Close button click
+  closeHelpBtn.addEventListener("click", () => {
+    helpModal.classList.add("hidden");
+    localStorage.setItem("letterWalkerHelpSeen", "true");
+  });
+
+  // Close on background click
+  helpModal.addEventListener("click", (e) => {
+    if (e.target === helpModal) {
+      helpModal.classList.add("hidden");
+      localStorage.setItem("letterWalkerHelpSeen", "true");
+    }
+  });
+}
+
 function setupEventListeners() {
   // Row shift buttons
   document.querySelectorAll(".row-btn.left").forEach((btn) => {
@@ -728,6 +760,7 @@ function setupEventListeners() {
 
 // Initialize game when page loads
 document.addEventListener("DOMContentLoaded", () => {
+  initializeHelpModal();
   setupEventListeners();
   initGame();
   // Start loading dictionary in background

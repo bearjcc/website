@@ -37,6 +37,9 @@
             </header>
 
             <div class="game-controls">
+                <button id="help-btn" class="btn secondary-btn" title="How to play">
+                    ?
+                </button>
                 <button id="new-puzzle-btn" class="btn secondary-btn">
                     New Puzzle
                 </button>
@@ -126,6 +129,21 @@
             </div>
 
             <div id="message" class="message"></div>
+
+            <!-- Help Modal -->
+            <div id="help-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>How to Play</h2>
+                    <div class="help-instructions">
+                        <p>Slide the rows and columns using the arrow buttons to rearrange the letters.</p>
+                        <p>Click and drag to select letters that spell a word.</p>
+                        <p>Submit your word and earn points for each valid word found.</p>
+                    </div>
+                    <div class="modal-buttons">
+                        <button id="close-help-btn" class="btn primary-btn">Got it!</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Arcade-style name entry modal -->
             <div id="name-modal" class="modal hidden">

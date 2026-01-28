@@ -517,6 +517,32 @@ h1 {
   min-width: 100px;
 }
 
+/* Help instructions styling */
+.help-instructions {
+  margin: 16px 0;
+  text-align: left;
+}
+
+.help-instructions p {
+  color: #d7dadc;
+  margin-bottom: 12px;
+  font-size: 0.95em;
+  line-height: 1.4;
+}
+
+.help-instructions p:last-child {
+  margin-bottom: 0;
+}
+
+/* Help button styling */
+#help-btn {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 8px 12px;
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
 /* Responsive design - Phone portrait */
 @media (max-width: 600px) {
   .game-board-wrapper {
