@@ -137,79 +137,59 @@ h1 {
   background: #565758;
 }
 
+:root {
+  --cell-size: 45px;
+  --cell-gap: 4px;
+  --control-gap: 10px;
+}
+
 .game-board-wrapper {
-  flex: 1;
-  display: grid;
-  grid-template-columns: auto repeat(8, minmax(40px, 1fr)) auto;
-  grid-template-rows: auto auto auto;
-  gap: 2px;
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-items: center;
-  width: 100%;
-  max-height: 70vh;
-  padding: 0;
-}
-
-.top-controls {
-  grid-column: 2 / 10;
-  grid-row: 1;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 2px;
+  gap: var(--control-gap);
   width: 100%;
 }
 
+.top-controls,
 .bottom-controls {
-  grid-column: 2 / 10;
-  grid-row: 3;
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 2px;
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--control-gap);
+  width: auto;
 }
 
 .spacer {
-  display: none;
+  width: var(--cell-size);
+  display: block;
 }
 
 .col-controls {
-  display: contents;
+  display: grid;
+  grid-template-columns: repeat(8, var(--cell-size));
+  gap: var(--cell-gap);
+  padding: 0 var(--cell-gap);
 }
 
 .middle-section {
-  grid-column: 1 / 11;
-  grid-row: 2;
-  display: grid;
-  grid-template-columns: auto repeat(8, 1fr) auto;
-  gap: 2px;
-  width: 100%;
-  justify-items: center;
+  display: flex;
   align-items: center;
+  gap: var(--control-gap);
+  width: auto;
 }
 
-.left-controls {
-  grid-column: 1;
-  grid-row: 1 / 3;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2px;
-}
-
+.left-controls,
 .right-controls {
-  grid-column: 3;
-  grid-row: 1 / 3;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2px;
+  grid-template-rows: repeat(8, var(--cell-size));
+  gap: var(--cell-gap);
 }
 
 .row-btn,
 .col-btn {
-  width: 100%;
-  height: 100%;
-  aspect-ratio: 1;
-  min-width: 40px;
-  min-height: 40px;
+  width: var(--cell-size);
+  height: var(--cell-size);
   font-size: 1.2em;
   background: #818384;
   border: none;
@@ -236,19 +216,14 @@ h1 {
 
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  grid-template-rows: repeat(8, 1fr);
-  gap: 2px;
-  background: #121213;
-  padding: 0;
-  border-radius: 3px;
-  aspect-ratio: 1;
-  width: 100%;
-  height: 100%;
-  max-width: 400px;
-  max-height: 400px;
-  grid-column: 2;
-  grid-row: 2;
+  grid-template-columns: repeat(8, var(--cell-size));
+  grid-template-rows: repeat(8, var(--cell-size));
+  gap: var(--cell-gap);
+  background: #3a3a3c;
+  padding: var(--cell-gap);
+  border-radius: 4px;
+  width: auto;
+  height: auto;
 }
 
 .grid-cell {
@@ -545,24 +520,14 @@ h1 {
 
 /* Responsive design - Phone portrait */
 @media (max-width: 600px) {
-  .game-board-wrapper {
-    grid-template-columns: auto repeat(8, minmax(35px, 1fr)) auto;
-  }
-
-  .grid-container {
-    max-width: 90vw;
-    max-height: 90vw;
+  :root {
+    --cell-size: 38px;
+    --cell-gap: 3px;
+    --control-gap: 6px;
   }
 
   .grid-cell {
     font-size: 4vmin;
-  }
-
-  .row-btn,
-  .col-btn {
-    min-width: 35px;
-    min-height: 35px;
-    font-size: 1em;
   }
 
   h1 {
@@ -578,10 +543,6 @@ h1 {
     font-size: 1.2em;
   }
 
-  .game-board-wrapper {
-    max-height: 65vh;
-  }
-
   .found-words {
     max-height: 10vh;
   }
@@ -589,24 +550,14 @@ h1 {
 
 /* Responsive design - Tablet landscape */
 @media (max-height: 700px) and (min-width: 600px) {
-  .game-board-wrapper {
-    max-height: 80vh;
-    grid-template-columns: auto repeat(8, minmax(30px, 1fr)) auto;
-  }
-
-  .grid-container {
-    max-width: 350px;
-    max-height: 350px;
+  :root {
+    --cell-size: 32px;
+    --cell-gap: 2px;
+    --control-gap: 8px;
   }
 
   .grid-cell {
     font-size: 2vmin;
-  }
-
-  .row-btn,
-  .col-btn {
-    min-width: 30px;
-    min-height: 30px;
   }
 
   h1 {
