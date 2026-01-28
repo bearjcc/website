@@ -40,6 +40,7 @@ Route::prefix('games')->name('games.')->group(function () {
     Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake');
     Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('checkers');
     Route::get('/chess', \App\Livewire\Games\Chess::class)->name('chess');
+    Route::view('/letter-walker', 'games.letter-walker')->name('letter-walker');
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
 
@@ -50,6 +51,13 @@ Route::prefix('api/sudoku')->name('api.sudoku.')->group(function () {
     Route::post('/validate', [\App\Http\Controllers\SudokuController::class, 'validate'])->name('validate');
     Route::post('/hint', [\App\Http\Controllers\SudokuController::class, 'hint'])->name('hint');
     Route::post('/rate', [\App\Http\Controllers\SudokuController::class, 'rate'])->name('rate');
+});
+
+// Letter Walker API routes
+Route::prefix('api/letter-walker')->name('api.letter-walker.')->group(function () {
+    Route::post('/score', [\App\Http\Controllers\LetterWalkerScoreController::class, 'store'])->name('score.submit');
+    Route::get('/scores', [\App\Http\Controllers\LetterWalkerScoreController::class, 'index'])->name('scores.index');
+    Route::get('/scores/daily', [\App\Http\Controllers\LetterWalkerScoreController::class, 'daily'])->name('scores.daily');
 });
 
 // Blog routes removed - blog section not needed

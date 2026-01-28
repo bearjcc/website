@@ -15,7 +15,7 @@ RUN npm run build
 FROM composer:2 AS composerbuild
 WORKDIR /app
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist --optimize-autoloader
+RUN composer install --no-dev --no-interaction --no-scripts --prefer-dist --optimize-autoloader --ignore-platform-reqs
 
 # ---------- Runtime Stage: PHP-FPM + Nginx ----------
 FROM php:8.3-fpm-bullseye AS app

@@ -31,7 +31,7 @@
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
                     @php
                         $publishedGames = \App\Models\Game::where('status', 'published')->get();
-                        
+
                         // Map game slugs to motifs
                         $motifMap = [
                             'tic-tac-toe' => 'tictactoe',
@@ -40,6 +40,7 @@
                             'minesweeper' => 'minesweeper',
                             'snake' => 'snake',
                             'twenty-forty-eight' => '2048',
+                            'letter-walker' => null, // No motif - uses Wordle-style green/grey
                         ];
                     @endphp
 
