@@ -6,43 +6,45 @@
         'Avoid colliding with walls or the serpent\'s own body',
         'Game accelerates every 5 fruits consumed',
         'Press SPACE to pause/unpause during play'
-    ]"
-    x-data="{
-        gameLoop: null,
-        startLoop() {
-            if (this.gameLoop) clearInterval(this.gameLoop);
-            this.gameLoop = setInterval(() => {
-                if (@this.gameStarted && !@this.gameOver && !@this.paused) {
-                    @this.tick();
-                }
-            }, @this.speed);
-        },
-        stopLoop() {
-            if (this.gameLoop) {
-                clearInterval(this.gameLoop);
-                this.gameLoop = null;
-            }
-        }
-    }"
-    x-init="startLoop(); $watch('$wire.speed', () => startLoop())"
-    @keydown.window.arrow-up.prevent="@this.changeDirection('up')"
-    @keydown.window.arrow-down.prevent="@this.changeDirection('down')"
-    @keydown.window.arrow-left.prevent="@this.changeDirection('left')"
-    @keydown.window.arrow-right.prevent="@this.changeDirection('right')"
-    @keydown.window.w.prevent="@this.changeDirection('up')"
-    @keydown.window.s.prevent="@this.changeDirection('down')"
-    @keydown.window.a.prevent="@this.changeDirection('left')"
-    @keydown.window.d.prevent="@this.changeDirection('right')"
-    @keydown.window.space.prevent="@this.togglePause()">
+    ]">
 
-    {{-- Game Instructions --}}
-    <div class="text-center mb-6">
+    <div
+        x-data="{
+            gameLoop: null,
+            startLoop() {
+                if (this.gameLoop) clearInterval(this.gameLoop);
+                this.gameLoop = setInterval(() => {
+                    if ($wire.gameStarted && !$wire.gameOver && !$wire.paused) {
+                        $wire.tick();
+                    }
+                }, $wire.speed);
+            },
+            stopLoop() {
+                if (this.gameLoop) {
+                    clearInterval(this.gameLoop);
+                    this.gameLoop = null;
+                }
+            }
+        }"
+        x-init="startLoop(); $watch('$wire.speed', () => startLoop())"
+        @keydown.window.arrow-up.prevent="$wire.changeDirection('up')"
+        @keydown.window.arrow-down.prevent="$wire.changeDirection('down')"
+        @keydown.window.arrow-left.prevent="$wire.changeDirection('left')"
+        @keydown.window.arrow-right.prevent="$wire.changeDirection('right')"
+        @keydown.window.w.prevent="$wire.changeDirection('up')"
+        @keydown.window.s.prevent="$wire.changeDirection('down')"
+        @keydown.window.a.prevent="$wire.changeDirection('left')"
+        @keydown.window.d.prevent="$wire.changeDirection('right')"
+        @keydown.window.space.prevent="$wire.togglePause()"
+    >
+        {{-- Game Instructions --}}
+        <div class="text-center mb-6">
         <p class="text-sm text-ink/60 mb-2">Use arrow keys or WASD to guide the serpent</p>
         <p class="text-xs text-ink/40">Consume cosmic fruit and avoid the void!</p>
-    </div>
+        </div>
 
-    {{-- Game Status and Score --}}
-    @if($gameStarted)
+        {{-- Game Status and Score --}}
+        @if($gameStarted)
         <div class="flex flex-wrap justify-center gap-4 text-sm">
             <div class="px-4 py-2 glass rounded-lg border border-[hsl(var(--border)/.1)]">
                 <span class="text-ink/60">Score:</span>
@@ -63,10 +65,10 @@
                 </div>
             @endif
         </div>
-    @endif
+        @endif
 
-    {{-- Game Status Messages --}}
-    @if(!$gameStarted)
+        {{-- Game Status Messages --}}
+        @if(!$gameStarted)
         <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
             <div class="flex items-center justify-center gap-2">
                 <x-heroicon-o-play class="w-5 h-5 text-star" />
@@ -79,7 +81,7 @@
                 <span>Begin Journey</span>
             </button>
         </div>
-    @elseif($gameOver)
+        @elseif($gameOver)
         <div class="glass rounded-xl border border-[hsl(var(--border)/.3)] bg-[hsl(var(--space-900)/.5)] p-6 text-center space-y-3">
             <div class="flex items-center justify-center gap-2">
                 <x-heroicon-o-exclamation-triangle class="w-5 h-5 text-ink/60" />
@@ -93,7 +95,7 @@
                 <div>High Score: <strong class="text-ink font-bold">{{ number_format($highScore) }}</strong></div>
             </div>
         </div>
-    @elseif($paused)
+        @elseif($paused)
         <div class="glass rounded-xl border border-[hsl(var(--border)/.3)] bg-[hsl(var(--space-900)/.3)] p-6 text-center space-y-3">
             <div class="flex items-center justify-center gap-2">
                 <x-heroicon-o-pause class="w-5 h-5 text-ink/60" />
@@ -102,10 +104,10 @@
             </div>
             <p class="text-sm text-ink/60">Press SPACE to continue your journey</p>
         </div>
-    @endif
+        @endif
 
-    {{-- Game Board --}}
-    <div class="flex justify-center">
+        {{-- Game Board --}}
+        <div class="flex justify-center">
         <div class="snake-board">
             @for($y = 0; $y < 15; $y++)
                 @for($x = 0; $x < 20; $x++)
@@ -129,10 +131,10 @@
                 @endfor
             @endfor
         </div>
-    </div>
+        </div>
 
-    {{-- Game Controls --}}
-    <div class="space-y-4">
+        {{-- Game Controls --}}
+        <div class="space-y-4">
         <div class="flex flex-wrap justify-center gap-2">
             <button wire:click="newGame"
                     class="px-6 py-2 rounded-lg bg-star text-space-900 font-semibold hover:-translate-y-0.5 hover:shadow-lg hover:shadow-star/20 transition-all inline-flex items-center gap-2"
@@ -168,6 +170,7 @@
                 <div></div>
                 <button @click="@this.changeDirection('down')" class="aspect-square rounded-lg border-2 border-[hsl(var(--border)/.3)] bg-[hsl(var(--surface)/.1)] text-ink hover:border-star/50 hover:bg-[hsl(var(--surface)/.2)] active:bg-star/10 transition-all text-sm font-bold min-h-[44px]" title="Move Down">↓</button>
                 <div></div>
+            </div>
             </div>
         </div>
     </div>

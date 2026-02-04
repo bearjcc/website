@@ -128,6 +128,13 @@
                 <div id="found-words-list"></div>
             </div>
 
+            <div class="leaderboard" id="leaderboard">
+                <h3>Today&#039;s Top Scores</h3>
+                <div id="leaderboard-body">
+                    <p class="leaderboard-empty">No scores yet today. Be the first!</p>
+                </div>
+            </div>
+
             <div id="message" class="message"></div>
 
             <!-- Help Modal -->

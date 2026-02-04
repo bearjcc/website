@@ -618,6 +618,7 @@ function showScoreModal() {
 
       if (data.success) {
         showMessage("Score saved to leaderboard!", "success");
+        await refreshLeaderboard();
       } else {
         showMessage(
           data.message || "Failed to save score. Please try again.",
@@ -643,6 +644,70 @@ function showScoreModal() {
     }
   };
   document.addEventListener("keydown", handleEscape);
+}
+
+async function refreshLeaderboard() {
+  const leaderboardContainer = document.getElementById("leaderboard-body");
+
+  if (!leaderboardContainer) {
+    return;
+  }
+
+  leaderboardContainer.textContent = "Loading today\u2019s scores\u2026";
+
+  try {
+    const response = await fetch("/api/letter-walker/scores/daily", {
+      headers: {
+        Accept: "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      leaderboardContainer.textContent = "Unable to load leaderboard.";
+      return;
+    }
+
+    const data = await response.json();
+    const scores = Array.isArray(data.scores) ? data.scores : [];
+
+    if (!scores.length) {
+      leaderboardContainer.innerHTML =
+        '<p class="leaderboard-empty">No scores yet today. Be the first!</p>';
+      return;
+    }
+
+    const list = document.createElement("div");
+    list.className = "leaderboard-list";
+
+    scores.forEach((entry, index) => {
+      const row = document.createElement("div");
+      row.className = "leaderboard-row";
+
+      const rank = document.createElement("span");
+      rank.className = "leaderboard-rank";
+      rank.textContent = `#${index + 1}`;
+
+      const name = document.createElement("span");
+      name.className = "leaderboard-name";
+      name.textContent = entry.player_name || "Anonymous";
+
+      const score = document.createElement("span");
+      score.className = "leaderboard-score";
+      score.textContent = entry.score;
+
+      row.appendChild(rank);
+      row.appendChild(name);
+      row.appendChild(score);
+
+      list.appendChild(row);
+    });
+
+    leaderboardContainer.innerHTML = "";
+    leaderboardContainer.appendChild(list);
+  } catch (error) {
+    console.error("Error loading leaderboard:", error);
+    leaderboardContainer.textContent = "Unable to load leaderboard.";
+  }
 }
 
 // Load dictionary from txt file
@@ -765,4 +830,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initGame();
   // Start loading dictionary in background
   loadDictionary();
+  refreshLeaderboard();
 });

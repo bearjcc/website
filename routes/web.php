@@ -9,6 +9,7 @@ use App\Livewire\Pages\Home;
 use App\Livewire\Pages\LoreEdit;
 use App\Livewire\Pages\LoreIndex;
 use App\Livewire\Pages\LoreShow;
+use App\Models\Game;
 use Illuminate\Support\Facades\Route;
 
 // Health check for Railway deployment
@@ -29,19 +30,64 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
 });
 
-// Games routes (public)
-Route::prefix('games')->name('games.')->group(function () {
-    Route::get('/', \App\Livewire\Pages\GamesIndex::class)->name('index');
-    Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe');
-    Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('connect-4');
-    Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('sudoku');
-    Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('twenty-forty-eight');
-    Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('minesweeper');
-    Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake');
-    Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('checkers');
-    Route::get('/chess', \App\Livewire\Games\Chess::class)->name('chess');
-    Route::view('/letter-walker', 'games.letter-walker')->name('letter-walker');
-    Route::get('/{game:slug}', GamePlay::class)->name('play');
+// Games index (keeps /games as the listing page)
+Route::get('/games', \App\Livewire\Pages\GamesIndex::class)->name('games.index');
+
+// Top-level game routes (new canonical URLs)
+Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('games.tic-tac-toe');
+Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('games.connect-4');
+Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('games.sudoku');
+Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('games.twenty-forty-eight');
+Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('games.minesweeper');
+Route::get('/snake', \App\Livewire\Games\Snake::class)->name('games.snake');
+Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('games.checkers');
+Route::get('/chess', \App\Livewire\Games\Chess::class)->name('games.chess');
+Route::view('/letter-walker', 'games.letter-walker')->name('games.letter-walker');
+
+// Dynamic game route at top level using route model binding
+Route::get('/{game:slug}', GamePlay::class)->name('games.play');
+
+// Legacy /games/... routes with permanent redirects to new top-level URLs
+Route::prefix('games')->group(function () {
+    Route::get('/tic-tac-toe', function () {
+        return redirect('/tic-tac-toe', 301);
+    });
+
+    Route::get('/connect-4', function () {
+        return redirect('/connect-4', 301);
+    });
+
+    Route::get('/sudoku', function () {
+        return redirect('/sudoku', 301);
+    });
+
+    Route::get('/twenty-forty-eight', function () {
+        return redirect('/twenty-forty-eight', 301);
+    });
+
+    Route::get('/minesweeper', function () {
+        return redirect('/minesweeper', 301);
+    });
+
+    Route::get('/snake', function () {
+        return redirect('/snake', 301);
+    });
+
+    Route::get('/checkers', function () {
+        return redirect('/checkers', 301);
+    });
+
+    Route::get('/chess', function () {
+        return redirect('/chess', 301);
+    });
+
+    Route::get('/letter-walker', function () {
+        return redirect('/letter-walker', 301);
+    });
+
+    Route::get('/{game:slug}', function (Game $game) {
+        return redirect('/'.$game->slug, 301);
+    })->name('games.play.legacy');
 });
 
 // Sudoku API routes
