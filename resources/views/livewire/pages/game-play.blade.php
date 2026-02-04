@@ -7,6 +7,8 @@
         'minesweeper' => 'games.minesweeper',
         'snake' => 'games.snake',
         'connect-4' => 'games.connect4',
+        'checkers' => 'games.checkers',
+        'chess' => 'games.chess',
     ];
 
     $componentName = $componentMap[$game->slug] ?? null;

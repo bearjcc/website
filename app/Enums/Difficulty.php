@@ -8,20 +8,20 @@ enum Difficulty: string
     case Medium = 'medium';
     case Hard = 'hard';
     case Expert = 'expert';
-    
+
     public function getLabel(): string
     {
-        return match($this) {
+        return match ($this) {
             self::Easy => 'Easy',
             self::Medium => 'Medium',
             self::Hard => 'Hard',
             self::Expert => 'Expert',
         };
     }
-    
+
     public function getClueCount(): int
     {
-        return match($this) {
+        return match ($this) {
             self::Easy => 36,
             self::Medium => 30,
             self::Hard => 24,
@@ -29,8 +29,3 @@ enum Difficulty: string
         };
     }
 }
-
-
-
-
-

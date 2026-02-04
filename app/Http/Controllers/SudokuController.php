@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Services\Sudoku\{SudokuGenerator, SudokuSolver, SudokuBoard, HumanSolver, DifficultyRating};
 use App\Enums\Difficulty;
+use App\Services\Sudoku\DifficultyRating;
+use App\Services\Sudoku\HumanSolver;
+use App\Services\Sudoku\SudokuBoard;
+use App\Services\Sudoku\SudokuGenerator;
+use App\Services\Sudoku\SudokuSolver;
+use Illuminate\Http\Request;
 
 class SudokuController extends Controller
 {
@@ -38,7 +42,7 @@ class SudokuController extends Controller
         $solver = new SudokuSolver();
         $solution = $solver->solve($board);
 
-        if (!$solution) {
+        if (! $solution) {
             return response()->json(['error' => 'No solution found'], 400);
         }
 
@@ -71,7 +75,7 @@ class SudokuController extends Controller
         $humanSolver = new HumanSolver();
         $step = $humanSolver->nextStep($board);
 
-        if (!$step) {
+        if (! $step) {
             return response()->json(['message' => 'No hints available'], 404);
         }
 

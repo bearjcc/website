@@ -39,23 +39,27 @@
                         <x-ui.nav-logo class="h-8" />
                     </div>
 
-                    {{-- Simple breadcrumb navigation for game pages --}}
-                    @hasSection('breadcrumbs')
-                        <nav aria-label="Breadcrumb navigation">
-                            @yield('breadcrumbs')
-                        </nav>
-                    @else
-                        {{-- Only show home link on non-home pages --}}
-                        @if(!request()->routeIs('home'))
-                            <a
-                                href="{{ route('home') }}"
-                                class="px-3 py-2 text-sm text-ink/70 hover:text-ink transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
-                                aria-label="Back to home"
-                            >
-                                <x-heroicon-o-home class="w-4 h-4" />
-                            </a>
-                        @endif
-                    @endif
+                    {{-- Main nav: Home, Games, About (paths for test and port-agnostic links) --}}
+                    <nav aria-label="Main navigation" class="flex items-center gap-1">
+                        <a
+                            href="/"
+                            class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
+                        >
+                            Home
+                        </a>
+                        <a
+                            href="/games"
+                            class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
+                        >
+                            Games
+                        </a>
+                        <a
+                            href="/about"
+                            class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
+                        >
+                            About
+                        </a>
+                    </nav>
                 </div>
             </div>
             {{-- Glass gradient border that tapers to transparency --}}

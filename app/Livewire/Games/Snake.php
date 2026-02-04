@@ -5,7 +5,6 @@ namespace App\Livewire\Games;
 use App\Games\Snake\SnakeEngine;
 use App\Livewire\Concerns\InteractsWithGameState;
 use App\Models\Game;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Snake extends Component
@@ -47,7 +46,7 @@ class Snake extends Component
     public function newGame()
     {
         $state = SnakeEngine::applyMove($this->getCurrentState(), [
-            'action' => 'new_game'
+            'action' => 'new_game',
         ]);
         $this->syncFromState($state);
         $this->resetGame();
@@ -57,7 +56,7 @@ class Snake extends Component
     {
         $state = SnakeEngine::applyMove($this->getCurrentState(), [
             'action' => 'change_direction',
-            'direction' => $newDirection
+            'direction' => $newDirection,
         ]);
         $this->syncFromState($state);
         $this->incrementMoveCount();
@@ -67,7 +66,7 @@ class Snake extends Component
     public function startGame()
     {
         $state = SnakeEngine::applyMove($this->getCurrentState(), [
-            'action' => 'start_game'
+            'action' => 'start_game',
         ]);
         $this->syncFromState($state);
         $this->startTimer();
@@ -81,7 +80,7 @@ class Snake extends Component
         }
 
         $state = SnakeEngine::applyMove($this->getCurrentState(), [
-            'action' => 'tick'
+            'action' => 'tick',
         ]);
         $this->syncFromState($state);
         $this->incrementMoveCount();
@@ -97,7 +96,7 @@ class Snake extends Component
                 'level' => $this->level,
                 'moves' => $this->moveCount,
                 'time' => $this->getElapsedTime(),
-                'length' => count($this->snake)
+                'length' => count($this->snake),
             ]);
         }
     }
@@ -107,7 +106,7 @@ class Snake extends Component
         if ($this->gameStarted && ! $this->gameOver) {
             $action = $this->paused ? 'resume_game' : 'pause_game';
             $state = SnakeEngine::applyMove($this->getCurrentState(), [
-                'action' => $action
+                'action' => $action,
             ]);
             $this->syncFromState($state);
             $this->saveState();

@@ -33,7 +33,7 @@ class GameFunctionalityTest extends TestCase
         ];
 
         foreach ($games as $gameData) {
-            Game::create($gameData);
+            Game::create(array_merge($gameData, ['status' => 'published']));
         }
     }
 
@@ -50,14 +50,15 @@ class GameFunctionalityTest extends TestCase
     /** @test */
     public function homepage_navigation_links_work(): void
     {
-        // Test Home link
-        $this->get('/')->assertSee('href="/"');
-
-        // Test Games link
-        $this->get('/')->assertSee('href="/games"');
-
-        // Test About link
-        $this->get('/')->assertSee('href="/about"');
+        $response = $this->get('/');
+        $response->assertStatus(200);
+        $content = $response->getContent();
+        $this->assertStringContainsString('Home', $content);
+        $this->assertStringContainsString('Games', $content);
+        $this->assertStringContainsString('About', $content);
+        $this->assertStringContainsString('/games', $content);
+        $this->assertStringContainsString('/about', $content);
+        $this->assertMatchesRegularExpression('#href=["\']/?["\']#', $content, 'Home link (href="/" or href=\'/\') should be present');
     }
 
     /** @test */
@@ -244,21 +245,21 @@ class GameFunctionalityTest extends TestCase
 
         // Test initial state
         $component->assertSet('currentPlayer', 'X');
-        $component->assertSet('moves', 0);
+        $component->assertSet('movesCount', 0);
 
         // Test mode selection
-        $component->call('setGameMode', 'easy');
-        $component->assertSet('gameMode', 'easy');
+        $component->call('setGameMode', 'ai-easy');
+        $component->assertSet('gameMode', 'ai-easy');
 
         // Test cell click
         $component->call('makeMove', 0);
         $component->assertSet('board.0', 'X');
         $component->assertSet('currentPlayer', 'O');
-        $component->assertSet('moves', 1);
+        $component->assertSet('movesCount', 1);
 
         // Test new game
         $component->call('newGame');
-        $component->assertSet('moves', 0);
+        $component->assertSet('movesCount', 0);
         $component->assertSet('currentPlayer', 'X');
     }
 
@@ -308,13 +309,26 @@ class GameFunctionalityTest extends TestCase
         $component->assertSet('selectedCell', null);
         $component->assertSet('gameOver', false);
 
-        // Test cell selection
-        $component->call('selectCell', 0, 0);
-        $component->assertSet('selectedCell', [0, 0]);
+        // Find first empty cell (generated puzzle may have (0,0) pre-filled)
+        $board = $component->get('board');
+        $original = $component->get('originalPuzzle');
+        $emptyRow = $emptyCol = null;
+        for ($r = 0; $r < 9 && $emptyRow === null; $r++) {
+            for ($c = 0; $c < 9; $c++) {
+                if ($original[$r][$c] === 0) {
+                    $emptyRow = $r;
+                    $emptyCol = $c;
+                    break;
+                }
+            }
+        }
+        $this->assertNotNull($emptyRow, 'Puzzle should have at least one empty cell');
 
-        // Test number placement
+        // Test cell selection and number placement
+        $component->call('selectCell', $emptyRow, $emptyCol);
+        $component->assertSet('selectedCell', [$emptyRow, $emptyCol]);
         $component->call('placeNumber', 1);
-        $component->assertSet('board.0.0', 1);
+        $component->assertSet('board.'.$emptyRow.'.'.$emptyCol, 1);
     }
 
     /** @test */

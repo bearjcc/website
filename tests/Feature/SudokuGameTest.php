@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Livewire\Livewire;
 use App\Livewire\Games\Sudoku;
+use Livewire\Livewire;
+use Tests\TestCase;
 
 class SudokuGameTest extends TestCase
 {
@@ -16,7 +16,7 @@ class SudokuGameTest extends TestCase
             ->assertSet('solved', false)
             ->assertSet('hintsUsed', 0);
     }
-    
+
     /** @test */
     public function it_allows_setting_cell_value()
     {
@@ -25,13 +25,13 @@ class SudokuGameTest extends TestCase
             ->call('placeNumber', 5)
             ->assertSet('board.0.0', 5); // Assuming first cell is empty and selected
     }
-    
+
     /** @test */
     public function it_prevents_modifying_original_puzzle()
     {
         $component = Livewire::test(Sudoku::class);
         $component->call('newGame');
-        
+
         // Find a cell that's not empty (original puzzle)
         $hasOriginal = false;
         for ($r = 0; $r < 9; $r++) {
@@ -39,7 +39,7 @@ class SudokuGameTest extends TestCase
                 if ($component->get('originalPuzzle')[$r][$c] !== 0) {
                     $component->call('selectCell', $r, $c);
                     $component->call('placeNumber', 9);
-                    
+
                     // Should not change
                     $this->assertNotEquals(9, $component->get('board')[$r][$c]);
                     $hasOriginal = true;
@@ -47,10 +47,10 @@ class SudokuGameTest extends TestCase
                 }
             }
         }
-        
+
         $this->assertTrue($hasOriginal, 'No original puzzle cells found');
     }
-    
+
     /** @test */
     public function it_provides_hints()
     {
@@ -59,18 +59,18 @@ class SudokuGameTest extends TestCase
             ->call('useHint')
             ->assertSet('hintsUsed', 1);
     }
-    
+
     /** @test */
     public function it_loads_custom_puzzle()
     {
         $puzzle = '530070000600195000098000060800060003400803001700020006060000280000419005000080079';
-        
+
         Livewire::test(Sudoku::class)
             ->set('customPuzzleInput', $puzzle)
             ->call('loadCustomPuzzle')
             ->assertSet('showCustomInput', false);
     }
-    
+
     /** @test */
     public function it_validates_custom_puzzle_format()
     {
@@ -79,7 +79,7 @@ class SudokuGameTest extends TestCase
             ->call('loadCustomPuzzle')
             ->assertDispatched('error');
     }
-    
+
     /** @test */
     public function it_auto_solves_puzzle()
     {
@@ -88,7 +88,7 @@ class SudokuGameTest extends TestCase
             ->call('autoSolve')
             ->assertSet('gameComplete', true);
     }
-    
+
     /** @test */
     public function it_toggles_notes_mode()
     {
@@ -141,8 +141,3 @@ class SudokuGameTest extends TestCase
         $this->assertEmpty($component->get('eliminations')[0][0]);
     }
 }
-
-
-
-
-

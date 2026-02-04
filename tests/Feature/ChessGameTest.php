@@ -128,21 +128,21 @@ class ChessGameTest extends TestCase
         // Test invalid move (off board)
         $invalidMove = [
             'from' => ['row' => -1, 'col' => 0],
-            'to' => ['row' => 0, 'col' => 1]
+            'to' => ['row' => 0, 'col' => 1],
         ];
         $this->assertFalse($game->validateMove($state, $invalidMove));
 
         // Test move from empty square
         $emptyMove = [
             'from' => ['row' => 3, 'col' => 0],
-            'to' => ['row' => 4, 'col' => 1]
+            'to' => ['row' => 4, 'col' => 1],
         ];
         $this->assertFalse($game->validateMove($state, $emptyMove));
 
         // Test move from opponent piece
         $opponentMove = [
             'from' => ['row' => 0, 'col' => 0], // Black rook
-            'to' => ['row' => 1, 'col' => 0]
+            'to' => ['row' => 1, 'col' => 0],
         ];
         $this->assertFalse($game->validateMove($state, $opponentMove)); // White's turn
     }
@@ -169,5 +169,3 @@ class ChessGameTest extends TestCase
         $this->assertFalse($game->isOver($initialState));
     }
 }
-
-

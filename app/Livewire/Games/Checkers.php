@@ -88,7 +88,7 @@ class Checkers extends Component
         $game = new CheckersGame();
         $move = [
             'from' => $from,
-            'to' => $to
+            'to' => $to,
         ];
 
         if ($game->validateMove($this->getCurrentState(), $move)) {
@@ -108,7 +108,7 @@ class Checkers extends Component
                     'moves' => $this->moves,
                     'time' => $this->getElapsedTime(),
                     'capturedPieces' => $this->capturedPieces,
-                    'isWon' => $this->winner !== 'draw' && $this->winner !== null
+                    'isWon' => $this->winner !== 'draw' && $this->winner !== null,
                 ]);
             }
         }
@@ -116,8 +116,9 @@ class Checkers extends Component
 
     public function updateValidMoves()
     {
-        if (!$this->selectedSquare) {
+        if (! $this->selectedSquare) {
             $this->validMoves = [];
+
             return;
         }
 
@@ -125,7 +126,7 @@ class Checkers extends Component
         $state = $this->getCurrentState();
         $allValidMoves = CheckersEngine::getValidMoves($state);
 
-        $this->validMoves = array_filter($allValidMoves, function($move) {
+        $this->validMoves = array_filter($allValidMoves, function ($move) {
             return $move['from']['row'] === $this->selectedSquare['row'] &&
                    $move['from']['col'] === $this->selectedSquare['col'];
         });
@@ -138,12 +139,13 @@ class Checkers extends Component
                 return true;
             }
         }
+
         return false;
     }
 
     public function getPieceAt(int $row, int $col): ?string
     {
-        if (!CheckersEngine::isValidPosition($row, $col)) {
+        if (! CheckersEngine::isValidPosition($row, $col)) {
             return null;
         }
 
@@ -238,4 +240,3 @@ class Checkers extends Component
         return view('livewire.games.checkers');
     }
 }
-

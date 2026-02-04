@@ -64,7 +64,7 @@ class CheckersGame implements GameInterface
         }
 
         // Validate move structure
-        if (!isset($move['from']) || !isset($move['to'])) {
+        if (! isset($move['from']) || ! isset($move['to'])) {
             return $state;
         }
 
@@ -72,14 +72,14 @@ class CheckersGame implements GameInterface
         $to = $move['to'];
 
         // Validate positions
-        if (!CheckersEngine::isValidPosition($from['row'], $from['col']) ||
-            !CheckersEngine::isValidPosition($to['row'], $to['col'])) {
+        if (! CheckersEngine::isValidPosition($from['row'], $from['col']) ||
+            ! CheckersEngine::isValidPosition($to['row'], $to['col'])) {
             return $state;
         }
 
         // Check if it's the player's piece
         $piece = $state['board'][$from['row']][$from['col']] ?? null;
-        if (!CheckersEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
+        if (! CheckersEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
             return $state;
         }
 
@@ -97,7 +97,7 @@ class CheckersGame implements GameInterface
             }
         }
 
-        if (!$isValidMove) {
+        if (! $isValidMove) {
             return $state;
         }
 
@@ -111,7 +111,7 @@ class CheckersGame implements GameInterface
         }
 
         // Validate move structure
-        if (!isset($move['from']) || !isset($move['to'])) {
+        if (! isset($move['from']) || ! isset($move['to'])) {
             return false;
         }
 
@@ -119,14 +119,14 @@ class CheckersGame implements GameInterface
         $to = $move['to'];
 
         // Validate positions
-        if (!CheckersEngine::isValidPosition($from['row'], $from['col']) ||
-            !CheckersEngine::isValidPosition($to['row'], $to['col'])) {
+        if (! CheckersEngine::isValidPosition($from['row'], $from['col']) ||
+            ! CheckersEngine::isValidPosition($to['row'], $to['col'])) {
             return false;
         }
 
         // Check if it's the player's piece
         $piece = $state['board'][$from['row']][$from['col']] ?? null;
-        if (!CheckersEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
+        if (! CheckersEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
             return false;
         }
 
@@ -182,12 +182,12 @@ class CheckersGame implements GameInterface
      */
     public function getValidMovesForSquare(array $state, int $row, int $col): array
     {
-        if (!CheckersEngine::isDarkSquare($row, $col)) {
+        if (! CheckersEngine::isDarkSquare($row, $col)) {
             return [];
         }
 
         $piece = $state['board'][$row][$col] ?? null;
-        if (!CheckersEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
+        if (! CheckersEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
             return [];
         }
 
@@ -200,7 +200,8 @@ class CheckersGame implements GameInterface
     public function hasValidMoves(array $state, int $row, int $col): bool
     {
         $moves = $this->getValidMovesForSquare($state, $row, $col);
-        return !empty($moves);
+
+        return ! empty($moves);
     }
 
     /**
@@ -208,7 +209,7 @@ class CheckersGame implements GameInterface
      */
     public function getPieceAt(array $state, int $row, int $col): ?string
     {
-        if (!CheckersEngine::isValidPosition($row, $col)) {
+        if (! CheckersEngine::isValidPosition($row, $col)) {
             return null;
         }
 
@@ -220,7 +221,7 @@ class CheckersGame implements GameInterface
      */
     public function isCaptureMove(array $move): bool
     {
-        return !empty($move['captures'] ?? []);
+        return ! empty($move['captures'] ?? []);
     }
 
     /**
@@ -231,4 +232,3 @@ class CheckersGame implements GameInterface
         return CheckersEngine::getStats($state);
     }
 }
-

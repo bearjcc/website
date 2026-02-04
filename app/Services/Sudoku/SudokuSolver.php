@@ -68,6 +68,7 @@ class SudokuSolver
         // If we've filled all cells, we found a solution
         if ($row === 9) {
             $solutions[] = $board;
+
             return true;
         }
 
@@ -125,7 +126,7 @@ class SudokuSolver
 
         return true;
     }
-    
+
     /**
      * Check if puzzle has exactly one unique solution
      */
@@ -139,7 +140,7 @@ class SudokuSolver
 
         return count($solutions) === 1;
     }
-    
+
     /**
      * Count total solutions (up to a limit)
      */
@@ -154,8 +155,3 @@ class SudokuSolver
         return count($solutions);
     }
 }
-
-
-
-
-

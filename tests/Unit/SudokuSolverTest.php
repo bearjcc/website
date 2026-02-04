@@ -2,19 +2,20 @@
 
 namespace Tests\Unit;
 
+use App\Services\Sudoku\SudokuBoard;
+use App\Services\Sudoku\SudokuSolver;
 use Tests\TestCase;
-use App\Services\Sudoku\{SudokuBoard, SudokuSolver};
 
 class SudokuSolverTest extends TestCase
 {
     private SudokuSolver $solver;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->solver = new SudokuSolver();
     }
-    
+
     /** @test */
     public function it_solves_valid_puzzle()
     {
@@ -27,7 +28,7 @@ class SudokuSolverTest extends TestCase
         $this->assertNotNull($solution);
         $this->assertTrue($solution->isSolved());
     }
-    
+
     /** @test */
     public function it_detects_unique_solution()
     {
@@ -54,7 +55,7 @@ class SudokuSolverTest extends TestCase
         $this->assertTrue($solution->isSolved());
         $this->assertTrue($solution->isValid());
     }
-    
+
     /** @test */
     public function it_returns_null_for_unsolvable_puzzle()
     {
@@ -62,12 +63,12 @@ class SudokuSolverTest extends TestCase
         $board = new SudokuBoard();
         $board->setValue(0, 0, 1);
         $board->setValue(0, 1, 1); // Conflict
-        
+
         $solution = $this->solver->solve($board);
-        
+
         $this->assertNull($solution);
     }
-    
+
     /** @test */
     public function it_counts_solutions()
     {
@@ -80,8 +81,3 @@ class SudokuSolverTest extends TestCase
         $this->assertEquals(1, $count);
     }
 }
-
-
-
-
-

@@ -2,9 +2,12 @@
 
 namespace App\Livewire\Games;
 
-use App\Games\Sudoku\SudokuEngine;
-use App\Services\Sudoku\{SudokuBoard, SudokuGenerator, HumanSolver, SudokuSolver};
 use App\Enums\Difficulty;
+use App\Games\Sudoku\SudokuEngine;
+use App\Services\Sudoku\HumanSolver;
+use App\Services\Sudoku\SudokuBoard;
+use App\Services\Sudoku\SudokuGenerator;
+use App\Services\Sudoku\SudokuSolver;
 use Livewire\Component;
 
 /**
@@ -26,7 +29,6 @@ use Livewire\Component;
  * The component integrates with advanced Sudoku services for reliable
  * puzzle generation, solving, and educational hinting.
  */
-
 class Sudoku extends Component
 {
     public array $board = [];
@@ -64,6 +66,7 @@ class Sudoku extends Component
     public bool $showDifficultySelector = true;
 
     public ?array $lastHint = null;
+
     public ?array $hintStep = null;
 
     public bool $showCustomInput = false;
@@ -234,6 +237,7 @@ class Sudoku extends Component
 
             if (! $hint) {
                 $this->dispatch('error', 'No more hints available!');
+
                 return;
             }
 
@@ -266,6 +270,7 @@ class Sudoku extends Component
 
             if (strlen($input) !== 81) {
                 $this->dispatch('error', 'Please enter exactly 81 digits (use 0 for empty cells)');
+
                 return;
             }
 
@@ -284,29 +289,32 @@ class Sudoku extends Component
             $validationReport = $board->getValidationReport();
 
             // Check for validation errors
-            if (!$validationReport['isValid']) {
+            if (! $validationReport['isValid']) {
                 $errorMessages = $validationReport['errors'];
-                $this->dispatch('error', 'Puzzle validation failed: ' . implode(', ', $errorMessages));
+                $this->dispatch('error', 'Puzzle validation failed: '.implode(', ', $errorMessages));
+
                 return;
             }
 
             // Show warnings if any
-            if (!empty($validationReport['warnings'])) {
+            if (! empty($validationReport['warnings'])) {
                 $warningMessages = $validationReport['warnings'];
-                $this->dispatch('warning', 'Puzzle loaded with warnings: ' . implode(', ', $warningMessages));
+                $this->dispatch('warning', 'Puzzle loaded with warnings: '.implode(', ', $warningMessages));
             }
 
             // Check if puzzle has a unique solution
             $solver = new SudokuSolver();
-            if (!$solver->hasUniqueSolution($board)) {
+            if (! $solver->hasUniqueSolution($board)) {
                 $this->dispatch('error', 'The puzzle does not have a unique solution - it may have multiple ways to be solved');
+
                 return;
             }
 
             // Get the solution
             $solution = $solver->solve($board);
-            if (!$solution) {
+            if (! $solution) {
                 $this->dispatch('error', 'The puzzle cannot be solved - it may be invalid');
+
                 return;
             }
 
@@ -386,14 +394,14 @@ class Sudoku extends Component
         }
 
         // Toggle elimination
-        if (!isset($this->eliminations[$row][$col])) {
+        if (! isset($this->eliminations[$row][$col])) {
             $this->eliminations[$row][$col] = [];
         }
 
         if (in_array($number, $this->eliminations[$row][$col])) {
             $this->eliminations[$row][$col] = array_filter(
                 $this->eliminations[$row][$col],
-                fn($n) => $n !== $number
+                fn ($n) => $n !== $number
             );
         } else {
             $this->eliminations[$row][$col][] = $number;
@@ -463,12 +471,12 @@ class Sudoku extends Component
 
     public function canUseHint(): bool
     {
-        return $this->hintsUsed < $this->maxHints && !$this->gameComplete;
+        return $this->hintsUsed < $this->maxHints && ! $this->gameComplete;
     }
 
     public function getMaxHintsForDifficulty(string $difficulty): int
     {
-        return match($difficulty) {
+        return match ($difficulty) {
             'beginner' => 6,
             'easy' => 5,
             'medium' => 3,

@@ -2,20 +2,21 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Services\Sudoku\{SudokuBoard, HumanSolver};
 use App\Enums\TechniqueType;
+use App\Services\Sudoku\HumanSolver;
+use App\Services\Sudoku\SudokuBoard;
+use Tests\TestCase;
 
 class HumanSolverTest extends TestCase
 {
     private HumanSolver $solver;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->solver = new HumanSolver();
     }
-    
+
     /** @test */
     public function it_finds_naked_single()
     {
@@ -35,7 +36,7 @@ class HumanSolverTest extends TestCase
         $this->assertEquals(0, $step->placements[0]['r']);
         $this->assertEquals(8, $step->placements[0]['c']);
     }
-    
+
     /** @test */
     public function it_finds_hidden_single()
     {
@@ -55,18 +56,18 @@ class HumanSolverTest extends TestCase
         $this->assertNotNull($step);
         $this->assertTrue(in_array($step->type, [TechniqueType::NakedSingle, TechniqueType::HiddenSingle]));
     }
-    
+
     /** @test */
     public function it_returns_null_for_solved_puzzle()
     {
         $solvedPuzzle = '534678912672195348198342567859761423426853791713924856961537284287419635345286179';
         $board = SudokuBoard::fromString($solvedPuzzle);
-        
+
         $step = $this->solver->nextStep($board);
-        
+
         $this->assertNull($step);
     }
-    
+
     /** @test */
     public function it_finds_locked_candidates()
     {
@@ -106,8 +107,3 @@ class HumanSolverTest extends TestCase
         }
     }
 }
-
-
-
-
-

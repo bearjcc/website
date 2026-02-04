@@ -58,9 +58,9 @@ class SiteCohesionTest extends TestCase
 
         foreach ($pages as $page) {
             $response = $this->get($page);
-            
+
             $response->assertStatus(200);
-            
+
             // Should have proper structure
             $html = $response->getContent();
             $this->assertStringContainsString('<!DOCTYPE html>', $html);
@@ -132,7 +132,7 @@ class SiteCohesionTest extends TestCase
             $emojiPatterns = ['🎉', '🎮', '⭐', '🏆', '👍', '😀', '🤝', '💫', '✨', '💥'];
 
             foreach ($emojiPatterns as $emoji) {
-                $this->assertStringNotContainsString($emoji, $html, "No emojis allowed in output");
+                $this->assertStringNotContainsString($emoji, $html, 'No emojis allowed in output');
             }
         }
     }
@@ -154,7 +154,7 @@ class SiteCohesionTest extends TestCase
         ];
 
         foreach ($bannedPhrases as $phrase) {
-            $this->assertStringNotContainsString($phrase, $html, "Copy should be calm and professional");
+            $this->assertStringNotContainsString($phrase, $html, 'Copy should be calm and professional');
         }
     }
 
@@ -183,4 +183,3 @@ class SiteCohesionTest extends TestCase
         $this->assertLessThan(1000, $duration, 'Page should load quickly');
     }
 }
-

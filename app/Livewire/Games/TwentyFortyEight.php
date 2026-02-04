@@ -5,7 +5,6 @@ namespace App\Livewire\Games;
 use App\Games\TwentyFortyEight\TwentyFortyEightGame;
 use App\Livewire\Concerns\InteractsWithGameState;
 use App\Models\Game;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class TwentyFortyEight extends Component
@@ -98,7 +97,7 @@ class TwentyFortyEight extends Component
                     'moves' => $this->moveCount,
                     'time' => $this->getElapsedTime(),
                     'maxTile' => max($this->board),
-                    'isWon' => $state['isWon']
+                    'isWon' => $state['isWon'],
                 ]);
             }
         }

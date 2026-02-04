@@ -138,7 +138,7 @@ class TwentyFortyEightEngine
         }
 
         // If no tiles, no moves possible
-        if (!$hasTiles) {
+        if (! $hasTiles) {
             return false;
         }
 

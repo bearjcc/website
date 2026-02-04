@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Games\Checkers\CheckersEngine;
 use App\Games\Checkers\CheckersGame;
-use App\Livewire\Games\Checkers;
-use Livewire\Livewire;
 use Tests\TestCase;
 
 class CheckersGameTest extends TestCase
@@ -130,6 +128,7 @@ class CheckersGameTest extends TestCase
         $reflection = new \ReflectionClass($className);
         $method = $reflection->getMethod($methodName);
         $method->setAccessible(true);
+
         return $method->invokeArgs(null, $args);
     }
 
@@ -168,14 +167,14 @@ class CheckersGameTest extends TestCase
         // Test invalid move (off board)
         $invalidMove = [
             'from' => ['row' => -1, 'col' => 0],
-            'to' => ['row' => 0, 'col' => 1]
+            'to' => ['row' => 0, 'col' => 1],
         ];
         $this->assertFalse($game->validateMove($state, $invalidMove));
 
         // Test move from empty square
         $emptyMove = [
             'from' => ['row' => 3, 'col' => 0],
-            'to' => ['row' => 4, 'col' => 1]
+            'to' => ['row' => 4, 'col' => 1],
         ];
         $this->assertFalse($game->validateMove($state, $emptyMove));
     }

@@ -15,28 +15,30 @@ namespace App\Services\Sudoku;
  * - Immutable operations with proper state management
  * - Comprehensive validation and error reporting
  */
-
 class SudokuBoard
 {
     private array $grid;              // 9x9 array, 0 = empty, 1-9 = digits
+
     private array $rowMasks;          // 9 bitmasks for row candidates
+
     private array $colMasks;          // 9 bitmasks for column candidates
+
     private array $boxMasks;          // 9 bitmasks for box candidates
-    
-    public function __construct(array $grid = null)
+
+    public function __construct(?array $grid = null)
     {
         $this->grid = $grid ?? array_fill(0, 9, array_fill(0, 9, 0));
         $this->initializeMasks();
     }
-    
+
     /**
      * Get box index from row and column
      */
     public static function getBoxIndex(int $row, int $col): int
     {
-        return (int)(floor($row / 3) * 3 + floor($col / 3));
+        return (int) (floor($row / 3) * 3 + floor($col / 3));
     }
-    
+
     /**
      * Get value at position
      */
@@ -44,7 +46,7 @@ class SudokuBoard
     {
         return $this->grid[$row][$col];
     }
-    
+
     /**
      * Set a value in the grid
      */
@@ -53,23 +55,23 @@ class SudokuBoard
         if ($value < 0 || $value > 9) {
             throw new \InvalidArgumentException('Value must be 0-9');
         }
-        
+
         $oldValue = $this->grid[$row][$col];
-        
+
         // Remove old value from masks
         if ($oldValue !== 0) {
             $this->addCandidateToMasks($row, $col, $oldValue);
         }
-        
+
         // Set new value
         $this->grid[$row][$col] = $value;
-        
+
         // Update masks with new value
         if ($value !== 0) {
             $this->removeCandidateFromMasks($row, $col, $value);
         }
     }
-    
+
     /**
      * Get candidates for a cell as array of digits
      */
@@ -78,15 +80,15 @@ class SudokuBoard
         if ($this->grid[$row][$col] !== 0) {
             return [];
         }
-        
+
         $boxIndex = self::getBoxIndex($row, $col);
-        $mask = $this->rowMasks[$row] 
-              & $this->colMasks[$col] 
+        $mask = $this->rowMasks[$row]
+              & $this->colMasks[$col]
               & $this->boxMasks[$boxIndex];
-        
+
         return $this->maskToDigits($mask);
     }
-    
+
     /**
      * Check if board has any conflicts
      */
@@ -94,21 +96,21 @@ class SudokuBoard
     {
         // Check all rows
         for ($r = 0; $r < 9; $r++) {
-            if (!$this->isUnitValid($this->getRow($r))) {
+            if (! $this->isUnitValid($this->getRow($r))) {
                 return false;
             }
         }
 
         // Check all columns
         for ($c = 0; $c < 9; $c++) {
-            if (!$this->isUnitValid($this->getCol($c))) {
+            if (! $this->isUnitValid($this->getCol($c))) {
                 return false;
             }
         }
 
         // Check all boxes
         for ($b = 0; $b < 9; $b++) {
-            if (!$this->isUnitValid($this->getBox($b))) {
+            if (! $this->isUnitValid($this->getBox($b))) {
                 return false;
             }
         }
@@ -126,17 +128,17 @@ class SudokuBoard
 
         // Check for conflicts
         for ($r = 0; $r < 9; $r++) {
-            $rowErrors = $this->getUnitErrors($this->getRow($r), "row " . ($r + 1));
+            $rowErrors = $this->getUnitErrors($this->getRow($r), 'row '.($r + 1));
             $errors = array_merge($errors, $rowErrors);
         }
 
         for ($c = 0; $c < 9; $c++) {
-            $colErrors = $this->getUnitErrors($this->getCol($c), "column " . ($c + 1));
+            $colErrors = $this->getUnitErrors($this->getCol($c), 'column '.($c + 1));
             $errors = array_merge($errors, $colErrors);
         }
 
         for ($b = 0; $b < 9; $b++) {
-            $boxErrors = $this->getUnitErrors($this->getBox($b), "box " . ($b + 1));
+            $boxErrors = $this->getUnitErrors($this->getBox($b), 'box '.($b + 1));
             $errors = array_merge($errors, $boxErrors);
         }
 
@@ -146,7 +148,7 @@ class SudokuBoard
                 if ($this->grid[$r][$c] === 0) {
                     $candidates = $this->getCandidates($r, $c);
                     if (empty($candidates)) {
-                        $warnings[] = "Cell R" . ($r + 1) . "C" . ($c + 1) . " has no possible candidates";
+                        $warnings[] = 'Cell R'.($r + 1).'C'.($c + 1).' has no possible candidates';
                     }
                 }
             }
@@ -180,26 +182,26 @@ class SudokuBoard
 
         return $errors;
     }
-    
+
     /**
      * Check if board is completely filled and valid
      */
     public function isSolved(): bool
     {
-        if (!$this->isValid()) {
+        if (! $this->isValid()) {
             return false;
         }
-        
+
         // Check all cells are filled
         foreach ($this->grid as $row) {
             if (in_array(0, $row, true)) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Convert board to 81-character string
      */
@@ -211,9 +213,10 @@ class SudokuBoard
                 $result .= ($cell === 0) ? '.' : $cell;
             }
         }
+
         return $result;
     }
-    
+
     /**
      * Parse 81-character string into board
      */
@@ -222,19 +225,19 @@ class SudokuBoard
         if (strlen($str) !== 81) {
             throw new \InvalidArgumentException('String must be 81 characters');
         }
-        
+
         $grid = [];
         for ($r = 0; $r < 9; $r++) {
             $grid[$r] = [];
             for ($c = 0; $c < 9; $c++) {
                 $char = $str[$r * 9 + $c];
-                $grid[$r][$c] = ($char === '.' || $char === '0') ? 0 : (int)$char;
+                $grid[$r][$c] = ($char === '.' || $char === '0') ? 0 : (int) $char;
             }
         }
-        
+
         return new self($grid);
     }
-    
+
     /**
      * Get the full grid as array
      */
@@ -242,28 +245,28 @@ class SudokuBoard
     {
         return $this->grid;
     }
-    
+
     /**
      * Clone the board
      */
     public function __clone()
     {
-        $this->grid = array_map(fn($row) => array_map(fn($cell) => $cell, $row), $this->grid);
+        $this->grid = array_map(fn ($row) => array_map(fn ($cell) => $cell, $row), $this->grid);
         $this->rowMasks = $this->rowMasks;
         $this->colMasks = $this->colMasks;
         $this->boxMasks = $this->boxMasks;
     }
-    
+
     // Private helper methods
     private function initializeMasks(): void
     {
         // Initialize all masks to allow all digits (bits 0-8 set)
         $fullMask = (1 << 9) - 1; // 511 in binary: 111111111
-        
+
         $this->rowMasks = array_fill(0, 9, $fullMask);
         $this->colMasks = array_fill(0, 9, $fullMask);
         $this->boxMasks = array_fill(0, 9, $fullMask);
-        
+
         // Update masks based on existing values
         for ($r = 0; $r < 9; $r++) {
             for ($c = 0; $c < 9; $c++) {
@@ -274,25 +277,25 @@ class SudokuBoard
             }
         }
     }
-    
+
     private function removeCandidateFromMasks(int $row, int $col, int $digit): void
     {
         $mask = ~(1 << ($digit - 1)); // Clear the bit for this digit
-        
+
         $this->rowMasks[$row] &= $mask;
         $this->colMasks[$col] &= $mask;
         $this->boxMasks[self::getBoxIndex($row, $col)] &= $mask;
     }
-    
+
     private function addCandidateToMasks(int $row, int $col, int $digit): void
     {
         $mask = (1 << ($digit - 1)); // Set the bit for this digit
-        
+
         $this->rowMasks[$row] |= $mask;
         $this->colMasks[$col] |= $mask;
         $this->boxMasks[self::getBoxIndex($row, $col)] |= $mask;
     }
-    
+
     private function maskToDigits(int $mask): array
     {
         $digits = [];
@@ -301,53 +304,53 @@ class SudokuBoard
                 $digits[] = $i;
             }
         }
+
         return $digits;
     }
-    
+
     private function isUnitValid(array $unit): bool
     {
         $seen = [];
         foreach ($unit as $digit) {
-            if ($digit === 0) continue;
+            if ($digit === 0) {
+                continue;
+            }
             if (in_array($digit, $seen, true)) {
                 return false;
             }
             $seen[] = $digit;
         }
+
         return true;
     }
-    
+
     private function getRow(int $row): array
     {
         return $this->grid[$row];
     }
-    
+
     private function getCol(int $col): array
     {
         $column = [];
         for ($r = 0; $r < 9; $r++) {
             $column[] = $this->grid[$r][$col];
         }
+
         return $column;
     }
-    
+
     private function getBox(int $box): array
     {
         $startRow = intval($box / 3) * 3;
         $startCol = ($box % 3) * 3;
-        
+
         $boxValues = [];
         for ($r = $startRow; $r < $startRow + 3; $r++) {
             for ($c = $startCol; $c < $startCol + 3; $c++) {
                 $boxValues[] = $this->grid[$r][$c];
             }
         }
-        
+
         return $boxValues;
     }
 }
-
-
-
-
-
