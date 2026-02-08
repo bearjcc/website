@@ -72,14 +72,14 @@ class Connect4EngineTest extends TestCase
         $engine = new Connect4Game();
         $state = $engine->initialState();
 
-        // Red: positions 0,1,2,3 in row 5
+        // Red gets row 5 cols 0,1,2,3. Yellow plays elsewhere.
         $state = $engine->applyMove($state, ['column' => 0]); // Red
-        $state = $engine->applyMove($state, ['column' => 1]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 4]); // Yellow
         $state = $engine->applyMove($state, ['column' => 1]); // Red
-        $state = $engine->applyMove($state, ['column' => 2]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 5]); // Yellow
         $state = $engine->applyMove($state, ['column' => 2]); // Red
-        $state = $engine->applyMove($state, ['column' => 3]); // Yellow
-        $state = $engine->applyMove($state, ['column' => 3]); // Red - should win
+        $state = $engine->applyMove($state, ['column' => 6]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 3]); // Red - wins horizontal
 
         $this->assertTrue($state['gameOver']);
         $this->assertEquals(Connect4Engine::RED, $state['winner']);
@@ -91,10 +91,14 @@ class Connect4EngineTest extends TestCase
         $engine = new Connect4Game();
         $state = $engine->initialState();
 
-        // Red drops 4 in column 3
-        for ($i = 0; $i < 4; $i++) {
-            $state = $engine->applyMove($state, ['column' => 3]);
-        }
+        // Red gets 4 in column 3; Yellow plays other columns
+        $state = $engine->applyMove($state, ['column' => 3]); // Red
+        $state = $engine->applyMove($state, ['column' => 0]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 3]); // Red
+        $state = $engine->applyMove($state, ['column' => 1]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 3]); // Red
+        $state = $engine->applyMove($state, ['column' => 2]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 3]); // Red - wins vertical
 
         $this->assertTrue($state['gameOver']);
         $this->assertEquals(Connect4Engine::RED, $state['winner']);
@@ -106,16 +110,20 @@ class Connect4EngineTest extends TestCase
         $engine = new Connect4Game();
         $state = $engine->initialState();
 
-        // Set up diagonal: Red pieces at (5,0), (4,1), (3,2), (2,3)
+        // Build diagonal (5,0)-(4,1)-(3,2)-(2,3)-(1,4): Red needs col 4 drop to complete
+        // Yellow fills col 4 rows 5,4,3,2 so Red's drop lands at (1,4)
         $state['board'][5][0] = Connect4Engine::RED;
         $state['board'][4][1] = Connect4Engine::RED;
         $state['board'][3][2] = Connect4Engine::RED;
         $state['board'][2][3] = Connect4Engine::RED;
+        $state['board'][5][4] = Connect4Engine::YELLOW;
+        $state['board'][4][4] = Connect4Engine::YELLOW;
+        $state['board'][3][4] = Connect4Engine::YELLOW;
+        $state['board'][2][4] = Connect4Engine::YELLOW;
         $state['currentPlayer'] = Connect4Engine::RED;
-        $state['moves'] = 4;
+        $state['moves'] = 8;
 
-        // This should be a winning move
-        $newState = $engine->applyMove($state, ['column' => 3]);
+        $newState = $engine->applyMove($state, ['column' => 4]);
 
         $this->assertTrue($newState['gameOver']);
         $this->assertEquals(Connect4Engine::RED, $newState['winner']);
@@ -127,14 +135,8 @@ class Connect4EngineTest extends TestCase
         $engine = new Connect4Game();
         $state = $engine->initialState();
 
-        // Fill board without winner (simplified)
-        $moves = [
-            0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, // First 14 moves
-            0, 1, 2, 3, 4, 5, 6, // Next 7 moves
-            0, 1, 2, 3, 4, 5, 6, // Next 7 moves
-            0, 1, 2, 3, 4, 5, 6, // Next 7 moves
-            0, 1, 2, 3, 4, 5, 6, // Next 7 moves
-        ];
+        // Verified draw sequence (found via random search)
+        $moves = [3, 1, 2, 6, 0, 4, 1, 2, 5, 2, 5, 6, 3, 1, 2, 4, 6, 2, 1, 3, 4, 6, 1, 0, 4, 5, 2, 1, 4, 3, 3, 4, 3, 5, 0, 5, 5, 6, 6, 0, 0, 0];
 
         foreach ($moves as $column) {
             $state = $engine->applyMove($state, ['column' => $column]);
@@ -207,15 +209,14 @@ class Connect4EngineTest extends TestCase
         $engine = new Connect4Game();
         $state = $engine->initialState();
 
-        // Red wins first game
-        $state['board'][5][0] = Connect4Engine::RED;
-        $state['board'][4][1] = Connect4Engine::RED;
-        $state['board'][3][2] = Connect4Engine::RED;
-        $state['board'][2][3] = Connect4Engine::RED;
-        $state['currentPlayer'] = Connect4Engine::RED;
-        $state['moves'] = 4;
-
-        $newState = $engine->applyMove($state, ['column' => 3]);
+        // Red wins with vertical 4 in column 3
+        $state = $engine->applyMove($state, ['column' => 3]); // Red
+        $state = $engine->applyMove($state, ['column' => 0]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 3]); // Red
+        $state = $engine->applyMove($state, ['column' => 1]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 3]); // Red
+        $state = $engine->applyMove($state, ['column' => 2]); // Yellow
+        $newState = $engine->applyMove($state, ['column' => 3]); // Red wins
 
         $this->assertEquals(['red' => 1, 'yellow' => 0], $newState['score']);
     }
@@ -225,14 +226,14 @@ class Connect4EngineTest extends TestCase
         $engine = new Connect4Game();
         $state = $engine->initialState();
 
-        // Set up horizontal win
-        for ($col = 0; $col < 4; $col++) {
-            $state['board'][5][$col] = Connect4Engine::RED;
-        }
-        $state['currentPlayer'] = Connect4Engine::RED;
-        $state['moves'] = 4;
-
-        $newState = $engine->applyMove($state, ['column' => 3]);
+        // Red completes horizontal win with final move at (5,3)
+        $state = $engine->applyMove($state, ['column' => 0]); // Red
+        $state = $engine->applyMove($state, ['column' => 4]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 1]); // Red
+        $state = $engine->applyMove($state, ['column' => 5]); // Yellow
+        $state = $engine->applyMove($state, ['column' => 2]); // Red
+        $state = $engine->applyMove($state, ['column' => 6]); // Yellow
+        $newState = $engine->applyMove($state, ['column' => 3]); // Red wins horizontal
 
         $this->assertNotNull($newState['winningLine']);
         $this->assertCount(4, $newState['winningLine']);
@@ -274,7 +275,7 @@ class Connect4EngineTest extends TestCase
 
         $this->assertIsArray($rules);
         $this->assertNotEmpty($rules);
-        $this->assertStringContainsString('Connect four', $rules[0]);
+        $this->assertStringContainsString('4 pieces in a row', $rules[2]);
     }
 
     public function test_engine_static_methods(): void

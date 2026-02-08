@@ -2,56 +2,66 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Livewire\Livewire;
 use App\Livewire\Games\Sudoku;
+use Livewire\Livewire;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class SudokuGameTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_generates_new_game()
     {
         Livewire::test(Sudoku::class)
             ->call('newGame')
-            ->assertSet('solved', false)
+            ->assertSet('gameComplete', false)
             ->assertSet('hintsUsed', 0);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_allows_setting_cell_value()
     {
-        Livewire::test(Sudoku::class)
-            ->call('newGame')
-            ->call('placeNumber', 5)
-            ->assertSet('board.0.0', 5); // Assuming first cell is empty and selected
+        $component = Livewire::test(Sudoku::class)->call('newGame');
+        $original = $component->get('originalPuzzle');
+        for ($r = 0; $r < 9; $r++) {
+            for ($c = 0; $c < 9; $c++) {
+                if ($original[$r][$c] === 0) {
+                    $component->call('placeNumberAt', $r, $c, 5);
+                    $component->assertSet("board.{$r}.{$c}", 5);
+
+                    return;
+                }
+            }
+        }
+        $this->fail('No empty cell found to place number');
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_prevents_modifying_original_puzzle()
     {
         $component = Livewire::test(Sudoku::class);
         $component->call('newGame');
-        
-        // Find a cell that's not empty (original puzzle)
-        $hasOriginal = false;
+
+        $original = $component->get('originalPuzzle');
         for ($r = 0; $r < 9; $r++) {
             for ($c = 0; $c < 9; $c++) {
-                if ($component->get('originalPuzzle')[$r][$c] !== 0) {
+                if ($original[$r][$c] !== 0) {
+                    $expected = $original[$r][$c];
                     $component->call('selectCell', $r, $c);
                     $component->call('placeNumber', 9);
-                    
-                    // Should not change
-                    $this->assertNotEquals(9, $component->get('board')[$r][$c]);
-                    $hasOriginal = true;
-                    break 2;
+
+                    // Board should be unchanged (given cells are read-only)
+                    $this->assertSame($expected, $component->get('board')[$r][$c]);
+
+                    return;
                 }
             }
         }
-        
-        $this->assertTrue($hasOriginal, 'No original puzzle cells found');
+
+        $this->fail('No original puzzle cells found');
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_provides_hints()
     {
         Livewire::test(Sudoku::class)
@@ -59,19 +69,19 @@ class SudokuGameTest extends TestCase
             ->call('useHint')
             ->assertSet('hintsUsed', 1);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_loads_custom_puzzle()
     {
         $puzzle = '530070000600195000098000060800060003400803001700020006060000280000419005000080079';
-        
+
         Livewire::test(Sudoku::class)
             ->set('customPuzzleInput', $puzzle)
             ->call('loadCustomPuzzle')
             ->assertSet('showCustomInput', false);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_validates_custom_puzzle_format()
     {
         Livewire::test(Sudoku::class)
@@ -79,8 +89,8 @@ class SudokuGameTest extends TestCase
             ->call('loadCustomPuzzle')
             ->assertDispatched('error');
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_auto_solves_puzzle()
     {
         Livewire::test(Sudoku::class)
@@ -88,8 +98,8 @@ class SudokuGameTest extends TestCase
             ->call('autoSolve')
             ->assertSet('gameComplete', true);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_toggles_notes_mode()
     {
         Livewire::test(Sudoku::class)
@@ -99,50 +109,70 @@ class SudokuGameTest extends TestCase
             ->assertSet('notesMode', false);
     }
 
-    /** @test */
+    #[Test]
     public function it_toggles_eliminations()
     {
-        $component = Livewire::test(Sudoku::class)
-            ->call('newGame');
-
-        // Test eliminating a number
-        $component->call('toggleEliminationAt', 0, 0, 5)
-            ->assertSet('eliminations.0.0', [5]);
-
-        // Test un-eliminating the same number
-        $component->call('toggleEliminationAt', 0, 0, 5)
-            ->assertSet('eliminations.0.0', []);
-
-        // Test eliminating multiple numbers
-        $component->call('toggleEliminationAt', 0, 0, 3)
-            ->call('toggleEliminationAt', 0, 0, 7)
-            ->assertSet('eliminations.0.0', [3, 7]);
+        $component = Livewire::test(Sudoku::class)->call('newGame');
+        $original = $component->get('originalPuzzle');
+        $row = $col = null;
+        for ($r = 0; $r < 9 && $row === null; $r++) {
+            for ($c = 0; $c < 9; $c++) {
+                if ($original[$r][$c] === 0) {
+                    $row = $r;
+                    $col = $c;
+                    break;
+                }
+            }
+        }
+        $this->assertNotNull($row, 'No empty cell for elimination test');
+        $component->call('toggleEliminationAt', $row, $col, 5)
+            ->assertSet("eliminations.{$row}.{$col}", [5]);
+        $component->call('toggleEliminationAt', $row, $col, 5)
+            ->assertSet("eliminations.{$row}.{$col}", []);
+        $component->call('toggleEliminationAt', $row, $col, 3)
+            ->call('toggleEliminationAt', $row, $col, 7)
+            ->assertSet("eliminations.{$row}.{$col}", [3, 7]);
     }
 
-    /** @test */
+    #[Test]
     public function it_shows_remaining_numbers_when_eliminated()
     {
-        $this->markTestSkipped('Remaining numbers functionality needs debugging - skipping for now');
+        $component = Livewire::test(Sudoku::class)->call('newGame');
+        $original = $component->get('originalPuzzle');
+        $row = $col = null;
+        for ($r = 0; $r < 9; $r++) {
+            for ($c = 0; $c < 9; $c++) {
+                if ($original[$r][$c] === 0) {
+                    $row = $r;
+                    $col = $c;
+                    break 2;
+                }
+            }
+        }
+        $this->assertNotNull($row, 'No empty cell for remaining-numbers test');
+        $component->call('toggleEliminationAt', $row, $col, 1)
+            ->call('toggleEliminationAt', $row, $col, 2)
+            ->call('toggleEliminationAt', $row, $col, 3);
+        $remaining = $component->instance()->getRemainingNumbers($row, $col);
+        $this->assertEqualsCanonicalizing([4, 5, 6, 7, 8, 9], $remaining, 'Remaining numbers should exclude eliminated 1,2,3');
     }
 
-    /** @test */
+    #[Test]
     public function it_prevents_elimination_of_placed_numbers()
     {
-        $component = Livewire::test(Sudoku::class)
-            ->call('newGame');
+        $component = Livewire::test(Sudoku::class)->call('newGame');
+        $original = $component->get('originalPuzzle');
+        for ($r = 0; $r < 9; $r++) {
+            for ($c = 0; $c < 9; $c++) {
+                if ($original[$r][$c] === 0) {
+                    $component->call('placeNumberAt', $r, $c, 5);
+                    $component->call('toggleEliminationAt', $r, $c, 5);
+                    $this->assertEmpty($component->get('eliminations')[$r][$c]);
 
-        // Place a number first
-        $component->call('placeNumberAt', 0, 0, 5);
-
-        // Try to eliminate the same number - should not work
-        $component->call('toggleEliminationAt', 0, 0, 5);
-
-        // Eliminations should be empty since number is placed
-        $this->assertEmpty($component->get('eliminations')[0][0]);
+                    return;
+                }
+            }
+        }
+        $this->fail('No empty cell found');
     }
 }
-
-
-
-
-

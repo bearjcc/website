@@ -2,20 +2,22 @@
 
 namespace Tests\Unit;
 
+use App\Services\Sudoku\SudokuBoard;
+use App\Services\Sudoku\SudokuSolver;
+use PHPUnit\Framework\Attributes\Test;
 use Tests\TestCase;
-use App\Services\Sudoku\{SudokuBoard, SudokuSolver};
 
 class SudokuSolverTest extends TestCase
 {
     private SudokuSolver $solver;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->solver = new SudokuSolver();
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_solves_valid_puzzle()
     {
         // Use a simpler puzzle for faster testing
@@ -27,8 +29,8 @@ class SudokuSolverTest extends TestCase
         $this->assertNotNull($solution);
         $this->assertTrue($solution->isSolved());
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_detects_unique_solution()
     {
         // Use a simpler puzzle for faster testing
@@ -40,7 +42,7 @@ class SudokuSolverTest extends TestCase
         $this->assertTrue($hasUnique);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_solve_empty_puzzle()
     {
         // Test that we can solve an empty puzzle (should return a valid solution)
@@ -54,21 +56,21 @@ class SudokuSolverTest extends TestCase
         $this->assertTrue($solution->isSolved());
         $this->assertTrue($solution->isValid());
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_returns_null_for_unsolvable_puzzle()
     {
         // Create invalid puzzle with conflicts
         $board = new SudokuBoard();
         $board->setValue(0, 0, 1);
         $board->setValue(0, 1, 1); // Conflict
-        
+
         $solution = $this->solver->solve($board);
-        
+
         $this->assertNull($solution);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_counts_solutions()
     {
         // Use a simpler puzzle for faster testing
@@ -80,8 +82,3 @@ class SudokuSolverTest extends TestCase
         $this->assertEquals(1, $count);
     }
 }
-
-
-
-
-

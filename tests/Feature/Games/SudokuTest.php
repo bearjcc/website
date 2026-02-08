@@ -53,10 +53,10 @@ class SudokuTest extends TestCase
         // Find first empty cell
         $board = $component->get('board');
         $originalPuzzle = $component->get('originalPuzzle');
-        
+
         $emptyRow = null;
         $emptyCol = null;
-        
+
         for ($row = 0; $row < 9; $row++) {
             for ($col = 0; $col < 9; $col++) {
                 if ($originalPuzzle[$row][$col] === 0) {
@@ -83,11 +83,11 @@ class SudokuTest extends TestCase
 
         // Find an original cell
         $originalPuzzle = $component->get('originalPuzzle');
-        
+
         $originalRow = null;
         $originalCol = null;
         $originalValue = null;
-        
+
         for ($row = 0; $row < 9; $row++) {
             for ($col = 0; $col < 9; $col++) {
                 if ($originalPuzzle[$row][$col] !== 0) {
@@ -114,7 +114,7 @@ class SudokuTest extends TestCase
             ->call('selectDifficulty', 'medium');
 
         $hintsBefore = $component->get('hintsUsed');
-        
+
         $component->call('useHint')
             ->assertSet('hintsUsed', $hintsBefore + 1);
 
@@ -151,20 +151,20 @@ class SudokuTest extends TestCase
 
         // Find first empty cell
         $originalPuzzle = $component->get('originalPuzzle');
-        
+
         for ($row = 0; $row < 9; $row++) {
             for ($col = 0; $col < 9; $col++) {
                 if ($originalPuzzle[$row][$col] === 0) {
                     $component->call('toggleNoteAt', $row, $col, 5);
-                    
+
                     $notes = $component->get('notes');
                     $this->assertContains(5, $notes[$row][$col]);
-                    
+
                     // Toggle off
                     $component->call('toggleNoteAt', $row, $col, 5);
                     $notes = $component->get('notes');
                     $this->assertNotContains(5, $notes[$row][$col]);
-                    
+
                     return; // Test one cell
                 }
             }
@@ -180,15 +180,16 @@ class SudokuTest extends TestCase
 
         // Find first empty cell and place number
         $originalPuzzle = $component->get('originalPuzzle');
-        
+
         for ($row = 0; $row < 9; $row++) {
             for ($col = 0; $col < 9; $col++) {
                 if ($originalPuzzle[$row][$col] === 0) {
                     $component->call('placeNumberAt', $row, $col, 7);
                     $component->call('selectCell', $row, $col);
                     $component->call('clearCell');
-                    
+
                     $component->assertSet("board.{$row}.{$col}", 0);
+
                     return;
                 }
             }
@@ -275,7 +276,7 @@ class SudokuTest extends TestCase
         // Find two empty cells in same row
         $originalPuzzle = $component->get('originalPuzzle');
         $solution = $component->get('solution');
-        
+
         for ($row = 0; $row < 9; $row++) {
             $emptyCells = [];
             for ($col = 0; $col < 9; $col++) {
@@ -283,18 +284,19 @@ class SudokuTest extends TestCase
                     $emptyCells[] = $col;
                 }
             }
-            
+
             if (count($emptyCells) >= 2) {
                 // Place same number in two cells in same row
                 $col1 = $emptyCells[0];
                 $col2 = $emptyCells[1];
                 $sameNumber = $solution[$row][$col1];
-                
+
                 $component->call('placeNumberAt', $row, $col1, $sameNumber);
                 $component->call('placeNumberAt', $row, $col2, $sameNumber);
-                
+
                 $conflicts = $component->get('conflicts');
                 $this->assertNotEmpty($conflicts);
+
                 return;
             }
         }

@@ -2,21 +2,24 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Services\Sudoku\{SudokuBoard, HumanSolver};
 use App\Enums\TechniqueType;
+use App\Services\Sudoku\HumanSolver;
+use App\Services\Sudoku\Step;
+use App\Services\Sudoku\SudokuBoard;
+use PHPUnit\Framework\Attributes\Test;
+use Tests\TestCase;
 
 class HumanSolverTest extends TestCase
 {
     private HumanSolver $solver;
-    
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->solver = new HumanSolver();
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_finds_naked_single()
     {
         // Create a puzzle where one cell has only one candidate
@@ -35,8 +38,8 @@ class HumanSolverTest extends TestCase
         $this->assertEquals(0, $step->placements[0]['r']);
         $this->assertEquals(8, $step->placements[0]['c']);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_finds_hidden_single()
     {
         // Create a simple puzzle that should trigger a hidden single
@@ -55,35 +58,53 @@ class HumanSolverTest extends TestCase
         $this->assertNotNull($step);
         $this->assertTrue(in_array($step->type, [TechniqueType::NakedSingle, TechniqueType::HiddenSingle]));
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_returns_null_for_solved_puzzle()
     {
         $solvedPuzzle = '534678912672195348198342567859761423426853791713924856961537284287419635345286179';
         $board = SudokuBoard::fromString($solvedPuzzle);
-        
+
         $step = $this->solver->nextStep($board);
-        
+
         $this->assertNull($step);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_finds_locked_candidates()
     {
-        // Create a scenario where locked candidates (pointing/claiming) can be detected
-        $board = new SudokuBoard();
+        // Puzzle that yields locked candidates (claiming) at some step
+        $puzzle = '030000500008000009000310400020006000600090001000200080005067000200000800007000030';
+        $board = SudokuBoard::fromString($puzzle);
 
-        // Fill a box with candidates that create a pointing pattern
-        // This is complex to set up, so for now just test that the method exists
-        $step = $this->solver->nextStep($board);
-
-        // If no step found, that's okay - this test verifies the method works
-        if ($step !== null) {
-            $this->assertContains($step->type, TechniqueType::cases());
+        $foundLocked = false;
+        $maxSteps = 20;
+        for ($i = 0; $i < $maxSteps; $i++) {
+            $step = $this->solver->nextStep($board);
+            if ($step === null) {
+                break;
+            }
+            if ($step->type === TechniqueType::LockedCandidates) {
+                $foundLocked = true;
+                $this->assertNotEmpty($step->eliminations, 'LockedCandidates step must have eliminations');
+                $this->assertContains($step->type, TechniqueType::cases());
+                break;
+            }
+            $this->applyStepToBoard($board, $step);
         }
+
+        $this->assertTrue($foundLocked, 'Solver should find LockedCandidates in this puzzle');
     }
 
-    /** @test */
+    private function applyStepToBoard(SudokuBoard $board, Step $step): void
+    {
+        foreach ($step->placements as $p) {
+            $board->setValue($p['r'], $p['c'], $p['d']);
+        }
+        // Eliminations-only steps: board state unchanged; naked/hidden singles make progress
+    }
+
+    #[Test]
     public function it_solves_with_steps()
     {
         // Use a puzzle that has some steps but is simple enough to solve quickly
@@ -106,8 +127,3 @@ class HumanSolverTest extends TestCase
         }
     }
 }
-
-
-
-
-

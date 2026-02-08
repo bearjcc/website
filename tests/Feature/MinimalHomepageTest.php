@@ -161,7 +161,7 @@ class MinimalHomepageTest extends TestCase
 
         // Should use games grid instead of carousel
         $this->assertStringContainsString('Free Games to Play', $html);
-        
+
         // Should have game cards in grid layout
         $this->assertStringContainsString('um-game-card', $html);
     }
