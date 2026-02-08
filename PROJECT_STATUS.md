@@ -1,4 +1,4 @@
-# Project Status — October 13, 2025
+# Project Status — February 8, 2025
 
 Current state of Ursa Minor Games website.
 
@@ -6,9 +6,9 @@ Current state of Ursa Minor Games website.
 
 ## Overview
 
-**URL**: http://tavernsandtreasures.test/ (local)  
+**URL**: http://website.test/ (local, Laravel Herd)  
 **Production**: Railway auto-deploy  
-**Phase**: 1 Complete, 2 In Progress
+**Phase**: 1 Complete, 2 Complete
 
 ---
 
@@ -28,16 +28,19 @@ Current state of Ursa Minor Games website.
 - Lowercase mode feature flag
 - Component architecture (14 reusable components)
 - Railway deployment with Docker multi-stage build
-- 33 tests passing (100% success rate)
+- 237 tests passing, 880 assertions
 
 ### Games (Phase 2)
-**6 games functional**:
+**9 games functional**:
 - Tic-Tac-Toe
 - Connect 4
 - Sudoku
+- Chess
+- Checkers
 - Minesweeper
 - Snake
 - 2048
+- Letter Walker (vanilla JS, score API)
 
 All use visual-first cards with motif-based recognition.
 
@@ -118,23 +121,22 @@ Framework capabilities demonstrated:
 **After**: Organized framework, documented patterns, reusable abstractions  
 **Net**: -1,442 lines removed, +1,972 lines framework added (net +530 quality code)
 
-### Missing Games
-- Chess (in database, not yet implemented)
-- Checkers (in database, not yet implemented)
+### Phase 2 Complete
+All games implemented: Chess and Checkers use engines and Livewire; Letter Walker uses vanilla JS with score API.
 
 ---
 
 ## Next Step Options
 
-### Option A: Complete Phase 2 (Implement Missing Games)
-- [ ] Implement Chess
-- [ ] Implement Checkers
+### Option A: Phase 2 Polish
+- [x] Implement Chess
+- [x] Implement Checkers
 - [ ] Polish games lobby further
 - [ ] Add score tracking system
 - [ ] High score leaderboards
 
 ### Option B: Move to Phase 3 (F1 Predictions)
-6 solid, polished games sufficient. Extract F1 system from `C:\Users\bearj\Herd\formula1predictions`
+9 solid, polished games sufficient. Extract F1 system from `C:\Users\bearj\Herd\formula1predictions`
 
 ### Option C: Polish Current Games
 - [ ] Game-specific loading animations (starfield motif)
@@ -142,14 +144,14 @@ Framework capabilities demonstrated:
 - [ ] Performance optimization
 - [ ] Accessibility audit with real screen readers
 
-**Recommendation**: Option B — foundation is solid, 6 games working well, time to build community features (F1 Predictions)
+**Recommendation**: Option B — foundation is solid, 9 games working well, time to build community features (F1 Predictions)
 
 ---
 
 ## Technical Health
 
 ### Tests
-- 33 tests, 51 assertions, 100% passing
+- 237 tests, 880 assertions
 - Homepage thoroughly tested
 - Game cards tested
 - Minimal copy validated
@@ -212,11 +214,11 @@ Framework capabilities demonstrated:
 - **Tic-Tac-Toe**: AI opponents (easy, medium, impossible)
 - **Sudoku**: Advanced UX (hover picker, custom input, 5 difficulties, hints, auto-solve)
 
-**All 88 tests passing** (249 assertions, +19 new Sudoku tests)
+**237 tests passing** (880 assertions; previously skipped Sudoku remaining-numbers test now implemented)
 
-**Next Ready**: Chess or Checkers can reuse AI+minimax framework. Or move to Phase 3 (F1 Predictions).
+**Next Ready**: Phase 3 (F1 Predictions) or further polish (AI opponents for Chess/Checkers, loading animations).
 
 ---
 
-*Auto-updated: 2025-10-13*
+*Auto-updated: 2025-02-08*
 
