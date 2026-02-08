@@ -20,6 +20,8 @@ class TicTacToeTest extends TestCase
     {
         parent::setUp();
 
+        Livewire::withoutLazyLoading();
+
         $this->game = Game::factory()->create([
             'slug' => 'tic-tac-toe',
             'title' => 'Tic-Tac-Toe',

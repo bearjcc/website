@@ -22,6 +22,7 @@ return [
     'nav_dashboard' => 'Dashboard',
     'nav_login' => 'Login',
     'back_to_games' => 'Back to games',
+    'loading' => 'Loading...',
 
     // === Accessibility ===
     'skip_to_content' => 'Skip to content',

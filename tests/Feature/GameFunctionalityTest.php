@@ -16,6 +16,8 @@ class GameFunctionalityTest extends TestCase
     {
         parent::setUp();
 
+        Livewire::withoutLazyLoading();
+
         // Seed games for testing
         $this->seedGames();
     }

@@ -29,17 +29,17 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
 });
 
-// Games routes (public)
+// Games routes (public) - lazy load game pages with starfield placeholder
 Route::prefix('games')->name('games.')->group(function () {
     Route::get('/', \App\Livewire\Pages\GamesIndex::class)->name('index');
-    Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe');
-    Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('connect-4');
-    Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('sudoku');
-    Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('twenty-forty-eight');
-    Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('minesweeper');
-    Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake');
-    Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('checkers');
-    Route::get('/chess', \App\Livewire\Games\Chess::class)->name('chess');
+    Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe')->lazy();
+    Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('connect-4')->lazy();
+    Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('sudoku')->lazy();
+    Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('twenty-forty-eight')->lazy();
+    Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('minesweeper')->lazy();
+    Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake')->lazy();
+    Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('checkers')->lazy();
+    Route::get('/chess', \App\Livewire\Games\Chess::class)->name('chess')->lazy();
     Route::view('/letter-walker', 'games.letter-walker')->name('letter-walker');
     Route::get('/{game:slug}', GamePlay::class)->name('play');
 });
