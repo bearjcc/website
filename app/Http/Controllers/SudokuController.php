@@ -10,16 +10,18 @@ use App\Services\Sudoku\HumanSolver;
 use App\Services\Sudoku\SudokuBoard;
 use App\Services\Sudoku\SudokuGenerator;
 use App\Services\Sudoku\SudokuSolver;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SudokuController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         return view('sudoku.index');
     }
 
-    public function generate(Request $request)
+    public function generate(Request $request): JsonResponse
     {
         $difficulty = Difficulty::from($request->input('difficulty', 'medium'));
 
@@ -36,7 +38,7 @@ class SudokuController extends Controller
         ]);
     }
 
-    public function solve(Request $request)
+    public function solve(Request $request): JsonResponse
     {
         $puzzleStr = $request->input('puzzle');
         $board = SudokuBoard::fromString($puzzleStr);
@@ -53,7 +55,7 @@ class SudokuController extends Controller
         ]);
     }
 
-    public function validate(Request $request)
+    public function validate(Request $request): JsonResponse
     {
         $puzzleStr = $request->input('puzzle');
         $board = SudokuBoard::fromString($puzzleStr);
@@ -69,7 +71,7 @@ class SudokuController extends Controller
         ]);
     }
 
-    public function hint(Request $request)
+    public function hint(Request $request): JsonResponse
     {
         $puzzleStr = $request->input('puzzle');
         $board = SudokuBoard::fromString($puzzleStr);
@@ -91,7 +93,7 @@ class SudokuController extends Controller
         ]);
     }
 
-    public function rate(Request $request)
+    public function rate(Request $request): JsonResponse
     {
         $puzzleStr = $request->input('puzzle');
         $board = SudokuBoard::fromString($puzzleStr);
