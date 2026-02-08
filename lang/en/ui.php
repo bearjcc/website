@@ -5,6 +5,7 @@ declare(strict_types=1);
 return [
     // === Hero Section ===
     'tagline' => 'The sky is the limit.',
+    'hero_headline' => 'Where games are born under the stars',
     'cta_play' => 'Play',
     'cta_browse' => 'Browse',
 

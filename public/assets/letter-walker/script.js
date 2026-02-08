@@ -1,27 +1,24 @@
-// Seeded random number generator
+/* ==========================================================================
+   LETTER WALKER - SCRIPT
+   ========================================================================== */
+
 class SeededRandom {
   constructor(seed) {
     this.seed = seed;
   }
-
-  // Simple linear congruential generator
   next() {
     this.seed = (this.seed * 9301 + 49297) % 233280;
     return this.seed / 233280;
   }
-
   nextInt(min, max) {
     return Math.floor(this.next() * (max - min + 1)) + min;
   }
-
-  // Generate random letter (A-Z, no accents)
   nextLetter() {
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     return letters[this.nextInt(0, letters.length - 1)];
   }
 }
 
-// Game state
 const gameState = {
   grid: [],
   moves: 0,
@@ -33,22 +30,29 @@ const gameState = {
   dictionary: new Set(),
   isSelecting: false,
   selectionStart: null,
-  selectionDirection: null,
   dictionaryLoaded: false,
-  lastSavedAt: null,
+  theme: localStorage.getItem('lw-theme') || 'light',
+  lastMoveType: null // Tracks {type: 'row'|'col', index: number, direction: string}
 };
 
-// Get date-based seed
-function getDailySeed(date = new Date()) {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return parseInt(
-    `${year}${String(month).padStart(2, "0")}${String(day).padStart(2, "0")}`,
-  );
+// --- Theme Management ---
+function initTheme() {
+  document.documentElement.setAttribute('data-theme', gameState.theme);
+  const toggleBtn = document.getElementById('theme-toggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      gameState.theme = gameState.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', gameState.theme);
+      localStorage.setItem('lw-theme', gameState.theme);
+    });
+  }
 }
 
-// Save game state to localStorage
+// --- Persistence ---
+function getDailySeed(date = new Date()) {
+  return parseInt(`${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`);
+}
+
 function saveGameState() {
   const stateToSave = {
     grid: gameState.grid,
@@ -57,712 +61,315 @@ function saveGameState() {
     foundWords: gameState.foundWords,
     puzzleNumber: gameState.puzzleNumber,
     dailySeed: getDailySeed().toString(),
-    savedAt: new Date().toISOString(),
+    lastMoveType: gameState.lastMoveType,
   };
-
   localStorage.setItem("letterWalkerState", JSON.stringify(stateToSave));
-  gameState.lastSavedAt = Date.now();
 }
 
-// Load game state from localStorage
 function loadGameState() {
   const saved = localStorage.getItem("letterWalkerState");
-
   if (!saved) return false;
-
   try {
     const savedState = JSON.parse(saved);
-    const currentSeed = getDailySeed().toString();
-
-    // Only load if saved from today
-    if (savedState.dailySeed !== currentSeed) {
-      clearSavedState();
+    if (savedState.dailySeed !== getDailySeed().toString()) {
+      localStorage.removeItem("letterWalkerState");
       return false;
     }
-
-    // Restore state
-    gameState.grid = savedState.grid;
-    gameState.moves = savedState.moves;
-    gameState.score = savedState.score;
-    gameState.foundWords = savedState.foundWords;
-    gameState.puzzleNumber = savedState.puzzleNumber || 1;
-    gameState.rng = new SeededRandom(
-      parseInt(savedState.dailySeed) + gameState.puzzleNumber,
-    );
-
+    Object.assign(gameState, savedState);
+    gameState.rng = new SeededRandom(parseInt(savedState.dailySeed) + (gameState.puzzleNumber || 0));
     return true;
-  } catch (error) {
-    console.error("Error loading saved state:", error);
-    clearSavedState();
-    return false;
-  }
+  } catch (e) { return false; }
 }
 
-// Clear saved state
-function clearSavedState() {
-  localStorage.removeItem("letterWalkerState");
-}
-
-// Auto-save helper
-function autoSave() {
-  saveGameState();
-}
-
-// Initialize game
+// --- Core Game Logic ---
 function initGame() {
   const dailySeed = getDailySeed();
-
-  // Try to load saved state
   if (!loadGameState()) {
-    // Initialize new game if no saved state
+    gameState.puzzleNumber = gameState.puzzleNumber || 1;
     gameState.rng = new SeededRandom(dailySeed + gameState.puzzleNumber);
-
-    // Initialize 8x8 grid
-    gameState.grid = [];
-    for (let row = 0; row < 8; row++) {
-      gameState.grid[row] = [];
-      for (let col = 0; col < 8; col++) {
-        gameState.grid[row][col] = {
-          letter: gameState.rng.nextLetter(),
-          hidden: false,
-        };
-      }
-    }
-
+    gameState.grid = Array.from({ length: 8 }, () =>
+      Array.from({ length: 8 }, () => ({ letter: gameState.rng.nextLetter(), hidden: false }))
+    );
     gameState.moves = 0;
     gameState.score = 0;
     gameState.foundWords = [];
-    gameState.selectedCells = [];
+    gameState.lastMoveType = null;
   }
-
   updateDisplay();
   renderGrid();
+  updateSelectedWord();
   updateDateDisplay();
-  hideMessage();
 }
 
-// Render grid
 function renderGrid() {
-  const gridContainer = document.getElementById("grid");
-  gridContainer.innerHTML = "";
-
-  for (let row = 0; row < 8; row++) {
-    for (let col = 0; col < 8; col++) {
+  const container = document.getElementById("grid");
+  container.innerHTML = "";
+  gameState.grid.forEach((row, r) => {
+    row.forEach((cellData, c) => {
       const cell = document.createElement("div");
       cell.className = "grid-cell";
-      cell.dataset.row = row;
-      cell.dataset.col = col;
-
-      const cellData = gameState.grid[row][col];
+      if (cellData.hidden) cell.classList.add("hidden");
+      if (gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) cell.classList.add("selected");
       cell.textContent = cellData.letter;
-
-      if (cellData.hidden) {
-        cell.classList.add("hidden");
-      }
-
-      if (
-        gameState.selectedCells.some((sc) => sc.row === row && sc.col === col)
-      ) {
-        cell.classList.add("selected");
-      }
-
-      // Mouse events
-      cell.addEventListener("mousedown", handleCellMouseDown);
-      cell.addEventListener("mouseenter", handleCellMouseEnter);
-      cell.addEventListener("mouseup", handleCellMouseUp);
-
-      // Touch events
-      cell.addEventListener("touchstart", handleTouchStart, { passive: false });
-      cell.addEventListener("touchmove", handleTouchMove, { passive: false });
-      cell.addEventListener("touchend", handleTouchEnd, { passive: false });
-
-      gridContainer.appendChild(cell);
-    }
-  }
+      cell.dataset.row = r;
+      cell.dataset.col = c;
+      
+      cell.addEventListener("mousedown", (e) => startSelection(r, c));
+      cell.addEventListener("mouseenter", (e) => updateSelection(r, c));
+      cell.addEventListener("touchstart", (e) => { e.preventDefault(); startSelection(r, c); }, {passive: false});
+      
+      container.appendChild(cell);
+    });
+  });
 }
 
-// Shift row left
-function shiftRowLeft(rowIndex) {
+// --- Movement ---
+function shiftRow(rowIndex, direction) {
   const row = gameState.grid[rowIndex];
-  const leftmost = row[0];
-
-  // Shift all elements left
-  for (let col = 0; col < 7; col++) {
-    row[col] = row[col + 1];
-  }
-
-  // Hide leftmost letter
-  leftmost.hidden = true;
-
-  // Generate new letter for rightmost position
-  row[7] = {
-    letter: gameState.rng.nextLetter(),
-    hidden: false,
-  };
-
-  gameState.moves++;
-  clearSelection();
-  updateDisplay();
-  renderGrid();
-  autoSave();
-}
-
-// Shift row right
-function shiftRowRight(rowIndex) {
-  const row = gameState.grid[rowIndex];
-  const rightmost = row[7];
-
-  // Shift all elements right
-  for (let col = 7; col > 0; col--) {
-    row[col] = row[col - 1];
-  }
-
-  // Hide rightmost letter
-  rightmost.hidden = true;
-
-  // Generate new letter for leftmost position
-  row[0] = {
-    letter: gameState.rng.nextLetter(),
-    hidden: false,
-  };
-
-  gameState.moves++;
-  clearSelection();
-  updateDisplay();
-  renderGrid();
-  autoSave();
-}
-
-// Shift column up
-function shiftColUp(colIndex) {
-  const topmost = gameState.grid[0][colIndex];
-
-  // Shift all elements up
-  for (let row = 0; row < 7; row++) {
-    gameState.grid[row][colIndex] = gameState.grid[row + 1][colIndex];
-  }
-
-  // Hide topmost letter
-  topmost.hidden = true;
-
-  // Generate new letter for bottom position
-  gameState.grid[7][colIndex] = {
-    letter: gameState.rng.nextLetter(),
-    hidden: false,
-  };
-
-  gameState.moves++;
-  clearSelection();
-  updateDisplay();
-  renderGrid();
-  autoSave();
-}
-
-// Shift column down
-function shiftColDown(colIndex) {
-  const bottommost = gameState.grid[7][colIndex];
-
-  // Shift all elements down
-  for (let row = 7; row > 0; row--) {
-    gameState.grid[row][colIndex] = gameState.grid[row - 1][colIndex];
-  }
-
-  // Hide bottommost letter
-  bottommost.hidden = true;
-
-  // Generate new letter for top position
-  gameState.grid[0][colIndex] = {
-    letter: gameState.rng.nextLetter(),
-    hidden: false,
-  };
-
-  gameState.moves++;
-  clearSelection();
-  updateDisplay();
-  renderGrid();
-  autoSave();
-}
-
-// Cell selection handlers
-function handleCellMouseDown(e) {
-  e.preventDefault();
-  const row = parseInt(e.target.dataset.row);
-  const col = parseInt(e.target.dataset.col);
-  startSelection(row, col);
-}
-
-function handleCellMouseEnter(e) {
-  if (!gameState.isSelecting) return;
-
-  const row = parseInt(e.target.dataset.row);
-  const col = parseInt(e.target.dataset.col);
-  updateSelection(row, col);
-}
-
-function handleCellMouseUp(e) {
-  endSelection();
-}
-
-// Touch handlers
-function handleTouchStart(e) {
-  e.preventDefault();
-  const touch = e.touches[0];
-  const element = document.elementFromPoint(touch.clientX, touch.clientY);
-
-  if (element && element.classList.contains("grid-cell")) {
-    const row = parseInt(element.dataset.row);
-    const col = parseInt(element.dataset.col);
-    startSelection(row, col);
-  }
-}
-
-function handleTouchMove(e) {
-  e.preventDefault();
-  if (!gameState.isSelecting) return;
-
-  const touch = e.touches[0];
-  const element = document.elementFromPoint(touch.clientX, touch.clientY);
-
-  if (element && element.classList.contains("grid-cell")) {
-    const row = parseInt(element.dataset.row);
-    const col = parseInt(element.dataset.col);
-    updateSelection(row, col);
-  }
-}
-
-function handleTouchEnd(e) {
-  e.preventDefault();
-  endSelection();
-}
-
-// Start cell selection
-function startSelection(row, col) {
-  gameState.isSelecting = true;
-  gameState.selectionStart = { row, col };
-  gameState.selectionDirection = null;
-  gameState.selectedCells = [{ row, col }];
-  renderGrid();
-  updateSelectedWord();
-}
-
-// Update selection during drag
-function updateSelection(row, col) {
-  if (!gameState.selectionStart) return;
-
-  const start = gameState.selectionStart;
-  const rowDiff = row - start.row;
-  const colDiff = col - start.col;
-
-  // Only allow horizontal or vertical selection
-  if (rowDiff === 0 && colDiff === 0) {
-    // Same cell
-    gameState.selectedCells = [{ row, col }];
-  } else if (Math.abs(rowDiff) > Math.abs(colDiff)) {
-    // Vertical selection
-    gameState.selectionDirection = "vertical";
-    const direction = rowDiff > 0 ? 1 : -1;
-    gameState.selectedCells = [];
-    for (
-      let r = start.row;
-      direction > 0 ? r <= row : r >= row;
-      r += direction
-    ) {
-      if (r >= 0 && r < 8) {
-        gameState.selectedCells.push({ row: r, col: start.col });
-      }
-    }
+  if (direction === 'left') {
+    const leftmost = row.shift();
+    leftmost.hidden = true;
+    row.push({ letter: gameState.rng.nextLetter(), hidden: false });
   } else {
-    // Horizontal selection
-    gameState.selectionDirection = "horizontal";
-    const direction = colDiff > 0 ? 1 : -1;
-    gameState.selectedCells = [];
-    for (
-      let c = start.col;
-      direction > 0 ? c <= col : c >= col;
-      c += direction
-    ) {
-      if (c >= 0 && c < 8) {
-        gameState.selectedCells.push({ row: start.row, col: c });
-      }
-    }
+    const rightmost = row.pop();
+    rightmost.hidden = true;
+    row.unshift({ letter: gameState.rng.nextLetter(), hidden: false });
   }
+  
+  // Only count as a new move if this is a different row/col/direction than the last move
+  const currentMoveType = { type: 'row', index: rowIndex, direction: direction };
+  if (!isSameMoveType(gameState.lastMoveType, currentMoveType)) {
+    gameState.moves++;
+    gameState.lastMoveType = currentMoveType;
+  }
+  
+  clearSelection();
+  renderGrid();
+  updateDisplay();
+  saveGameState();
+}
 
+function shiftCol(colIndex, direction) {
+  if (direction === 'up') {
+    const topmost = gameState.grid[0][colIndex];
+    topmost.hidden = true;
+    for (let r = 0; r < 7; r++) gameState.grid[r][colIndex] = gameState.grid[r+1][colIndex];
+    gameState.grid[7][colIndex] = { letter: gameState.rng.nextLetter(), hidden: false };
+  } else {
+    const bottommost = gameState.grid[7][colIndex];
+    bottommost.hidden = true;
+    for (let r = 7; r > 0; r--) gameState.grid[r][colIndex] = gameState.grid[r-1][colIndex];
+    gameState.grid[0][colIndex] = { letter: gameState.rng.nextLetter(), hidden: false };
+  }
+  
+  // Only count as a new move if this is a different row/col/direction than the last move
+  const currentMoveType = { type: 'col', index: colIndex, direction: direction };
+  if (!isSameMoveType(gameState.lastMoveType, currentMoveType)) {
+    gameState.moves++;
+    gameState.lastMoveType = currentMoveType;
+  }
+  
+  clearSelection();
+  renderGrid();
+  updateDisplay();
+  saveGameState();
+}
+
+// Helper function to check if two move types are the same
+function isSameMoveType(lastMove, currentMove) {
+  if (!lastMove || !currentMove) return false;
+  return lastMove.type === currentMove.type &&
+         lastMove.index === currentMove.index &&
+         lastMove.direction === currentMove.direction;
+}
+
+// --- Selection ---
+function startSelection(r, c) {
+  gameState.isSelecting = true;
+  gameState.selectedCells = [{ row: r, col: c }];
   renderGrid();
   updateSelectedWord();
 }
 
-// End selection
+function updateSelection(r, c) {
+  if (!gameState.isSelecting) return;
+  const last = gameState.selectedCells[gameState.selectedCells.length - 1];
+  if (last.row === r && last.col === c) return;
+
+  // Only allow horizontal or vertical neighbors
+  const isNeighbor = (Math.abs(last.row - r) === 1 && last.col === c) || 
+                     (Math.abs(last.col - c) === 1 && last.row === r);
+  
+  if (isNeighbor) {
+    // If re-selecting the previous cell, treat as "undo"
+    if (gameState.selectedCells.length > 1) {
+      const prev = gameState.selectedCells[gameState.selectedCells.length - 2];
+      if (prev.row === r && prev.col === c) {
+        gameState.selectedCells.pop();
+      } else if (!gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
+        gameState.selectedCells.push({ row: r, col: c });
+      }
+    } else if (!gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
+      gameState.selectedCells.push({ row: r, col: c });
+    }
+  }
+  renderGrid();
+  updateSelectedWord();
+}
+
 function endSelection() {
   gameState.isSelecting = false;
-  gameState.selectionStart = null;
-  gameState.selectionDirection = null;
 }
 
-// Clear selection
 function clearSelection() {
   gameState.selectedCells = [];
   gameState.isSelecting = false;
-  gameState.selectionStart = null;
-  gameState.selectionDirection = null;
   renderGrid();
   updateSelectedWord();
 }
 
-// Get selected word
-function getSelectedWord() {
-  return gameState.selectedCells
-    .sort((a, b) => {
-      if (a.row !== b.row) return a.row - b.row;
-      return a.col - b.col;
-    })
-    .map((cell) => gameState.grid[cell.row][cell.col].letter)
-    .join("");
-}
-
-// Update selected word display
 function updateSelectedWord() {
-  const selectedWord = getSelectedWord();
-  const display = document.getElementById("selected-word");
-  const submitBtn = document.getElementById("submit-btn");
-
-  display.textContent = selectedWord;
-  submitBtn.disabled = selectedWord.length === 0;
+  const word = gameState.selectedCells.map(sc => gameState.grid[sc.row][sc.col].letter).join("");
+  document.getElementById("selected-word").textContent = word;
+  document.getElementById("submit-btn").disabled = word.length < 3;
 }
 
-// Update display
+// --- UI Updates ---
 function updateDisplay() {
   document.getElementById("score").textContent = gameState.score;
   document.getElementById("moves").textContent = gameState.moves;
   document.getElementById("puzzle-num").textContent = gameState.puzzleNumber;
-
-  // Update found words list
-  const foundWordsList = document.getElementById("found-words-list");
-  foundWordsList.innerHTML = "";
-
-  gameState.foundWords.forEach((word) => {
-    const wordElement = document.createElement("div");
-    wordElement.className = "found-word";
-    wordElement.textContent = word;
-    foundWordsList.appendChild(wordElement);
+  
+  const list = document.getElementById("found-words-list");
+  list.innerHTML = "";
+  gameState.foundWords.forEach(w => {
+    const div = document.createElement("div");
+    div.className = "found-word";
+    div.textContent = w;
+    list.appendChild(div);
   });
 }
 
-// Update date display
 function updateDateDisplay() {
-  const now = new Date();
-  const options = {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  };
-  const dateStr = now.toLocaleDateString("en-US", options);
-  document.getElementById("date-display").textContent = dateStr;
+  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+  document.getElementById("date-display").textContent = new Date().toLocaleDateString("en-US", options);
 }
 
-// Check if word is valid
-function isValidWord(word) {
-  return (
-    word.length >= 3 &&
-    word.length <= 8 &&
-    gameState.dictionary.has(word.toLowerCase())
-  );
+// --- Dictionary & Submission ---
+async function loadDictionary() {
+  try {
+    const loading = document.getElementById("dict-loading");
+    loading.style.display = "flex";
+    const res = await fetch("/assets/letter-walker/dictionary.txt");
+    const text = await res.text();
+    text.split("\n").forEach(w => {
+      const trimmed = w.trim().toLowerCase();
+      if (trimmed.length >= 3 && trimmed.length <= 8) gameState.dictionary.add(trimmed);
+    });
+    gameState.dictionaryLoaded = true;
+    loading.style.display = "none";
+  } catch (e) { console.error(e); }
 }
 
-// Submit word
 function submitWord() {
-  const word = getSelectedWord();
-
-  if (word.length === 0) {
-    showMessage("Please select a word", "error");
-    return;
-  }
-
-  // Check if dictionary is loaded, if not show loading indicator
+  const word = gameState.selectedCells.map(sc => gameState.grid[sc.row][sc.col].letter).join("").toLowerCase();
+  
   if (!gameState.dictionaryLoaded) {
-    const message = document.getElementById("message");
-    message.innerHTML = `
-      <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-        <span style="animation: pulse 1s ease-in-out infinite; font-size: 1.2em;">●</span>
-        <span>Dictionary loading, please wait...</span>
-      </div>
-    `;
-    message.className = "message info";
-    message.style.display = "block";
-
-    // Disable submit button to prevent multiple clicks
-    const submitBtn = document.getElementById("submit-btn");
-    submitBtn.disabled = true;
-
-    // Set up a listener for when dictionary loads
-    const checkInterval = setInterval(() => {
-      if (gameState.dictionaryLoaded) {
-        clearInterval(checkInterval);
-        message.style.display = "none";
-        // Re-enable submit button
-        submitBtn.disabled = false;
-        // Retry submission
-        submitWord();
-      }
-    }, 100);
+    showToast("Loading dictionary...", "info");
+    return;
+  }
+  
+  if (!gameState.dictionary.has(word)) {
+    showToast(`"${word.toUpperCase()}" is not in dictionary`, "error");
     return;
   }
 
-  if (!isValidWord(word)) {
-    showMessage(`"${word}" is not a valid word`, "error");
-    return;
-  }
-
-  // Word is valid - game over!
-  // Calculate score
-  const basePoints = word.length * 10;
-  const movePenalty = gameState.moves;
-  const multiplier = word.length === 8 ? 2 : 1;
-  gameState.score = Math.max(0, (basePoints - movePenalty) * multiplier);
-  gameState.foundWords.push(word);
-
-  showMessage(`Game Over! Score: ${gameState.score}`, "success");
-
-  // Show score submission modal
+  // Calculate high score logic
+  // Penalty is based on total letter count of all found words, not move count
+  const totalLetterCount = gameState.foundWords.reduce((sum, w) => sum + w.length, 0) + word.length;
+  const basePoints = word.length * 50;
+  const movePenalty = totalLetterCount * 5;
+  gameState.score = Math.max(0, basePoints - movePenalty);
+  gameState.foundWords.push(word.toUpperCase());
+  
+  showToast(`Found ${word.toUpperCase()}!`, "success");
   showScoreModal();
 }
 
-// Show message
-function showMessage(text, type) {
-  const message = document.getElementById("message");
-  message.textContent = text;
-  message.className = `message ${type}`;
-
-  setTimeout(() => {
-    hideMessage();
-  }, 3000);
+function showToast(text, type) {
+  const toast = document.getElementById("message");
+  toast.textContent = text;
+  toast.className = `toast ${type}`;
+  toast.style.display = "block";
+  setTimeout(() => toast.style.display = "none", 3000);
 }
 
-// Hide message
-function hideMessage() {
-  const message = document.getElementById("message");
-  message.className = "message";
-  message.style.display = "none";
-}
-
-// New puzzle
-function newPuzzle() {
-  gameState.puzzleNumber++;
-  clearSavedState();
-  initGame();
-  showMessage("New puzzle started!", "info");
-}
-
-// Share results
-function shareResults() {
-  const word = gameState.foundWords.length > 0 ? gameState.foundWords[0].toUpperCase() : "None";
-  const results =
-    `Letter Walker - Puzzle ${gameState.puzzleNumber}\n` +
-    `Word: ${word}\n` +
-    `Score: ${gameState.score}\n` +
-    `Moves: ${gameState.moves}\n`;
-
-  // Try to copy to clipboard
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard
-      .writeText(results)
-      .then(() => {
-        showMessage("Results copied to clipboard!", "success");
-      })
-      .catch(() => {
-        // Fallback: show alert with results
-        alert(results);
-      });
-  } else {
-    // Fallback: show alert with results
-    alert(results);
-  }
-}
-
-// Show score submission modal
-function showScoreModal() {
-  const nameModal = document.getElementById("name-modal");
-  const playerNameInput = document.getElementById("player-name");
-  const saveNameBtn = document.getElementById("save-name-btn");
-  const cancelNameBtn = document.getElementById("cancel-name-btn");
-
-  // Set final score in modal
-  document.getElementById("final-score").textContent = gameState.score;
-
-  nameModal.classList.remove("hidden");
-  playerNameInput.value = "";
-  playerNameInput.focus();
-
-  // Handle save name
-  saveNameBtn.onclick = async () => {
-    const playerName = playerNameInput.value.trim() || "Anonymous";
-    nameModal.classList.add("hidden");
-
-    try {
-      const response = await fetch("/api/letter-walker/score", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-        },
-        body: JSON.stringify({
-          score: gameState.score,
-          moves: gameState.moves,
-          words_found: 1,
-          puzzle_number: gameState.puzzleNumber,
-          player_name: playerName,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        showMessage("Score saved to leaderboard!", "success");
-      } else {
-        showMessage(
-          data.message || "Failed to save score. Please try again.",
-          "error",
-        );
-      }
-    } catch (error) {
-      console.error("Score submission error:", error);
-      showMessage("Error saving score. Please try again.", "error");
-    }
-  };
-
-  // Handle cancel
-  cancelNameBtn.onclick = () => {
-    nameModal.classList.add("hidden");
-  };
-
-  // Close on escape key
-  const handleEscape = (e) => {
-    if (e.key === "Escape") {
-      nameModal.classList.add("hidden");
-      document.removeEventListener("keydown", handleEscape);
-    }
-  };
-  document.addEventListener("keydown", handleEscape);
-}
-
-// Load dictionary from txt file
-async function loadDictionary() {
-  try {
-    // Show loading indicator
-    const dictLoading = document.getElementById("dict-loading");
-    dictLoading.style.display = "flex";
-
-    const response = await fetch("/assets/letter-walker/dictionary.txt");
-    const text = await response.text();
-    const lines = text.split("\n");
-
-    gameState.dictionary.clear();
-
-    // Process words - dictionary.txt is already lowercase and has no accents
-    for (let i = 0; i < lines.length; i++) {
-      const word = lines[i].trim();
-      if (word.length >= 3 && word.length <= 8) {
-        gameState.dictionary.add(word);
-      }
-    }
-
-    gameState.dictionaryLoaded = true;
-    console.log(`Dictionary loaded: ${gameState.dictionary.size} words`);
-
-    // Hide loading indicator
-    dictLoading.style.display = "none";
-  } catch (error) {
-    console.error("Error loading dictionary:", error);
-    showMessage(
-      "Error loading dictionary. Please refresh the page.",
-      "error",
-    );
-  }
-}
-
-// Setup event listeners
-// Help modal management
-function initializeHelpModal() {
+// --- Modals ---
+function initModals() {
   const helpModal = document.getElementById("help-modal");
-  const helpBtn = document.getElementById("help-btn");
-  const closeHelpBtn = document.getElementById("close-help-btn");
-  const hasSeenHelp = localStorage.getItem("letterWalkerHelpSeen");
-
-  // Show help on first visit
-  if (!hasSeenHelp) {
-    helpModal.classList.remove("hidden");
-  }
-
-  // Help button click
-  helpBtn.addEventListener("click", () => {
-    helpModal.classList.remove("hidden");
-  });
-
-  // Close button click
-  closeHelpBtn.addEventListener("click", () => {
+  document.getElementById("help-btn").addEventListener("click", () => helpModal.classList.remove("hidden"));
+  document.getElementById("close-help-btn").addEventListener("click", () => {
     helpModal.classList.add("hidden");
-    localStorage.setItem("letterWalkerHelpSeen", "true");
+    localStorage.setItem("lw-help-seen", "true");
   });
+  if (!localStorage.getItem("lw-help-seen")) helpModal.classList.remove("hidden");
 
-  // Close on background click
-  helpModal.addEventListener("click", (e) => {
-    if (e.target === helpModal) {
-      helpModal.classList.add("hidden");
-      localStorage.setItem("letterWalkerHelpSeen", "true");
-    }
-  });
+  document.getElementById("cancel-name-btn").addEventListener("click", () => document.getElementById("name-modal").classList.add("hidden"));
 }
 
-function setupEventListeners() {
-  // Row shift buttons
-  document.querySelectorAll(".row-btn.left").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const row = parseInt(btn.dataset.row);
-      shiftRowLeft(row);
-    });
+function showScoreModal() {
+  const modal = document.getElementById("name-modal");
+  document.getElementById("final-score").textContent = gameState.score;
+  modal.classList.remove("hidden");
+  
+  document.getElementById("save-name-btn").onclick = async () => {
+    const name = document.getElementById("player-name").value.trim() || "Anonymous";
+    modal.classList.add("hidden");
+    try {
+      await fetch("/api/letter-walker/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content },
+        body: JSON.stringify({ score: gameState.score, moves: gameState.moves, words_found: 1, puzzle_number: gameState.puzzleNumber, player_name: name })
+      });
+      showToast("Score saved!", "success");
+    } catch (e) { showToast("Failed to save score", "error"); }
+  };
+}
+
+// --- Initialization ---
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  initModals();
+  initGame();
+  loadDictionary();
+
+  // Global events
+  document.addEventListener("mouseup", endSelection);
+  document.addEventListener("touchend", endSelection);
+  
+  // Row/Col Shift buttons
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+    
+    if (btn.classList.contains('row-btn')) shiftRow(parseInt(btn.dataset.row), btn.classList.contains('left') ? 'left' : 'right');
+    if (btn.classList.contains('col-btn')) shiftCol(parseInt(btn.dataset.col), btn.classList.contains('up') ? 'up' : 'down');
   });
 
-  document.querySelectorAll(".row-btn.right").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const row = parseInt(btn.dataset.row);
-      shiftRowRight(row);
-    });
+  document.getElementById("new-puzzle-btn").addEventListener("click", () => {
+    gameState.puzzleNumber++;
+    localStorage.removeItem("letterWalkerState");
+    initGame();
   });
-
-  // Column shift buttons
-  document.querySelectorAll(".col-btn.up").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const col = parseInt(btn.dataset.col);
-      shiftColUp(col);
-    });
-  });
-
-  document.querySelectorAll(".col-btn.down").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const col = parseInt(btn.dataset.col);
-      shiftColDown(col);
-    });
-  });
-
-  // Game control buttons
-  document.getElementById("new-puzzle-btn").addEventListener("click", newPuzzle);
-  document.getElementById("share-btn").addEventListener("click", shareResults);
+  
   document.getElementById("submit-btn").addEventListener("click", submitWord);
   document.getElementById("clear-btn").addEventListener("click", clearSelection);
-
-  // Global mouse up to end selection
-  document.addEventListener("mouseup", () => {
-    if (gameState.isSelecting) {
-      endSelection();
+  document.getElementById("share-btn").addEventListener("click", () => {
+    const text = `Letter Walker Puzzle #${gameState.puzzleNumber}\nScore: ${gameState.score}\nWord: ${gameState.foundWords[0] || "???"}`;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(() => showToast("Copied to clipboard!", "success"));
+    } else {
+      alert(text);
     }
   });
-}
-
-// Initialize game when page loads
-document.addEventListener("DOMContentLoaded", () => {
-  initializeHelpModal();
-  setupEventListeners();
-  initGame();
-  // Start loading dictionary in background
-  loadDictionary();
 });

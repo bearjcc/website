@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0, maximum-scale=1, user-scalable=no, minimal-ui" />
         <title>Letter Walker - Ursa Minor</title>
         <link rel="stylesheet" href="{{ asset('assets/letter-walker/styles.css') }}" />
 
@@ -13,155 +13,141 @@
     </head>
     <body>
         <div class="container">
+            <!-- Header -->
             <header>
                 <div class="header-top">
-                    <a href="{{ route('games.index') }}" class="back-link">&larr; Back to Games</a>
+                    <a href="{{ route('games.index') }}" class="back-link">&larr; Back</a>
                     <h1>Letter Walker</h1>
+                    <button id="theme-toggle" class="theme-btn" title="Toggle Theme">
+                        <span class="sun-icon">☀</span>
+                        <span class="moon-icon">☾</span>
+                    </button>
                 </div>
                 <div class="game-info">
-                    <div class="score-display">
-                        Score: <span id="score">0</span>
+                    <div class="info-card score-card">
+                        <span class="label">Score</span>
+                        <span id="score">0</span>
                     </div>
-                    <div class="moves-display">
-                        Moves: <span id="moves">0</span>
+                    <div class="info-card moves-card">
+                        <span class="label">Moves</span>
+                        <span id="moves">0</span>
                     </div>
-                    <div class="daily-info">
-                        <span id="date-display"></span>
-                        <span class="puzzle-num">Puzzle <span id="puzzle-num">1</span></span>
+                    <div class="puzzle-meta">
+                        <div id="date-display"></div>
+                        <div class="puzzle-tag">#<span id="puzzle-num">1</span></div>
                     </div>
                     <div class="dict-loading" id="dict-loading">
-                        <span class="loading-dot"></span>
-                        Loading dictionary...
+                        <div class="spinner"></div>
+                        <span>Loading</span>
                     </div>
                 </div>
             </header>
 
+            <!-- Game Controls -->
             <div class="game-controls">
-                <button id="help-btn" class="btn secondary-btn" title="How to play">
-                    ?
-                </button>
-                <button id="new-puzzle-btn" class="btn secondary-btn">
-                    New Puzzle
-                </button>
-                <button id="share-btn" class="btn secondary-btn">
-                    Share Results
-                </button>
+                <button id="help-btn" class="btn-icon" title="How to play">?</button>
+                <button id="new-puzzle-btn" class="btn secondary">New Puzzle</button>
+                <button id="share-btn" class="btn secondary">Share</button>
             </div>
 
-            <div class="game-board-wrapper">
-                <!-- Top column shift buttons -->
-                <div class="top-controls">
-                    <div class="spacer"></div>
-                    <div class="col-controls">
-                        <button class="col-btn up" data-col="0">&#9650;</button>
-                        <button class="col-btn up" data-col="1">&#9650;</button>
-                        <button class="col-btn up" data-col="2">&#9650;</button>
-                        <button class="col-btn up" data-col="3">&#9650;</button>
-                        <button class="col-btn up" data-col="4">&#9650;</button>
-                        <button class="col-btn up" data-col="5">&#9650;</button>
-                        <button class="col-btn up" data-col="6">&#9650;</button>
-                        <button class="col-btn up" data-col="7">&#9650;</button>
-                    </div>
-                    <div class="spacer"></div>
-                </div>
-
-                <div class="middle-section">
-                    <!-- Left row shift buttons -->
-                    <div class="left-controls">
-                        <button class="row-btn left" data-row="0">&#9664;</button>
-                        <button class="row-btn left" data-row="1">&#9664;</button>
-                        <button class="row-btn left" data-row="2">&#9664;</button>
-                        <button class="row-btn left" data-row="3">&#9664;</button>
-                        <button class="row-btn left" data-row="4">&#9664;</button>
-                        <button class="row-btn left" data-row="5">&#9664;</button>
-                        <button class="row-btn left" data-row="6">&#9664;</button>
-                        <button class="row-btn left" data-row="7">&#9664;</button>
+            <!-- Game Board -->
+            <div class="game-wrapper">
+                <div class="board-layout">
+                    <!-- Top Controls -->
+                    <div class="controls-row top">
+                        <div class="col-controls">
+                            @for ($i = 0; $i < 8; $i++)
+                                <button class="col-btn up" data-col="{{ $i }}" title="Shift column {{ $i+1 }} up">&#9650;</button>
+                            @endfor
+                        </div>
                     </div>
 
-                    <!-- Main grid -->
-                    <div class="grid-container" id="grid">
-                        <!-- Grid cells will be generated by JavaScript -->
+                    <!-- Middle Section -->
+                    <div class="board-middle">
+                        <div class="row-controls left">
+                            @for ($i = 0; $i < 8; $i++)
+                                <button class="row-btn left" data-row="{{ $i }}" title="Shift row {{ $i+1 }} left">&#9664;</button>
+                            @endfor
+                        </div>
+
+                        <div class="grid-container" id="grid">
+                            <!-- Grid cells generated by JS -->
+                        </div>
+
+                        <div class="row-controls right">
+                            @for ($i = 0; $i < 8; $i++)
+                                <button class="row-btn right" data-row="{{ $i }}" title="Shift row {{ $i+1 }} right">&#9654;</button>
+                            @endfor
+                        </div>
                     </div>
 
-                    <!-- Right row shift buttons -->
-                    <div class="right-controls">
-                        <button class="row-btn right" data-row="0">&#9654;</button>
-                        <button class="row-btn right" data-row="1">&#9654;</button>
-                        <button class="row-btn right" data-row="2">&#9654;</button>
-                        <button class="row-btn right" data-row="3">&#9654;</button>
-                        <button class="row-btn right" data-row="4">&#9654;</button>
-                        <button class="row-btn right" data-row="5">&#9654;</button>
-                        <button class="row-btn right" data-row="6">&#9654;</button>
-                        <button class="row-btn right" data-row="7">&#9654;</button>
+                    <!-- Bottom Controls -->
+                    <div class="controls-row bottom">
+                        <div class="col-controls">
+                            @for ($i = 0; $i < 8; $i++)
+                                <button class="col-btn down" data-col="{{ $i }}" title="Shift column {{ $i+1 }} down">&#9660;</button>
+                            @endfor
+                        </div>
                     </div>
-                </div>
-
-                <!-- Bottom column shift buttons -->
-                <div class="bottom-controls">
-                    <div class="spacer"></div>
-                    <div class="col-controls">
-                        <button class="col-btn down" data-col="0">&#9660;</button>
-                        <button class="col-btn down" data-col="1">&#9660;</button>
-                        <button class="col-btn down" data-col="2">&#9660;</button>
-                        <button class="col-btn down" data-col="3">&#9660;</button>
-                        <button class="col-btn down" data-col="4">&#9660;</button>
-                        <button class="col-btn down" data-col="5">&#9660;</button>
-                        <button class="col-btn down" data-col="6">&#9660;</button>
-                        <button class="col-btn down" data-col="7">&#9660;</button>
-                    </div>
-                    <div class="spacer"></div>
                 </div>
             </div>
 
+            <!-- Selection Area -->
             <div class="selection-area">
-                <div class="selected-word-display">
+                <div class="selected-word-container">
                     <span id="selected-word"></span>
                 </div>
-                <button id="submit-btn" class="btn primary-btn" disabled>
-                    Submit Word
-                </button>
-                <button id="clear-btn" class="btn secondary-btn">Clear</button>
+                <div class="action-buttons">
+                    <button id="submit-btn" class="btn primary" disabled>Submit Word</button>
+                    <button id="clear-btn" class="btn secondary">Clear</button>
+                </div>
             </div>
 
-            <div class="found-words">
+            <!-- Found Words -->
+            <div class="found-words-container">
                 <h3>Found Words</h3>
                 <div id="found-words-list"></div>
             </div>
 
-            <div id="message" class="message"></div>
-
-            <!-- Help Modal -->
-            <div id="help-modal" class="modal hidden">
-                <div class="modal-content">
-                    <h2>How to Play</h2>
-                    <div class="help-instructions">
-                        <p>Slide the rows and columns using the arrow buttons to rearrange the letters.</p>
-                        <p>Click and drag to select letters that spell a word.</p>
-                        <p>Submit your word and earn points for each valid word found.</p>
-                    </div>
-                    <div class="modal-buttons">
-                        <button id="close-help-btn" class="btn primary-btn">Got it!</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Arcade-style name entry modal -->
-            <div id="name-modal" class="modal hidden">
-                <div class="modal-content">
-                    <h2>Game Over!</h2>
-                    <p>Score: <span id="final-score"></span></p>
-                    <p>Enter your name for the leaderboard:</p>
-                    <input type="text" id="player-name" maxlength="50" placeholder="Your Name" />
-                    <div class="modal-buttons">
-                        <button id="save-name-btn" class="btn primary-btn">Save Score</button>
-                        <button id="cancel-name-btn" class="btn secondary-btn">Cancel</button>
-                    </div>
-                </div>
-            </div>
-
-            <footer style="margin-top: 30px; text-align: center; color: #666; font-size: 0.9em;">
+            <footer>
                 Game concept by <strong>Luke Walker</strong>
             </footer>
+        </div>
+
+        <div id="message" class="toast"></div>
+
+        <!-- Modals -->
+        <div id="help-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h2>How to Play</h2>
+                <div class="help-scroll">
+                    <p><strong>Rearrange:</strong> Slide rows and columns using the arrow buttons. Each shift adds a move.</p>
+                    <p><strong>Select:</strong> Click and drag (or touch and drag) to select letters that spell a word (3-8 letters).</p>
+                    <p><strong>Score:</strong> Submit your word to end the game. Longer words and fewer moves mean higher scores!</p>
+                    <div class="help-tips">
+                        <div class="tip"><span>☀</span> Shifts hide the outgoing letter and reveal a new one.</div>
+                    </div>
+                </div>
+                <button id="close-help-btn" class="btn primary full-width">Start Playing</button>
+            </div>
+        </div>
+
+        <div id="name-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            <div class="modal-content">
+                <h2>High Score!</h2>
+                <div class="final-score-display">
+                    <span id="final-score">0</span>
+                    <span class="score-label">Points</span>
+                </div>
+                <p>Enter your name for the leaderboard:</p>
+                <input type="text" id="player-name" maxlength="20" placeholder="Player Name" autofocus />
+                <div class="modal-actions">
+                    <button id="save-name-btn" class="btn primary">Save</button>
+                    <button id="cancel-name-btn" class="btn secondary">Skip</button>
+                </div>
+            </div>
         </div>
 
         <script src="{{ asset('assets/letter-walker/script.js') }}"></script>

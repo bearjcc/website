@@ -1,25 +1,25 @@
 <div>
     <x-slot:title>Home</x-slot:title>
-    
-    {{-- Hero Section - Minimal --}}
-    <section class="pt-8 pl-8 pb-20 md:pb-24" id="main-content">
-        <div class="max-w-2xl mx-auto text-center space-y-8">
-            <div class="flex justify-start mb-8">
-                <x-ui.logo-lockup data-um-lockup="hero" />
-            </div>
-            
-            {{-- H1 for accessibility (visually hidden since logo serves as brand identity) --}}
-            <h1 class="sr-only">Ursa Minor</h1>
-            
-            @php
-                $tagline = __('ui.tagline');
-                $lowercaseMode = config('ui.lowercase_mode', false);
-            @endphp
-            
-            <p class="text-lg text-[color:var(--ink-muted)] {{ $lowercaseMode ? 'lowercase' : '' }}">
-                {{ $tagline }}
-            </p>
 
+    {{-- Hero Section - Minimal copy, centered --}}
+    <section class="pt-24 md:pt-32 pb-16 md:pb-20">
+        <div class="section">
+            <div class="max-w-2xl mx-auto text-center space-y-8">
+                <x-ui.logo-lockup class="w-[280px] md:w-[360px] mx-auto" data-um-lockup="hero" />
+
+                <h1 class="h1">{{ __('ui.hero_headline') }}</h1>
+                <p class="text-lg text-[color:var(--ink-muted)]">{{ __('ui.tagline') }}</p>
+
+                <div class="pt-2">
+                    <x-ui.cta-row
+                        :primaryHref="route('games.index')"
+                        :primaryLabel="__('ui.cta_play')"
+                        :secondaryHref="route('games.index')"
+                        :secondaryLabel="__('ui.cta_browse')"
+                        data-um-goal="hero_play_click"
+                    />
+                </div>
+            </div>
         </div>
     </section>
 

@@ -45,16 +45,20 @@
                             @yield('breadcrumbs')
                         </nav>
                     @else
-                        {{-- Only show home link on non-home pages --}}
-                        @if(!request()->routeIs('home'))
+                        <nav aria-label="Main navigation" class="flex items-center gap-1">
                             <a
                                 href="{{ route('home') }}"
-                                class="px-3 py-2 text-sm text-ink/70 hover:text-ink transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2"
-                                aria-label="Back to home"
-                            >
-                                <x-heroicon-o-home class="w-4 h-4" />
-                            </a>
-                        @endif
+                                class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2 min-h-[44px] inline-flex items-center"
+                            >Home</a>
+                            <a
+                                href="{{ route('games.index') }}"
+                                class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2 min-h-[44px] inline-flex items-center"
+                            >{{ __('ui.nav_games') }}</a>
+                            <a
+                                href="{{ route('about') }}"
+                                class="px-3 md:px-4 py-2 text-sm font-medium text-ink hover:text-star transition-colors rounded focus-visible:outline-2 focus-visible:outline-star focus-visible:outline-offset-2 min-h-[44px] inline-flex items-center"
+                            >{{ __('ui.nav_about') }}</a>
+                        </nav>
                     @endif
                 </div>
             </div>

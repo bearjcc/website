@@ -6,16 +6,17 @@
         'Avoid colliding with walls or the serpent\'s own body',
         'Game accelerates every 5 fruits consumed',
         'Press SPACE to pause/unpause during play'
-    ]"
-    x-data="{
+    ]">
+    <div x-data="{
         gameLoop: null,
         startLoop() {
             if (this.gameLoop) clearInterval(this.gameLoop);
+            const w = $wire;
             this.gameLoop = setInterval(() => {
-                if (@this.gameStarted && !@this.gameOver && !@this.paused) {
-                    @this.tick();
+                if (w.gameStarted && !w.gameOver && !w.paused) {
+                    w.tick();
                 }
-            }, @this.speed);
+            }, w.speed);
         },
         stopLoop() {
             if (this.gameLoop) {
@@ -24,17 +25,16 @@
             }
         }
     }"
-    x-init="startLoop(); $watch('$wire.speed', () => startLoop())"
-    @keydown.window.arrow-up.prevent="@this.changeDirection('up')"
-    @keydown.window.arrow-down.prevent="@this.changeDirection('down')"
-    @keydown.window.arrow-left.prevent="@this.changeDirection('left')"
-    @keydown.window.arrow-right.prevent="@this.changeDirection('right')"
-    @keydown.window.w.prevent="@this.changeDirection('up')"
-    @keydown.window.s.prevent="@this.changeDirection('down')"
-    @keydown.window.a.prevent="@this.changeDirection('left')"
-    @keydown.window.d.prevent="@this.changeDirection('right')"
-    @keydown.window.space.prevent="@this.togglePause()">
-
+    x-init="startLoop(); $watch('\x24wire.speed', () => startLoop())"
+    @keydown.window.arrow-up.prevent="$wire.changeDirection('up')"
+    @keydown.window.arrow-down.prevent="$wire.changeDirection('down')"
+    @keydown.window.arrow-left.prevent="$wire.changeDirection('left')"
+    @keydown.window.arrow-right.prevent="$wire.changeDirection('right')"
+    @keydown.window.w.prevent="$wire.changeDirection('up')"
+    @keydown.window.s.prevent="$wire.changeDirection('down')"
+    @keydown.window.a.prevent="$wire.changeDirection('left')"
+    @keydown.window.d.prevent="$wire.changeDirection('right')"
+    @keydown.window.space.prevent="$wire.togglePause()">
     {{-- Game Instructions --}}
     <div class="text-center mb-6">
         <p class="text-sm text-ink/60 mb-2">Use arrow keys or WASD to guide the serpent</p>
@@ -170,6 +170,7 @@
                 <div></div>
             </div>
         </div>
+    </div>
     </div>
 </x-ui.game-wrapper>
 
