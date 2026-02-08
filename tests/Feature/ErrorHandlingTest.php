@@ -12,6 +12,16 @@ class ErrorHandlingTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_health_endpoint_returns_ok_and_timestamp(): void
+    {
+        $response = $this->get(route('health'));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/json');
+        $response->assertJsonStructure(['status', 'timestamp']);
+        $response->assertJsonPath('status', 'ok');
+    }
+
     public function test_returns_404_for_invalid_game_slug(): void
     {
         $response = $this->get(route('games.play', 'non-existent-game'));
