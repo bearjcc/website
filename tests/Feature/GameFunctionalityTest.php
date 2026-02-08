@@ -31,6 +31,7 @@ class GameFunctionalityTest extends TestCase
             ['title' => 'Checkers', 'slug' => 'checkers', 'type' => 'board', 'description' => 'Classic board game', 'status' => 'published'],
             ['title' => 'Minesweeper', 'slug' => 'minesweeper', 'type' => 'puzzle', 'description' => 'Mine detection game', 'status' => 'published'],
             ['title' => 'Snake', 'slug' => 'snake', 'type' => 'arcade', 'description' => 'Classic snake game', 'status' => 'published'],
+            ['title' => 'Letter Walker', 'slug' => 'letter-walker', 'type' => 'word', 'description' => 'Daily word puzzle', 'status' => 'published'],
         ];
 
         foreach ($games as $gameData) {
@@ -83,6 +84,7 @@ class GameFunctionalityTest extends TestCase
         $response->assertSee('Checkers');
         $response->assertSee('Minesweeper');
         $response->assertSee('Snake');
+        $response->assertSee('Letter Walker');
     }
 
     #[Test]

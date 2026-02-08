@@ -78,6 +78,33 @@ class ProductionSeeder extends Seeder
                 'rules_md' => 'Merge matching numbers to reach 2048.',
                 'options_json' => json_encode(['grid_size' => 4]),
             ],
+            [
+                'slug' => 'chess',
+                'title' => 'Chess',
+                'type' => 'board',
+                'status' => 'published',
+                'short_description' => 'Classic strategy board game.',
+                'rules_md' => "Move pieces according to their rules. Capture the opponent's king to win.",
+                'options_json' => json_encode(['time_control' => 'unlimited']),
+            ],
+            [
+                'slug' => 'checkers',
+                'title' => 'Checkers',
+                'type' => 'board',
+                'status' => 'published',
+                'short_description' => 'Jump your way to victory.',
+                'rules_md' => 'Move diagonally and jump opponent pieces. Reach the opposite end to king your piece.',
+                'options_json' => json_encode(['board_size' => '8x8']),
+            ],
+            [
+                'slug' => 'letter-walker',
+                'title' => 'Letter Walker',
+                'type' => 'word',
+                'status' => 'published',
+                'short_description' => 'Slide rows and columns to find hidden words in this daily puzzle game.',
+                'rules_md' => 'Click and drag to select letters to form words. Shift rows and columns to find as many words as possible.',
+                'options_json' => json_encode(['grid_size' => '8x8', 'dictionary_enabled' => true]),
+            ],
         ];
 
         foreach ($games as $gameData) {

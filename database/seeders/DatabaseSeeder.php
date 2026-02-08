@@ -107,7 +107,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Game::create([
-            'slug' => '2048',
+            'slug' => 'twenty-forty-eight',
             'title' => '2048',
             'type' => 'puzzle',
             'status' => 'published',
