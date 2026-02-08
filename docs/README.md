@@ -8,7 +8,7 @@ Simplified documentation structure for Ursa Minor Games.
 **[README.md](../README.md)** (root) — Project overview, setup, quick start
 
 ### 2. Design Bible
-**[DESIGN_BIBLE.md](../DESIGN_BIBLE.md)** (root) — Complete design reference: brand story, philosophy, visual identity, colors, typography, layout, tone, accessibility
+**[DESIGN_BIBLE.md](../DESIGN_BIBLE.md)** (root) — Complete design reference: brand story, philosophy, visual identity, colors, typography, layout, tone, accessibility. See also [BRAND_GUIDELINES.md](BRAND_GUIDELINES.md) (pointer).
 
 ### 3. Task Tracking
 **[TODO.md](TODO.md)** — Current tasks and roadmap
@@ -29,6 +29,10 @@ Simplified documentation structure for Ursa Minor Games.
 **Architecture**:
 - **[PROJECT_STRUCTURE.md](PROJECT_STRUCTURE.md)** — Codebase organization
 - **[DEPENDENCIES.md](DEPENDENCIES.md)** — Package management
+
+**Audit**:
+- **[ROADMAP.md](ROADMAP.md)** — High-level phase overview
+- **[AUDIT.md](AUDIT.md)** — Repository audit findings
 
 ---
 

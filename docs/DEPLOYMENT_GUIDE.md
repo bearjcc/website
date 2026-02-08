@@ -217,7 +217,7 @@ npm run dev        # Terminal 1
 php artisan serve  # Terminal 2
 ```
 
-Visit: http://localhost:8000
+Visit: http://website.test/ (Herd) or http://localhost:8000 (artisan serve)
 
 ## Performance
 

@@ -603,7 +603,7 @@ Use this checklist for each feature extraction:
 - [Laravel Upgrade Guide](https://laravel.com/docs/upgrade)
 - [Livewire Migration Guide](https://laravel-livewire.com/docs/upgrading)
 - [Vite Asset Bundling](https://laravel.com/docs/vite)
-- [Ursa Minor Brand Guidelines](../BRAND_GUIDELINES.md)
+- [Ursa Minor Design Bible](../DESIGN_BIBLE.md)
 
 ---
 

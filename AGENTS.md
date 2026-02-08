@@ -56,7 +56,7 @@ Load these files when working on specific tasks:
 **Always load first:**
 - `@001-core-project-conventions.mdc` - Complete project conventions and architecture
 - `@docs/PROJECT_STRUCTURE.md` - Where to find/add things
-- `@docs/BRAND_GUIDELINES.md` - Night sky design philosophy
+- `@DESIGN_BIBLE.md` - Night sky design philosophy (root)
 
 **Context-specific:**
 - `@003-tech-stack.mdc` - TALL stack patterns and usage

@@ -196,13 +196,16 @@ See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for complete deployment instructi
 
 All documentation lives in `/docs` folder:
 - README.md (index)
-- BRAND_GUIDELINES.md
+- BRAND_GUIDELINES.md (pointer to DESIGN_BIBLE)
 - DEPLOYMENT_GUIDE.md
-- DESIGN_FOUNDATIONS.md
 - FEATURE_EXTRACTION_GUIDE.md
+- GAME_DEVELOPMENT_GUIDE.md
 - PROJECT_STRUCTURE.md (this file)
 - ROADMAP.md
 - TODO.md
+- AUDIT.md (audit findings)
+
+Design reference: `DESIGN_BIBLE.md` at project root.
 
 Root level only has:
 - README.md (project overview)

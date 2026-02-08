@@ -287,7 +287,7 @@ All interactive elements must have:
 - Embla Carousel
 
 ### Development
-- Laravel Herd: http://tavernsandtreasures.test/
+- Laravel Herd: http://website.test/
 - `npm run dev` (runs in background)
 - Railway auto-deploys from main
 

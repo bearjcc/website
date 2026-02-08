@@ -68,7 +68,7 @@ php artisan db:seed --class=ProductionSeeder
 npm run dev
 ```
 
-Visit http://tavernsandtreasures.test/ (Laravel Herd automatically serves the site).
+Visit http://website.test/ (Laravel Herd project name; Herd serves the site automatically).
 
 ### Project Structure
 
@@ -220,13 +220,13 @@ See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed instructions an
 - **[FEATURE_EXTRACTION_GUIDE](docs/FEATURE_EXTRACTION_GUIDE.md)** — Integrate from other repos
 - **[docs/](docs/)** — Full index
 
-**AI guidance** in `.cursor/rules/*.mdc` files
+**AI guidance** in `AGENTS.md` (root); optional `.cursor/rules/*.mdc` if present
 
 ### Current Status
 
-**Phase 1 ✅** Foundation Complete — Homepage, design system, deployment  
-**Phase 2 🎯** Browser Games In Progress — 6 games functional, cleanup needed  
-**Next** Apply DESIGN_BIBLE principles to game UI — See [TODO.md](docs/TODO.md)
+**Phase 1** Foundation complete — Homepage, design system, deployment  
+**Phase 2** Browser games — 7+ games (Sudoku, 2048, Snake, Minesweeper, Connect 4, Tic-Tac-Toe, Letter Walker, Chess/Checkers placeholders)  
+**Next** See [docs/TODO.md](docs/TODO.md)
 
 ## Contributing
 

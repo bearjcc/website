@@ -10,7 +10,7 @@ Homepage live with night sky theme, visual-first game cards, component architect
 
 ---
 
-## Phase 2: Browser Games 🎯 NEARLY COMPLETE
+## Phase 2: Browser Games — COMPLETE
 
 ### Games Implemented and Polished ✅
 - [x] Tic-Tac-Toe — Clean, HSL tokens, no emoji
@@ -19,6 +19,7 @@ Homepage live with night sky theme, visual-first game cards, component architect
 - [x] Minesweeper — Clean, HSL tokens
 - [x] Snake — Clean, CSS-only styling (no emoji)
 - [x] 2048 — Clean, HSL tokens
+- [x] Letter Walker — Wordle-style, vanilla JS, score API
 
 ### Game UI Cleanup ✅ COMPLETE
 - [x] Remove all emoji from controls (replaced with Heroicons)
@@ -44,9 +45,14 @@ Homepage live with night sky theme, visual-first game cards, component architect
 
 ### Remaining Tasks
 
-**Missing Games**:
-- [ ] Chess (in database, not yet implemented)
-- [ ] Checkers (in database, not yet implemented)
+**Games** (all implemented):
+- [x] Chess — Livewire, engine, tests
+- [x] Checkers — Livewire, engine, tests
+
+**Tech Debt / Cleanup**:
+- [x] Fix Connect4 engine tests (7 failures: wins, draw, scoring) — tests passing
+- [x] Remove or ignore letter-walker .bak files — `*.bak` in .gitignore; no .bak files in repo
+- [x] Resolve PHPUnit doc-comment deprecation warnings (PHPUnit 12) — migrated to attributes in 6 test files
 
 **Sudoku Enhancements** ✅ COMPLETE:
 - [x] CSS Grid layout with 3x3 box borders
@@ -66,9 +72,9 @@ Homepage live with night sky theme, visual-first game cards, component architect
 
 ### Next Phase Decision
 
-**Option A**: Implement Chess + Checkers to complete Phase 2  
-**Option B**: Move to Phase 3 (F1 Predictions) with 6 solid games  
-**Option C**: Polish existing 6 games further (animations, scores)
+**Option A**: Phase 2 complete — Chess + Checkers implemented  
+**Option B**: Move to Phase 3 (F1 Predictions) with 9 solid games  
+**Option C**: Polish existing 9 games further (animations, scores)
 
 ---
 
@@ -113,7 +119,7 @@ Extract from `C:\Users\bearj\Herd\tavernsandtreasures`:
 ## Current Status
 
 **Phase 2 complete** ✅ 
-- 6 games cleaned and polished  
+- 9 games implemented and polished  
 - Framework architecture created
 - AI opponent system (easy, medium, impossible)
 - Sudoku enhanced (CSS Grid, hover picker, custom puzzles, auto-solve)
@@ -126,6 +132,6 @@ Extract from `C:\Users\bearj\Herd\tavernsandtreasures`:
 - Tic-Tac-Toe: AI opponents (3 difficulty levels)
 - Sudoku: Advanced UX (hover picker, custom input, 5 difficulties)
 
-**Next**: Foundation is solid. Chess/Checkers AI-ready, or move to Phase 3 (F1 Predictions)?
+**Next**: Phase 3 (F1 Predictions) or polish (AI opponents for Chess/Checkers). See [docs/AUDIT.md](AUDIT.md) for audit findings.
 
-*Last updated: 2025-10-13*
+*Last updated: 2025-02-08*

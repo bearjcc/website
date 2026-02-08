@@ -37,7 +37,7 @@ php artisan key:generate
 php artisan serve
 ```
 
-Visit http://localhost:8000
+Visit http://website.test/ (Herd) or http://localhost:8000 if not using Herd
 
 ## Development Workflow
 
@@ -312,7 +312,7 @@ git commit -m "chore: add package-name dependency"
 
 - Open an issue for bugs or feature requests
 - Start a discussion for ideas or questions
-- Check [docs/ROADMAP.md](docs/ROADMAP.md) for planned features
+- Check [docs/ROADMAP.md](docs/ROADMAP.md) and [docs/TODO.md](docs/TODO.md) for planned features
 - Review existing code for patterns
 - See [docs/](docs/) for all documentation
 
@@ -325,5 +325,5 @@ Contributors will be recognized in:
 
 ---
 
-**Happy coding! Let's build something great together! 🐻⭐**
+**Happy coding!**
 
