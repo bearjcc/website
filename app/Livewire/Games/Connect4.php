@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\Games;
 
 use App\Games\Connect4\Connect4Engine;
