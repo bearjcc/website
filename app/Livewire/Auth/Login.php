@@ -24,7 +24,7 @@ class Login extends Component
         'password' => 'required',
     ];
 
-    public function login()
+    public function login(): ?\Illuminate\Http\RedirectResponse
     {
         $this->validate();
 
@@ -35,6 +35,8 @@ class Login extends Component
         }
 
         $this->addError('email', 'These credentials do not match our records.');
+
+        return null;
     }
 
     public function render(): \Illuminate\Contracts\View\View

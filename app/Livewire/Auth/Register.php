@@ -29,7 +29,7 @@ class Register extends Component
         'password' => 'required|string|min:8|confirmed',
     ];
 
-    public function register()
+    public function register(): \Illuminate\Http\RedirectResponse
     {
         $this->validate();
 

@@ -40,7 +40,7 @@ class LoreEdit extends Component
         }
     }
 
-    public function save()
+    public function save(): \Illuminate\Http\RedirectResponse
     {
         $existingId = $this->lorePage && $this->lorePage->exists ? $this->lorePage->id : 'NULL';
 
