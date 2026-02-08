@@ -63,7 +63,7 @@ class ChessGame implements GameInterface
         }
 
         // Validate move structure
-        if (!isset($move['from']) || !isset($move['to'])) {
+        if (! isset($move['from']) || ! isset($move['to'])) {
             return $state;
         }
 
@@ -71,14 +71,14 @@ class ChessGame implements GameInterface
         $to = $move['to'];
 
         // Validate positions
-        if (!ChessEngine::isValidPosition($from['row'], $from['col']) ||
-            !ChessEngine::isValidPosition($to['row'], $to['col'])) {
+        if (! ChessEngine::isValidPosition($from['row'], $from['col']) ||
+            ! ChessEngine::isValidPosition($to['row'], $to['col'])) {
             return $state;
         }
 
         // Check if it's the player's piece
         $piece = $state['board'][$from['row']][$from['col']] ?? null;
-        if (!ChessEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
+        if (! ChessEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
             return $state;
         }
 
@@ -104,7 +104,7 @@ class ChessGame implements GameInterface
         }
 
         // Validate move structure
-        if (!isset($move['from']) || !isset($move['to'])) {
+        if (! isset($move['from']) || ! isset($move['to'])) {
             return false;
         }
 
@@ -112,14 +112,14 @@ class ChessGame implements GameInterface
         $to = $move['to'];
 
         // Validate positions
-        if (!ChessEngine::isValidPosition($from['row'], $from['col']) ||
-            !ChessEngine::isValidPosition($to['row'], $to['col'])) {
+        if (! ChessEngine::isValidPosition($from['row'], $from['col']) ||
+            ! ChessEngine::isValidPosition($to['row'], $to['col'])) {
             return false;
         }
 
         // Check if it's the player's piece
         $piece = $state['board'][$from['row']][$from['col']] ?? null;
-        if (!ChessEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
+        if (! ChessEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
             return false;
         }
 
@@ -176,7 +176,7 @@ class ChessGame implements GameInterface
     public function getValidMovesForSquare(array $state, int $row, int $col): array
     {
         $piece = $state['board'][$row][$col] ?? null;
-        if (!ChessEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
+        if (! ChessEngine::isPlayerPiece($piece, $state['currentPlayer'])) {
             return [];
         }
 
@@ -189,7 +189,8 @@ class ChessGame implements GameInterface
     public function hasValidMoves(array $state, int $row, int $col): bool
     {
         $moves = $this->getValidMovesForSquare($state, $row, $col);
-        return !empty($moves);
+
+        return ! empty($moves);
     }
 
     /**
@@ -197,7 +198,7 @@ class ChessGame implements GameInterface
      */
     public function getPieceAt(array $state, int $row, int $col): ?string
     {
-        if (!ChessEngine::isValidPosition($row, $col)) {
+        if (! ChessEngine::isValidPosition($row, $col)) {
             return null;
         }
 
@@ -209,7 +210,7 @@ class ChessGame implements GameInterface
      */
     public function getPieceDisplayName(?string $piece): string
     {
-        return match($piece) {
+        return match ($piece) {
             ChessEngine::WHITE_KING => 'White King',
             ChessEngine::WHITE_QUEEN => 'White Queen',
             ChessEngine::WHITE_ROOK => 'White Rook',
@@ -252,7 +253,6 @@ class ChessGame implements GameInterface
             return 'O-O-O';
         }
 
-        return $piece . $capture . $to;
+        return $piece.$capture.$to;
     }
 }
-

@@ -13,10 +13,10 @@ enum TechniqueType: string
     case HiddenTriple = 'hidden_triple';
     case XWing = 'x_wing';
     case Swordfish = 'swordfish';
-    
+
     public function getWeight(): int
     {
-        return match($this) {
+        return match ($this) {
             self::NakedSingle => 1,
             self::HiddenSingle => 2,
             self::LockedCandidates => 3,
@@ -28,10 +28,10 @@ enum TechniqueType: string
             self::Swordfish => 18,
         };
     }
-    
+
     public function getDescription(): string
     {
-        return match($this) {
+        return match ($this) {
             self::NakedSingle => 'A cell that has only one possible candidate',
             self::HiddenSingle => 'A digit that can only go in one cell within a row, column, or box',
             self::LockedCandidates => 'Candidates confined to one row/column within a box, or one box within a row/column',
@@ -44,8 +44,3 @@ enum TechniqueType: string
         };
     }
 }
-
-
-
-
-

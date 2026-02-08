@@ -6,7 +6,6 @@ use App\Games\Connect4\Connect4Engine;
 use App\Games\Connect4\Connect4Game;
 use App\Livewire\Concerns\InteractsWithGameState;
 use App\Models\Game;
-use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Connect4 extends Component
@@ -64,7 +63,7 @@ class Connect4 extends Component
                     'moves' => $this->moveCount,
                     'time' => $this->getElapsedTime(),
                     'winningLine' => $this->state['winningLine'] ?? null,
-                    'isWon' => $this->state['winner'] !== 'draw' && $this->state['winner'] !== null
+                    'isWon' => $this->state['winner'] !== 'draw' && $this->state['winner'] !== null,
                 ]);
             }
         }

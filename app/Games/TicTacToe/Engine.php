@@ -99,6 +99,7 @@ final class Engine
                         break;
                     } // Alpha-beta pruning
                 }
+
                 return $maxEval;
             } else {
                 // Minimizing player (opponent)
@@ -117,6 +118,7 @@ final class Engine
                         break;
                     } // Alpha-beta pruning
                 }
+
                 return $minEval;
             }
         };
@@ -307,14 +309,14 @@ final class Engine
     {
         // Check for fork opportunities (two ways to win)
         $forkMoves = $this->findForkMoves($board, $moves, $player);
-        if (!empty($forkMoves)) {
+        if (! empty($forkMoves)) {
             return $forkMoves[array_rand($forkMoves)];
         }
 
         // Block opponent forks (70% chance)
         if (mt_rand(1, 100) <= 70) {
             $blockForkMoves = $this->findForkMoves($board, $moves, $opponent);
-            if (!empty($blockForkMoves)) {
+            if (! empty($blockForkMoves)) {
                 return $blockForkMoves[array_rand($blockForkMoves)];
             }
         }
@@ -327,21 +329,22 @@ final class Engine
         // Take corners strategically
         $corners = [0, 2, 6, 8];
         $availableCorners = array_intersect($corners, $moves);
-        if (!empty($availableCorners)) {
+        if (! empty($availableCorners)) {
             // Prefer corners adjacent to opponent pieces (20% chance for mistake)
             if (mt_rand(1, 100) <= 80) {
                 $strategicCorners = $this->getStrategicCorners($board, $availableCorners, $opponent);
-                if (!empty($strategicCorners)) {
+                if (! empty($strategicCorners)) {
                     return $strategicCorners[array_rand($strategicCorners)];
                 }
             }
+
             return $availableCorners[array_rand($availableCorners)];
         }
 
         // Take edges, but avoid creating immediate threats (60% success rate)
         $edges = [1, 3, 5, 7];
         $availableEdges = array_intersect($edges, $moves);
-        if (!empty($availableEdges)) {
+        if (! empty($availableEdges)) {
             if (mt_rand(1, 100) <= 60) {
                 // Make smart edge choice
                 return $this->getBestEdge($board, $availableEdges, $player);
@@ -415,7 +418,7 @@ final class Engine
                 }
             }
 
-            if (!$dangerous) {
+            if (! $dangerous) {
                 $strategic[] = $corner;
             }
         }
@@ -542,8 +545,11 @@ final class Engine
         $opponentCorners = 0;
 
         foreach ($corners as $corner) {
-            if ($board[$corner] === $player) $playerCorners++;
-            elseif ($board[$corner] === $opponent) $opponentCorners++;
+            if ($board[$corner] === $player) {
+                $playerCorners++;
+            } elseif ($board[$corner] === $opponent) {
+                $opponentCorners++;
+            }
         }
 
         $score += $playerCorners * 20;
@@ -555,8 +561,11 @@ final class Engine
         $opponentEdges = 0;
 
         foreach ($edges as $edge) {
-            if ($board[$edge] === $player) $playerEdges++;
-            elseif ($board[$edge] === $opponent) $opponentEdges++;
+            if ($board[$edge] === $player) {
+                $playerEdges++;
+            } elseif ($board[$edge] === $opponent) {
+                $opponentEdges++;
+            }
         }
 
         $score += $playerEdges * 10;
@@ -571,12 +580,12 @@ final class Engine
 
         // 6. Block potential forks
         $opponentForkMoves = $this->findForkMoves($board, $this->availableMoves($board), $opponent);
-        if (!empty($opponentForkMoves)) {
+        if (! empty($opponentForkMoves)) {
             $score += 40; // Bonus for blocking opponent forks
         }
 
         // 7. Game phase consideration (early game vs late game)
-        $filledPositions = count(array_filter($board, fn($cell) => $cell !== null));
+        $filledPositions = count(array_filter($board, fn ($cell) => $cell !== null));
         if ($filledPositions <= 2) {
             // Early game: prioritize center and corners
             $score += 25;

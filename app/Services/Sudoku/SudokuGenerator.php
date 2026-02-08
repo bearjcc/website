@@ -24,20 +24,21 @@ use App\Enums\Difficulty;
  * - Adaptive clue removal based on puzzle analysis
  * - Fast generation with optimized algorithms
  */
-
 class SudokuGenerator
 {
     private SeededRandom $random;
+
     private SudokuSolver $solver;
+
     private DifficultyRating $rating;
-    
-    public function __construct(int $seed = null)
+
+    public function __construct(?int $seed = null)
     {
         $this->random = new SeededRandom($seed ?? time());
         $this->solver = new SudokuSolver();
         $this->rating = new DifficultyRating();
     }
-    
+
     /**
      * Generate puzzle of target difficulty
      */
@@ -77,7 +78,7 @@ class SudokuGenerator
 
         throw new \RuntimeException("Failed to generate {$difficulty->value} puzzle after {$maxAttempts} attempts");
     }
-    
+
     /**
      * Create a full valid solution grid
      */
@@ -92,7 +93,7 @@ class SudokuGenerator
         }
 
         // Then solve the rest using backtracking
-        if (!$this->solveRemaining($board, 0, 0)) {
+        if (! $this->solveRemaining($board, 0, 0)) {
             throw new \RuntimeException('Failed to generate solution');
         }
 
@@ -188,7 +189,7 @@ class SudokuGenerator
 
         return true;
     }
-    
+
     /**
      * Remove clues while maintaining uniqueness and target difficulty
      */
@@ -220,13 +221,15 @@ class SudokuGenerator
             }
 
             $original = $puzzle->getValue($r, $c);
-            if ($original === 0) continue; // Skip already empty cells
+            if ($original === 0) {
+                continue;
+            } // Skip already empty cells
 
             $puzzle->setValue($r, $c, 0);
 
             // Check for unique solution
             $tempSolver = new SudokuSolver();
-            if (!$tempSolver->hasUniqueSolution($puzzle)) {
+            if (! $tempSolver->hasUniqueSolution($puzzle)) {
                 $puzzle->setValue($r, $c, $original); // Revert if not unique
             } else {
                 $cluesRemoved++;
@@ -256,8 +259,3 @@ class SudokuGenerator
         return $puzzle;
     }
 }
-
-
-
-
-

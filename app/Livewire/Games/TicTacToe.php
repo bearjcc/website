@@ -50,7 +50,7 @@ class TicTacToe extends Component
         $this->movesCount = 0;
         $this->winningPositions = [];
         $this->gameDuration = 0;
-        $this->aiDifficulty = match($this->gameMode) {
+        $this->aiDifficulty = match ($this->gameMode) {
             'ai-easy' => 'Easy',
             'ai-medium' => 'Medium',
             'ai-impossible' => 'Impossible',
@@ -108,7 +108,7 @@ class TicTacToe extends Component
                     'winner' => $this->winner,
                     'moves' => $this->movesCount,
                     'mode' => $this->gameMode,
-                    'duration' => round($this->movesCount / 2, 1)
+                    'duration' => round($this->movesCount / 2, 1),
                 ]);
             }
         }
@@ -149,7 +149,7 @@ class TicTacToe extends Component
                     'moves' => $this->movesCount,
                     'mode' => $this->gameMode,
                     'duration' => round($this->movesCount / 2, 1),
-                    'winningPositions' => $this->winningPositions
+                    'winningPositions' => $this->winningPositions,
                 ]);
             }
         }
@@ -166,7 +166,7 @@ class TicTacToe extends Component
 
         foreach ($lines as $line) {
             // Check if all positions in the line are filled and match the winner
-            $positionsFilled = array_filter($line, fn($pos) => $board[$pos] === $winner);
+            $positionsFilled = array_filter($line, fn ($pos) => $board[$pos] === $winner);
             if (count($positionsFilled) === 3) {
                 return $line;
             }

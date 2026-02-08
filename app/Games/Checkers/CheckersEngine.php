@@ -104,7 +104,7 @@ class CheckersEngine
 
         // Check if player must jump (forced captures)
         $jumpMoves = self::getJumpMoves($state);
-        if (!empty($jumpMoves)) {
+        if (! empty($jumpMoves)) {
             return $jumpMoves; // Must jump if possible
         }
 
@@ -150,7 +150,7 @@ class CheckersEngine
         $piece = $state['board'][$row][$col];
         $player = $state['currentPlayer'];
 
-        if (!self::isPlayerPiece($piece, $player)) {
+        if (! self::isPlayerPiece($piece, $player)) {
             return $moves;
         }
 
@@ -167,7 +167,7 @@ class CheckersEngine
                         'from' => ['row' => $row, 'col' => $col],
                         'to' => ['row' => $newRow, 'col' => $newCol],
                         'captures' => [],
-                        'type' => 'move'
+                        'type' => 'move',
                     ];
                 }
                 // Jump move (enemy piece)
@@ -183,7 +183,7 @@ class CheckersEngine
                             'from' => ['row' => $row, 'col' => $col],
                             'to' => ['row' => $jumpRow, 'col' => $jumpCol],
                             'captures' => [['row' => $newRow, 'col' => $newCol]],
-                            'type' => 'jump'
+                            'type' => 'jump',
                         ];
                     }
                 }
@@ -202,7 +202,7 @@ class CheckersEngine
         $piece = $state['board'][$row][$col];
         $player = $state['currentPlayer'];
 
-        if (!self::isPlayerPiece($piece, $player)) {
+        if (! self::isPlayerPiece($piece, $player)) {
             return $moves;
         }
 
@@ -226,7 +226,7 @@ class CheckersEngine
                             'from' => ['row' => $row, 'col' => $col],
                             'to' => ['row' => $jumpRow, 'col' => $jumpCol],
                             'captures' => [['row' => $newRow, 'col' => $newCol]],
-                            'type' => 'jump'
+                            'type' => 'jump',
                         ];
                     }
                 }
@@ -241,7 +241,7 @@ class CheckersEngine
      */
     private static function getPieceDirections(?string $piece): array
     {
-        if (!$piece) {
+        if (! $piece) {
             return [];
         }
 
@@ -280,7 +280,7 @@ class CheckersEngine
         $newState['board'][$to['row']][$to['col']] = $piece;
 
         // Handle captures
-        if (!empty($move['captures'])) {
+        if (! empty($move['captures'])) {
             foreach ($move['captures'] as $capture) {
                 $capturedPiece = $newState['board'][$capture['row']][$capture['col']];
                 $newState['board'][$capture['row']][$capture['col']] = self::EMPTY;
@@ -301,10 +301,11 @@ class CheckersEngine
         if ($move['type'] === 'jump') {
             $additionalJumps = self::getPieceJumps($newState, $to['row'], $to['col']);
 
-            if (!empty($additionalJumps)) {
+            if (! empty($additionalJumps)) {
                 // There are more jumps available - don't switch players
                 $newState['selectedSquare'] = ['row' => $to['row'], 'col' => $to['col']];
                 $newState['jumpSequence'] = $additionalJumps;
+
                 return $newState;
             }
         }
@@ -325,7 +326,7 @@ class CheckersEngine
      */
     private static function checkForPromotion(?string $piece, int $row, int $col): ?string
     {
-        if (!$piece) {
+        if (! $piece) {
             return $piece;
         }
 
@@ -396,7 +397,7 @@ class CheckersEngine
      */
     public static function isPlayerPiece(?string $piece, string $player): bool
     {
-        if (!$piece) {
+        if (! $piece) {
             return false;
         }
 
@@ -414,7 +415,7 @@ class CheckersEngine
      */
     private static function isOpponentPiece(?string $piece, string $player): bool
     {
-        if (!$piece) {
+        if (! $piece) {
             return false;
         }
 
@@ -448,7 +449,7 @@ class CheckersEngine
      */
     public static function getPieceDisplayName(?string $piece): string
     {
-        return match($piece) {
+        return match ($piece) {
             self::RED => 'Red',
             self::BLACK => 'Black',
             self::RED_KING => 'Red King',
@@ -490,4 +491,3 @@ class CheckersEngine
         return $count;
     }
 }
-

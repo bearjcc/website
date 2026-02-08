@@ -133,4 +133,3 @@ trait InteractsWithGameState
         $this->clearSavedState();
     }
 }
-

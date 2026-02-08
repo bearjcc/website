@@ -94,7 +94,7 @@ class Chess extends Component
         $game = new ChessGame();
         $move = [
             'from' => $from,
-            'to' => $to
+            'to' => $to,
         ];
 
         if ($game->validateMove($this->getCurrentState(), $move)) {
@@ -114,7 +114,7 @@ class Chess extends Component
                     'moves' => $this->moves,
                     'time' => $this->getElapsedTime(),
                     'inCheck' => $this->inCheck,
-                    'isWon' => $this->winner !== 'draw' && $this->winner !== null
+                    'isWon' => $this->winner !== 'draw' && $this->winner !== null,
                 ]);
             }
         }
@@ -122,8 +122,9 @@ class Chess extends Component
 
     public function updateValidMoves()
     {
-        if (!$this->selectedSquare) {
+        if (! $this->selectedSquare) {
             $this->validMoves = [];
+
             return;
         }
 
@@ -131,7 +132,7 @@ class Chess extends Component
         $state = $this->getCurrentState();
         $allValidMoves = ChessEngine::getValidMoves($state);
 
-        $this->validMoves = array_filter($allValidMoves, function($move) {
+        $this->validMoves = array_filter($allValidMoves, function ($move) {
             return $move['from']['row'] === $this->selectedSquare['row'] &&
                    $move['from']['col'] === $this->selectedSquare['col'];
         });
@@ -144,24 +145,28 @@ class Chess extends Component
                 return true;
             }
         }
+
         return false;
     }
 
     public function getPieceAt(int $row, int $col): ?string
     {
         $game = new ChessGame();
+
         return $game->getPieceAt($this->getCurrentState(), $row, $col);
     }
 
     public function getPieceDisplayName(?string $piece): string
     {
         $game = new ChessGame();
+
         return $game->getPieceDisplayName($piece);
     }
 
     public function getMoveNotation(array $move): string
     {
         $game = new ChessGame();
+
         return $game->getMoveNotation($move);
     }
 
@@ -236,4 +241,3 @@ class Chess extends Component
         return view('livewire.games.chess');
     }
 }
-

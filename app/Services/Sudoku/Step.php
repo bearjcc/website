@@ -34,7 +34,7 @@ class Step
      */
     public function getTechniqueName(): string
     {
-        return match($this->type) {
+        return match ($this->type) {
             TechniqueType::NakedSingle => 'Naked Single',
             TechniqueType::HiddenSingle => 'Hidden Single',
             TechniqueType::LockedCandidates => 'Locked Candidates',
@@ -52,7 +52,7 @@ class Step
      */
     public function hasPlacements(): bool
     {
-        return !empty($this->placements);
+        return ! empty($this->placements);
     }
 
     /**
@@ -60,11 +60,6 @@ class Step
      */
     public function hasEliminations(): bool
     {
-        return !empty($this->eliminations);
+        return ! empty($this->eliminations);
     }
 }
-
-
-
-
-
