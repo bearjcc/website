@@ -13,7 +13,7 @@ use Livewire\Component;
 #[Title('Ursa Minor - Small games. Big craft.')]
 class Home extends Component
 {
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         // Get all published games for carousel
         $games = $this->getGamesSafely();

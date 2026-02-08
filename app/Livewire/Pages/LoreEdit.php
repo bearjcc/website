@@ -75,7 +75,7 @@ class LoreEdit extends Component
         return redirect()->route('lore.show', $savedPage);
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         $pageTitle = ($this->lorePage ? 'Edit' : 'Create').' Lore Page';
 

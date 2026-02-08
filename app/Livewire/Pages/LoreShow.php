@@ -13,7 +13,7 @@ class LoreShow extends Component
 {
     public LorePage $lorePage;
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.pages.lore-show', [
             'title' => $this->lorePage->title.' - Lore',

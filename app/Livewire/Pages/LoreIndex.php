@@ -13,7 +13,7 @@ use Livewire\Component;
 #[Title('Lore - Ursa Minor')]
 class LoreIndex extends Component
 {
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         $lorePages = LorePage::latest()->get();
 

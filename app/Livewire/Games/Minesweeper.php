@@ -220,7 +220,7 @@ class Minesweeper extends Component
         $this->moveCount = $state['moveCount'] ?? 0;
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.games.minesweeper');
     }

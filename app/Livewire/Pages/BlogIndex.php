@@ -13,7 +13,7 @@ use Livewire\Component;
 #[Title('Blog - Ursa Minor')]
 class BlogIndex extends Component
 {
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         $posts = Post::published()->latest()->get();
 

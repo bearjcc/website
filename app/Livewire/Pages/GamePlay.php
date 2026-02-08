@@ -13,7 +13,7 @@ class GamePlay extends Component
 {
     public Game $game;
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.pages.game-play', [
             'title' => $this->game->title.' - Ursa Minor',

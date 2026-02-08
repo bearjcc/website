@@ -18,7 +18,7 @@ class Logout extends Component
         return redirect('/');
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.auth.logout');
     }

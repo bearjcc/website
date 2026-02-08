@@ -12,7 +12,7 @@ use Livewire\Component;
 #[Title('About - Ursa Minor')]
 class About extends Component
 {
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.pages.about');
     }

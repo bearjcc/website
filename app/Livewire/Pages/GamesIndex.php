@@ -9,7 +9,7 @@ use Livewire\Component;
 
 class GamesIndex extends Component
 {
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         $games = Game::published()
             ->orderBy('title')

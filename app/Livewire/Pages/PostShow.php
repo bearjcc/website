@@ -20,7 +20,7 @@ class PostShow extends Component
         }
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.pages.post-show', [
             'title' => $this->post->title.' - Ursa Minor',

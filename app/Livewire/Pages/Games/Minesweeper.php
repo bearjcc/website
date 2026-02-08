@@ -8,7 +8,7 @@ use Livewire\Component;
 
 class Minesweeper extends Component
 {
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.pages.games.minesweeper');
     }

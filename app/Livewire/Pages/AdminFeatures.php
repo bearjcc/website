@@ -45,7 +45,7 @@ class AdminFeatures extends Component
         session()->flash('message', 'Feature block removed!');
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         $featureBlocks = FeatureBlock::orderBy('order')->get();
         $games = Game::published()->get();

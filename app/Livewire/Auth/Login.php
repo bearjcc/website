@@ -37,7 +37,7 @@ class Login extends Component
         $this->addError('email', 'These credentials do not match our records.');
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.auth.login');
     }

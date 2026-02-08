@@ -514,7 +514,7 @@ class Sudoku extends Component
         return count($this->getRemainingNumbers($row, $col)) <= 8 && count($this->getRemainingNumbers($row, $col)) > 0;
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.games.sudoku');
     }

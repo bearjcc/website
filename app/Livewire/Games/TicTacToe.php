@@ -177,7 +177,7 @@ class TicTacToe extends Component
         return [];
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.games.tic-tac-toe');
     }

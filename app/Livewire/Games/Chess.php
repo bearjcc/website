@@ -238,7 +238,7 @@ class Chess extends Component
         $this->startTime = $state['startTime'] ?? null;
     }
 
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.games.chess');
     }
