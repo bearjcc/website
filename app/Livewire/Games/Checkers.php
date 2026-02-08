@@ -34,7 +34,7 @@ class Checkers extends Component
 
     public bool $showRules = false;
 
-    public function mount()
+    public function mount(): void
     {
         $this->game = Game::where('slug', 'checkers')->firstOrFail();
         $this->newGame();

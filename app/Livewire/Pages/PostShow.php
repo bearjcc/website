@@ -13,7 +13,7 @@ class PostShow extends Component
 {
     public Post $post;
 
-    public function mount(Post $post)
+    public function mount(Post $post): void
     {
         if ($post->status !== 'published') {
             abort(404);

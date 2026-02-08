@@ -27,7 +27,7 @@ class LoreEdit extends Component
 
     public array $tags = [];
 
-    public function mount(?LorePage $lorePage = null)
+    public function mount(?LorePage $lorePage = null): void
     {
         if ($lorePage && $lorePage->exists) {
             $this->lorePage = $lorePage;

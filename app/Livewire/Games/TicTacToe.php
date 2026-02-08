@@ -35,7 +35,7 @@ class TicTacToe extends Component
 
     public string $aiDifficulty = ''; // Current AI difficulty for display
 
-    public function mount()
+    public function mount(): void
     {
         $this->game = Game::where('slug', 'tic-tac-toe')->firstOrFail();
         $this->newGame();

@@ -75,7 +75,7 @@ class Sudoku extends Component
 
     public string $customPuzzleInput = '';
 
-    public function mount()
+    public function mount(): void
     {
         $this->newGame();
     }

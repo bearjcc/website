@@ -36,7 +36,7 @@ class Chess extends Component
 
     public bool $showRules = false;
 
-    public function mount()
+    public function mount(): void
     {
         $this->game = Game::where('slug', 'chess')->firstOrFail();
         $this->newGame();

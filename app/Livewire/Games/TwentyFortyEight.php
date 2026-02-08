@@ -27,7 +27,7 @@ class TwentyFortyEight extends Component
 
     public array $previousState = [];
 
-    public function mount()
+    public function mount(): void
     {
         $this->game = Game::where('slug', 'twenty-forty-eight')->firstOrFail();
         $this->newGame();

@@ -39,7 +39,7 @@ class Snake extends Component
 
     public bool $paused = false;
 
-    public function mount()
+    public function mount(): void
     {
         $this->game = Game::where('slug', 'snake')->firstOrFail();
         $this->newGame();
