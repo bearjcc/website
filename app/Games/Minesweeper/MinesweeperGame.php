@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Minesweeper;
 
 use App\Games\Contracts\GameInterface;

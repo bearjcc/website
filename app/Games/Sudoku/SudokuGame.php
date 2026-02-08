@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Games\Sudoku;
 
 use App\Games\Contracts\GameInterface;
