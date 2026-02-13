@@ -261,8 +261,12 @@ function getDisplayLocale() {
 }
 
 function updateDateDisplay() {
+  const locale = getDisplayLocale();
+  if (document.body) document.body.dataset.displayLocale = locale;
+  const regionEl = document.getElementById("region-display");
+  if (regionEl) regionEl.textContent = "Region: " + locale;
   const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  document.getElementById("date-display").textContent = new Date().toLocaleDateString(getDisplayLocale(), options);
+  document.getElementById("date-display").textContent = new Date().toLocaleDateString(locale, options);
 }
 
 // --- Dictionary & Submission ---
@@ -283,19 +287,6 @@ async function loadDictionary() {
     const res = await fetch("/assets/letter-walker/dictionary.txt");
     const text = await res.text();
     addWordsFromText(text);
-    if (getDisplayLocale() === "en-nz") {
-      try {
-        const nzRes = await fetch("/assets/letter-walker/dictionary-en-nz.txt");
-        const nzText = await nzRes.text();
-        nzText.split("\n").forEach(w => {
-          const trimmed = w.trim().toLowerCase();
-          if (trimmed && !trimmed.startsWith("#") && trimmed.length >= 3 && trimmed.length <= 8) gameState.dictionary.add(trimmed);
-        });
-      } catch (nzErr) {
-        console.warn("en-NZ dictionary unavailable, using main dictionary only:", nzErr);
-      }
-    }
-    ["autex", "joseph", "caswell", "luke", "rosa"].forEach(w => gameState.dictionary.add(w));
     gameState.dictionaryLoaded = true;
   } catch (e) {
     console.error("Dictionary load failed:", e);
