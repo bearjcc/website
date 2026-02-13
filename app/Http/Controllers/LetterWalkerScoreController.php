@@ -39,11 +39,11 @@ class LetterWalkerScoreController extends Controller
 
     public function index(): JsonResponse
     {
-        $scores = LetterWalkerScore::with('user')
+        $scores = LetterWalkerScore::query()
             ->orderBy('score', 'desc')
             ->orderBy('date_played', 'desc')
             ->limit(10)
-            ->get();
+            ->get(['id', 'player_name', 'score', 'date_played']);
 
         return response()->json([
             'success' => true,
@@ -53,11 +53,11 @@ class LetterWalkerScoreController extends Controller
 
     public function daily(): JsonResponse
     {
-        $scores = LetterWalkerScore::with('user')
+        $scores = LetterWalkerScore::query()
             ->todaysPuzzle()
             ->orderBy('score', 'desc')
             ->limit(10)
-            ->get();
+            ->get(['id', 'player_name', 'score', 'date_played']);
 
         return response()->json([
             'success' => true,

@@ -394,14 +394,30 @@ function showScoreModal() {
     const name = document.getElementById("player-name").value.trim() || "Anonymous";
     modal.classList.add("hidden");
     try {
-      await fetch("/api/letter-walker/score", {
+      const res = await fetch("/api/letter-walker/score", {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content },
-        body: JSON.stringify({ score: gameState.score, moves: gameState.moves, words_found: 1, puzzle_number: gameState.puzzleNumber, player_name: name })
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+          "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')?.content || ""
+        },
+        body: JSON.stringify({
+          score: gameState.score,
+          moves: gameState.moves,
+          words_found: gameState.foundWords.length,
+          puzzle_number: gameState.puzzleNumber,
+          player_name: name
+        })
       });
+      if (!res.ok) {
+        showToast("Failed to save score", "error");
+        return;
+      }
       showToast("Score saved!", "success");
       await refreshLeaderboard();
-    } catch (e) { showToast("Failed to save score", "error"); }
+    } catch (e) {
+      showToast("Failed to save score", "error");
+    }
   };
 }
 

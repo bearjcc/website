@@ -6,9 +6,9 @@
         <title>Letter Walker - Ursa Minor</title>
         <link rel="stylesheet" href="{{ asset('assets/letter-walker/styles.css') }}" />
 
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         @if(auth()->check())
             <meta name="user-authenticated" content="true">
-            <meta name="csrf-token" content="{{ csrf_token() }}">
         @endif
     </head>
     <body>

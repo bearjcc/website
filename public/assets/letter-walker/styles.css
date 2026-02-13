@@ -436,6 +436,8 @@ h1 {
   border: 1px solid #3a3a3c;
   border-radius: 8px;
   width: 100%;
+  max-width: 100%;
+  min-height: 80px;
   max-height: 20vh;
   overflow-y: auto;
 }
@@ -749,6 +751,27 @@ input[type="text"] {
   .found-word {
     font-size: 12px;
     padding: 3px 8px;
+  }
+
+  .leaderboard {
+    min-height: 100px;
+    max-height: 28vh;
+    padding: 10px;
+  }
+
+  .leaderboard h3 {
+    font-size: 0.8em;
+  }
+
+  .leaderboard-row {
+    padding: 8px 10px;
+    min-height: 36px;
+  }
+
+  .leaderboard-rank,
+  .leaderboard-name,
+  .leaderboard-score {
+    font-size: 0.85em;
   }
 
   footer {
