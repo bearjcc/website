@@ -250,25 +250,50 @@ function updateDisplay() {
   });
 }
 
+function getDisplayLocale() {
+  const browser = (navigator.language || navigator.userLanguage || "").toLowerCase();
+  if (browser === "en-nz" || browser === "en-us") return browser;
+  return "en-us";
+}
+
 function updateDateDisplay() {
   const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  document.getElementById("date-display").textContent = new Date().toLocaleDateString("en-US", options);
+  document.getElementById("date-display").textContent = new Date().toLocaleDateString(getDisplayLocale(), options);
 }
 
 // --- Dictionary & Submission ---
+function addWordsFromText(text) {
+  text.split("\n").forEach(w => {
+    const trimmed = w.trim().toLowerCase();
+    if (trimmed.length >= 3 && trimmed.length <= 8) gameState.dictionary.add(trimmed);
+  });
+}
+
 async function loadDictionary() {
+  const loading = document.getElementById("dict-loading");
+  loading.style.display = "flex";
   try {
-    const loading = document.getElementById("dict-loading");
-    loading.style.display = "flex";
     const res = await fetch("/assets/letter-walker/dictionary.txt");
     const text = await res.text();
-    text.split("\n").forEach(w => {
-      const trimmed = w.trim().toLowerCase();
-      if (trimmed.length >= 3 && trimmed.length <= 8) gameState.dictionary.add(trimmed);
-    });
+    addWordsFromText(text);
+    if (getDisplayLocale() === "en-nz") {
+      try {
+        const nzRes = await fetch("/assets/letter-walker/dictionary-en-nz.txt");
+        const nzText = await nzRes.text();
+        nzText.split("\n").forEach(w => {
+          const trimmed = w.trim().toLowerCase();
+          if (trimmed && !trimmed.startsWith("#") && trimmed.length >= 3 && trimmed.length <= 8) gameState.dictionary.add(trimmed);
+        });
+      } catch (nzErr) {
+        console.warn("en-NZ dictionary unavailable, using main dictionary only:", nzErr);
+      }
+    }
+    ["autex", "joseph", "caswell", "luke", "rosa"].forEach(w => gameState.dictionary.add(w));
     gameState.dictionaryLoaded = true;
-    loading.style.display = "none";
-  } catch (e) { console.error(e); }
+  } catch (e) {
+    console.error("Dictionary load failed:", e);
+  }
+  loading.style.display = "none";
 }
 
 function submitWord() {
