@@ -224,8 +224,8 @@ class Sudoku extends Component
                     $this->board[$placement['r']][$placement['c']] = $placement['d'];
                 }
 
-                $this->hintsUsed++;
                 $this->validateBoard();
+                $this->hintsUsed++;
 
                 $this->dispatch('hint-used');
             } else {
