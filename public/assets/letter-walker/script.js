@@ -230,8 +230,14 @@ function clearSelection() {
 
 function updateSelectedWord() {
   const word = gameState.selectedCells.map(sc => gameState.grid[sc.row][sc.col].letter).join("");
-  document.getElementById("selected-word").textContent = word;
-  document.getElementById("submit-btn").disabled = word.length < 3;
+  const selectedEl = document.getElementById("selected-word");
+  const clearBtn = document.getElementById("clear-btn");
+  const submitBtn = document.getElementById("submit-btn");
+  selectedEl.textContent = word;
+  if (word.length > 0) selectedEl.classList.add("has-letters");
+  else selectedEl.classList.remove("has-letters");
+  if (clearBtn) clearBtn.disabled = gameState.selectedCells.length === 0;
+  if (submitBtn) submitBtn.disabled = word.length < 3;
 }
 
 // --- UI Updates ---
@@ -271,7 +277,10 @@ function addWordsFromText(text) {
 
 async function loadDictionary() {
   const loading = document.getElementById("dict-loading");
-  loading.style.display = "flex";
+  if (loading) {
+    loading.style.display = "flex";
+    loading.setAttribute("aria-hidden", "false");
+  }
   try {
     const res = await fetch("/assets/letter-walker/dictionary.txt");
     const text = await res.text();
@@ -293,7 +302,10 @@ async function loadDictionary() {
   } catch (e) {
     console.error("Dictionary load failed:", e);
   }
-  loading.style.display = "none";
+  if (loading) {
+    loading.style.display = "none";
+    loading.setAttribute("aria-hidden", "true");
+  }
 }
 
 function submitWord() {
