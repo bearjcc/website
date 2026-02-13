@@ -16,12 +16,10 @@ class MinimalHomepageTest extends TestCase
 
         $response->assertStatus(200);
 
-        // Hero tagline present
         $response->assertSee('The sky is the limit.');
 
-        // CTAs present with one-word labels
-        $response->assertSee('Play');
-        $response->assertSee('Browse');
+        // Games section is the primary CTA
+        $response->assertSee('Free Games to Play');
     }
 
     public function test_homepage_uses_visual_first_game_cards(): void
@@ -146,10 +144,8 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // CTAs should use btn-primary and btn-secondary classes
-        // which now include min-height: 44px
-        $this->assertStringContainsString('btn-primary', $html);
-        $this->assertStringContainsString('btn-secondary', $html);
+        // Nav and key controls use min-h-[44px] for touch target
+        $this->assertStringContainsString('min-h-[44px]', $html);
     }
 
     public function test_homepage_uses_embla_carousel(): void
