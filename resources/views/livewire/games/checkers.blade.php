@@ -93,7 +93,7 @@
                             <div class="checkers-piece {{ $piece }} {{ $isKing ? 'king' : '' }}"
                                  aria-label="{{ $this->getPieceDisplayName($piece) }}">
                                 @if($isKing)
-                                    <div class="king-crown">♔</div>
+                                    <div class="king-crown" aria-hidden="true">K</div>
                                 @endif
                             </div>
                         @elseif($isValidMove)
@@ -128,7 +128,7 @@
                     <span>Black</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <div class="w-3 h-3 rounded-full bg-star border border-star/60">♔</div>
+                    <div class="w-3 h-3 rounded-full bg-star border border-star/60 flex items-center justify-center text-[8px] font-bold text-space-900">K</div>
                     <span>King</span>
                 </div>
             </div>

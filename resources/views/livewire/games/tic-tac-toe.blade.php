@@ -54,7 +54,7 @@
                     </div>
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0 w-5 h-5 rounded-full bg-star/20 flex items-center justify-center text-xs font-semibold text-star mt-0.5">2</div>
-                        <p>Choose your symbol: Moon (🌙) or Star (⭐) when playing against AI.</p>
+                        <p>Choose your symbol: Moon or Star when playing against AI.</p>
                     </div>
                     <div class="flex items-start gap-3">
                         <div class="flex-shrink-0 w-5 h-5 rounded-full bg-star/20 flex items-center justify-center text-xs font-semibold text-star mt-0.5">3</div>
