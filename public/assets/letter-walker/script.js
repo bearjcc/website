@@ -136,13 +136,13 @@ function shiftRow(rowIndex, direction) {
     row.unshift({ letter: gameState.rng.nextLetter(), hidden: false });
   }
   
-  // Only count as a new move if this is a different row/col/direction than the last move
-  const currentMoveType = { type: 'row', index: rowIndex, direction: direction };
+  // One move = moving a single row any number of times; move ends when another row or col is moved
+  const currentMoveType = { type: 'row', index: rowIndex };
   if (!isSameMoveType(gameState.lastMoveType, currentMoveType)) {
     gameState.moves++;
     gameState.lastMoveType = currentMoveType;
   }
-  
+
   clearSelection();
   renderGrid();
   updateDisplay();
@@ -162,25 +162,23 @@ function shiftCol(colIndex, direction) {
     gameState.grid[0][colIndex] = { letter: gameState.rng.nextLetter(), hidden: false };
   }
   
-  // Only count as a new move if this is a different row/col/direction than the last move
-  const currentMoveType = { type: 'col', index: colIndex, direction: direction };
+  // One move = moving a single col any number of times; move ends when another row or col is moved
+  const currentMoveType = { type: 'col', index: colIndex };
   if (!isSameMoveType(gameState.lastMoveType, currentMoveType)) {
     gameState.moves++;
     gameState.lastMoveType = currentMoveType;
   }
-  
+
   clearSelection();
   renderGrid();
   updateDisplay();
   saveGameState();
 }
 
-// Helper function to check if two move types are the same
+// Same row/col = same move (direction does not matter; move ends only when another row or col is shifted)
 function isSameMoveType(lastMove, currentMove) {
   if (!lastMove || !currentMove) return false;
-  return lastMove.type === currentMove.type &&
-         lastMove.index === currentMove.index &&
-         lastMove.direction === currentMove.direction;
+  return lastMove.type === currentMove.type && lastMove.index === currentMove.index;
 }
 
 // --- Selection ---
@@ -321,12 +319,10 @@ function submitWord() {
     return;
   }
 
-  // Calculate high score logic
-  // Penalty is based on total letter count of all found words, not move count
-  const totalLetterCount = gameState.foundWords.reduce((sum, w) => sum + w.length, 0) + word.length;
-  const basePoints = word.length * 50;
-  const movePenalty = totalLetterCount * 5;
-  gameState.score = Math.max(0, basePoints - movePenalty);
+  // 10 pts per letter, -1 per move, 2x for 8-letter words
+  const base = word.length * 10 - gameState.moves;
+  const multiplier = word.length === 8 ? 2 : 1;
+  gameState.score = Math.max(0, base * multiplier);
   gameState.foundWords.push(word.toUpperCase());
   
   showToast(`Found ${word.toUpperCase()}!`, "success");

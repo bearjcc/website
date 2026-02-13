@@ -105,10 +105,10 @@
                         <p>Submit your word when you find a valid word (3–8 letters). Words must be in a straight line (horizontal or vertical).</p>
                         <h3>Scoring</h3>
                         <ul>
-                            <li>Base points: word length &times; 10 (e.g. 4 letters = 40 points).</li>
-                            <li>Each move costs 1 point (subtracted from the base).</li>
+                            <li>10 points per letter (e.g. 4 letters = 40 points).</li>
+                            <li>Minus 1 point per move. A move = shifting one row or column; shifting the same row or column multiple times counts as 1 move.</li>
                             <li>8-letter words get a 2&times; multiplier.</li>
-                            <li>Final score = (base &minus; moves) &times; multiplier, never below zero.</li>
+                            <li>Final score = (letters &times; 10 &minus; moves) &times; multiplier, never below zero.</li>
                         </ul>
                     </div>
                     <div class="modal-buttons">
