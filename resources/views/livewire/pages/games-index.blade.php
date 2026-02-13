@@ -18,24 +18,10 @@
         @else
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 @foreach($games as $game)
-                    @php
-                        // Map game type or slug to visual motif
-                        $motif = match($game->slug) {
-                            'tic-tac-toe' => 'tictactoe',
-                            'connect-4' => 'connect4',
-                            'twenty-forty-eight', '2048' => '2048',
-                            default => match($game->type) {
-                                'board' => 'board',
-                                'puzzle' => 'puzzle',
-                                'card' => 'cards',
-                                default => $game->slug,
-                            },
-                        };
-                    @endphp
                     <x-ui.game-card
                         :href="route('games.play', $game->slug)"
                         :title="$game->title"
-                        :motif="$motif"
+                        :motif="$game->getMotifKey()"
                         :aria="__('ui.play_game', ['game' => $game->title])"
                     />
                 @endforeach

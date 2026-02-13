@@ -35,4 +35,44 @@ class Game extends Model
     {
         return $query->where('status', 'published');
     }
+
+    /**
+     * Canonical slug (and optional type) to motif key for game-card and game page hero.
+     * Keys: tictactoe, connect4, sudoku, chess, checkers, minesweeper, snake, 2048, board, puzzle, cards, sparkles.
+     */
+    public static function motifKeyForSlug(string $slug, ?string $type = null): string
+    {
+        $bySlug = match ($slug) {
+            'tic-tac-toe' => 'tictactoe',
+            'connect-4' => 'connect4',
+            'twenty-forty-eight', '2048' => '2048',
+            'sudoku' => 'sudoku',
+            'minesweeper' => 'minesweeper',
+            'snake' => 'snake',
+            'checkers' => 'checkers',
+            'chess' => 'chess',
+            'letter-walker' => 'board',
+            default => null,
+        };
+        if ($bySlug !== null) {
+            return $bySlug;
+        }
+        if ($type !== null) {
+            $byType = match ($type) {
+                'board' => 'board',
+                'puzzle' => 'puzzle',
+                'card' => 'cards',
+                default => null,
+            };
+            if ($byType !== null) {
+                return $byType;
+            }
+        }
+        return 'sparkles';
+    }
+
+    public function getMotifKey(): string
+    {
+        return self::motifKeyForSlug($this->slug, $this->type);
+    }
 }

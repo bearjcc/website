@@ -30,25 +30,11 @@
                 <h2 class="h3 text-center text-ink mb-8">Free Games to Play</h2>
                 
                 <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-                    @php
-                        // Map game slugs to motifs
-                        $motifMap = [
-                            'tic-tac-toe' => 'tictactoe',
-                            'connect-4' => 'connect4',
-                            'sudoku' => 'sudoku',
-                            'chess' => 'chess',
-                            'checkers' => 'checkers',
-                            'minesweeper' => 'minesweeper',
-                            'snake' => 'snake',
-                            'twenty-forty-eight' => '2048',
-                        ];
-                    @endphp
-
                     @foreach($games as $game)
                         <x-ui.game-card
                             :href="route('games.play', $game->slug)"
                             :title="$game->title"
-                            :motif="$motifMap[$game->slug] ?? null"
+                            :motif="$game->getMotifKey()"
                         />
                     @endforeach
                 </div>
