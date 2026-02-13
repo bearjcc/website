@@ -126,7 +126,7 @@
             <div class="glass rounded-xl border border-star/40 bg-star/5 p-6 text-center space-y-3">
                 <div class="flex items-center justify-center gap-2">
                     <x-heroicon-o-star class="w-6 h-6 text-star animate-pulse" />
-                    <p class="text-xl font-bold text-star">🎉 Congratulations!</p>
+                    <p class="text-xl font-bold text-star">Congratulations!</p>
                     <x-heroicon-o-star class="w-6 h-6 text-star animate-pulse" style="animation-delay: 0.5s" />
                 </div>
                 <div class="flex items-center justify-center gap-3 text-sm text-ink/70">

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Games\Chess;
 
 use Chess\Variant\Classical\Board as ChessBoard;
+use Chess\Variant\Classical\PGN\Color as ChessColor;
 
 /**
  * Chess game engine using php-chess library
@@ -20,27 +21,27 @@ class ChessEngine
 
     public const BLACK = 'black';
 
-    public const WHITE_ROOK = 'white_rook';
-
-    public const WHITE_KNIGHT = 'white_knight';
-
-    public const WHITE_BISHOP = 'white_bishop';
+    public const WHITE_KING = 'white_king';
 
     public const WHITE_QUEEN = 'white_queen';
 
-    public const WHITE_KING = 'white_king';
+    public const WHITE_ROOK = 'white_rook';
+
+    public const WHITE_BISHOP = 'white_bishop';
+
+    public const WHITE_KNIGHT = 'white_knight';
 
     public const WHITE_PAWN = 'white_pawn';
 
-    public const BLACK_ROOK = 'black_rook';
-
-    public const BLACK_KNIGHT = 'black_knight';
-
-    public const BLACK_BISHOP = 'black_bishop';
+    public const BLACK_KING = 'black_king';
 
     public const BLACK_QUEEN = 'black_queen';
 
-    public const BLACK_KING = 'black_king';
+    public const BLACK_ROOK = 'black_rook';
+
+    public const BLACK_BISHOP = 'black_bishop';
+
+    public const BLACK_KNIGHT = 'black_knight';
 
     public const BLACK_PAWN = 'black_pawn';
 
@@ -97,12 +98,13 @@ class ChessEngine
     {
         $array = array_fill(0, self::BOARD_SIZE, array_fill(0, self::BOARD_SIZE, self::EMPTY));
 
-        for ($row = 0; $row < self::BOARD_SIZE; $row++) {
-            for ($col = 0; $col < self::BOARD_SIZE; $col++) {
-                $square = chr(97 + $col).(self::BOARD_SIZE - $row);
-                $piece = $board->pieceBySq($square);
-                $array[$row][$col] = $piece ? self::pieceToString($piece) : self::EMPTY;
-            }
+        foreach ($board as $piece) {
+            $square = $piece->sq;
+            $rank = (int) substr($square, 1);
+            $row = self::BOARD_SIZE - $rank;
+            $col = ord($square[0]) - ord('a');
+
+            $array[$row][$col] = self::pieceToString($piece);
         }
 
         return $array;
@@ -118,9 +120,9 @@ class ChessEngine
         }
 
         $color = $piece->color;
-        $type = $piece->id;
+        $type = strtoupper($piece->id);
 
-        $colorPrefix = $color === 'W' ? 'white_' : 'black_';
+        $colorPrefix = (strtoupper($color) === 'W') ? 'white_' : 'black_';
 
         return match ($type) {
             'K' => $colorPrefix.'king',
@@ -138,39 +140,27 @@ class ChessEngine
      */
     public static function getValidMoves(array $state): array
     {
-        $libColor = $state['currentPlayer'] === self::WHITE ? 'W' : 'B';
-
-        if (($state['moves'] ?? 0) === 0) {
-            $board = new ChessBoard();
-            $board->turn = $libColor;
-        } else {
-            $board = self::arrayToBoard($state['board']);
-            $board->turn = $libColor;
-        }
+        $board = self::arrayToBoard($state['board']);
+        $currentColor = $state['currentPlayer'] === self::WHITE ? ChessColor::W : ChessColor::B;
+        $board->turn = $currentColor;
 
         $moves = [];
-        for ($row = 0; $row < self::BOARD_SIZE; $row++) {
-            for ($col = 0; $col < self::BOARD_SIZE; $col++) {
-                $fromSq = chr(97 + $col).(self::BOARD_SIZE - $row);
-                $piece = $board->pieceBySq($fromSq);
-                if (! $piece || $piece->color !== $libColor) {
-                    continue;
-                }
-                $fromRow = $row;
-                $fromCol = $col;
-                foreach ($board->legal($fromSq) as $toSq) {
-                    $toRank = (int) substr($toSq, 1);
-                    $toRow = self::BOARD_SIZE - $toRank;
-                    $toCol = ord(substr($toSq, 0, 1)) - ord('a');
-                    $moves[] = [
-                        'from' => ['row' => $fromRow, 'col' => $fromCol],
-                        'to' => ['row' => $toRow, 'col' => $toCol],
-                        'piece' => $state['board'][$fromRow][$fromCol],
-                        'captured' => $state['board'][$toRow][$toCol] !== self::EMPTY ? $state['board'][$toRow][$toCol] : null,
-                        'promotion' => false,
-                        'special' => null,
-                    ];
-                }
+        foreach ($board->pieces($currentColor) as $piece) {
+            $fromSquare = $piece->sq;
+            $fromRow = self::BOARD_SIZE - (int) substr($fromSquare, 1);
+            $fromCol = ord($fromSquare[0]) - ord('a');
+            foreach ($board->legal($fromSquare) as $toSquare) {
+                $toRow = self::BOARD_SIZE - (int) substr($toSquare, 1);
+                $toCol = ord($toSquare[0]) - ord('a');
+                $moves[] = [
+                    'from' => ['row' => $fromRow, 'col' => $fromCol],
+                    'to' => ['row' => $toRow, 'col' => $toCol],
+                    'piece' => $state['board'][$fromRow][$fromCol],
+                    'captured' => $state['board'][$toRow][$toCol] !== self::EMPTY ? $state['board'][$toRow][$toCol] : null,
+                    'promotion' => false,
+                    'special' => null,
+                    'notation' => $fromSquare.$toSquare,
+                ];
             }
         }
 
@@ -205,8 +195,7 @@ class ChessEngine
                 }
             }
         }
-        $board->sqCount = $board->sqCount();
-        $board->turn = 'W';
+        $board->refresh();
 
         return $board;
     }
@@ -227,7 +216,7 @@ class ChessEngine
      */
     private static function stringToPiece(string $pieceString, string $square)
     {
-        $color = substr($pieceString, 0, 6) === 'white_' ? 'W' : 'B';
+        $color = substr($pieceString, 0, 6) === 'white_' ? ChessColor::W : ChessColor::B;
         $type = match (substr($pieceString, 6)) {
             'king' => 'K',
             'queen' => 'Q',
@@ -268,12 +257,14 @@ class ChessEngine
             $fromSquare = self::arrayPosToSquare($move['from']['row'], $move['from']['col']);
             $toSquare = self::arrayPosToSquare($move['to']['row'], $move['to']['col']);
 
-            $sanMove = $fromSquare.$toSquare;
-            if ($move['promotion']) {
-                $sanMove .= '=Q'; // Default to queen promotion
+            $lan = $fromSquare.$toSquare;
+            if ($move['promotion'] ?? false) {
+                $lan .= 'q'; // queen promotion in LAN
             }
-
-            $board->play($sanMove);
+            $currentColor = $state['currentPlayer'] === self::WHITE ? ChessColor::W : ChessColor::B;
+            if (! $board->playLan($currentColor, $lan)) {
+                return $state;
+            }
 
             $newState = $state;
             $newState['board'] = self::boardToArray($board);
@@ -303,7 +294,7 @@ class ChessEngine
      */
     private static function checkGameState(array $state, ChessBoard $board): array
     {
-        $state['inCheck'] = $board->isChecked($state['currentPlayer'] === self::WHITE ? 'W' : 'B');
+        $state['inCheck'] = $board->isCheck();
 
         // Check for checkmate or stalemate
         if ($board->isMate()) {

@@ -26,9 +26,8 @@ class SudokuGameTest extends TestCase
         for ($r = 0; $r < 9; $r++) {
             for ($c = 0; $c < 9; $c++) {
                 if ($original[$r][$c] === 0) {
-                    $component->call('placeNumberAt', $r, $c, 5);
-                    $component->assertSet("board.{$r}.{$c}", 5);
-
+                    $component->call('selectCell', $r, $c)->call('placeNumber', 5);
+                    $this->assertEquals(5, $component->get('board')[$r][$c]);
                     return;
                 }
             }
@@ -49,15 +48,11 @@ class SudokuGameTest extends TestCase
                     $expected = $original[$r][$c];
                     $component->call('selectCell', $r, $c);
                     $component->call('placeNumber', 9);
-
-                    // Board should be unchanged (given cells are read-only)
-                    $this->assertSame($expected, $component->get('board')[$r][$c]);
-
+                    $this->assertSame($expected, $component->get('board')[$r][$c], 'Original puzzle cell must not change');
                     return;
                 }
             }
         }
-
         $this->fail('No original puzzle cells found');
     }
 
@@ -120,7 +115,7 @@ class SudokuGameTest extends TestCase
                 if ($original[$r][$c] === 0) {
                     $row = $r;
                     $col = $c;
-                    break;
+                    break 2;
                 }
             }
         }

@@ -109,45 +109,54 @@
                 <div id="found-words-list"></div>
             </div>
 
-            <footer>
-                Game concept by <strong>Luke Walker</strong>
-            </footer>
-        </div>
+            <div class="leaderboard" id="leaderboard">
+                <h3>Today&#039;s Top Scores</h3>
+                <div id="leaderboard-body">
+                    <p class="leaderboard-empty">No scores yet today. Be the first!</p>
+                </div>
+            </div>
 
-        <div id="message" class="toast"></div>
+            <div id="message" class="message"></div>
 
-        <!-- Modals -->
-        <div id="help-modal" class="modal hidden">
-            <div class="modal-overlay"></div>
-            <div class="modal-content">
-                <h2>How to Play</h2>
-                <div class="help-scroll">
-                    <p><strong>Rearrange:</strong> Slide rows and columns using the arrow buttons. Each shift adds a move.</p>
-                    <p><strong>Select:</strong> Click and drag (or touch and drag) to select letters that spell a word (3-8 letters).</p>
-                    <p><strong>Score:</strong> Submit your word to end the game. Longer words and fewer moves mean higher scores!</p>
-                    <div class="help-tips">
-                        <div class="tip"><span>☀</span> Shifts hide the outgoing letter and reveal a new one.</div>
+            <!-- Help Modal -->
+            <div id="help-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>How to Play</h2>
+                    <div class="help-instructions">
+                        <p>Slide the rows and columns using the arrow buttons to rearrange the letters.</p>
+                        <p>Click and drag to select letters that spell a word.</p>
+                        <p>Submit your word when you find a valid word (3–8 letters). Words must be in a straight line (horizontal or vertical).</p>
+                        <h3>Scoring</h3>
+                        <ul>
+                            <li>Base points: word length &times; 10 (e.g. 4 letters = 40 points).</li>
+                            <li>Each move costs 1 point (subtracted from the base).</li>
+                            <li>8-letter words get a 2&times; multiplier.</li>
+                            <li>Final score = (base &minus; moves) &times; multiplier, never below zero.</li>
+                        </ul>
+                    </div>
+                    <div class="modal-buttons">
+                        <button id="close-help-btn" class="btn primary-btn">Got it!</button>
                     </div>
                 </div>
-                <button id="close-help-btn" class="btn primary full-width">Start Playing</button>
             </div>
-        </div>
 
-        <div id="name-modal" class="modal hidden">
-            <div class="modal-overlay"></div>
-            <div class="modal-content">
-                <h2>High Score!</h2>
-                <div class="final-score-display">
-                    <span id="final-score">0</span>
-                    <span class="score-label">Points</span>
-                </div>
-                <p>Enter your name for the leaderboard:</p>
-                <input type="text" id="player-name" maxlength="20" placeholder="Player Name" autofocus />
-                <div class="modal-actions">
-                    <button id="save-name-btn" class="btn primary">Save</button>
-                    <button id="cancel-name-btn" class="btn secondary">Skip</button>
+            <!-- Arcade-style name entry modal -->
+            <div id="name-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h2>Game Over!</h2>
+                    <p>Score: <span id="final-score"></span></p>
+                    <p>Enter your name for the leaderboard:</p>
+                    <input type="text" id="player-name" maxlength="50" placeholder="Your Name" />
+                    <div class="modal-buttons">
+                        <button id="save-name-btn" class="btn primary-btn">Save Score</button>
+                        <button id="cancel-name-btn" class="btn secondary-btn">Cancel</button>
+                    </div>
                 </div>
             </div>
+
+            <footer class="letter-walker-footer">
+                Game concept by <strong>Luke Walker</strong>
+            </footer>
         </div>
 
         <script src="{{ asset('assets/letter-walker/script.js') }}"></script>

@@ -304,8 +304,51 @@ function showToast(text, type) {
   setTimeout(() => toast.style.display = "none", 3000);
 }
 
-// --- Modals ---
-function initModals() {
+// --- Modals & helpers ---
+async function refreshLeaderboard() {
+  const leaderboardContainer = document.getElementById("leaderboard-body");
+  if (!leaderboardContainer) return;
+  leaderboardContainer.textContent = "Loading today\u2019s scores\u2026";
+  try {
+    const response = await fetch("/api/letter-walker/scores/daily", { headers: { Accept: "application/json" } });
+    if (!response.ok) {
+      leaderboardContainer.textContent = "Unable to load leaderboard.";
+      return;
+    }
+    const data = await response.json();
+    const scores = Array.isArray(data.scores) ? data.scores : [];
+    if (!scores.length) {
+      leaderboardContainer.innerHTML = '<p class="leaderboard-empty">No scores yet today. Be the first!</p>';
+      return;
+    }
+    const list = document.createElement("div");
+    list.className = "leaderboard-list";
+    scores.forEach((entry, index) => {
+      const row = document.createElement("div");
+      row.className = "leaderboard-row";
+      const rank = document.createElement("span");
+      rank.className = "leaderboard-rank";
+      rank.textContent = `#${index + 1}`;
+      const name = document.createElement("span");
+      name.className = "leaderboard-name";
+      name.textContent = entry.player_name || "Anonymous";
+      const score = document.createElement("span");
+      score.className = "leaderboard-score";
+      score.textContent = entry.score;
+      row.appendChild(rank);
+      row.appendChild(name);
+      row.appendChild(score);
+      list.appendChild(row);
+    });
+    leaderboardContainer.innerHTML = "";
+    leaderboardContainer.appendChild(list);
+  } catch (error) {
+    console.error("Error loading leaderboard:", error);
+    leaderboardContainer.textContent = "Unable to load leaderboard.";
+  }
+}
+
+function initializeHelpModal() {
   const helpModal = document.getElementById("help-modal");
   document.getElementById("help-btn").addEventListener("click", () => helpModal.classList.remove("hidden"));
   document.getElementById("close-help-btn").addEventListener("click", () => {
@@ -332,6 +375,7 @@ function showScoreModal() {
         body: JSON.stringify({ score: gameState.score, moves: gameState.moves, words_found: 1, puzzle_number: gameState.puzzleNumber, player_name: name })
       });
       showToast("Score saved!", "success");
+      await refreshLeaderboard();
     } catch (e) { showToast("Failed to save score", "error"); }
   };
 }
@@ -339,9 +383,10 @@ function showScoreModal() {
 // --- Initialization ---
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
-  initModals();
+  initializeHelpModal();
   initGame();
   loadDictionary();
+  refreshLeaderboard();
 
   // Global events
   document.addEventListener("mouseup", endSelection);

@@ -114,8 +114,9 @@
                     wire:click="dropPiece({{ $col }})"
                     @disabled($state['gameOver'] || !$this->canDropInColumn($col))
                     class="column-button {{ $this->canDropInColumn($col) && !$state['gameOver'] ? 'available' : '' }}"
+                    aria-label="Drop in column {{ $col + 1 }}"
                 >
-                    ↓
+                    <x-heroicon-o-chevron-down class="w-4 h-4" />
                 </button>
             @endfor
         </div>

@@ -9,6 +9,7 @@ use App\Livewire\Pages\Home;
 use App\Livewire\Pages\LoreEdit;
 use App\Livewire\Pages\LoreIndex;
 use App\Livewire\Pages\LoreShow;
+use App\Models\Game;
 use Illuminate\Support\Facades\Route;
 
 // Health check for Railway deployment
@@ -29,19 +30,35 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
 });
 
-// Games routes (public) - lazy load game pages with starfield placeholder
-Route::prefix('games')->name('games.')->group(function () {
-    Route::get('/', \App\Livewire\Pages\GamesIndex::class)->name('index');
-    Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('tic-tac-toe')->lazy();
-    Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('connect-4')->lazy();
-    Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('sudoku')->lazy();
-    Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('twenty-forty-eight')->lazy();
-    Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('minesweeper')->lazy();
-    Route::get('/snake', \App\Livewire\Games\Snake::class)->name('snake')->lazy();
-    Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('checkers')->lazy();
-    Route::get('/chess', \App\Livewire\Games\Chess::class)->name('chess')->lazy();
-    Route::view('/letter-walker', 'games.letter-walker')->name('letter-walker');
-    Route::get('/{game:slug}', GamePlay::class)->name('play');
+// Games index (must be before /{game:slug} so /games is not matched as a slug)
+Route::get('/games', \App\Livewire\Pages\GamesIndex::class)->name('games.index');
+
+// Top-level game routes (canonical URLs) - lazy load with starfield placeholder
+Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('games.tic-tac-toe')->lazy();
+Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('games.connect-4')->lazy();
+Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('games.sudoku')->lazy();
+Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('games.twenty-forty-eight')->lazy();
+Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('games.minesweeper')->lazy();
+Route::get('/snake', \App\Livewire\Games\Snake::class)->name('games.snake')->lazy();
+Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('games.checkers')->lazy();
+Route::get('/chess', \App\Livewire\Games\Chess::class)->name('games.chess')->lazy();
+Route::view('/letter-walker', 'games.letter-walker')->name('games.letter-walker');
+Route::get('/{game:slug}', GamePlay::class)->name('games.play');
+
+// Legacy /games/* redirects (301 to top-level)
+Route::prefix('games')->group(function () {
+    $legacyRedirects = [
+        'tic-tac-toe', 'connect-4', 'sudoku', 'twenty-forty-eight',
+        'minesweeper', 'snake', 'checkers', 'chess', 'letter-walker',
+    ];
+    foreach ($legacyRedirects as $slug) {
+        Route::get('/'.$slug, function () use ($slug) {
+            return redirect('/'.$slug, 301);
+        });
+    }
+    Route::get('/{game:slug}', function (Game $game) {
+        return redirect('/'.$game->slug, 301);
+    });
 });
 
 // Sudoku API routes

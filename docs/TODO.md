@@ -22,7 +22,7 @@ Homepage live with night sky theme, visual-first game cards, component architect
 - [x] Letter Walker — Wordle-style, vanilla JS, score API
 
 ### Game UI Cleanup ✅ COMPLETE
-- [x] Remove all emoji from controls (replaced with Heroicons)
+- [x] Remove all emoji from controls (replaced with Heroicons; verified and fixed remaining instances)
 - [x] Extract 1,000+ lines of inline styles to app.css
 - [x] Apply night sky motif (constellation completion messages)
 - [x] Convert all colors to HSL tokens
@@ -46,8 +46,8 @@ Homepage live with night sky theme, visual-first game cards, component architect
 ### Remaining Tasks
 
 **Games** (all implemented):
-- [x] Chess — Livewire, engine, tests
-- [x] Checkers — Livewire, engine, tests
+- [x] Chess — Livewire, engine, tests (php-chess engine, game-play map)
+- [x] Checkers — Livewire, engine, tests (game-play map)
 
 **Tech Debt / Cleanup**:
 - [x] Fix Connect4 engine tests (7 failures: wins, draw, scoring) — tests passing
