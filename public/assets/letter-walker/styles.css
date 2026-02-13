@@ -571,6 +571,25 @@ h1 {
   margin-bottom: 0;
 }
 
+.help-instructions h3 {
+  color: #d7dadc;
+  font-size: 1em;
+  font-weight: 600;
+  margin: 16px 0 8px;
+}
+
+.help-instructions ul {
+  margin: 0 0 12px;
+  padding-left: 1.25em;
+  color: #d7dadc;
+  font-size: 0.95em;
+  line-height: 1.5;
+}
+
+.help-instructions li {
+  margin-bottom: 4px;
+}
+
 /* Help button styling */
 #help-btn {
   min-width: 40px;

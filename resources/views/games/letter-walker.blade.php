@@ -144,7 +144,14 @@
                     <div class="help-instructions">
                         <p>Slide the rows and columns using the arrow buttons to rearrange the letters.</p>
                         <p>Click and drag to select letters that spell a word.</p>
-                        <p>Submit your word and earn points for each valid word found.</p>
+                        <p>Submit your word when you find a valid word (3–8 letters). Words must be in a straight line (horizontal or vertical).</p>
+                        <h3>Scoring</h3>
+                        <ul>
+                            <li>Base points: word length &times; 10 (e.g. 4 letters = 40 points).</li>
+                            <li>Each move costs 1 point (subtracted from the base).</li>
+                            <li>8-letter words get a 2&times; multiplier.</li>
+                            <li>Final score = (base &minus; moves) &times; multiplier, never below zero.</li>
+                        </ul>
                     </div>
                     <div class="modal-buttons">
                         <button id="close-help-btn" class="btn primary-btn">Got it!</button>
