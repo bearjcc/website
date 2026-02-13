@@ -21,7 +21,7 @@ Homepage live with night sky theme, visual-first game cards, component architect
 - [x] 2048 — Clean, HSL tokens
 
 ### Game UI Cleanup ✅ COMPLETE
-- [x] Remove all emoji from controls (replaced with Heroicons)
+- [x] Remove all emoji from controls (replaced with Heroicons; verified and fixed remaining instances)
 - [x] Extract 1,000+ lines of inline styles to app.css
 - [x] Apply night sky motif (constellation completion messages)
 - [x] Convert all colors to HSL tokens
@@ -45,8 +45,8 @@ Homepage live with night sky theme, visual-first game cards, component architect
 ### Remaining Tasks
 
 **Missing Games**:
-- [ ] Chess (in database, not yet implemented)
-- [ ] Checkers (in database, not yet implemented)
+- [x] Chess (implemented; php-chess engine, game-play map)
+- [x] Checkers (implemented; game-play map)
 
 **Sudoku Enhancements** ✅ COMPLETE:
 - [x] CSS Grid layout with 3x3 box borders
