@@ -219,6 +219,19 @@ function endSelection() {
   gameState.isSelecting = false;
 }
 
+// Touch drag: no touchenter; use touchmove + elementFromPoint to extend selection
+function handleTouchMove(e) {
+  if (!gameState.isSelecting || !e.touches.length) return;
+  const t = e.touches[0];
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  if (el && el.classList.contains("grid-cell") && el.dataset.row != null) {
+    const r = parseInt(el.dataset.row, 10);
+    const c = parseInt(el.dataset.col, 10);
+    updateSelection(r, c);
+    e.preventDefault();
+  }
+}
+
 function clearSelection() {
   gameState.selectedCells = [];
   gameState.isSelecting = false;
@@ -431,6 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Global events
   document.addEventListener("mouseup", endSelection);
   document.addEventListener("touchend", endSelection);
+  document.addEventListener("touchmove", handleTouchMove, { passive: false });
   
   // Row/Col Shift buttons
   document.addEventListener("click", (e) => {
