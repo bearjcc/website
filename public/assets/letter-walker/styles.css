@@ -10,7 +10,7 @@
 
 :root {
   --lw-font-main: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-  /* Dark theme (default) */
+  /* Dark theme (default when no data-theme) */
   --lw-bg: #121213;
   --lw-text: #d7dadc;
   --lw-muted: #818384;
@@ -25,6 +25,23 @@
   --cell-size: 32px;
   --cell-gap: 4px;
   --arrow-size: 28px;
+}
+
+/* System light preference before JS runs (avoids flash when no lw-theme saved) */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --lw-bg: #ffffff;
+    --lw-text: #121213;
+    --lw-muted: #787c7e;
+    --lw-border: #d3d6da;
+    --lw-card-bg: #f5f5f5;
+    --lw-cell-bg: #ffffff;
+    --lw-cell-border: #d3d6da;
+    --lw-cell-selected: #538d4e;
+    --lw-btn-border: #121213;
+    --lw-btn-disabled: #787c7e;
+    --arrow-bg: #e5e7eb;
+  }
 }
 
 [data-theme="light"] {
@@ -60,12 +77,28 @@ body {
 }
 
 /* ==========================================================================
-   LAYOUT - Centered column (~420px)
+   LAYOUT - Centered column; wider on desktop so not always mobile strip
    ========================================================================== */
 
 .wrap {
   width: 100%;
   max-width: 420px;
+}
+
+@media screen and (min-width: 640px) {
+  .wrap {
+    max-width: 520px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .wrap {
+    max-width: 560px;
+  }
+  :root {
+    --cell-size: 36px;
+    --arrow-size: 32px;
+  }
 }
 
 /* ==========================================================================
