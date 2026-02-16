@@ -188,6 +188,7 @@ body {
 .board-outer {
   padding: 12px;
   margin-bottom: 20px;
+  touch-action: none; /* allow tap-and-drag word selection on mobile without page scroll */
 }
 
 .controls-row {

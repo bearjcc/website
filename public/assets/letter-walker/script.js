@@ -30,6 +30,7 @@ const gameState = {
   dictionary: new Set(),
   isSelecting: false,
   selectionStart: null,
+  activePointerId: null,
   dictionaryLoaded: false,
   theme: localStorage.getItem('lw-theme') || 'light',
   lastMoveType: null // Tracks {type: 'row'|'col', index: number, direction: string}
@@ -114,13 +115,14 @@ function renderGrid() {
       cell.dataset.row = r;
       cell.dataset.col = c;
 
-      cell.addEventListener("mousedown", (e) => startSelection(r, c));
-      cell.addEventListener("mouseenter", (e) => updateSelection(r, c));
-      cell.addEventListener("touchstart", (e) => {
-        if (e.cancelable) e.preventDefault();
+      cell.addEventListener("pointerdown", (e) => {
+        if (e.pointerType === "touch" && e.cancelable) e.preventDefault();
+        gameState.activePointerId = e.pointerId;
         startSelection(r, c);
       }, { passive: false });
-      
+      cell.addEventListener("mouseenter", (e) => {
+        if (gameState.isSelecting && e.buttons !== 0) updateSelection(r, c);
+      });
       container.appendChild(cell);
     });
   });
@@ -245,16 +247,17 @@ function updateSelection(r, c) {
   refreshSelectionHighlight();
 }
 
-function endSelection() {
+function endSelection(e) {
+  if (e && typeof e.pointerId === "number" && gameState.activePointerId !== null && e.pointerId !== gameState.activePointerId) return;
   gameState.isSelecting = false;
+  gameState.activePointerId = null;
 }
 
-// Touch drag: no touchenter; use touchmove + elementFromPoint to extend selection
-function handleTouchMove(e) {
-  if (!gameState.isSelecting || !e.touches.length) return;
-  e.preventDefault(); // prevent scroll so touch sequence stays active and we keep receiving move
-  const t = e.touches[0];
-  const el = document.elementFromPoint(t.clientX, t.clientY);
+// Unified pointer/touch: extend selection during drag (no pointerenter on touch; use elementFromPoint)
+function handlePointerMove(e) {
+  if (!gameState.isSelecting || e.pointerId !== gameState.activePointerId) return;
+  if (e.cancelable) e.preventDefault();
+  const el = document.elementFromPoint(e.clientX, e.clientY);
   const cell = el && el.closest ? el.closest(".grid-cell") : (el && el.classList.contains("grid-cell") ? el : null);
   if (cell && cell.dataset.row != null) {
     const r = parseInt(cell.dataset.row, 10);
@@ -266,6 +269,7 @@ function handleTouchMove(e) {
 function clearSelection() {
   gameState.selectedCells = [];
   gameState.isSelecting = false;
+  gameState.activePointerId = null;
   refreshSelectionHighlight();
 }
 
@@ -471,10 +475,10 @@ document.addEventListener("DOMContentLoaded", () => {
   loadDictionary();
   refreshLeaderboard();
 
-  // Global events
-  document.addEventListener("mouseup", endSelection);
-  document.addEventListener("touchend", endSelection);
-  document.addEventListener("touchmove", handleTouchMove, { passive: false });
+  // Global events: pointer events unify mouse and touch so mobile tap-and-drag uses same logic as PC
+  document.addEventListener("pointermove", handlePointerMove, { passive: false });
+  document.addEventListener("pointerup", endSelection);
+  document.addEventListener("pointercancel", endSelection);
   
   // Row/Col Shift buttons
   document.addEventListener("click", (e) => {
