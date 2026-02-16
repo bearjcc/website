@@ -21,6 +21,8 @@ class LetterWalkerScoreController extends Controller
             'player_name' => 'nullable|string|max:50',
         ]);
 
+        $tz = config('letter_walker.leaderboard_timezone', 'Pacific/Auckland');
+
         $score = LetterWalkerScore::create([
             'user_id' => Auth::id(),
             'player_name' => $validated['player_name'] ?? 'Anonymous',
@@ -28,7 +30,7 @@ class LetterWalkerScoreController extends Controller
             'moves' => $validated['moves'],
             'words_found' => $validated['words_found'],
             'puzzle_number' => $validated['puzzle_number'],
-            'date_played' => now()->toDateString(),
+            'date_played' => now($tz)->toDateString(),
         ]);
 
         return response()->json([
@@ -59,10 +61,12 @@ class LetterWalkerScoreController extends Controller
             ->limit(10)
             ->get(['id', 'player_name', 'score', 'date_played']);
 
+        $tz = config('letter_walker.leaderboard_timezone', 'Pacific/Auckland');
+
         return response()->json([
             'success' => true,
             'scores' => $scores,
-            'date' => now()->toDateString(),
+            'date' => now($tz)->toDateString(),
         ]);
     }
 }

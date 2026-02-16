@@ -33,8 +33,13 @@ class LetterWalkerScore extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Scope to scores for "today" in the leaderboard timezone (see config/letter_walker.php).
+     */
     public function scopeTodaysPuzzle($query)
     {
-        return $query->where('date_played', now()->toDateString());
+        $tz = config('letter_walker.leaderboard_timezone', 'Pacific/Auckland');
+
+        return $query->whereDate('date_played', now($tz)->toDateString());
     }
 }
