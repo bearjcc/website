@@ -209,22 +209,38 @@ function updateSelection(r, c) {
   const last = gameState.selectedCells[gameState.selectedCells.length - 1];
   if (last.row === r && last.col === c) return;
 
-  // Only allow horizontal or vertical neighbors
-  const isNeighbor = (Math.abs(last.row - r) === 1 && last.col === c) ||
-                     (Math.abs(last.col - c) === 1 && last.row === r);
+  const len = gameState.selectedCells.length;
 
-  if (isNeighbor) {
-    // If re-selecting the previous cell, treat as "undo"
-    if (gameState.selectedCells.length > 1) {
-      const prev = gameState.selectedCells[gameState.selectedCells.length - 2];
-      if (prev.row === r && prev.col === c) {
-        gameState.selectedCells.pop();
-      } else if (!gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
-        gameState.selectedCells.push({ row: r, col: c });
-      }
-    } else if (!gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
+  // Undo: re-selecting the previous cell
+  if (len >= 2) {
+    const prev = gameState.selectedCells[len - 2];
+    if (prev.row === r && prev.col === c) {
+      gameState.selectedCells.pop();
+      refreshSelectionHighlight();
+      return;
+    }
+  }
+
+  // First extension: any horizontal or vertical neighbor (direction not yet locked)
+  if (len === 1) {
+    const isNeighbor = (Math.abs(last.row - r) === 1 && last.col === c) ||
+                       (Math.abs(last.col - c) === 1 && last.row === r);
+    if (isNeighbor && !gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
       gameState.selectedCells.push({ row: r, col: c });
     }
+    refreshSelectionHighlight();
+    return;
+  }
+
+  // Direction locked: must continue in same line (horizontal or vertical)
+  const first = gameState.selectedCells[0];
+  const second = gameState.selectedCells[1];
+  const isHorizontal = first.row === second.row;
+  const sameLine = isHorizontal
+    ? (r === last.row && Math.abs(c - last.col) === 1)
+    : (c === last.col && Math.abs(r - last.row) === 1);
+  if (sameLine && !gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
+    gameState.selectedCells.push({ row: r, col: c });
   }
   refreshSelectionHighlight();
 }
