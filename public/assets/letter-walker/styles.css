@@ -234,7 +234,7 @@ body {
   background: var(--arrow-bg);
   color: var(--lw-muted);
   border: 1px solid var(--lw-border);
-  border-radius: 4px;
+  border-radius: 2px;
   font-size: 12px;
   cursor: pointer;
   font-family: inherit;
@@ -274,10 +274,11 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--lw-cell-bg);
-  border: 2px solid var(--lw-cell-border);
-  border-radius: 4px;
+  border: 1px solid var(--lw-cell-border);
+  border-radius: 2px;
   font-weight: 700;
-  font-size: clamp(10px, 2.8vw, 14px);
+  font-size: clamp(12px, 3.2vw, 17px);
+  text-transform: uppercase;
   color: var(--lw-text);
   cursor: pointer;
   user-select: none;
@@ -658,16 +659,17 @@ input[type="text"] {
 
 @media screen and (max-width: 480px) {
   body {
-    padding: 16px 12px;
+    padding: 16px 4px;
   }
 
   .wrap {
     max-width: 100%;
   }
 
+  /* Fill width with ~4px margin (same as cell-gap); 2*arrow + 8*cell + 9*gap = 100vw - 16 */
   :root {
-    --cell-size: 28px;
-    --arrow-size: 26px;
+    --cell-size: max(24px, min(32px, calc((100vw - 52px) / 10)));
+    --arrow-size: var(--cell-size);
   }
 
   .header-center .title {
@@ -675,7 +677,7 @@ input[type="text"] {
   }
 
   .board-outer {
-    padding: 8px;
+    padding: 4px;
   }
 
   .selected-word {
@@ -694,11 +696,6 @@ input[type="text"] {
 }
 
 @media screen and (max-width: 360px) {
-  :root {
-    --cell-size: 24px;
-    --arrow-size: 24px;
-  }
-
   .grid-container {
     width: calc(var(--cell-size) * 8 + var(--cell-gap) * 7);
     height: calc(var(--cell-size) * 8 + var(--cell-gap) * 7);
