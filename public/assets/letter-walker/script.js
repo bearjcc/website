@@ -128,20 +128,17 @@ function renderGrid() {
   });
 }
 
-// --- Movement ---
+// --- Movement (wrap-around: no new letters; shifted letter wraps to opposite end) ---
 function shiftRow(rowIndex, direction) {
   const row = gameState.grid[rowIndex];
   if (direction === 'left') {
     const leftmost = row.shift();
-    leftmost.hidden = true;
-    row.push({ letter: gameState.rng.nextLetter(), hidden: false });
+    row.push(leftmost);
   } else {
     const rightmost = row.pop();
-    rightmost.hidden = true;
-    row.unshift({ letter: gameState.rng.nextLetter(), hidden: false });
+    row.unshift(rightmost);
   }
-  
-  // One move = moving a single row any number of times; move ends when another row or col is moved
+
   const currentMoveType = { type: 'row', index: rowIndex };
   if (!isSameMoveType(gameState.lastMoveType, currentMoveType)) {
     gameState.moves++;
@@ -157,17 +154,14 @@ function shiftRow(rowIndex, direction) {
 function shiftCol(colIndex, direction) {
   if (direction === 'up') {
     const topmost = gameState.grid[0][colIndex];
-    topmost.hidden = true;
-    for (let r = 0; r < 7; r++) gameState.grid[r][colIndex] = gameState.grid[r+1][colIndex];
-    gameState.grid[7][colIndex] = { letter: gameState.rng.nextLetter(), hidden: false };
+    for (let r = 0; r < 7; r++) gameState.grid[r][colIndex] = gameState.grid[r + 1][colIndex];
+    gameState.grid[7][colIndex] = topmost;
   } else {
     const bottommost = gameState.grid[7][colIndex];
-    bottommost.hidden = true;
-    for (let r = 7; r > 0; r--) gameState.grid[r][colIndex] = gameState.grid[r-1][colIndex];
-    gameState.grid[0][colIndex] = { letter: gameState.rng.nextLetter(), hidden: false };
+    for (let r = 7; r > 0; r--) gameState.grid[r][colIndex] = gameState.grid[r - 1][colIndex];
+    gameState.grid[0][colIndex] = bottommost;
   }
-  
-  // One move = moving a single col any number of times; move ends when another row or col is moved
+
   const currentMoveType = { type: 'col', index: colIndex };
   if (!isSameMoveType(gameState.lastMoveType, currentMoveType)) {
     gameState.moves++;
