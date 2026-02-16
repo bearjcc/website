@@ -1,0 +1,47 @@
+# NYT Single Game Page - ASCII Layout Mockup
+# Reference: https://www.nytimes.com/games/wordle/index.html
+#            https://www.nytimes.com/games/connections
+# Use as inspiration for Ursa Minor individual game landing/play pages.
+#
+# NOTE: This describes the GAME-IN-PLAY view (no "How to play" modal). The HTML mockup
+# shows the actual game UI (grid + keyboard) as it appears when playing.
+
++--------------------------------------------------------------------------------------------------+
+| HEADER (sticky)                                                                                  |
+|  [Menu]  Games          GAME NAME (e.g. Wordle)              [Hint] [Stats] [Help] [Subscribe]  |
+|                          February 13, 2026                                                       |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  GAME AREA (no modal overlay)                                                                   |
+|  -----------------------------                                                                   |
+|  One-line instruction (e.g. "Guess the word in 6 tries.")                                        |
+|                                                                                                  |
+|  [ ][ ][ ][ ][ ]   <- 6 rows x 5 cols (Wordle-style grid)                                        |
+|  [ ][ ][ ][ ][ ]      or game-specific board (Connections 4x4, Spelling Bee honeycomb, etc.)    |
+|  ...                                                                                             |
+|                                                                                                  |
+|  [ Q ][ W ][ E ]...[ P ]   <- On-screen keyboard (if applicable)                                 |
+|  [ A ][ S ]...[ L ]                                                                              |
+|  [ENTER][ Z ]...[ M ][ <- ]                                                                      |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (minimal)                                                                                |
+|  ------                                                                                          |
+|  NYTimes.com | Sitemap | Privacy | Terms ...  |  (c) The New York Times Company                   |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY (single game page – game-in-play view)
+-------------------------------------------------------
+1. Sticky header: menu, logo/games link; center = game name + date; right = hint, stats, help, Subscribe.
+2. Main: one-line instruction then the game UI (grid, board, or puzzle) with no modal overlay.
+3. On-screen keyboard or game controls below the board when applicable.
+4. Footer: minimal (legal/product links, copyright).
+
+TAKEAWAYS FOR URSA MINOR
+------------------------
+- Mockup shows the live game layout, not a "How to play" modal or landing CTA.
+- Header: game name + date centered; actions (hint, stats, help) in header.
+- Game area is the focus: board/grid + controls (e.g. keyboard).
+- Same peaceful, minimal tone as games hub; no purple gradients.

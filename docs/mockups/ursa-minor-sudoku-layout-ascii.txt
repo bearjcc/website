@@ -1,0 +1,38 @@
+# Ursa Minor - Sudoku Play Screen Layout
+# Per-game play mockup: 9x9 grid, 3x3 sub-boxes, clues vs blanks, one primary action.
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       Sudoku                     Timer   Mistakes     |
++------------------------------------------------------------------+
+| MAIN (max-width ~32rem, centered)                                 |
+|   Instruction: "Fill each row, column, and 3x3 box with 1-9."    |
+|                                                                  |
+|   9x9 GRID (square, 3x3 sub-boxes, thicker inner borders)          |
+|   +-------+-------+-------+                                       |
+|   | 5 3 . | . 7 . | . . . |  <- given (clue) vs blank (.)         |
+|   | 6 . . | 1 9 5 | . . . |                                       |
+|   | . 9 8 | . . . | . 6 . |                                       |
+|   +-------+-------+-------+                                       |
+|   | 8 . . | . 6 . | . . 3 |                                       |
+|   | 4 . . | 8 . 3 | . . 1 |                                       |
+|   | 7 . . | . 2 . | . . 6 |                                       |
+|   +-------+-------+-------+                                       |
+|   | . 6 . | . . . | 2 8 . |                                       |
+|   | . . . | 4 1 9 | . . 5 |                                       |
+|   | . . . | . 8 . | . 7 9 |                                       |
+|   +-------+-------+-------+                                       |
+|                                                                  |
+|   NUMBER STRIP (1-9)  [ 1 ] [ 2 ] [ 3 ] ... [ 9 ]  (pick for cell)|
+|   ACTION ROW          [ New game ]  [ Hint ]  [ Check ]           |
+|   HINT                "Tap a cell, then pick a number."            |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-sudoku-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

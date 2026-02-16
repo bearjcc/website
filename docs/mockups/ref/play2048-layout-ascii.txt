@@ -1,0 +1,69 @@
+# play2048.co - Layout Wireframe
+# Reference: https://play2048.co/
+# Single-page 2048 game: minimal chrome, grid-centric.
+# Use as reference for Ursa Minor 2048 game page or similar puzzle layout.
+
++--------------------------------------------------------------------------------------------------+
+|  HEADER (minimal, often inline with game)                                                        |
+|  -----                                                                                           |
+|  2048                    [Score: 0]  [Best: 0]              [ New game ]                          |
+|  (title, left or center)           (scores, right)                (primary action)               |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  TAGLINE (one line, below header or above grid)                                                  |
+|  --------                                                                                        |
+|  Join the numbers to get to the 2048 tile!                                                       |
+|  (or similar; can be omitted in ultra-minimal versions)                                          |
+|                                                                                                  |
+|  GAME GRID (4x4, centered)                                                                       |
+|  ---------                                                                                       |
+|                                                                                                  |
+|                    +------+------+------+------+                                                  |
+|                    |  2   |      |      |      |                                                  |
+|                    +------+------+------+------+                                                  |
+|                    |      |  2   |      |      |   <- tiles: 2, 4, 8, 16 ... 2048                 |
+|                    +------+------+------+------+     merge on same-number collision               |
+|                    |      |      |      |      |     new tile spawns after each move              |
+|                    +------+------+------+------+                                                  |
+|                    |      |      |      |      |                                                  |
+|                    +------+------+------+------+                                                  |
+|                                                                                                  |
+|  Controls: Arrow keys or swipe (touch). No on-screen arrow buttons on play2048.co.               |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (minimal)                                                                                |
+|  ------                                                                                          |
+|  Privacy Policy                                                                                  |
+|  (single link; no nav, no copyright line on many clones)                                         |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY
+-----------------
+1. Header: game title (2048) + score + best score + New game button.
+2. Tagline: one line of instruction (optional).
+3. Main: 4x4 grid only; no sidebar, no how-to modal by default.
+4. Input: keyboard (arrows / WASD) or touch swipe; no visible control UI.
+5. Footer: Privacy Policy link only.
+
+COMPARISON TO OTHER MOCKUPS
+---------------------------
+| Element        | play2048.co    | NYT game page   | Ursa Minor game |
+|----------------|----------------|-----------------|-----------------|
+| Header         | Title+score+CTA| Nav+game+date   | Logo+nav        |
+| Game chrome    | Score, New game| Hint, Stats     | Play CTA        |
+| Board          | 4x4 grid       | Game-specific   | Game-specific   |
+| On-screen ctrl | No             | Yes (Wordle KB)| No              |
+| Footer         | Privacy only   | Multi-link      | Horizon+copyright |
+
+TAKEAWAYS FOR URSA MINOR
+------------------------
+- Ultra-minimal game page: title, score, one CTA, grid. No nav in header if single-game site.
+- Score + Best score in header is standard for puzzle/arcade games.
+- 4x4 grid is the only content; no rules block unless expandable.
+- Footer can be a single link (e.g. Privacy) for third-party reference; Ursa Minor would use horizon footer.
+
+FILE REFERENCE
+--------------
+- HTML mockup: docs/mockups/play2048-mockup.html

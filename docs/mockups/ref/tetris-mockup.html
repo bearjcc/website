@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tetris – Layout Wireframe</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #333; background: #e8e8e8; }
+
+    .wf-placeholder { border: 1px dashed #bbb; background: #eee; color: #888; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 1rem 1.5rem;
+      border-bottom: 2px solid #999;
+      background: #fff;
+    }
+    .game-title { font-size: 1.75rem; font-weight: 700; margin: 0; color: #444; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .score-box {
+      padding: 0.35rem 0.75rem;
+      background: #f0f0f0;
+      border: 1px dashed #999;
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .btn-header {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid #999;
+      border-radius: 4px;
+      background: #f5f5f5;
+      color: #444;
+      cursor: pointer;
+    }
+    .btn-header.primary {
+      background: #2a2a2a;
+      color: #fff;
+      border-color: #2a2a2a;
+    }
+    .btn-header.primary:hover { background: #444; }
+
+    .main { max-width: 42rem; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .game-area {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+
+    .sidebar-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-width: 5rem;
+    }
+    .hold-box, .next-box {
+      width: 5rem;
+      height: 5rem;
+      border: 1px dashed #999;
+      background: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      color: #888;
+    }
+    .hold-box::before { content: "HOLD"; }
+    .next-box::before { content: "NEXT"; }
+
+    .playfield-wrapper {
+      flex-shrink: 0;
+    }
+    .playfield {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-template-rows: repeat(20, 1fr);
+      gap: 1px;
+      width: 10rem;
+      height: 20rem;
+      background: #333;
+      padding: 2px;
+      border: 2px solid #666;
+    }
+    .playfield .cell {
+      background: #1a1a1a;
+      min-width: 0;
+      min-height: 0;
+    }
+    .playfield .cell.filled {
+      background: #555;
+      border: 1px solid #666;
+    }
+    .playfield .cell.ghost { background: #2a2a2a; }
+
+    .sidebar-right {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 5rem;
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .sidebar-right .stat { font-weight: 600; color: #333; }
+
+    .controls-hint {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #888;
+      margin: 1.5rem 0 0;
+    }
+
+    .site-footer {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #666;
+      border-top: 1px dashed #999;
+      background: #f5f5f5;
+    }
+    .site-footer a { color: #555; text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="game-title">Tetris</h1>
+    <div class="header-right">
+      <div class="score-box wf-placeholder">Score: 0</div>
+      <div class="score-box wf-placeholder">Level: 1</div>
+      <div class="score-box wf-placeholder">Lines: 0</div>
+      <button type="button" class="btn-header">Pause</button>
+      <button type="button" class="btn-header primary">New game</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="game-area">
+      <div class="sidebar-left">
+        <div class="hold-box" aria-label="Hold piece"></div>
+        <div class="next-box" aria-label="Next piece"></div>
+      </div>
+
+      <div class="playfield-wrapper">
+        <div class="playfield" aria-label="Tetris playfield 10 by 20">
+          <!-- Row 1 -->
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <!-- Row 2 -->
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <!-- Row 3 -->
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <!-- Rows 4-18 empty -->
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+          <!-- Row 19-20 (stack) -->
+          <div class="cell"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell"></div><div class="cell"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell"></div><div class="cell"></div>
+          <div class="cell filled"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell filled"></div><div class="cell filled"></div>
+        </div>
+      </div>
+
+      <div class="sidebar-right">
+        <div class="stat">Score: 0</div>
+        <div class="stat">Level: 1</div>
+        <div class="stat">Lines: 0</div>
+      </div>
+    </div>
+
+    <p class="controls-hint">Arrow keys or WASD: move, rotate, soft drop. Hold: C or Shift. Hard drop: Space.</p>
+  </main>
+
+  <footer class="site-footer">
+    <a href="#">Privacy</a>
+    <span> | </span>
+    <a href="#">Terms</a>
+  </footer>
+</body>
+</html>

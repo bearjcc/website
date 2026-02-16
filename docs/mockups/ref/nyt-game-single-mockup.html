@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Single Game Page – Layout Mockup (NYT game-in-play, no modal)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; line-height: 1.5; color: #121212; background: #fff; min-height: 100vh; }
+
+    /* Header – NYT-style: nav, logo, game name + date, actions */
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 0.75rem 1.5rem 1rem;
+      border-bottom: 1px solid #e2e2e2;
+      background: #fff;
+      z-index: 10;
+    }
+    .header-left { display: flex; align-items: center; gap: 1rem; }
+    .hamburger {
+      width: 24px; height: 20px;
+      border: none; background: transparent;
+      cursor: pointer;
+      padding: 0;
+      display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .hamburger span { display: block; height: 2px; background: #121212; }
+    .logo-text { font-size: 1.25rem; font-weight: 700; color: #121212; text-decoration: none; }
+    .header-center {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 0;
+    }
+    .game-title { font-size: 2rem; font-weight: 700; margin: 0; letter-spacing: 0.02em; }
+    .game-date { font-size: 0.875rem; color: #666; margin: 0.25rem 0 0; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .icon-btn {
+      width: 36px; height: 36px;
+      border: none; background: transparent;
+      cursor: pointer;
+      padding: 0;
+      display: flex; align-items: center; justify-content: center;
+      color: #121212;
+    }
+    .icon-btn:hover { background: #f0f0f0; border-radius: 4px; }
+    .btn-subscribe {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #121212;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 999px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn-subscribe:hover { background: #f5f5f5; }
+
+    /* Main – game area only (no how-to-play modal) */
+    .main { max-width: 36rem; margin: 0 auto; padding: 2rem 1.5rem 3rem; }
+
+    .game-instruction {
+      text-align: center;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 1.5rem;
+      color: #121212;
+    }
+
+    /* Word grid – generic 6x5 (Wordle-style) */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.35rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+    .game-grid .cell {
+      aspect-ratio: 1;
+      max-width: 62px;
+      border: 2px solid #d3d6da;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: #fff;
+    }
+    .game-grid .cell.filled { border-color: #878a8c; }
+    .game-grid-wrapper { display: flex; justify-content: center; }
+
+    /* On-screen keyboard */
+    .keyboard { margin-top: 1rem; }
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.35rem;
+      margin-bottom: 0.35rem;
+    }
+    .key {
+      min-width: 2rem;
+      height: 3.5rem;
+      padding: 0 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #121212;
+      background: #d3d6da;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .key.wide { min-width: 3rem; font-size: 0.75rem; }
+    .key.enter { min-width: 3.5rem; }
+    .key.backspace { min-width: 3.5rem; }
+
+    /* Footer – minimal NYT-style */
+    .site-footer {
+      margin-top: 2rem;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid #e2e2e2;
+      font-size: 0.8125rem;
+      color: #666;
+      text-align: center;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1rem; margin-bottom: 0.5rem; }
+    .footer-links a { color: #121212; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-left">
+      <button type="button" class="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+      <a href="#" class="logo-text">Games</a>
+    </div>
+    <div class="header-center">
+      <h1 class="game-title">Wordle</h1>
+      <p class="game-date">February 13, 2026</p>
+    </div>
+    <div class="header-actions">
+      <button type="button" class="icon-btn" aria-label="Hint">&#9432;</button>
+      <button type="button" class="icon-btn" aria-label="Stats">&#8719;</button>
+      <button type="button" class="icon-btn" aria-label="Help">?</button>
+      <a href="#" class="btn-subscribe">Subscribe to Games</a>
+    </div>
+  </header>
+
+  <main class="main">
+    <p class="game-instruction">Guess the word in 6 tries.</p>
+
+    <div class="game-grid-wrapper">
+      <div class="game-grid" aria-label="Guess grid">
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+        <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+      </div>
+    </div>
+
+    <div class="keyboard" role="group" aria-label="Keyboard">
+      <div class="keyboard-row">
+        <button type="button" class="key">Q</button><button type="button" class="key">W</button><button type="button" class="key">E</button><button type="button" class="key">R</button><button type="button" class="key">T</button><button type="button" class="key">Y</button><button type="button" class="key">U</button><button type="button" class="key">I</button><button type="button" class="key">O</button><button type="button" class="key">P</button>
+      </div>
+      <div class="keyboard-row">
+        <button type="button" class="key">A</button><button type="button" class="key">S</button><button type="button" class="key">D</button><button type="button" class="key">F</button><button type="button" class="key">G</button><button type="button" class="key">H</button><button type="button" class="key">J</button><button type="button" class="key">K</button><button type="button" class="key">L</button>
+      </div>
+      <div class="keyboard-row">
+        <button type="button" class="key wide enter">ENTER</button>
+        <button type="button" class="key">Z</button><button type="button" class="key">X</button><button type="button" class="key">C</button><button type="button" class="key">V</button><button type="button" class="key">B</button><button type="button" class="key">N</button><button type="button" class="key">M</button>
+        <button type="button" class="key wide backspace">&#9003;</button>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="#">NYTimes.com</a>
+      <a href="#">Sitemap</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+      <a href="#">Terms of Sale</a>
+    </div>
+    <p>&copy; 2026 The New York Times Company</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# Ursa Minor - Tic-Tac-Toe Play Screen Layout
+# Per-game play mockup: board, turn, scores, one primary action (New game).
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       Tic-Tac-Toe                    X's turn        |
++------------------------------------------------------------------+
+| MAIN (max-width ~28rem, centered)                                 |
+|   Instruction: "Get three in a row."                              |
+|                                                                  |
+|   3x3 BOARD (square, centered)                                    |
+|   +-----+-----+-----+                                             |
+|   |  X  |     |     |                                             |
+|   +-----+-----+-----+                                             |
+|   |     |  O  |     |                                             |
+|   +-----+-----+-----+                                             |
+|   |     |     |     |                                             |
+|   +-----+-----+-----+                                             |
+|                                                                  |
+|   INFO BUBBLES   [ X (you) 0 ]  [ Ties 0 ]  [ O (CPU) 0 ]        |
+|   ACTION ROW     [ New game ]  [ Hint ]                           |
+|   HINT           "Tap a cell to play."                            |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-tic-tac-toe-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

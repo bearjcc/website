@@ -27,6 +27,23 @@ class ErrorHandlingTest extends TestCase
         $response = $this->get(route('games.play', 'non-existent-game'));
 
         $response->assertStatus(404);
+        $response->assertSee('Game not found');
+        $response->assertSee('Browse games');
+    }
+
+    public function test_returns_404_for_unpublished_game(): void
+    {
+        $game = Game::factory()->create([
+            'slug' => 'draft-game',
+            'title' => 'Draft Game',
+            'status' => 'draft',
+        ]);
+
+        $response = $this->get(route('games.show', $game->slug));
+
+        $response->assertStatus(404);
+        $response->assertSee('Game not found');
+        $response->assertSee('Browse games');
     }
 
     public function test_handles_empty_game_list_gracefully(): void

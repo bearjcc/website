@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>play2048.co – Layout Wireframe</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #333; background: #e8e8e8; }
+
+    /* Wireframe: gray blocks, dashed placeholders (match other mockups) */
+    .wf-box { border: 1px dashed #999; background: #f5f5f5; }
+    .wf-placeholder { border: 1px dashed #bbb; background: #eee; color: #888; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+
+    /* Header - minimal: title, scores, new game */
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      padding: 1rem 1.5rem;
+      border-bottom: 2px solid #999;
+      background: #fff;
+    }
+    .game-title { font-size: 1.75rem; font-weight: 700; margin: 0; color: #444; }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .score-box {
+      padding: 0.35rem 0.75rem;
+      background: #f0f0f0;
+      border: 1px dashed #999;
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .btn-new-game {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #fff;
+      background: #8f7a66;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .btn-new-game:hover { background: #9f8a76; }
+
+    /* Main - centered game area */
+    .main { max-width: 28rem; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .tagline {
+      text-align: center;
+      font-size: 0.9375rem;
+      color: #555;
+      margin: 0 0 1.5rem;
+    }
+
+    /* 4x4 grid - wireframe cells */
+    .grid-wrapper { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      width: 100%;
+      max-width: 20rem;
+      aspect-ratio: 1;
+    }
+    .game-grid .cell {
+      background: #eee;
+      border: 1px dashed #bbb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #666;
+    }
+    .game-grid .cell.has-tile { background: #e0dcc8; color: #776e65; }
+
+    .controls-hint {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #888;
+      margin: 0;
+    }
+
+    /* Footer - minimal (play2048.co style) */
+    .site-footer {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #666;
+      border-top: 1px dashed #999;
+      background: #f5f5f5;
+    }
+    .site-footer a { color: #555; text-decoration: none; }
+    .site-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="game-title">2048</h1>
+    <div class="header-right">
+      <div class="score-box wf-placeholder">Score: 0</div>
+      <div class="score-box wf-placeholder">Best: 0</div>
+      <button type="button" class="btn-new-game">New game</button>
+    </div>
+  </header>
+
+  <main class="main">
+    <p class="tagline">Join the numbers to get to the 2048 tile!</p>
+
+    <div class="grid-wrapper">
+      <div class="game-grid" aria-label="2048 grid">
+        <div class="cell has-tile">2</div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell has-tile">2</div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+      </div>
+    </div>
+
+    <p class="controls-hint">Use arrow keys or swipe to move tiles.</p>
+  </main>
+
+  <footer class="site-footer">
+    <a href="https://play2048.co/privacy-policy">Privacy Policy</a>
+  </footer>
+</body>
+</html>

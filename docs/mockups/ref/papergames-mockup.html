@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games Hub – Layout Mockup (Papergames.io-inspired)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #1a1a1a; }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+      z-index: 10;
+    }
+    .site-logo { font-weight: 700; font-size: 1.25rem; }
+    .nav-main { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-main a { color: inherit; text-decoration: none; }
+    .nav-main a:hover { text-decoration: underline; }
+    .nav-group { display: flex; gap: 0.5rem; }
+    .nav-group span { color: #888; font-size: 0.875rem; }
+
+    /* Value props strip */
+    .value-strip {
+      text-align: center;
+      padding: 1.5rem 2rem;
+      background: #f8f8f8;
+      border-bottom: 1px solid #eee;
+    }
+    .value-strip .headline { font-size: 1rem; font-weight: 600; margin-bottom: 0.75rem; }
+    .value-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
+    .value-pills span {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 999px;
+      font-size: 0.875rem;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 600; margin: 0 0 1rem; }
+    .hero p { max-width: 40rem; margin: 0 auto 1.5rem; font-size: 1rem; color: #444; }
+    .hero-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    .hero-badges a {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      color: inherit;
+      text-decoration: none;
+    }
+    .hero-badges a:hover { border-color: #999; background: #f5f5f5; }
+
+    /* Feature blocks */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+      gap: 1.5rem;
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .feature-card {
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      padding: 1.25rem;
+      background: #fff;
+    }
+    .feature-card h3 { font-size: 1.125rem; margin: 0 0 0.5rem; }
+    .feature-card p { margin: 0; font-size: 0.9375rem; color: #555; line-height: 1.5; }
+    .feature-card a { font-size: 0.875rem; color: #1a1a1a; text-decoration: underline; margin-top: 0.5rem; display: inline-block; }
+
+    /* Section + game grid */
+    .section { padding: 2rem; max-width: 72rem; margin: 0 auto; }
+    .section-title { font-size: 1.5rem; margin-bottom: 1rem; }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+    .game-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      text-align: center;
+      transition: border-color 0.2s;
+    }
+    .game-card:hover { border-color: #999; }
+    .game-card .icon { width: 48px; height: 48px; margin: 0 auto 0.75rem; background: #eee; border-radius: 6px; }
+    .game-card .name { font-weight: 600; font-size: 0.9375rem; }
+
+    /* CTA strip */
+    .cta-strip {
+      background: #f0f0f0;
+      padding: 1.5rem 2rem;
+      text-align: center;
+      border-top: 1px solid #e5e5e5;
+    }
+    .cta-strip p { margin: 0 0 0.5rem; font-size: 0.9375rem; color: #444; }
+    .cta-strip a { font-size: 0.875rem; color: #1a1a1a; text-decoration: underline; }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.875rem;
+      color: #666;
+      text-align: center;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .footer-links a { color: inherit; text-decoration: none; }
+    .footer-links a:hover { text-decoration: underline; }
+    .footer-meta { margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <span class="site-logo">Logo</span>
+    <nav class="nav-main">
+      <a href="#">Home</a>
+      <a href="#">Shop</a>
+      <a href="#">Goodies</a>
+      <span class="nav-group">
+        <a href="#">Gruppo</a>
+        <a href="#">Create tournament</a>
+        <a href="#">My tournaments</a>
+        <a href="#">Pricing</a>
+      </span>
+      <span class="nav-group">
+        <a href="#">Games</a>
+        <a href="#">Battleship</a>
+        <a href="#">Tic Tac Toe</a>
+        <a href="#">Connect 4</a>
+        <a href="#">Gomoku</a>
+        <a href="#">Chess</a>
+        <a href="#">Checkers</a>
+      </span>
+      <a href="#">Pricing</a>
+      <a href="#">Resources</a>
+    </nav>
+  </header>
+
+  <div class="value-strip">
+    <p class="headline">A unique gaming platform</p>
+    <div class="value-pills">
+      <span>100% Free</span>
+      <span>Multiplayer</span>
+      <span>Child friendly</span>
+    </div>
+  </div>
+
+  <main>
+    <section class="hero">
+      <h1>.IO Games – Free online games</h1>
+      <p>Play online with hundreds of players. Connect with friends by sharing a link. Play as guest. Games for all ages, near or far.</p>
+      <div class="hero-badges">
+        <a href="#">Get it on Play Store</a>
+        <a href="#">Get it on App Store</a>
+      </div>
+    </section>
+
+    <section class="features">
+      <div class="feature-card">
+        <h3>Worldwide ranking</h3>
+        <p>Challenge the best players worldwide with our unique daily tournament system and become number one.</p>
+        <a href="#">Learn more</a>
+      </div>
+      <div class="feature-card">
+        <h3>Play with a friend and chat</h3>
+        <p>Play with anyone in the world in real time by sharing a unique link. One click and you're connected.</p>
+        <a href="#">Learn more</a>
+      </div>
+      <div class="feature-card">
+        <h3>Tournament organizer</h3>
+        <p>Organize fun tournaments with up to 512 participants. For friends, teachers, or team building.</p>
+        <a href="#">Learn more</a>
+      </div>
+      <div class="feature-card">
+        <h3>Online shop</h3>
+        <p>The more you play, the more you earn. Spend coins on avatars and emojis to use with your opponent.</p>
+        <a href="#">Learn more</a>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Games</h2>
+      <div class="game-grid">
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Battleship</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Tic Tac Toe</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Connect 4</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Gomoku</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Chess</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Checkers</span>
+        </a>
+      </div>
+    </section>
+
+    <div class="cta-strip">
+      <p>Remove ads to play in a safe environment. Gruppo plan: ad-free, share 2-player games.</p>
+      <a href="#">Learn more</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="#">Discord</a>
+      <a href="#">Twitter</a>
+      <a href="#">Facebook</a>
+      <a href="#">Developers</a>
+      <a href="#">API</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+    <p class="footer-meta">&copy; 2026 Papergames.io</p>
+  </footer>
+</body>
+</html>

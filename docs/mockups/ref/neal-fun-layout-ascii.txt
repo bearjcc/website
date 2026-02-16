@@ -1,0 +1,57 @@
+# Neal.fun Homepage - ASCII Layout Mockup
+# Reference: https://neal.fun/
+# Use as inspiration for Ursa Minor games hub (personal, minimal, grid-first)
+
++--------------------------------------------------------------------------------------------------+
+| TOP STRIP (minimal, quirky)                                                                      |
+|  [Mail] Get new posts     Watered 0 times today     [plant graphic]                             |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  HERO (one line)                                                                                 |
+|                                                                                                  |
+|                         games and stuff by Neal                                                  |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  GAME GRID (image + title only; no descriptions)                                                |
+|  Dense, equal-size cards; visual-first. Many columns (4-6+).                                    |
+|                                                                                                  |
+|  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+                         |
+|  | [img]  |  | [img]  |  | [img]  |  | [img]  |  | [img]  |  | [img]  |                         |
+|  | Size   |  | I'm Not|  | Internet|  | Stimul.|  | Infinite|  | Internet|                         |
+|  | of Life|  | a Robot|  | Roadtrip|  | Clicker|  | Craft   |  | Artifacts|                        |
+|  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+                         |
+|  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+                         |
+|  | [img]  |  | [img]  |  | [img]  |  | [img]  |  ... (continues)                                |
+|  | Pass-  |  | Space  |  | Asteroid|  | Draw   |                                                      |
+|  | word   |  | Elevator|  | Launcher|  | Circle |                                                      |
+|  +--------+  +--------+  +--------+  +--------+                                                  |
+|                                                                                                  |
+|  (No "View all" or section titles; grid is the whole content.)                                   |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (personal, one-liner + links)                                                            |
+|  ------                                                                                          |
+|  Hi! I'm Neal. This is where I make stuff on the web. Obligatory links:                          |
+|  [Newsletter]  [Twitter]  [Buy me a coffee]                                                      |
+|  Contact - email   [Privacy policy]                                                             |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY
+-----------------
+1. No traditional nav: optional top strip (newsletter, quirky counter/widget).
+2. Hero: single line, casual voice ("games and stuff by Neal").
+3. One big game grid: card = image + title only; no descriptions; many columns.
+4. No "View all" or section headings; grid is the primary content.
+5. Footer: first-person one-liner + obligatory links (newsletter, social, support, contact, privacy).
+
+TAKEAWAYS FOR URSA MINOR
+------------------------
+- Minimal chrome: no mega-nav; optional small strip (e.g. newsletter, light widget).
+- One hero line in casual, personal voice (we can do "games under the stars" tone).
+- Grid-first: image + title per game; dense and scannable; no card copy needed.
+- Personal footer: one sentence + links (blog, Twitter, support, contact, privacy).
+- Contrast with NYT: fewer sections, no "latest/feature" block, no "learn more" column.
+- Align with night-sky motif: calm, minimal, no purple gradients; grid can feel like a constellation.

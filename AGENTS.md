@@ -54,18 +54,10 @@ Before adding ANY feature, UI element, copy, or interaction, ask:
 Load these files when working on specific tasks:
 
 **Always load first:**
-- `@001-core-project-conventions.mdc` - Complete project conventions and architecture
 - `@docs/PROJECT_STRUCTURE.md` - Where to find/add things
 - `@DESIGN_BIBLE.md` - Night sky design philosophy (root)
 
-**Context-specific:**
-- `@003-tech-stack.mdc` - TALL stack patterns and usage
-- `@030-code-standards.mdc` - PHP, Blade, and JS standards
-- `@040-commit-standards.mdc` - Git workflow and commit format
-- `@100-ui-ux-patterns.mdc` - UI components and design patterns
-- `@150-component-implementation.mdc` - Livewire and Blade component patterns
-- `@200-domain-guidelines.mdc` - Game development patterns
-- `@300-testing-and-guardrails.mdc` - Testing requirements and strategies
+**Cursor rules (apply automatically when relevant):** `.cursor/rules/mockup-task.mdc` (mockups), `.cursor/rules/design-context.mdc` (views, CSS, design). See `docs/README.md` for the full list and optional rules.
 
 ## TALL Stack Usage
 - **Laravel** - Backend framework, service container
@@ -157,12 +149,7 @@ Load these files when working on specific tasks:
 ## Development Workflow
 
 ### Before Committing
-- [ ] Test locally at http://website.test/
-- [ ] Run Pint: `./vendor/bin/pint`
-- [ ] Check for linter errors
-- [ ] Verify no emoji in production code
-- [ ] Ensure no secrets committed
-- [ ] Write descriptive commit message
+See `.cursor/rules/verification-guide.mdc` for what to verify before committing.
 
 ### Conventional Commits
 Format: `<type>(<scope>): <description>`

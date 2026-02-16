@@ -1,0 +1,55 @@
+# Ursa Minor Games - Game Entry Page Layout Wireframe
+# Pre-play screen: opponent selection + rules. Template for every game.
+# Shown after user clicks "Play" on the game page (e.g. Sudoku, Tic-Tac-Toe).
+# Design: DESIGN_BIBLE.md - peaceful night sky, one clear next action
+
++--------------------------------------------------------------------------------------------------+
+| HEADER (sticky, same as homepage / game page)                                                     |
+|  [Logo]                                           Home   Games   About                           |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  MAIN (max 960px centered)                                                                       |
+|  ----                                                                                            |
+|                                                                                                  |
+|  GAME CONTEXT                                                                                    |
+|  ------------                                                                                    |
+|  Breadcrumb or short line: Games -> [Game name]. So user knows which game they're entering.     |
+|                                                                                                  |
+|  OPPONENT SELECTION                                                                              |
+|  -------------------                                                                            |
+|  Heading: "Who do you want to play?"                                                             |
+|  Options (card-style or radio-style, one selected):                                              |
+|  +----------------+  +----------------+  +----------------+                                      |
+|  | vs Computer    |  | vs Friend      |  | Solo           |                                      |
+|  | (selected)     |  | Two players    |  | Practice        |                                      |
+|  +----------------+  +----------------+  +----------------+                                      |
+|                                                                                                  |
+|  RULES                                                                                           |
+|  -----                                                                                           |
+|  Short rules text or expandable. Placeholder only; no long copy.                                 |
+|  +----------------------------------------------------------------+                             |
+|  | Rules placeholder (dashed box)                                  |                             |
+|  +----------------------------------------------------------------+                             |
+|                                                                                                  |
+|  PRIMARY CTA                                                                                     |
+|  ------------                                                                                    |
+|  [ Start game ]   <- single dominant action. User's next step is to enter the play screen.       |
+|  (Same button style: border 2px solid #333, background #333, color #fff)                          |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (horizon-footer, same as rest of site)                                                   |
+|  ------                                                                                          |
+|  Sunset line + [Back to top] + Copyright                                                          |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+FLOW
+----
+Game page (hero + Play) -> Game entry (opponent + rules + Start game) -> Play screen (board/controls).
+
+FILE REFERENCE
+--------------
+- Game page mockup: docs/mockups/ursa-minor-game-page-mockup.html
+- Play mockup: docs/mockups/ursa-minor-play-mockup.html
+- Design: DESIGN_BIBLE.md

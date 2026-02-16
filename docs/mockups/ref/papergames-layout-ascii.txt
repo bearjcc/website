@@ -1,0 +1,97 @@
+# Papergames.io Homepage - ASCII Layout Mockup
+# Reference: https://papergames.io/en/
+# Use as inspiration for Ursa Minor games hub (value props, feature blocks, game grid)
+
++--------------------------------------------------------------------------------------------------+
+| HEADER                                                                                           |
+|  Logo    Home  Shop  Goodies  |  Gruppo v    |  Games v    |  Pricing  |  Resources v   [optional]  |
+|                               Create tournament, My tournaments, Pricing                         |
+|                               Battleship, Tic Tac Toe, Connect 4, Gomoku, Chess, Checkers        |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  VALUE PROPS STRIP (badges / pills)                                                              |
+|  --------------------------------                                                                |
+|  A unique gaming platform                                                                        |
+|  [ 100% Free ]  [ Multiplayer ]  [ Child friendly ]                                              |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  HERO                                                                                            |
+|  ----                                                                                            |
+|  .IO Games - Free online games on papergames.io                                                   |
+|                                                                                                  |
+|  Play online with hundreds of players. Connect with friends by sharing a link.                  |
+|  Play as guest. Games for all ages, near or far.                                                 |
+|                                                                                                  |
+|  [ Get it on Play Store ]  [ Get it on App Store ]                                               |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FEATURE BLOCKS (2x2 or 4-column grid)                                                          |
+|  --------------------------------                                                                |
+|  +------------------------+  +------------------------+                                          |
+|  | Worldwide ranking      |  | Play with a friend      |                                          |
+|  | Challenge the best     |  | Share a unique link.    |                                          |
+|  | players worldwide...   |  | One click, connected.   |                                          |
+|  | [Learn more]           |  | [Learn more]           |                                          |
+|  +------------------------+  +------------------------+                                          |
+|  +------------------------+  +------------------------+                                          |
+|  | Tournament organizer   |  | Online shop             |                                          |
+|  | Up to 512 participants.|  | Earn coins, get avatars |                                          |
+|  | Friends, teachers...   |  | and emojis.             |                                          |
+|  | [Learn more]           |  | [Learn more]           |                                          |
+|  +------------------------+  +------------------------+                                          |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  SECTION: Games (card grid)                                                                      |
+|  -------------------------                                                                      |
+|  +-------------+  +-------------+  +-------------+  +-------------+  +-------------+  +-------------+
+|  | Battleship  |  | Tic Tac Toe |  | Connect 4   |  | Gomoku      |  | Chess       |  | Checkers    |
+|  |   [icon]    |  |   [icon]    |  |   [icon]    |  |   [icon]    |  |   [icon]   |  |   [icon]   |
+|  +-------------+  +-------------+  +-------------+  +-------------+  +-------------+  +-------------+
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  CTA STRIP (optional)                                                                            |
+|  Remove ads to play in a safe environment. Gruppo plan: ad-free, share 2-player games.            |
+|  [ Learn more ]                                                                                  |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER                                                                                          |
+|  ------                                                                                          |
+|  Follow us:  Discord  X  Facebook  YouTube  Instagram                                            |
+|  Resources:  Remove ads  Goodies  Developers  API  Privacy  Terms  Contact                        |
+|  (c) 2026 papergames.io   Location / address                                                     |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+GAME PAGE PATTERN (e.g. Tic Tac Toe)
+------------------------------------
+Same header. Then:
+- Game thumbnail + title + one-line tagline ("First to align three marks wins")
+- App store badges
+- Play modes: [ Play with a friend ] [ Play vs robot ] [ Create tournament ] [ Play online ]
+- Daily leaderboard (countdown)
+- Side/block: "Integrate this game" (API) link
+- Body: game description, rules, similar games, strategies
+
+STRUCTURE SUMMARY
+-----------------
+1. Header: logo + grouped nav (Gruppo, Games, Pricing, Resources) with dropdowns.
+2. Value props: one headline + 3 badges (Free, Multiplayer, Child friendly).
+3. Hero: main title + short copy + app store badges.
+4. Feature grid: 4 blocks (ranking, play with friend, tournaments, shop) with headline + copy + Learn more.
+5. Game grid: 6 cards (icon + name); link to each game.
+6. Optional CTA strip: remove ads / premium plan.
+7. Footer: social, resource links, legal, copyright.
+
+TAKEAWAYS FOR URSA MINOR
+------------------------
+- Value-props strip gives quick trust (free, multiplayer, family-friendly) without clutter.
+- Feature blocks explain how to play (share link, tournaments) and monetization (shop, ad-free).
+- Game grid is primary; keep cards simple (icon + name) like Neal.fun but with optional one-liner.
+- Game page: thumbnail + tagline + play-mode buttons + leaderboard/API hooks.
+- Footer can stay minimal; social + legal + contact.
+- Align with night-sky motif: calm, no purple gradients; badges and cards can feel like gentle stars.

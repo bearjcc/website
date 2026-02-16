@@ -1,0 +1,33 @@
+# Ursa Minor - Minesweeper Play Screen Layout
+# Per-game play mockup: grid of covered/revealed cells, mines/flags/time chrome, one primary action (New game).
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       Minesweeper           Mines 10   Flags 2   Time 00:32 |
++------------------------------------------------------------------+
+| MAIN (max-width ~32rem, centered)                                 |
+|   Instruction: "Reveal safe cells. Flag mines. Don't hit a mine." |
+|                                                                  |
+|   6x6 GRID (square cells, centered)                              |
+|   +----+----+----+----+----+----+                                 |
+|   | 1  | ?  | ?  | ?  | ?  | ?  |                                 |
+|   +----+----+----+----+----+----+                                 |
+|   |    | 1  | 1  | 1  | ?  | ?  |                                 |
+|   +----+----+----+----+----+----+                                 |
+|   |    |    |    | 1  | F  | ?  |   F = flag                       |
+|   +----+----+----+----+----+----+                                 |
+|   | ?  | ?  | ?  | ?  | ?  | ?  |                                 |
+|   +----+----+----+----+----+----+                                 |
+|                                                                  |
+|   ACTION ROW     [ New game ]                                     |
+|   HINT           "Click to reveal, right-click to flag."          |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-minesweeper-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

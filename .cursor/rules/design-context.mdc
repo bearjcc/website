@@ -1,0 +1,15 @@
+---
+description: "When working on design, UI, views, frontend styling, copy, or visual identity for Ursa Minor. Ensures peaceful night sky philosophy is applied."
+globs: ["resources/views/**", "resources/css/**", "DESIGN_BIBLE.md", "docs/BRAND_GUIDELINES.md"]
+alwaysApply: false
+---
+
+# Design context — Ursa Minor
+
+When editing views, CSS, or design-related docs:
+
+1. **Read** @DESIGN_BIBLE.md for the full design reference: peaceful night sky philosophy, colors (HSL), typography, layout, tone, accessibility.
+2. **Apply** the decision filter: Does this feel like peaceful night sky? Does it belong like a star in a constellation, or is it noise? Is it calm, collected, and welcoming? If no to any, do not add it.
+3. **Avoid** purple gradients, value strips, app badges, marketing hype, and anything that demands attention. Craigslist-like simplicity; understated, never overstated.
+
+Reference the file; do not duplicate long excerpts in this rule.

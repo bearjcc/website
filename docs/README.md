@@ -10,8 +10,8 @@ Simplified documentation structure for Ursa Minor Games.
 ### 2. Design Bible
 **[DESIGN_BIBLE.md](../DESIGN_BIBLE.md)** (root) — Complete design reference: brand story, philosophy, visual identity, colors, typography, layout, tone, accessibility. See also [BRAND_GUIDELINES.md](BRAND_GUIDELINES.md) (pointer).
 
-### 3. Task Tracking
-**[TODO.md](TODO.md)** — Current tasks and roadmap
+### 3. Verification Guide
+**.cursor/rules/verification-guide.mdc** — Things to verify before committing and when building a game (guide, not a task list)
 
 ### 4. Technical Guides
 
@@ -38,24 +38,21 @@ Simplified documentation structure for Ursa Minor Games.
 
 ## AI-Consumable Rules (.cursor/rules/)
 
-Technical implementation guidance lives in `.cursor/rules/*.mdc` for AI agents:
+Technical and task-specific guidance lives in `.cursor/rules/*.mdc` for AI agents. Rules use frontmatter (`description`, `globs`, `alwaysApply`) so Cursor applies them when relevant.
 
-### Core Rules
+### Active rules
+- **mockup-task.mdc** — Apply to `docs/mockups/**`. Wireframe/mockup task: deliverables, style. **mockup-prompt.mdc** — Checklist and full prompt (same scope); update checklist there when completing items.
+- **design-context.mdc** — Apply to views, CSS, design docs. References DESIGN_BIBLE.md; peaceful night sky decision filter.
+
+### Optional / planned (create as needed)
 - `001-core-project-conventions.mdc` — Project layout, naming, workflow
 - `002-development-workflow.mdc` — Dev process, testing, commits
 - `030-code-standards.mdc` — Code quality, PHP standards
 - `040-commit-standards.mdc` — Conventional commits
-
-### Design Rules
 - `100-ui-ux-patterns.mdc` — UI/UX patterns, accessibility
-- `110-minimal-copy.mdc` — Minimal copy philosophy
-- `120-lowercase-mode.mdc` — Lowercase feature flag
 - `150-component-implementation.mdc` — Component technical patterns
-
-### Domain Rules
 - `200-domain-guidelines.mdc` — Business logic, general architecture
-- `210-game-development-patterns.mdc` — Game development framework
-- `300-testing-and-guardrails.mdc` — Testing requirements, content validation
+- `300-testing-and-guardrails.mdc` — Testing requirements
 
 ---
 
@@ -65,7 +62,7 @@ Technical implementation guidance lives in `.cursor/rules/*.mdc` for AI agents:
 **Building a game?** → GAME_DEVELOPMENT_GUIDE.md  
 **Need UI component?** → Component Library README  
 **Need setup help?** → README.md  
-**What's next?** → TODO.md  
+**What to verify?** → .cursor/rules/verification-guide.mdc  
 **Deploying?** → DEPLOYMENT_GUIDE.md  
 **Integrating code?** → FEATURE_EXTRACTION_GUIDE.md
 
@@ -74,7 +71,7 @@ Technical implementation guidance lives in `.cursor/rules/*.mdc` for AI agents:
 ## Documentation Philosophy
 
 **Less is more**:
-- 3 core MD files for humans (README, DESIGN_BIBLE, TODO)
+- Core MD for humans (README, DESIGN_BIBLE); verification guide in .cursor/rules
 - Technical guides for specific tasks
 - MDC files for AI agent guidance
 - No redundancy, no verbosity

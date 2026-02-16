@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ursa Minor Wireframes – Mockup Index</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #333; background: #e8e8e8; }
+
+    .wf-placeholder { border: 1px dashed #bbb; background: #eee; color: #888; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #999;
+      background: #fff;
+      z-index: 10;
+    }
+    .logo-placeholder { width: 120px; height: 32px; }
+    .nav-main { display: flex; gap: 2rem; }
+    .nav-main a { color: inherit; text-decoration: none; font-size: 0.9rem; }
+    .nav-main a.current { font-weight: 600; }
+
+    .main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .main h1 { font-size: 1.5rem; font-weight: 500; margin: 0 0 1.5rem; color: #444; }
+    .wireframe-list { list-style: none; padding: 0; margin: 0; }
+    .wireframe-list li { margin-bottom: 0.5rem; }
+    .wireframe-list a { color: #333; text-decoration: none; font-size: 1rem; }
+    .wireframe-list a:hover { text-decoration: underline; }
+    .wireframe-list .section { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #666; margin: 1.5rem 0 0.5rem; }
+    .wireframe-list .section:first-child { margin-top: 0; }
+
+    .site-footer {
+      margin-top: 4rem;
+      padding: 2rem 1.5rem 2.5rem;
+      background: #2a2520;
+      color: #ccc;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+    .footer-horizon { height: 6px; background: #c9a227; margin: 0 -1.5rem 1.5rem; }
+    .back-to-top { display: inline-block; margin-bottom: 1rem; color: #c9a227; text-decoration: none; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="wf-placeholder logo-placeholder">Logo</a>
+    <nav class="nav-main" aria-label="Main">
+      <a href="ursa-minor-homepage-mockup.html">Home</a>
+      <a href="ursa-minor-play-mockup.html">Games</a>
+      <span class="current">All wireframes</span>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <main class="main">
+    <h1>Ursa Minor wireframes</h1>
+    <p style="color:#666; margin-bottom: 1.5rem;">Static HTML mockups for layout and flow. Use the header to move between key pages; use this index to jump to any screen.</p>
+
+    <ul class="wireframe-list">
+      <li class="section">Flow</li>
+      <li><a href="ursa-minor-homepage-mockup.html">Homepage</a></li>
+      <li><a href="ursa-minor-play-mockup.html">Play / game hub</a></li>
+      <li><a href="ursa-minor-game-entry-mockup.html">Game entry (opponent + rules)</a></li>
+      <li><a href="ursa-minor-game-page-mockup.html">Game page (info + Play CTA)</a></li>
+      <li><a href="ursa-minor-game-not-found-mockup.html">Game not found (404)</a></li>
+
+      <li class="section">Per-game play</li>
+      <li><a href="ursa-minor-tic-tac-toe-mockup.html">Tic-Tac-Toe</a></li>
+      <li><a href="ursa-minor-connect-4-mockup.html">Connect 4</a></li>
+      <li><a href="ursa-minor-sudoku-mockup.html">Sudoku</a></li>
+      <li><a href="ursa-minor-2048-mockup.html">2048</a></li>
+      <li><a href="ursa-minor-minesweeper-mockup.html">Minesweeper</a></li>
+      <li><a href="ursa-minor-snake-mockup.html">Snake</a></li>
+      <li><a href="ursa-minor-checkers-mockup.html">Checkers</a></li>
+      <li><a href="ursa-minor-chess-mockup.html">Chess</a></li>
+    </ul>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-horizon" aria-hidden="true"></div>
+    <a href="#top" class="back-to-top">Back to top</a>
+    <p>&copy; Ursa Minor Games</p>
+  </footer>
+</body>
+</html>

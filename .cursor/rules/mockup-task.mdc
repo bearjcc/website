@@ -1,0 +1,50 @@
+---
+description: "When creating or editing Ursa Minor wireframe mockups in docs/mockups (HTML wireframes, layout ASCII). Use for mockup tasks only."
+globs: ["docs/mockups/**"]
+alwaysApply: false
+---
+
+# Ursa Minor Mockup Task
+
+## What you are doing
+
+**Wireframe and mock up the game experience** for Ursa Minor Games. Produce one page or mockup per task. Each deliverable must be a static HTML wireframe (and optionally a short layout ASCII) that defines structure, content blocks, and one clear next action. Do not implement backend or Livewire — layout and UX only.
+
+## Why
+
+- **Design clarity** — Stakeholders and implementers see the target before build.
+- **Template for implementation** — Each mockup is the reference for the corresponding Blade/Livewire view.
+- **Alignment with the design system** — Every screen must fit the "peaceful night sky" philosophy (see DESIGN_BIBLE.md and AGENTS.md).
+
+## Deliverables per item
+
+- A short layout ASCII (e.g. `docs/mockups/ursa-minor-<name>-layout-ascii.txt`).
+- One HTML mockup file (e.g. `docs/mockups/ursa-minor-<name>-mockup.html`).
+
+**Checklist and current item:** Use the checklist in `.cursor/rules/mockup-prompt.mdc`. Complete the **first unchecked item** only. When you finish, mark it checked there (and in `docs/mockups/TODO.md` if present).
+
+## Style
+
+Match existing Ursa Minor mockups: wireframe look (dashed borders, gray blocks, placeholders), same header/footer chrome, max-width centered main, one primary CTA. Use `ursa-minor-homepage-mockup.html`, `ursa-minor-play-mockup.html`, and `ursa-minor-game-page-mockup.html` as references. Same header nav: Logo → `index.html`, Home → `ursa-minor-homepage-mockup.html`, Games → `ursa-minor-play-mockup.html`, All wireframes → `index.html`.
+
+## Focus on
+
+- **Layout and structure** — Header, main content, footer; placement of hero, CTA, rules, navigation.
+- **One clear next action** — One primary button/link (e.g. "Play").
+- **Consistency** — Same header (logo, Home, Games, About), same footer (horizon style), same button/chrome patterns as existing mockups.
+- **Game experience only** — Pre-play (entry) and play (board/controls); no auth, account, or marketing pages.
+- **Design Bible** — Calm, no noise; "peaceful night sky." No value strips, app badges, or extra CTAs unless specified.
+
+## Do not
+
+- Backend or framework — No Laravel, Livewire, or database; static HTML/CSS only.
+- Copy or content — Placeholder text and labels are enough.
+- Visual polish — Wireframe-level (gray blocks, dashed borders) is fine.
+- Pages out of scope — Do only the **first unchecked** item in the checklist.
+
+## File references (load when working)
+
+- **Project / design:** @DESIGN_BIBLE.md, @AGENTS.md, @docs/PROJECT_STRUCTURE.md
+- **Existing mockups:** @docs/mockups/ursa-minor-homepage-mockup.html, @docs/mockups/ursa-minor-play-mockup.html, @docs/mockups/ursa-minor-game-page-mockup.html
+- **Layout notes:** @docs/mockups/ursa-minor-game-page-layout-ascii.txt, @docs/mockups/ursa-minor-play-layout-ascii.txt
+- **Checklist:** @.cursor/rules/mockup-prompt.mdc

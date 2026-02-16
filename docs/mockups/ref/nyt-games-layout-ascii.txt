@@ -1,0 +1,91 @@
+# NYT Games Page - ASCII Layout Mockup
+# Reference: https://www.nytco.com/games/
+# Use as inspiration for Ursa Minor games hub layout
+
++--------------------------------------------------------------------------------------------------+
+| HEADER (sticky)                                                                                  |
+|  Logo    Our Company  Our Work  Careers  Press  Investors                    [optional CTA]   |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  HERO                                                                                            |
+|                                                                                                  |
+|                              G A M E S                                                           |
+|                                                                                                  |
+|            Since the launch of The Crossword in 1942, The Times has captivated                  |
+|            solvers by providing engaging word and logic games.                                   |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  SECTION: Puzzles for Every Solver                                                               |
+|  ---------------------------------                                                               |
+|  Short intro paragraph. In 2014 we introduced The Mini... Wordle, Connections, Strands.           |
+|  We strive to offer puzzles for all skill levels.                                                |
+|                                                                                                  |
+|  [ Explore ]                                                                                     |
+|  - Start playing now                                                                             |
+|  - Download our app                                                                              |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  SECTION: Our Daily Games                                                                        |
+|  -------------------------                                                                       |
+|                                                                                                  |
+|  +-------------+  +-------------+  +-------------+  +-------------+                              |
+|  |   Wordle    |  | Connections |  |   Strands   |  | Spelling Bee|                              |
+|  |   [icon]    |  |   [icon]    |  |   [icon]    |  |   [icon]   |                              |
+|  |  5-letter   |  | Group words |  | Hidden words|  | 7 letters  |                              |
+|  |  6 chances  |  | common thread|  | reveal theme|  | how many?  |                              |
+|  +-------------+  +-------------+  +-------------+  +-------------+                              |
+|                                                                                                  |
+|  +-------------+  +-------------+  +-------------+                                                |
+|  | The Crossword|  | Mini Cross  |  |    Pips    |                                               |
+|  |   [icon]     |  |   [icon]    |  |   [icon]   |                                               |
+|  | wordplay     |  | bite-sized  |  | dominoes   |                                               |
+|  | every day    |  | few minutes |  | right spot |                                               |
+|  +-------------+  +-------------+  +-------------+                                                |
+|                                                                                                  |
+|  [ View all games ]                                                                              |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  SECTION: The Latest From Games                                                                  |
+|  --------------------------------                                                                |
+|  Feature / announcement block (e.g. Crossplay 2-player word game).                               |
+|  Headline + short description + optional image or CTA.                                           |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  SECTION: Learn More About Games                                                                 |
+|  ---------------------------------                                                               |
+|  Column / companion links in a simple list or grid:                                              |
+|  - Daily Wordplay    - Wordle Review    - Connections Companion                                 |
+|  - Spelling Bee Forum - Strands Sidekick                                                        |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER                                                                                          |
+|  ------                                                                                          |
+|  Explore More:  Cooking | Wirecutter | The Athletic                                              |
+|  Contact | Partner | Privacy | Terms | Cookies | ...                                              |
+|  (c) 2026 Company                                                                                |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY
+-----------------
+1. Global nav (mega or simple links)
+2. Hero: one big title + one short tagline
+3. Intro block: "Puzzles for every solver" + CTA
+4. Game grid: cards with icon, name, one-line description (3-4 cols, responsive)
+5. "View all games" link
+6. Editorial/announcement strip (one featured story)
+7. "Learn more" links (columns, hints, community)
+8. Footer: explore other products, legal, copyright
+
+TAKEAWAYS FOR URSA MINOR
+------------------------
+- Single hero word + one sentence is enough.
+- Game cards: icon + title + one line; grid not list.
+- One "latest/feature" slot keeps page fresh.
+- "Learn more" can map to blog, hints, or dev notes.
+- Keep footer minimal; no purple gradients.

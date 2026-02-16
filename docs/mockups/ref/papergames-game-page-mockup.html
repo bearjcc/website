@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Page – Layout Mockup (Papergames.io-inspired)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #1a1a1a; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+      z-index: 10;
+    }
+    .site-logo { font-weight: 700; font-size: 1.25rem; }
+    .nav-main { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-main a { color: inherit; text-decoration: none; }
+    .nav-main a:hover { text-decoration: underline; }
+    .nav-group { display: flex; gap: 0.5rem; }
+
+    .value-strip {
+      text-align: center;
+      padding: 1rem 2rem;
+      background: #f8f8f8;
+      border-bottom: 1px solid #eee;
+    }
+    .value-strip .headline { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .value-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; }
+    .value-pills span {
+      display: inline-block;
+      padding: 0.25rem 0.6rem;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 999px;
+      font-size: 0.8125rem;
+    }
+
+    /* Game page hero */
+    .game-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2rem;
+      border-bottom: 1px solid #eee;
+    }
+    .game-thumb {
+      width: 120px;
+      height: 120px;
+      min-width: 120px;
+      background: #eee;
+      border-radius: 12px;
+    }
+    .game-hero-text h1 { font-size: 1.75rem; margin: 0 0 0.25rem; font-weight: 600; }
+    .game-hero-text .tagline { font-size: 1rem; color: #555; margin: 0 0 1rem; }
+    .hero-badges { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .hero-badges a {
+      display: inline-block;
+      padding: 0.4rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 0.8125rem;
+      color: inherit;
+      text-decoration: none;
+    }
+    .hero-badges a:hover { border-color: #999; background: #f5f5f5; }
+
+    /* Play modes – critical for our analysis */
+    .play-modes {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .play-modes h2 { font-size: 1.125rem; margin: 0 0 1rem; font-weight: 600; }
+    .play-mode-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      gap: 1rem;
+    }
+    .play-mode-btn {
+      display: block;
+      padding: 1rem 1.25rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background: #fff;
+      color: inherit;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      text-align: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .play-mode-btn:hover { border-color: #666; background: #f8f8f8; }
+    .play-mode-btn.primary { border-color: #333; background: #1a1a1a; color: #fff; }
+    .play-mode-btn.primary:hover { background: #333; }
+
+    /* Leaderboard + API strip */
+    .game-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 0 2rem 2rem;
+    }
+    .leaderboard-teaser {
+      font-size: 0.875rem;
+      color: #555;
+    }
+    .leaderboard-teaser strong { color: #1a1a1a; }
+    .countdown { font-family: monospace; font-size: 0.9375rem; }
+    .api-link { font-size: 0.875rem; }
+    .api-link a { color: inherit; text-decoration: underline; }
+
+    /* Body: rules, similar games */
+    .game-body {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: 2rem;
+      border-top: 1px solid #eee;
+    }
+    .game-body h3 { font-size: 1.125rem; margin: 1.5rem 0 0.5rem; }
+    .game-body h3:first-child { margin-top: 0; }
+    .game-body p { margin: 0 0 0.75rem; font-size: 0.9375rem; color: #444; }
+    .similar-games {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 0.5rem;
+    }
+    .similar-games a {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      color: inherit;
+      text-decoration: none;
+    }
+    .similar-games a:hover { border-color: #999; }
+
+    .site-footer {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.875rem;
+      color: #666;
+      text-align: center;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .footer-links a { color: inherit; text-decoration: none; }
+    .footer-meta { margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <span class="site-logo">Logo</span>
+    <nav class="nav-main">
+      <a href="#">Home</a>
+      <a href="#">Shop</a>
+      <span class="nav-group">
+        <a href="#">Gruppo</a>
+        <a href="#">Create tournament</a>
+        <a href="#">My tournaments</a>
+        <a href="#">Pricing</a>
+      </span>
+      <span class="nav-group">
+        <a href="#">Games</a>
+        <a href="#">Battleship</a>
+        <a href="#">Tic Tac Toe</a>
+        <a href="#">Connect 4</a>
+        <a href="#">Gomoku</a>
+        <a href="#">Chess</a>
+        <a href="#">Checkers</a>
+      </span>
+      <a href="#">Pricing</a>
+      <a href="#">Resources</a>
+    </nav>
+  </header>
+
+  <div class="value-strip">
+    <p class="headline">A unique gaming platform</p>
+    <div class="value-pills">
+      <span>100% Free</span>
+      <span>Multiplayer</span>
+      <span>Child friendly</span>
+    </div>
+  </div>
+
+  <main>
+    <section class="game-hero">
+      <div class="game-thumb" aria-hidden="true"></div>
+      <div class="game-hero-text">
+        <h1>Play Tic Tac Toe</h1>
+        <p class="tagline">First to align three marks wins</p>
+        <div class="hero-badges">
+          <a href="#">Get it on Play Store</a>
+          <a href="#">Get it on App Store</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="play-modes">
+      <h2>How do you want to play?</h2>
+      <div class="play-mode-grid">
+        <a href="#" class="play-mode-btn primary">Play with a friend</a>
+        <a href="#" class="play-mode-btn">Play vs robot</a>
+        <a href="#" class="play-mode-btn">Create tournament</a>
+        <a href="#" class="play-mode-btn">Play online</a>
+      </div>
+    </section>
+
+    <div class="game-meta">
+      <div class="leaderboard-teaser">
+        <strong>Daily leaderboard</strong>, ends in <span class="countdown">00:00:00</span>
+      </div>
+      <div class="api-link"><a href="#">Integrate this game</a></div>
+    </div>
+
+    <section class="game-body">
+      <h3>Rules</h3>
+      <p>Two players on a 3x3 board. One uses noughts, the other crosses. First to align three symbols (horizontally, vertically, or diagonally) wins.</p>
+      <h3>Similar games</h3>
+      <div class="similar-games">
+        <a href="#">Connect 4</a>
+        <a href="#">Gomoku</a>
+        <a href="#">Battleship</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="#">Discord</a>
+      <a href="#">Twitter</a>
+      <a href="#">Developers</a>
+      <a href="#">API</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Contact</a>
+    </div>
+    <p class="footer-meta">&copy; 2026 Papergames.io</p>
+  </footer>
+</body>
+</html>

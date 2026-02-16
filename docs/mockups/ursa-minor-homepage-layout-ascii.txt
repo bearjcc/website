@@ -1,0 +1,106 @@
+# Ursa Minor Games - Homepage Layout Wireframe
+# Inspired by: NYT Games, Neal.fun, Papergames.io
+# Design: DESIGN_BIBLE.md - peaceful night sky, Craigslist simplicity
+# Focus: Homepage only (layout structure, not inner game pages)
+
++--------------------------------------------------------------------------------------------------+
+| HEADER (sticky, glass)                                                                           |
+|  [Logo]                                           Home   Games   About                           |
+|                                                   (single-word nav, minimal)                     |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  STARFIELD (full bleed, canvas behind content - peaceful night sky)                              |
+|                                                                                                  |
+|  HERO (centered, max 960px)                                                                      |
+|  ----                                                                                            |
+|                                                                                                  |
+|                         [Logo lockup - bear + constellation]                                     |
+|                                                                                                  |
+|                         The sky is the limit.                                                    |
+|                         (tagline - max 6 words)                                                  |
+|                                                                                                  |
+|                    [ Play ]        [ Browse ]                                                    |
+|                    (primary CTA)   (secondary - both go to games)                                |
+|                                                                                                  |
+|  No intro paragraph. No value-props strip. No marketing copy.                                    |
+|  Hero = logo + tagline + CTAs only. (DESIGN_BIBLE)                                               |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  GAMES SECTION                                                                                   |
+|  ---------------                                                                                 |
+|  Optional section heading only if needed; Neal.fun skips entirely.                               |
+|  "Free Games to Play" or omit - grid can stand alone.                                            |
+|                                                                                                  |
+|  GAME GRID (visual-first cards)                                                                  |
+|  ---------                                                                                       |
+|  Card = visual motif (board pattern, glyph, icon)                                                |
+|  Title reveals on hover in translucent pill (or always visible - DESIGN_BIBLE says "on hover")   |
+|  Dense, equal-size; 3-6 columns responsive. No per-card descriptions.                            |
+|                                                                                                  |
+|  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+                          |
+|  | [motif]|  | [motif]|  | [motif]|  | [motif]|  | [motif]|  | [motif]|                          |
+|  | Tic-Tac|  |Connect4|  | Sudoku |  | Chess  |  |Checker |  |Mineswpr|                          |
+|  +--------+  +--------+  +--------+  +--------+  +--------+  +--------+                          |
+|  +--------+  +--------+                                                                          |
+|  | [motif]|  | [motif]|  (continue as games exist)                                               |
+|  | Snake  |  | 2048   |                                                                          |
+|  +--------+  +--------+                                                                          |
+|                                                                                                  |
+|  No "View all games" link - home IS the games hub. Games index is /games (separate page).        |
+|  If many games: consider carousel (Embla) per DESIGN_BIBLE; else grid.                           |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  NO: "Latest from Games" editorial strip (NYT) - too editorial                                   |
+|  NO: "Learn more" column (NYT) - keep minimal                                                    |
+|  NO: Value-props badges (Papergames) - no marketing                                              |
+|  NO: Feature blocks (Papergames) - no monetization                                               |
+|  NO: App store badges - not applicable                                                           |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (horizon-footer)                                                                         |
+|  ------                                                                                          |
+|  Sunset line + earth silhouette                                                                  |
+|  [Back to top - star icon, glass]                                                                |
+|  Copyright line only                                                                             |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY
+-----------------
+1. Header: logo + nav (Home, Games, About) - sticky, glass
+2. Starfield: full bleed background (night sky motif)
+3. Hero: logo lockup + tagline (max 6 words) + two CTAs (Play, Browse)
+4. Games: optional heading + visual-first card grid (motif + title)
+5. Footer: horizon line, back-to-top, copyright
+
+COMPARISON TO REFERENCES
+------------------------
+| Element        | NYT Games       | Neal.fun        | Papergames      | Ursa Minor      |
+|----------------|-----------------|-----------------|-----------------|-----------------|
+| Hero           | Title + para    | One line        | Title + badges  | Logo + tagline  |
+| Intro block    | Yes             | No              | No              | No              |
+| Value props    | No              | No              | Yes (badges)    | No              |
+| Game grid      | Icon+name+desc  | Image+title     | Icon+name       | Motif+title     |
+| View all       | Yes             | No              | No              | No (home=hub)   |
+| Feature strip  | Yes             | No              | CTA strip       | No              |
+| Learn more     | Yes             | No              | No              | No              |
+| Footer         | Multi-column    | Personal links  | Social+legal    | Copyright only  |
+
+TAKEAWAYS APPLIED
+-----------------
+- Neal.fun: Minimal chrome, grid-first, no section bloat
+- NYT: Clear hero + game grid structure, but stripped of editorial/learn-more
+- Papergames: Rejected value-props and feature blocks (marketing tone)
+- DESIGN_BIBLE: Logo + tagline + CTAs; visual-first cards; calm, no noise
+- Peaceful night sky: Starfield, horizon footer, constellation motif
+- 960px max content width (section class)
+- Single-word nav labels
+
+FILE REFERENCE
+--------------
+- Current implementation: resources/views/livewire/pages/home.blade.php
+- Layout: resources/views/components/layouts/app.blade.php
+- Design: DESIGN_BIBLE.md

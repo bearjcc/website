@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Tournament – Layout Mockup (Papergames.io-inspired)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #1a1a1a; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+      z-index: 10;
+    }
+    .site-logo { font-weight: 700; font-size: 1.25rem; }
+    .nav-main { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-main a { color: inherit; text-decoration: none; }
+    .nav-main a:hover { text-decoration: underline; }
+
+    .page-heading {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2rem 2rem 0;
+    }
+    .page-heading h1 { font-size: 1.5rem; margin: 0 0 0.5rem; font-weight: 600; }
+    .page-heading p { margin: 0; font-size: 0.9375rem; color: #555; }
+
+    .form-section {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    .form-group { margin-bottom: 1.5rem; }
+    .form-group label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      max-width: 24rem;
+      padding: 0.5rem 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .form-group select { cursor: pointer; }
+    .form-hint { font-size: 0.8125rem; color: #666; margin-top: 0.25rem; }
+    .btn-create {
+      padding: 0.6rem 1.25rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: #fff;
+      cursor: pointer;
+    }
+    .btn-create:hover { background: #333; }
+
+    .share-block {
+      max-width: 40rem;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      background: #f8f8f8;
+      border-top: 1px solid #eee;
+    }
+    .share-block h3 { font-size: 1rem; margin: 0 0 0.75rem; font-weight: 600; }
+    .share-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .share-url {
+      flex: 1;
+      min-width: 12rem;
+      padding: 0.5rem 0.75rem;
+      font-family: monospace;
+      font-size: 0.875rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .btn-copy {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: 1px solid #333;
+      border-radius: 6px;
+      background: #1a1a1a;
+      color: #fff;
+      cursor: pointer;
+    }
+    .share-hint { font-size: 0.8125rem; color: #666; margin-top: 0.5rem; }
+
+    .site-footer {
+      margin-top: 2rem;
+      padding: 2rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.875rem;
+      color: #666;
+      text-align: center;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    .footer-links a { color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <span class="site-logo">Logo</span>
+    <nav class="nav-main">
+      <a href="#">Home</a>
+      <a href="#">Shop</a>
+      <a href="#">Create tournament</a>
+      <a href="#">My tournaments</a>
+      <a href="#">Pricing</a>
+      <a href="#">Games</a>
+      <a href="#">Resources</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="page-heading">
+      <h1>Create tournament</h1>
+      <p>Set up a private tournament and share the link with your group. Up to 512 participants.</p>
+    </div>
+
+    <section class="form-section">
+      <form>
+        <div class="form-group">
+          <label for="name">Tournament name</label>
+          <input type="text" id="name" placeholder="e.g. Friday Tic Tac Toe" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="game">Game</label>
+          <select id="game">
+            <option>Tic Tac Toe</option>
+            <option>Connect 4</option>
+            <option>Gomoku</option>
+            <option>Battleship</option>
+            <option>Chess</option>
+            <option>Checkers</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mode">Tournament mode</label>
+          <select id="mode">
+            <option>Single Elimination</option>
+            <option>Double Elimination</option>
+            <option>Swiss</option>
+            <option>Round Robin</option>
+          </select>
+          <p class="form-hint">Determines how players are paired and how the bracket advances.</p>
+        </div>
+        <button type="submit" class="btn-create">Create and get link</button>
+      </form>
+    </section>
+
+    <section class="share-block">
+      <h3>Share your tournament</h3>
+      <div class="share-row">
+        <input type="text" class="share-url" readonly value="https://papergames.io/en/t/Abc12XyZ" aria-label="Tournament link">
+        <button type="button" class="btn-copy">Copy link</button>
+      </div>
+      <p class="share-hint">Participants open this link to join. You can start the tournament when everyone is in.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="#">Home</a>
+      <a href="#">My tournaments</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+    <p style="margin: 0.5rem 0 0;">&copy; 2026 Papergames.io</p>
+  </footer>
+</body>
+</html>

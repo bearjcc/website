@@ -1,0 +1,33 @@
+# Ursa Minor - 2048 Play Screen Layout
+# Per-game play mockup: 4x4 grid, score/best, one primary action (New game).
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       2048                    Score 1234   Best 5678   |
++------------------------------------------------------------------+
+| MAIN (max-width ~28rem, centered)                                 |
+|   Instruction: "Slide tiles to combine. Reach 2048."              |
+|                                                                  |
+|   4x4 GRID (square, centered)                                     |
+|   +------+------+------+------+                                  |
+|   |  2   |  4   |      |      |                                  |
+|   +------+------+------+------+                                  |
+|   |      |  2   |  8   |      |                                  |
+|   +------+------+------+------+                                  |
+|   |      |      |  4   |  2   |                                  |
+|   +------+------+------+------+                                  |
+|   |      |      |      |      |                                  |
+|   +------+------+------+------+                                  |
+|                                                                  |
+|   ACTION ROW     [ New game ]                                     |
+|   HINT           "Swipe or use arrow keys."                       |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-2048-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

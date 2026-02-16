@@ -176,15 +176,18 @@ class GameFunctionalityTest extends TestCase
     #[Test]
     public function minesweeper_game_loads_successfully(): void
     {
-        $response = $this->get('/minesweeper');
+        $response = $this->get('/minesweeper/play');
 
         $response->assertStatus(200);
-        $response->assertSee('Galaxy Mapper');
+        // Minesweeper has minimal entry (no opponent choice)
+        $response->assertSee('Minesweeper');
+        $response->assertSee('Start game');
+        $response->assertSee('Games');
     }
 
     public function galaxy_mapper_route_works(): void
     {
-        $response = $this->get('/minesweeper');
+        $response = $this->get('/minesweeper/play');
 
         $response->assertStatus(200);
         $response->assertSee('Galaxy Mapper');

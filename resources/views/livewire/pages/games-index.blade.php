@@ -16,10 +16,10 @@
                 <p class="p">{{ __('ui.games_empty') }}</p>
             </div>
         @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                 @foreach($games as $game)
                     <x-ui.game-card
-                        :href="route('games.play', $game->slug)"
+                        :href="route('games.show', $game->slug)"
                         :title="$game->title"
                         :motif="$game->getMotifKey()"
                         :aria="__('ui.play_game', ['game' => $game->title])"

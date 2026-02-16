@@ -48,6 +48,20 @@ Game State (Data Structure)
 
 ---
 
+## User flow and routes
+
+**Flow**: Home or Games index → **Game page** (`/{slug}`) → **Game entry** (`/{slug}/play`) → **Play view** (same URL, after [Start game]).
+
+- **Game page** (`route('games.show', $slug)`): Hero (motif, title, tagline), [Play], optional Rules, "More games" links. Only published games; 404 otherwise.
+- **Game entry** (`route('games.play', $slug)`): Shown when `$started === false`. Breadcrumb, optional "Who do you want to play?" (for games with opponent choice), rules, [Start game]. Games without opponent choice (e.g. 2048, Sudoku, Minesweeper, Snake) get minimal entry (breadcrumb + rules + Start game).
+- **Play view**: Same URL as entry; after [Start game], `$started === true` and the game component is mounted. Use chrome bar (game name + turn/score), play-main wrapper (~28rem), instruction, board, info bubbles, action row (New game, optional Hint), controls hint.
+
+**Routes**: `games.index` = `/games`; `games.show` = `/{game:slug}`; `games.play` = `/{game:slug}/play`. Link cards to `games.show`, not `games.play`. Legacy `/games/tic-tac-toe` etc. redirect 301 to `/{slug}`.
+
+**Adding a new game**: DB entry (slug, title, status, etc.) → add to `$componentMap` in `game-play.blade.php` → create Livewire component and optional engine. If the game has opponent/mode choice, add its slug to `Game::slugsWithOpponentChoice()`.
+
+---
+
 ## Creating a New Game
 
 ### 1. Database Entry
@@ -1324,42 +1338,7 @@ app/
 
 ## Developer Experience Checklist
 
-When building a game, ensure:
-
-### Code Quality
-- [ ] Engine uses pure static methods
-- [ ] State is immutable (return new, don't mutate)
-- [ ] No side effects in engine
-- [ ] Clear PHPDoc comments
-- [ ] Follows PSR-12 (run Pint)
-
-### Reusability
-- [ ] Uses `InteractsWithGameState` trait
-- [ ] Uses `<x-ui.game-wrapper>` component
-- [ ] Standard control buttons with Heroicons
-- [ ] Constellation-style completion message
-- [ ] HSL color tokens (no hardcoded colors)
-
-### Testability
-- [ ] Unit tests for engine methods
-- [ ] Feature tests for Livewire component
-- [ ] Tests cover edge cases
-- [ ] Tests for win conditions
-- [ ] Tests for invalid moves
-
-### Accessibility
-- [ ] Proper aria-labels
-- [ ] Keyboard navigation (where applicable)
-- [ ] 44px minimum touch targets
-- [ ] Focus states visible
-- [ ] `prefers-reduced-motion` respected
-
-### Night Sky Theme
-- [ ] Subtle starfield on board (optional)
-- [ ] HSL tokens throughout
-- [ ] Constellation completion message
-- [ ] Calm, minimal UI
-- [ ] No emoji
+When building a game, use the verification guide: **.cursor/rules/verification-guide.mdc**.
 
 ---
 

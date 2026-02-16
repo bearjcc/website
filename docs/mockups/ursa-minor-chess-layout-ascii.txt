@@ -1,0 +1,41 @@
+# Ursa Minor - Chess Play Screen Layout
+# Per-game play mockup: 8x8 board, white vs black pieces, turn chrome, one primary action (New game).
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       Chess                White's turn               |
++------------------------------------------------------------------+
+| MAIN (max-width ~28rem, centered)                                 |
+|   Instruction: "Move your pieces. Checkmate to win."              |
+|                                                                  |
+|   8x8 BOARD (alternating light/dark; pieces K Q R B N P)          |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | r  | n  | b  | q  | k  | b  | n  | r  |  Row 0 (black pieces)  |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | p  | p  | p  | p  | p  | p  | p  | p  |  Black pawns          |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    |    |    |    |    |    |    |    |                       |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    |    |    |    |    |    |    |    |  Empty ranks           |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    |    |    |    |    |    |    |    |                       |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | P  | P  | P  | P  | P  | P  | P  | P  |  White pawns          |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | R  | N  | B  | Q  | K  | B  | N  | R  |  Row 7 (white pieces) |
+|   +----+----+----+----+----+----+----+----+                       |
+|   K=King Q=Queen R=Rook B=Bishop N=Knight P=Pawn; lower=black     |
+|                                                                  |
+|   INFO BUBBLES   White (you)  |  Black (CPU)  [turn highlight]   |
+|   ACTION ROW     [ New game ]                                     |
+|   HINT           "Tap a piece, then tap a square to move."        |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-chess-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

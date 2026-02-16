@@ -35,9 +35,27 @@ class TicTacToe extends Component
 
     public string $aiDifficulty = ''; // Current AI difficulty for display
 
+    /** Session win/ties counts for info bubbles (X you, Ties, O CPU). */
+    public int $xWins = 0;
+
+    public int $ties = 0;
+
+    public int $oWins = 0;
+
+    /** Set from game entry when coming from GamePlay (avoids inline mode selection). */
+    public ?string $initialGameMode = null;
+
+    public ?string $initialPlayerSymbol = null;
+
     public function mount(): void
     {
-        $this->game = Game::where('slug', 'tic-tac-toe')->firstOrFail();
+        if (! isset($this->game->slug)) {
+            $this->game = Game::where('slug', 'tic-tac-toe')->firstOrFail();
+        }
+        if ($this->initialGameMode !== null && $this->initialGameMode !== '') {
+            $this->setGameMode($this->initialGameMode, $this->initialPlayerSymbol ?? 'X');
+            return;
+        }
         $this->newGame();
     }
 
@@ -104,7 +122,7 @@ class TicTacToe extends Component
                 $this->dispatch('ai-move-delay');
             }
         } else {
-            // Game completed - add celebration
+            $this->recordSessionResult();
             if ($this->winner) {
                 $this->dispatch('game-completed', [
                     'winner' => $this->winner,
@@ -141,10 +159,9 @@ class TicTacToe extends Component
         }
 
         if ($this->winner === null && ! $this->isDraw) {
-            // Switch back to player
             $this->currentPlayer = $this->playerSymbol;
         } else {
-            // Game completed - add celebration
+            $this->recordSessionResult();
             if ($this->winner) {
                 $this->dispatch('game-completed', [
                     'winner' => $this->winner,
@@ -154,6 +171,17 @@ class TicTacToe extends Component
                     'winningPositions' => $this->winningPositions,
                 ]);
             }
+        }
+    }
+
+    private function recordSessionResult(): void
+    {
+        if ($this->winner === 'X') {
+            $this->xWins++;
+        } elseif ($this->winner === 'O') {
+            $this->oWins++;
+        } elseif ($this->isDraw) {
+            $this->ties++;
         }
     }
 
@@ -175,6 +203,21 @@ class TicTacToe extends Component
         }
 
         return [];
+    }
+
+    /** Turn/status line for game chrome bar. */
+    public function getChromeTurnText(): string
+    {
+        if ($this->winner !== null) {
+            return $this->winner === 'X' ? "Moon wins" : "Star wins";
+        }
+        if ($this->isDraw) {
+            return "Draw";
+        }
+        if ($this->gameMode === 'pvp') {
+            return $this->currentPlayer === 'X' ? "Moon's turn" : "Star's turn";
+        }
+        return $this->currentPlayer === $this->playerSymbol ? 'Your turn' : 'AI thinking...';
     }
 
     public function render(): \Illuminate\Contracts\View\View

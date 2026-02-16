@@ -1,0 +1,36 @@
+# Ursa Minor - Snake Play Screen Layout
+# Per-game play mockup: grid with snake body, food, score/length chrome, one primary action (New game).
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       Snake                  Score 12   Length 5      |
++------------------------------------------------------------------+
+| MAIN (max-width ~32rem, centered)                                 |
+|   Instruction: "Eat food to grow. Avoid walls and yourself."     |
+|                                                                  |
+|   10x10 GRID (square cells, centered)                            |
+|   +----+----+----+----+----+----+----+----+----+----+             |
+|   |    |    |    |    |    |    |    |    |    |    |             |
+|   +----+----+----+----+----+----+----+----+----+----+             |
+|   |    |    |    | S  | S  | S  | S  | S  |    |    |  S = snake  |
+|   +----+----+----+----+----+----+----+----+----+----+  F = food   |
+|   |    |    |    |    |    |    |    |    |    |    |             |
+|   +----+----+----+----+----+----+----+----+----+----+             |
+|   |    |    |    |    |    | F  |    |    |    |    |             |
+|   +----+----+----+----+----+----+----+----+----+----+             |
+|   |    |    |    |    |    |    |    |    |    |    |             |
+|   +----+----+----+----+----+----+----+----+----+----+             |
+|   ... (10 rows total)                                            |
+|                                                                  |
+|   ACTION ROW     [ New game ]                                     |
+|   HINT           "Arrow keys to move."                            |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-snake-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

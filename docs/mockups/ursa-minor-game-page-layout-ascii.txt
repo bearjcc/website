@@ -1,0 +1,73 @@
+# Ursa Minor Games - Game Page Layout Wireframe
+# Shown after user clicks a game from the homepage.
+# Inspired: NYT (game name + focus on play), Papergames (hero + play modes), Neal.fun (minimal)
+# Design: DESIGN_BIBLE.md - peaceful night sky, one clear next action
+
++--------------------------------------------------------------------------------------------------+
+| HEADER (sticky, same as homepage)                                                                |
+|  [Logo]                                           Home   Games   About                           |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  MAIN (max 960px centered)                                                                       |
+|  ----                                                                                            |
+|                                                                                                  |
+|  GAME HERO                                                                                       |
+|  ---------                                                                                       |
+|  Visual motif (same style as game card on homepage) + game name + one-line tagline.              |
+|  No app store badges. No value strip. No marketing.                                              |
+|                                                                                                  |
+|  +------------------+                                                                            |
+|  |  [motif 80x80]   |   Sudoku                                                                   |
+|  |  (9x9 grid)      |   Fill the grid so each row, column, and box has 1-9.                       |
+|  +------------------+                                                                            |
+|                                                                                                  |
+|  PRIMARY CTA                                                                                     |
+|  ------------                                                                                    |
+|  [ Play ]   <- single dominant action. User's next step is to play.                              |
+|  (Same button style as homepage: border 2px solid #333, background #333, color #fff)             |
+|                                                                                                  |
+|  OPTIONAL SECONDARY                                                                              |
+|  -------------------                                                                            |
+|  Rules: short expandable or one brief paragraph (DESIGN_BIBLE: calm, no noise).                  |
+|  More games: small text links (e.g. "Tic-Tac-Toe, Connect 4, Minesweeper") - escape hatch.      |
+|  No "Similar games" heading block like Papergames; keep it a single line or small pill links.   |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (horizon-footer, same as homepage)                                                       |
+|  ------                                                                                          |
+|  Sunset line + [Back to top] + Copyright                                                          |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+WHAT THE USER SEES AFTER CLICKING A GAME
+----------------------------------------
+1. Same chrome: header (Logo, Home, Games, About) so they know they're still on Ursa Minor.
+2. Game identity: motif + name + one-line tagline (what this game is).
+3. One clear next action: Play. No competing CTAs.
+4. Optional: Rules (for new players), More games (to browse elsewhere).
+
+REJECTED (from references)
+--------------------------
+| Element              | Papergames / NYT              | Ursa Minor choice        |
+|----------------------|-------------------------------|--------------------------|
+| Value strip          | Papergames badges             | No                       |
+| App store badges     | Papergames                    | No                       |
+| Multiple play modes  | Play friend / vs robot / etc.  | Single [Play] for now    |
+| Leaderboard/countdown| Papergames                    | Omit unless we add later |
+| API / Integrate      | Papergames                    | Omit                     |
+| Game date            | NYT (e.g. Wordle daily)       | Omit (not daily puzzle)  |
+| Header hint/stats    | NYT                           | On play view if needed   |
+
+TAKEAWAYS
+---------
+- NYT: Game name prominent; focus is the play area. We use that for the play view; this mockup is the landing before play.
+- Papergames: Hero (thumb + title + tagline) + "How do you want to play?" We simplify to hero + one Play button.
+- Neal.fun: Minimal chrome; grid-first. We keep one primary CTA, no section bloat.
+- DESIGN_BIBLE: No noise. One star in the constellation = one primary action.
+
+FILE REFERENCE
+--------------
+- Homepage mockup: docs/mockups/ursa-minor-homepage-mockup.html
+- Homepage layout: docs/mockups/ursa-minor-homepage-layout-ascii.txt
+- Design: DESIGN_BIBLE.md

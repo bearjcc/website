@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Games Hub – Layout Mockup (NYT-inspired)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #1a1a1a; }
+
+    /* Header */
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid #ddd;
+      background: #fff;
+      z-index: 10;
+    }
+    .site-logo { font-weight: 700; font-size: 1.25rem; }
+    .nav-main { display: flex; gap: 1.5rem; }
+    .nav-main a { color: inherit; text-decoration: none; }
+
+    /* Hero */
+    .hero {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+    .hero h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 300; margin: 0 0 1rem; letter-spacing: 0.05em; }
+    .hero p { max-width: 42rem; margin: 0 auto; font-size: 1.125rem; color: #444; }
+
+    /* Sections */
+    .section { padding: 3rem 2rem; max-width: 72rem; margin: 0 auto; }
+    .section-title { font-size: 1.5rem; margin-bottom: 1rem; }
+    .section-intro { max-width: 52rem; margin-bottom: 1.5rem; color: #444; }
+
+    /* CTA block */
+    .cta-block { margin-top: 1rem; }
+    .cta-block a { display: inline-block; padding: 0.5rem 1rem; background: #1a1a1a; color: #fff; text-decoration: none; border-radius: 4px; }
+    .cta-links { margin-top: 0.75rem; }
+    .cta-links a { color: #1a1a1a; text-decoration: underline; margin-right: 1rem; }
+
+    /* Game grid */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .game-card {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 1.25rem;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: border-color 0.2s;
+    }
+    .game-card:hover { border-color: #999; }
+    .game-card .icon { width: 48px; height: 48px; background: #eee; border-radius: 6px; margin-bottom: 0.75rem; }
+    .game-card .name { font-weight: 600; margin-bottom: 0.25rem; }
+    .game-card .desc { font-size: 0.875rem; color: #555; }
+
+    .view-all { margin-top: 1.5rem; }
+    .view-all a { color: #1a1a1a; text-decoration: underline; }
+
+    /* Latest / feature strip */
+    .latest {
+      background: #f5f5f5;
+      padding: 2rem;
+      border-radius: 8px;
+    }
+    .latest h3 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+    .latest p { margin: 0; color: #444; }
+
+    /* Learn more links */
+    .learn-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 1rem; }
+    .learn-links a { color: #1a1a1a; text-decoration: underline; }
+
+    /* Footer */
+    .site-footer {
+      margin-top: 3rem;
+      padding: 2rem;
+      border-top: 1px solid #ddd;
+      font-size: 0.875rem;
+      color: #666;
+    }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 0.5rem; }
+    .footer-links a { color: inherit; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <span class="site-logo">Logo</span>
+    <nav class="nav-main">
+      <a href="#">Our Company</a>
+      <a href="#">Our Work</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+      <a href="#">Investors</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Games</h1>
+      <p>Since the launch of The Crossword in 1942, The Times has captivated solvers by providing engaging word and logic games.</p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Puzzles for Every Solver</h2>
+      <p class="section-intro">In 2014, we introduced The Mini Crossword — followed by Spelling Bee, Letter Boxed and Tiles. Later we added Wordle, Connections and Strands. We strive to offer puzzles for all skill levels that everyone can enjoy every day.</p>
+      <div class="cta-block">
+        <a href="#">Explore</a>
+        <div class="cta-links">
+          <a href="#">Start playing now</a>
+          <a href="#">Download our app</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Our Daily Games</h2>
+      <div class="game-grid">
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Wordle</span>
+          <span class="desc">Guess the 5-letter word with 6 chances.</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Connections</span>
+          <span class="desc">Group words that share a common thread.</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Strands</span>
+          <span class="desc">Uncover hidden words and reveal the theme.</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Spelling Bee</span>
+          <span class="desc">How many words can you make with 7 letters?</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">The Crossword</span>
+          <span class="desc">Get clued in with wordplay, every day.</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">The Mini Crossword</span>
+          <span class="desc">Bite-sized puzzle in just a few minutes.</span>
+        </a>
+        <a href="#" class="game-card">
+          <div class="icon"></div>
+          <span class="name">Pips</span>
+          <span class="desc">Place every domino in the right spot.</span>
+        </a>
+      </div>
+      <p class="view-all"><a href="#">View all games</a></p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">The Latest From Games</h2>
+      <div class="latest">
+        <h3>Crossplay: 2-Player Word Game</h3>
+        <p>Our first-ever 2-player word game app — players take turns building words off one another, earning points and competing to win. Available on iOS and Android.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">Learn More About Games</h2>
+      <div class="learn-links">
+        <a href="#">Daily Wordplay</a>
+        <a href="#">Wordle Review</a>
+        <a href="#">Connections Companion</a>
+        <a href="#">Spelling Bee Forum</a>
+        <a href="#">Strands Sidekick</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-links">
+      <a href="#">Contact</a>
+      <a href="#">Partner With Us</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+    <p>&copy; 2026 Company</p>
+  </footer>
+</body>
+</html>

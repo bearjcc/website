@@ -12,6 +12,17 @@ class Game extends Model
 {
     use HasFactory;
 
+    /**
+     * Resolve route binding so only published games are returned; otherwise 404.
+     */
+    public function resolveRouteBinding($value, $field = null): Model
+    {
+        return static::query()
+            ->where($field ?? 'slug', $value)
+            ->published()
+            ->firstOrFail();
+    }
+
     protected $fillable = [
         'slug',
         'title',
@@ -74,5 +85,16 @@ class Game extends Model
     public function getMotifKey(): string
     {
         return self::motifKeyForSlug($this->slug, $this->type);
+    }
+
+    /** Slugs that show full game entry (opponent + rules + Start). Others get minimal entry (rules + Start). */
+    public static function slugsWithOpponentChoice(): array
+    {
+        return ['tic-tac-toe', 'connect-4', 'chess', 'checkers'];
+    }
+
+    public function hasOpponentChoice(): bool
+    {
+        return in_array($this->slug, self::slugsWithOpponentChoice(), true);
     }
 }

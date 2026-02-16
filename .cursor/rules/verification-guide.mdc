@@ -1,0 +1,66 @@
+---
+description: "Verification guide for Ursa Minor: things to verify before committing and when building a game. Use as criteria to verify work, not as a task list to check off."
+globs: ["**"]
+alwaysApply: false
+---
+
+# Verification guide — Ursa Minor
+
+Use this as a **guide for what to verify**. Not a task list; reference when preparing to commit or when building a game.
+
+---
+
+## Before committing
+
+Verify:
+
+- Site works locally at http://website.test/
+- Pint has been run: `./vendor/bin/pint`
+- No linter errors
+- No emoji in production code
+- No secrets committed
+- Commit message is descriptive (conventional commits)
+
+---
+
+## Game development (when building a game)
+
+### Code quality
+
+- Engine uses pure static methods
+- State is immutable (return new, don't mutate)
+- No side effects in engine
+- Clear PHPDoc comments
+- PSR-12 (run Pint)
+
+### Reusability
+
+- Uses `InteractsWithGameState` trait
+- Uses `<x-ui.game-wrapper>` component
+- Standard control buttons with Heroicons
+- Constellation-style completion message
+- HSL color tokens (no hardcoded colors)
+
+### Testability
+
+- Unit tests for engine methods
+- Feature tests for Livewire component
+- Tests cover edge cases
+- Tests for win conditions
+- Tests for invalid moves
+
+### Accessibility
+
+- Proper aria-labels
+- Keyboard navigation (where applicable)
+- 44px minimum touch targets
+- Focus states visible
+- `prefers-reduced-motion` respected
+
+### Night sky theme
+
+- Subtle starfield on board (optional)
+- HSL tokens throughout
+- Constellation completion message
+- Calm, minimal UI
+- No emoji

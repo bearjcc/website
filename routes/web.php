@@ -5,6 +5,7 @@ use App\Livewire\Auth\Register;
 use App\Livewire\Pages\About;
 use App\Livewire\Pages\AdminFeatures;
 use App\Livewire\Pages\GamePlay;
+use App\Livewire\Pages\GameShow;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\LoreEdit;
 use App\Livewire\Pages\LoreIndex;
@@ -33,19 +34,11 @@ Route::middleware('guest')->group(function () {
 // Games index (must be before /{game:slug} so /games is not matched as a slug)
 Route::get('/games', \App\Livewire\Pages\GamesIndex::class)->name('games.index');
 
-// Top-level game routes (canonical URLs) - lazy load with starfield placeholder
-Route::get('/tic-tac-toe', \App\Livewire\Games\TicTacToe::class)->name('games.tic-tac-toe')->lazy();
-Route::get('/connect-4', \App\Livewire\Games\Connect4::class)->name('games.connect-4')->lazy();
-Route::get('/sudoku', \App\Livewire\Games\Sudoku::class)->name('games.sudoku')->lazy();
-Route::get('/twenty-forty-eight', \App\Livewire\Games\TwentyFortyEight::class)->name('games.twenty-forty-eight')->lazy();
-Route::get('/minesweeper', \App\Livewire\Games\Minesweeper::class)->name('games.minesweeper')->lazy();
-Route::get('/snake', \App\Livewire\Games\Snake::class)->name('games.snake')->lazy();
-Route::get('/checkers', \App\Livewire\Games\Checkers::class)->name('games.checkers')->lazy();
-Route::get('/chess', \App\Livewire\Games\Chess::class)->name('games.chess')->lazy();
-Route::view('/letter-walker', 'games.letter-walker')->name('games.letter-walker');
-Route::get('/{game:slug}', GamePlay::class)->name('games.play');
+// Game page (hero + Play) at /{slug}; play at /{slug}/play
+Route::get('/{game:slug}', GameShow::class)->name('games.show');
+Route::get('/{game:slug}/play', GamePlay::class)->name('games.play');
 
-// Legacy /games/* redirects (301 to top-level)
+// Legacy /games/* redirects (301 to game page or play URL)
 Route::prefix('games')->group(function () {
     $legacyRedirects = [
         'tic-tac-toe', 'connect-4', 'sudoku', 'twenty-forty-eight',
@@ -55,9 +48,15 @@ Route::prefix('games')->group(function () {
         Route::get('/'.$slug, function () use ($slug) {
             return redirect('/'.$slug, 301);
         });
+        Route::get('/'.$slug.'/play', function () use ($slug) {
+            return redirect('/'.$slug.'/play', 301);
+        });
     }
     Route::get('/{game:slug}', function (Game $game) {
         return redirect('/'.$game->slug, 301);
+    });
+    Route::get('/{game:slug}/play', function (Game $game) {
+        return redirect('/'.$game->slug.'/play', 301);
     });
 });
 

@@ -1,0 +1,43 @@
+# Ursa Minor - Checkers Play Screen Layout
+# Per-game play mockup: 8x8 board, red vs black pieces, turn/score chrome, one primary action (New game).
+# See ursa-minor-play-layout-ascii.txt for full play-view pattern.
+
++------------------------------------------------------------------+
+| HEADER (sticky)   [Logo]              Home   Games   About        |
++------------------------------------------------------------------+
+| GAME CHROME       Checkers              Red's turn                |
++------------------------------------------------------------------+
+| MAIN (max-width ~28rem, centered)                                 |
+|   Instruction: "Jump and capture. King your pieces."              |
+|                                                                  |
+|   8x8 BOARD (alternating light/dark, play on dark squares)        |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    | B  |    | B  |    | B  |    | B  |  Row 0 (black pieces) |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | B  |    | B  |    | B  |    | B  |    |                       |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    | B  |    |    |    |    |    | B  |                       |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    |    |    |    | B  |    |    |    |  Empty row            |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    |    |    | R  |    |    |    |    |  Empty row            |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | R  |    | R  |    |    |    | R  |    |                       |
+|   +----+----+----+----+----+----+----+----+                       |
+|   |    | R  |    | R  |    | R  |    | R  |                       |
+|   +----+----+----+----+----+----+----+----+                       |
+|   | R  |    | R  |    | R  |    | R  |    |  Row 7 (red pieces)   |
+|   +----+----+----+----+----+----+----+----+                       |
+|   R = red (you), B = black (CPU). K = king (optional in wireframe)|
+|                                                                  |
+|   INFO BUBBLES   Red (you) 0  |  Black (CPU) 0                   |
+|   ACTION ROW     [ New game ]                                     |
+|   HINT           "Tap a piece, then tap where to move."           |
++------------------------------------------------------------------+
+| FOOTER (horizon)  ------  Back to top  (c) Ursa Minor Games       |
++------------------------------------------------------------------+
+
+FILE
+----
+- Mockup: docs/mockups/ursa-minor-checkers-mockup.html
+- Pattern: docs/mockups/ursa-minor-play-layout-ascii.txt

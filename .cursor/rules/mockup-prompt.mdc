@@ -1,0 +1,95 @@
+---
+description: "Checklist and full prompt for Ursa Minor mockup tasks. Referenced by mockup-task.mdc when working in docs/mockups."
+globs: ["docs/mockups/**"]
+alwaysApply: false
+---
+
+# Ursa Minor Mockup Task — Checklist and Prompt
+
+This rule holds the **checklist** (single source of truth). When working in `docs/mockups/`, the mockup-task rule also applies; update the checklist here when you complete an item.
+
+---
+
+## What you are doing
+
+**Wireframe and mock up the game experience** for Ursa Minor Games. Produce one page or mockup per task. Each deliverable must be a static HTML wireframe (and optionally a short layout ASCII) that defines structure, content blocks, and one clear next action. Do not implement backend or Livewire — layout and UX only.
+
+---
+
+## Why
+
+- **Design clarity** — Stakeholders and implementers see the target before build.
+- **Template for implementation** — Each mockup is the reference for the corresponding Blade/Livewire view.
+- **Alignment with the design system** — Ensures every screen fits the "peaceful night sky" philosophy (see DESIGN_BIBLE.md and project rules).
+
+---
+
+## What we are looking to accomplish (this run)
+
+**Your job:** Find the **first unchecked item** in the checklist below. Complete it. Then mark it as checked in this document (and in `docs/mockups/TODO.md` if that file exists in your workspace, so both stay in sync).
+
+- **Deliverables per item:**
+  - A short layout ASCII (e.g. `docs/mockups/ursa-minor-<name>-layout-ascii.txt`) to help you clarify structure and identify regions of the page.
+  - One HTML mockup file in the mockups folder (e.g. `docs/mockups/ursa-minor-<name>-mockup.html`).
+- **Style:** Match existing Ursa Minor mockups: wireframe look (dashed borders, gray blocks, placeholders), same header/footer chrome, max-width centered main, one primary CTA. Use `ursa-minor-homepage-mockup.html`, `ursa-minor-play-mockup.html`, and `ursa-minor-game-page-mockup.html` as references. Use the same header nav as existing mockups (Logo → `index.html`, Home → `ursa-minor-homepage-mockup.html`, Games → `ursa-minor-play-mockup.html`, All wireframes → `index.html`) so wireframes stay navigable.
+
+---
+
+## What to focus on
+
+- **Layout and structure** — Header, main content, footer; placement of hero, CTA, rules, navigation.
+- **One clear next action** — One primary button/link (e.g. "Play") so the user's next step is obvious.
+- **Consistency** — Same header (logo, Home, Games, About), same footer (horizon style), same button/chrome patterns as existing mockups.
+- **Game experience only** — Pre-play (entry) and play (board/controls) screens; no auth flows, no account pages, no marketing pages.
+- **Design Bible** — Calm, no noise; "peaceful night sky." No value strips, app badges, or extra CTAs unless specified.
+
+---
+
+## What not to focus on
+
+- **Backend or framework** — No Laravel, Livewire, or database; static HTML/CSS only.
+- **Copy or content** — Placeholder text and labels are enough; no need for final marketing copy.
+- **Visual polish** — Wireframe-level is fine (gray blocks, dashed borders); no full visual design or assets.
+- **Pages out of scope** — No game-not-found (404) until that item is in the list; no per-game play mockups until you're on that item. Do only the **first unchecked** item.
+
+---
+
+## Checklist (update this and TODO.md when you finish an item)
+
+Pages to wireframe or mock up for Ursa Minor. Focus: game experience only.
+
+### Game experience
+
+- [x] **Homepage** – `ursa-minor-homepage-mockup.html`
+- [x] **Play / game hub** – `ursa-minor-play-mockup.html` (catalog, pick a game)
+- [x] **Game entry page** (generalized) – One mockup for all games: opponent selection (who to play against) + game rules. Template for every game's pre-play screen.
+- [x] **Game not found** – `ursa-minor-game-not-found-mockup.html` (404 for unknown game slug)
+
+### Per-game play mockups
+
+One mockup per game for the actual play screen (board, controls, state).
+
+- [x] Tic-Tac-Toe
+- [x] Connect 4
+- [x] Sudoku
+- [x] 2048 (Twenty-Forty-Eight)
+- [x] Minesweeper
+- [x] Snake
+- [x] Checkers
+- [x] Chess
+- [ ] Letter Walker
+
+---
+
+## File references (load when working)
+
+- **Project / design:** `DESIGN_BIBLE.md`, `AGENTS.md` (or project root rules), `docs/PROJECT_STRUCTURE.md`
+- **Existing mockups:** `docs/mockups/ursa-minor-homepage-mockup.html`, `ursa-minor-play-mockup.html`, `ursa-minor-game-page-mockup.html`
+- **Layout notes:** `docs/mockups/ursa-minor-game-page-layout-ascii.txt`, `docs/mockups/ursa-minor-play-layout-ascii.txt`
+- **Reference inspiration (optional):** `docs/mockups/ref/` (e.g. papergames-game-page-mockup.html, nyt-game-single-mockup.html)
+
+---
+
+## After you finish
+
+1. Check off the item you completed in the **Checklist** above (change `[ ]` to `[x]`).

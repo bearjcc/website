@@ -32,7 +32,7 @@
                 <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
                     @foreach($games as $game)
                         <x-ui.game-card
-                            :href="route('games.play', $game->slug)"
+                            :href="route('games.show', $game->slug)"
                             :title="$game->title"
                             :motif="$game->getMotifKey()"
                         />

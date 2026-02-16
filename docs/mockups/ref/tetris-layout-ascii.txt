@@ -1,0 +1,63 @@
+# Tetris - Layout Wireframe
+# Classic in-game layout: playfield 10w x 20h, next piece, hold, score, level, lines.
+# Use as reference for Ursa Minor Tetris game page.
+
++--------------------------------------------------------------------------------------------------+
+|  HEADER (minimal)                                                                                 |
+|  -----                                                                                           |
+|  Tetris                    [Score: 0]  [Level: 1]  [Lines: 0]         [ Pause ]  [ New game ]     |
+|  (title)                               (stats)                          (secondary) (primary)     |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  MAIN: PLAYFIELD + SIDEBAR                                                                       |
+|  -----                                                                                           |
+|                                                                                                  |
+|    +-- HOLD --+     +---------------------------- PLAYFIELD (10 x 20) --------------------+      |
+|    |          |     | [][][][]  [][][]  [][]  []  [][]  [][][]  [][][][]  (tetrominoes)  |      |
+|    |  (box)   |     |                                                                     |      |
+|    +----------+     |  . . . . . . . . . .   <- empty row                                 |      |
+|                     |  . . . . . . . . . .                                                 |      |
+|    +-- NEXT --+     |  . . . . . . . . . .   (10 columns, 20 visible rows)                |      |
+|    |   [][]   |     |  . . . . . . . . . .   pieces lock at bottom, lines clear            |      |
+|    |   [][]   |     |  ...                                                                 |      |
+|    +----------+     |  (stacked locked pieces at bottom)                                  |      |
+|                     +----------------------------------------------------------------------+      |
+|    Score: 0                                                                                       |
+|    Level: 1                                                                                       |
+|    Lines: 0                                                                                       |
+|                                                                                                  |
+|  Controls: Left/Right (move), Down (soft drop), Up/Space (rotate), Hold (hold piece).            |
+|  (Keyboard: arrows or WASD; optional on-screen buttons for touch.)                                |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|  FOOTER (minimal)                                                                                |
+|  ------                                                                                          |
+|  Privacy  |  Terms                                                                                |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY
+-----------------
+1. Header: game title + score + level + lines + Pause + New game.
+2. Main: playfield (10x20 grid) with optional Hold and Next panels beside it; score/level/lines in sidebar or under Next.
+3. Input: keyboard (arrows/WASD, rotate, hold); optional touch controls.
+4. Footer: minimal links.
+
+ELEMENT NOTES
+-------------
+- Playfield: 10 columns (standard), 20 visible rows; piece spawns at top center.
+- Hold: one tetromino; swap current piece with held (once per drop).
+- Next: one or more upcoming pieces (1-5 depending on variant).
+- Score/Level/Lines: primary stats; level often increases speed.
+
+COMPARISON TO play2048
+----------------------
+| Element   | Tetris                    | play2048.co     |
+|-----------|---------------------------|-----------------|
+| Grid      | 10x20 (tall)              | 4x4 (square)    |
+| Sidebar   | Hold, Next, stats         | None            |
+| Header    | Title + stats + Pause/New | Title + scores + New |
+| Controls  | Move, rotate, drop, hold  | Swipe/arrows    |
+
+FILE REFERENCE
+--------------
+- HTML mockup: docs/mockups/tetris-mockup.html

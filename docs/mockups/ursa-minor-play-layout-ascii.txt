@@ -1,0 +1,82 @@
+# Ursa Minor Games - Play View Layout Wireframe
+# Shown after user clicks "Play" on a game page.
+# Assumes most games use a square board; some need score and/or whose turn.
+# References: play2048 (score, best, new game, 4x4 grid), NYT single (instruction, grid, controls)
+
++--------------------------------------------------------------------------------------------------+
+| HEADER (sticky, same as homepage and game page)                                                   |
+|  [Logo]                                           Home   Games   About                           |
++--------------------------------------------------------------------------------------------------+
+| GAME CHROME BAR (below header)                                                                   |
+| -----------------                                                                                |
+| Game name (e.g. Tic-Tac-Toe)    X's turn   <- turn indicator only; no actions here               |
+|   OR  Game name + Score/Best for score games. Actions (New game, Hint) live below the board.     |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  MAIN (max-width ~28rem for board focus; centered)                                                |
+|  ----                                                                                            |
+|  Optional: one-line instruction (e.g. "Get three in a row." or "Join the numbers to get to 2048") |
+|                                                                                                  |
+|  SQUARE BOARD (NxN grid, centered)                                                               |
+|  -------------                                                                                   |
+|  Most games: 3x3 (Tic-Tac-Toe), 4x4 (2048), 8x8 (Chess), 9x9 (Sudoku). Wireframe = equal cells.   |
+|                                                                                                  |
+|                    +-----+-----+-----+                                                            |
+|                    |     |     |     |                                                           |
+|                    +-----+-----+-----+                                                            |
+|                    |     |     |     |                                                           |
+|                    +-----+-----+-----+                                                            |
+|                    |     |     |     |                                                           |
+|                    +-----+-----+-----+                                                            |
+|                                                                                                  |
+|  INFO BUBBLES (close to the game, directly below board)                                           |
+|  ----------------                                                                                |
+|  [ X (you) 0 ]  [ Ties 0 ]  [ O (CPU) 0 ]   <- 2p with session scores (Tic-Tac-Toe style)        |
+|   OR  [ Score 0 ]  [ Best 0 ]   for single-player (2048 style). One bubble can be highlighted.   |
+|   Rounded pill/bubble; label + value; minimal.                                                   |
+|                                                                                                  |
+|  ACTION BUTTONS (below info bubbles)                                                               |
+|  -----------------                                                                                |
+|  [ New game ]  [ Hint ]   <- primary + optional secondary. Tetris/Reversi: actions below board.  |
+|                                                                                                  |
+|  Optional: controls hint ("Tap a cell to play." / "Arrow keys or swipe.")                         |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+|                                                                                                  |
+|  FOOTER (horizon-footer, same as rest of site)                                                   |
+|  ------                                                                                          |
+|  Sunset line + [Back to top] + Copyright                                                          |
+|                                                                                                  |
++--------------------------------------------------------------------------------------------------+
+
+STRUCTURE SUMMARY
+-----------------
+1. Header: Logo + nav only. Game chrome bar: game name + turn (or score) only; no actions in chrome.
+2. Main: instruction, square board (NxN), info bubbles (scores/stats), action buttons (New game, Hint), controls hint.
+3. Info bubbles sit close to the game (below board); action buttons sit below the bubbles.
+4. Footer: horizon style.
+
+GAME CHROME VARIANTS (bar above board; actions always below board)
+------------------------------------------------------------------
+| Game type     | Chrome bar              | Info bubbles (below board)   | Action buttons   |
+|---------------|-------------------------|------------------------------|------------------|
+| Puzzle/arcade | Game name               | Score, Best                  | New game, Hint   |
+| Turn-based 2p | Game name, Whose turn   | X wins, Ties, O wins         | New game, Hint   |
+| 2p + score    | Game name, Turn         | P1 score, P2 score (or pieces)| New game, Hint  |
+| Solo puzzle   | Game name               | Score, Timer (optional)      | New game         |
+
+REFERENCES APPLIED
+------------------
+- Tic-Tac-Toe (XO): Info bubbles (X YOU, Ties, O CPU) below board; turn + reset at top. We put bubbles below board, actions below bubbles.
+- Reversi: Player/opponent piece counts above board; New game + Hint buttons below board.
+- Tetris mockup: Stats in sidebar next to playfield; Pause/New game in header. We use bubbles + actions below for consistency.
+- play2048: Score/Best; we show these in bubbles below board and move New game to action row.
+- DESIGN_BIBLE: Calm, minimal. Board is focus; info and actions stay close and below.
+
+FILE REFERENCE
+--------------
+- HTML mockup: docs/mockups/ursa-minor-play-mockup.html
+- Game page (before Play): docs/mockups/ursa-minor-game-page-mockup.html
+- Tetris: docs/mockups/tetris-mockup.html
+- play2048: docs/mockups/play2048-mockup.html, play2048-layout-ascii.txt
+- NYT single: docs/mockups/nyt-game-single-mockup.html, nyt-game-single-layout-ascii.txt

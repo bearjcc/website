@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ursa Minor – 2048 Play Wireframe</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #333; background: #e8e8e8; }
+
+    .wf-box { border: 1px dashed #999; background: #f5f5f5; }
+    .wf-placeholder { border: 1px dashed #bbb; background: #eee; color: #888; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      border-bottom: 2px solid #999;
+      background: #fff;
+      z-index: 10;
+    }
+    .logo-placeholder { width: 120px; height: 32px; }
+    .nav-main { display: flex; gap: 2rem; }
+    .nav-main a { color: inherit; text-decoration: none; font-size: 0.9rem; }
+
+    .game-chrome {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 0.75rem 2rem;
+      background: #fff;
+      border-bottom: 1px solid #ccc;
+    }
+    .game-chrome .game-name { font-size: 1.125rem; font-weight: 600; color: #444; margin: 0; }
+    .game-chrome .chrome-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .chrome-item {
+      padding: 0.35rem 0.75rem;
+      background: #f0f0f0;
+      border: 1px dashed #999;
+      font-size: 0.875rem;
+      color: #555;
+    }
+
+    .main { max-width: 28rem; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .game-instruction {
+      text-align: center;
+      font-size: 0.9375rem;
+      color: #555;
+      margin: 0 0 1.5rem;
+    }
+
+    .board-wrapper { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.35rem;
+      width: 100%;
+      max-width: 18rem;
+      aspect-ratio: 1;
+    }
+    .game-grid .cell {
+      background: #eee;
+      border: 1px dashed #bbb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #666;
+    }
+    .game-grid .cell.has-tile { background: #e8e4dc; color: #444; }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    .action-buttons .btn {
+      padding: 0.6rem 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 2px solid #333;
+      background: #fff;
+      color: #333;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .action-buttons .btn:hover { background: #f0f0f0; }
+    .action-buttons .btn-primary { background: #333; color: #fff; }
+    .action-buttons .btn-primary:hover { background: #555; border-color: #555; }
+
+    .controls-hint {
+      text-align: center;
+      font-size: 0.8125rem;
+      color: #888;
+      margin: 0;
+    }
+
+    .site-footer {
+      margin-top: 4rem;
+      padding: 2rem 1.5rem 2.5rem;
+      background: #2a2520;
+      color: #ccc;
+      text-align: center;
+      font-size: 0.875rem;
+    }
+    .footer-horizon { height: 6px; background: #c9a227; margin: 0 -1.5rem 1.5rem; }
+    .back-to-top { display: inline-block; margin-bottom: 1rem; color: #c9a227; text-decoration: none; font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <a href="index.html" class="wf-placeholder logo-placeholder">Logo</a>
+    <nav class="nav-main" aria-label="Main">
+      <a href="ursa-minor-homepage-mockup.html">Home</a>
+      <a href="ursa-minor-play-mockup.html">Games</a>
+      <a href="index.html">All wireframes</a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <div class="game-chrome">
+    <h2 class="game-name">2048</h2>
+    <div class="chrome-right">
+      <span class="chrome-item">Score 1234</span>
+      <span class="chrome-item">Best 5678</span>
+    </div>
+  </div>
+
+  <main class="main">
+    <p class="game-instruction">Slide tiles to combine. Reach 2048.</p>
+
+    <div class="board-wrapper">
+      <div class="game-grid" aria-label="2048 grid, 4 by 4">
+        <div class="cell has-tile">2</div>
+        <div class="cell has-tile">4</div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell has-tile">2</div>
+        <div class="cell has-tile">8</div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell has-tile">4</div>
+        <div class="cell has-tile">2</div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+        <div class="cell"></div>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <a href="#" class="btn btn-primary">New game</a>
+    </div>
+
+    <p class="controls-hint">Swipe or use arrow keys.</p>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-horizon" aria-hidden="true"></div>
+    <a href="#top" class="back-to-top">Back to top</a>
+    <p>&copy; Ursa Minor Games</p>
+  </footer>
+</body>
+</html>

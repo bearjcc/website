@@ -1,0 +1,19 @@
+Ursa Minor – Game not found (404) – Layout
+
++----------------------------------------------------------+
+| HEADER (sticky)                                          |
+| [Logo]                    Home   Games   About           |
++----------------------------------------------------------+
+| MAIN (max 960px, centered)                               |
+|                                                          |
+|             404                                          |
+|             Game not found                               |
+|             Short copy: link wrong, go back to games.    |
+|             [Browse games]  <- primary CTA               |
+|                                                          |
++----------------------------------------------------------+
+| FOOTER (horizon)                                         |
+| ==== (gold line)                                         |
+| Back to top                                              |
+| (c) Ursa Minor Games                                     |
++----------------------------------------------------------+

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Models\Game;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -52,7 +53,8 @@ class LetterWalkerScoreTest extends TestCase
 
     public function test_letter_walker_page_loads_and_has_leaderboard_container(): void
     {
-        $response = $this->get('/letter-walker');
+        Game::factory()->create(['slug' => 'letter-walker', 'status' => 'published']);
+        $response = $this->get('/letter-walker/play');
 
         $response->assertStatus(200);
         $response->assertSee('Today&#039;s Top Scores', false);

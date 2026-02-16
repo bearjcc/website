@@ -67,7 +67,7 @@ class GamesIndexTest extends TestCase
         $response = $this->get(route('games.index'));
 
         $response->assertStatus(200);
-        $response->assertSee(route('games.play', $game->slug), false);
+        $response->assertSee(route('games.show', $game->slug), false);
     }
 
     public function test_games_index_has_proper_aria_labels(): void
