@@ -15,6 +15,10 @@ class GameShow extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
+        if ($this->game->slug === 'letter-walker') {
+            return view('games.letter-walker')->layout('layouts.blank');
+        }
+
         $otherGames = Game::published()
             ->where('id', '!=', $this->game->id)
             ->orderBy('title')

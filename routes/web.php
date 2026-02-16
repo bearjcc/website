@@ -34,6 +34,9 @@ Route::middleware('guest')->group(function () {
 // Games index (must be before /{game:slug} so /games is not matched as a slug)
 Route::get('/games', \App\Livewire\Pages\GamesIndex::class)->name('games.index');
 
+// Letter Walker: load game directly at /letter-walker (no intro); redirect /play to base
+Route::get('/letter-walker/play', fn () => redirect('/letter-walker', 301));
+
 // Game page (hero + Play) at /{slug}; play at /{slug}/play
 Route::get('/{game:slug}', GameShow::class)->name('games.show');
 Route::get('/{game:slug}/play', GamePlay::class)->name('games.play');

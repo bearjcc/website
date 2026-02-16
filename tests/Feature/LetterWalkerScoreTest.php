@@ -54,7 +54,7 @@ class LetterWalkerScoreTest extends TestCase
     public function test_letter_walker_page_loads_and_has_leaderboard_container(): void
     {
         Game::factory()->create(['slug' => 'letter-walker', 'status' => 'published']);
-        $response = $this->get('/letter-walker/play');
+        $response = $this->get('/letter-walker');
 
         $response->assertStatus(200);
         $response->assertSee('Today&#039;s Top Scores', false);

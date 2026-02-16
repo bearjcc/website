@@ -48,7 +48,12 @@ class GameRoutesTest extends TestCase
 
         foreach ($slugs as $slug) {
             $response = $this->get("/{$slug}/play");
-            $response->assertStatus(200, "/{$slug}/play should be accessible");
+            if ($slug === 'letter-walker') {
+                $response->assertRedirect('/letter-walker');
+                $this->assertSame(301, $response->getStatusCode(), '/letter-walker/play should redirect to /letter-walker');
+            } else {
+                $response->assertStatus(200, "/{$slug}/play should be accessible");
+            }
         }
     }
 
