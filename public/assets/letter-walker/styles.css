@@ -263,6 +263,7 @@ body {
   width: calc(var(--cell-size) * 8 + var(--cell-gap) * 7);
   height: calc(var(--cell-size) * 8 + var(--cell-gap) * 7);
   margin: 0 auto;
+  touch-action: none; /* allow tap-and-drag word selection without browser scroll/gesture */
 }
 
 .grid-cell {

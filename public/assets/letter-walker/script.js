@@ -113,10 +113,13 @@ function renderGrid() {
       cell.textContent = cellData.letter;
       cell.dataset.row = r;
       cell.dataset.col = c;
-      
+
       cell.addEventListener("mousedown", (e) => startSelection(r, c));
       cell.addEventListener("mouseenter", (e) => updateSelection(r, c));
-      cell.addEventListener("touchstart", (e) => { e.preventDefault(); startSelection(r, c); }, {passive: false});
+      cell.addEventListener("touchstart", (e) => {
+        if (e.cancelable) e.preventDefault();
+        startSelection(r, c);
+      }, { passive: false });
       
       container.appendChild(cell);
     });
@@ -182,11 +185,23 @@ function isSameMoveType(lastMove, currentMove) {
 }
 
 // --- Selection ---
+// Update selected state on existing cells only (avoids re-creating DOM during drag; critical for touch)
+function refreshSelectionHighlight() {
+  const container = document.getElementById("grid");
+  if (!container) return;
+  container.querySelectorAll(".grid-cell").forEach((cell) => {
+    const r = parseInt(cell.dataset.row, 10);
+    const c = parseInt(cell.dataset.col, 10);
+    const selected = gameState.selectedCells.some((sc) => sc.row === r && sc.col === c);
+    cell.classList.toggle("selected", selected);
+  });
+  updateSelectedWord();
+}
+
 function startSelection(r, c) {
   gameState.isSelecting = true;
   gameState.selectedCells = [{ row: r, col: c }];
-  renderGrid();
-  updateSelectedWord();
+  refreshSelectionHighlight();
 }
 
 function updateSelection(r, c) {
@@ -194,36 +209,64 @@ function updateSelection(r, c) {
   const last = gameState.selectedCells[gameState.selectedCells.length - 1];
   if (last.row === r && last.col === c) return;
 
-  // Only allow horizontal or vertical neighbors
-  const isNeighbor = (Math.abs(last.row - r) === 1 && last.col === c) || 
-                     (Math.abs(last.col - c) === 1 && last.row === r);
-  
-  if (isNeighbor) {
-    // If re-selecting the previous cell, treat as "undo"
-    if (gameState.selectedCells.length > 1) {
-      const prev = gameState.selectedCells[gameState.selectedCells.length - 2];
-      if (prev.row === r && prev.col === c) {
-        gameState.selectedCells.pop();
-      } else if (!gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
-        gameState.selectedCells.push({ row: r, col: c });
-      }
-    } else if (!gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
-      gameState.selectedCells.push({ row: r, col: c });
+  const len = gameState.selectedCells.length;
+
+  // Undo: re-selecting the previous cell
+  if (len >= 2) {
+    const prev = gameState.selectedCells[len - 2];
+    if (prev.row === r && prev.col === c) {
+      gameState.selectedCells.pop();
+      refreshSelectionHighlight();
+      return;
     }
   }
-  renderGrid();
-  updateSelectedWord();
+
+  // First extension: any horizontal or vertical neighbor (direction not yet locked)
+  if (len === 1) {
+    const isNeighbor = (Math.abs(last.row - r) === 1 && last.col === c) ||
+                       (Math.abs(last.col - c) === 1 && last.row === r);
+    if (isNeighbor && !gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
+      gameState.selectedCells.push({ row: r, col: c });
+    }
+    refreshSelectionHighlight();
+    return;
+  }
+
+  // Direction locked: must continue in same line (horizontal or vertical)
+  const first = gameState.selectedCells[0];
+  const second = gameState.selectedCells[1];
+  const isHorizontal = first.row === second.row;
+  const sameLine = isHorizontal
+    ? (r === last.row && Math.abs(c - last.col) === 1)
+    : (c === last.col && Math.abs(r - last.row) === 1);
+  if (sameLine && !gameState.selectedCells.some(sc => sc.row === r && sc.col === c)) {
+    gameState.selectedCells.push({ row: r, col: c });
+  }
+  refreshSelectionHighlight();
 }
 
 function endSelection() {
   gameState.isSelecting = false;
 }
 
+// Touch drag: no touchenter; use touchmove + elementFromPoint to extend selection
+function handleTouchMove(e) {
+  if (!gameState.isSelecting || !e.touches.length) return;
+  e.preventDefault(); // prevent scroll so touch sequence stays active and we keep receiving move
+  const t = e.touches[0];
+  const el = document.elementFromPoint(t.clientX, t.clientY);
+  const cell = el && el.closest ? el.closest(".grid-cell") : (el && el.classList.contains("grid-cell") ? el : null);
+  if (cell && cell.dataset.row != null) {
+    const r = parseInt(cell.dataset.row, 10);
+    const c = parseInt(cell.dataset.col, 10);
+    updateSelection(r, c);
+  }
+}
+
 function clearSelection() {
   gameState.selectedCells = [];
   gameState.isSelecting = false;
-  renderGrid();
-  updateSelectedWord();
+  refreshSelectionHighlight();
 }
 
 function updateSelectedWord() {
@@ -431,6 +474,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Global events
   document.addEventListener("mouseup", endSelection);
   document.addEventListener("touchend", endSelection);
+  document.addEventListener("touchmove", handleTouchMove, { passive: false });
   
   // Row/Col Shift buttons
   document.addEventListener("click", (e) => {
