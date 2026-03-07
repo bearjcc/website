@@ -98,6 +98,35 @@ class Game extends Model
         return $this->catalogValue('theme', 'astronomical') === 'astronomical';
     }
 
+    public function pace(): string
+    {
+        return $this->catalogValue('pace', match ($this->type) {
+            'arcade' => 'lively',
+            'word', 'board' => 'steady',
+            default => 'quiet',
+        });
+    }
+
+    public function bestFor(): string
+    {
+        return $this->catalogValue('best_for', 'A calm browser game session.');
+    }
+
+    public function isRelaxingPick(): bool
+    {
+        return (bool) $this->catalogValue('relaxing_pick', $this->pace() === 'quiet');
+    }
+
+    public function paceLabel(): string
+    {
+        return match ($this->pace()) {
+            'quiet' => 'Quiet start',
+            'steady' => 'Steady focus',
+            'lively' => 'Livelier pace',
+            default => 'Easy to begin',
+        };
+    }
+
     public function playComponentProps(string $mode = 'computer', string $playerSymbol = 'X'): array
     {
         $props = ['game' => $this];

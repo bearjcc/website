@@ -23,11 +23,10 @@ class HomepageTest extends TestCase
 
         $response->assertStatus(200);
 
-        // Hero section content
         $response->assertSee(__('ui.tagline'));
-        $response->assertSee(__('ui.cta_play'));
+        $response->assertSee(__('ui.cta_start_relaxing'));
+        $response->assertSee('User story');
 
-        // Footer copyright
         $response->assertSee('Ursa Minor Games');
     }
 
@@ -63,9 +62,8 @@ class HomepageTest extends TestCase
 
         $html = $response->getContent();
 
-        $this->assertStringContainsString('Free Games to Play', $html);
+        $this->assertStringContainsString('Wander a little.', $html);
 
-        // Top-level game routes: href="/slug" or full URL
         foreach ($games as $game) {
             $this->assertStringContainsString('/'.$game->slug, $html, "Homepage should link to game: {$game->slug}");
         }
@@ -80,9 +78,7 @@ class HomepageTest extends TestCase
 
         $response->assertStatus(200);
 
-        // Carousel should exist but be empty (graceful empty state)
-        // No crash or error
-        $this->assertTrue(true);
+        $response->assertSee('A relaxing visit should take three quiet steps.');
     }
 
     // Blog section removed - minimal homepage philosophy
@@ -128,8 +124,7 @@ class HomepageTest extends TestCase
 
         $html = $response->getContent();
 
-        // Homepage has games section and nav; accent (star) used in theme
-        $this->assertStringContainsString('Free Games to Play', $html);
+        $this->assertStringContainsString('Start relaxing', $html);
         $this->assertStringContainsString('star', $html);
     }
 

@@ -15,12 +15,18 @@ class Home extends Component
 {
     public function render(): \Illuminate\Contracts\View\View
     {
-        $games = Game::published()->latest()->get();
-        $firstPublishedGameSlug = Game::published()->orderBy('id')->value('slug');
+        $games = Game::published()->orderBy('title')->get();
+        $relaxingGames = $games
+            ->filter(fn (Game $game): bool => $game->isRelaxingPick())
+            ->take(3)
+            ->values();
+
+        $featuredGame = $relaxingGames->first() ?? $games->first();
 
         return view('livewire.pages.home', [
             'games' => $games,
-            'firstPublishedGameSlug' => $firstPublishedGameSlug,
+            'relaxingGames' => $relaxingGames,
+            'featuredGame' => $featuredGame,
         ]);
     }
 }

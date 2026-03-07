@@ -14,6 +14,9 @@ return [
             'livewire_component' => 'games.tic-tac-toe',
             'supports_opponent_choice' => true,
             'supports_player_symbol' => true,
+            'pace' => 'quiet',
+            'best_for' => 'A short, gentle break.',
+            'relaxing_pick' => true,
         ],
         'connect-4' => [
             'title' => 'Connect 4',
@@ -24,6 +27,8 @@ return [
             'motif' => 'connect4',
             'livewire_component' => 'games.connect4',
             'supports_opponent_choice' => true,
+            'pace' => 'steady',
+            'best_for' => 'A little focus without much setup.',
         ],
         'sudoku' => [
             'title' => 'Sudoku',
@@ -33,6 +38,9 @@ return [
             'options_json' => ['difficulty' => 'medium', 'hints_enabled' => true],
             'motif' => 'sudoku',
             'livewire_component' => 'games.sudoku',
+            'pace' => 'quiet',
+            'best_for' => 'Settling in for a longer quiet sit.',
+            'relaxing_pick' => true,
         ],
         'chess' => [
             'title' => 'Chess',
@@ -43,6 +51,8 @@ return [
             'motif' => 'chess',
             'livewire_component' => 'games.chess',
             'supports_opponent_choice' => true,
+            'pace' => 'steady',
+            'best_for' => 'A thoughtful session with room to think.',
         ],
         'checkers' => [
             'title' => 'Checkers',
@@ -53,6 +63,8 @@ return [
             'motif' => 'checkers',
             'livewire_component' => 'games.checkers',
             'supports_opponent_choice' => true,
+            'pace' => 'steady',
+            'best_for' => 'Simple rules and an easy rhythm.',
         ],
         'minesweeper' => [
             'title' => 'Minesweeper',
@@ -62,6 +74,8 @@ return [
             'options_json' => ['grid_size' => '10x10', 'mine_count' => 15],
             'motif' => 'minesweeper',
             'livewire_component' => 'games.minesweeper',
+            'pace' => 'steady',
+            'best_for' => 'A quiet puzzle with a bit more tension.',
         ],
         'snake' => [
             'title' => 'Snake',
@@ -71,6 +85,8 @@ return [
             'options_json' => ['speed' => 'normal'],
             'motif' => 'snake',
             'livewire_component' => 'games.snake',
+            'pace' => 'lively',
+            'best_for' => 'When you want something a little more awake.',
         ],
         'twenty-forty-eight' => [
             'title' => '2048',
@@ -80,6 +96,9 @@ return [
             'options_json' => ['grid_size' => '4x4'],
             'motif' => '2048',
             'livewire_component' => 'games.twenty-forty-eight',
+            'pace' => 'quiet',
+            'best_for' => 'A calm loop you can slip into quickly.',
+            'relaxing_pick' => true,
         ],
         'letter-walker' => [
             'title' => 'Letter Walker',
@@ -93,6 +112,8 @@ return [
             'play_view' => 'games.letter-walker',
             'layout' => 'layouts.blank',
             'redirect_play_to_show' => true,
+            'pace' => 'steady',
+            'best_for' => 'A thoughtful word puzzle with a daily rhythm.',
         ],
     ],
 ];

@@ -21,10 +21,19 @@ class GameShow extends Component
             ->limit(5)
             ->get();
 
+        $calmerGames = Game::published()
+            ->where('id', '!=', $this->game->id)
+            ->get()
+            ->filter(fn (Game $game): bool => $game->pace() === 'quiet')
+            ->sortBy('title')
+            ->take(3)
+            ->values();
+
         return view($this->game->showView(), [
             'game' => $this->game,
             'motif' => $this->game->getMotifKey(),
             'otherGames' => $otherGames,
+            'calmerGames' => $calmerGames,
         ])->layout($this->game->layoutView())
             ->title($this->game->title.' - Ursa Minor');
     }

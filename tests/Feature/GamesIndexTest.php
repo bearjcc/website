@@ -17,7 +17,7 @@ class GamesIndexTest extends TestCase
         $response = $this->get(route('games.index'));
 
         $response->assertStatus(200);
-        $response->assertSee(__('ui.games_title'));
+        $response->assertSee('Find the game that fits your evening.');
     }
 
     public function test_games_index_shows_published_games(): void
@@ -80,7 +80,24 @@ class GamesIndexTest extends TestCase
         $response = $this->get(route('games.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('Play Test Game', false); // aria-label
+        $response->assertSee('Play Test Game', false);
+    }
+
+    public function test_games_index_groups_games_by_pace(): void
+    {
+        Game::factory()->create([
+            'slug' => 'snake',
+            'title' => 'Snake',
+            'type' => 'arcade',
+            'status' => 'published',
+        ]);
+
+        $response = $this->get(route('games.index'));
+
+        $response->assertSee(__('ui.games_quiet_title'));
+        $response->assertSee(__('ui.games_steady_title'));
+        $response->assertSee(__('ui.games_lively_title'));
+        $response->assertSee('Quiet picks');
     }
 
     public function test_games_index_uses_correct_motifs(): void

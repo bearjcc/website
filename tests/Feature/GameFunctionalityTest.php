@@ -32,6 +32,7 @@ class GameFunctionalityTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Ursa Minor Games');
         $response->assertSee('The sky is the limit');
+        $response->assertSee('Start relaxing');
     }
 
     #[Test]
@@ -54,8 +55,8 @@ class GameFunctionalityTest extends TestCase
         $response = $this->get('/games');
 
         $response->assertStatus(200);
-        $response->assertSee('Games');
-        $response->assertSee('Play in your browser. No sign-up required.');
+        $response->assertSee('Find the game that fits your evening.');
+        $response->assertSee('Choose by pace');
     }
 
     #[Test]

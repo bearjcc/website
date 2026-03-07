@@ -15,8 +15,15 @@ class GamesIndex extends Component
             ->orderBy('title')
             ->get();
 
+        $paceGroups = [
+            'quiet' => $games->filter(fn (Game $game): bool => $game->pace() === 'quiet')->values(),
+            'steady' => $games->filter(fn (Game $game): bool => $game->pace() === 'steady')->values(),
+            'lively' => $games->filter(fn (Game $game): bool => $game->pace() === 'lively')->values(),
+        ];
+
         return view('livewire.pages.games-index', [
             'games' => $games,
+            'paceGroups' => $paceGroups,
         ]);
     }
 }

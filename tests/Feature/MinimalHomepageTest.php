@@ -17,9 +17,7 @@ class MinimalHomepageTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertSee('The sky is the limit.');
-
-        // Games section is the primary CTA
-        $response->assertSee('Free Games to Play');
+        $response->assertSee('Start relaxing');
     }
 
     public function test_homepage_uses_visual_first_game_cards(): void
@@ -84,11 +82,7 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should NOT have verbose section headers
         $this->assertStringNotContainsString('Available now', $html);
-        $this->assertStringNotContainsString('Play in your browser', $html);
-
-        // Should NOT have hero body text or headlines
         $this->assertStringNotContainsString('We build elegant, replayable games', $html);
         $this->assertStringNotContainsString('Small games. Big craft.', $html);
     }
@@ -155,10 +149,7 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        // Should use games grid instead of carousel
-        $this->assertStringContainsString('Free Games to Play', $html);
-
-        // Should have game cards in grid layout
+        $this->assertStringContainsString('Wander a little.', $html);
         $this->assertStringContainsString('um-game-card', $html);
     }
 
