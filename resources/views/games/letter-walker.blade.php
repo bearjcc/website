@@ -10,6 +10,14 @@
         @if(auth()->check())
             <meta name="user-authenticated" content="true">
         @endif
+        {{-- Set theme before first paint so background and content match (no flash of wrong theme) --}}
+        <script>
+          (function(){
+            var s = typeof localStorage !== 'undefined' && localStorage.getItem('lw-theme');
+            var theme = s || (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+            document.documentElement.setAttribute('data-theme', theme || 'dark');
+          })();
+        </script>
     </head>
     <body>
         <div class="wrap">

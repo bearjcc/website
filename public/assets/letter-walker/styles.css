@@ -10,7 +10,7 @@
 
 :root {
   --lw-font-main: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-  /* Dark theme (default) */
+  /* Dark theme (default when no data-theme) */
   --lw-bg: #121213;
   --lw-text: #d7dadc;
   --lw-muted: #818384;
@@ -25,6 +25,23 @@
   --cell-size: 32px;
   --cell-gap: 4px;
   --arrow-size: 28px;
+}
+
+/* System light preference before JS runs (avoids flash when no lw-theme saved) */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    --lw-bg: #ffffff;
+    --lw-text: #121213;
+    --lw-muted: #787c7e;
+    --lw-border: #d3d6da;
+    --lw-card-bg: #f5f5f5;
+    --lw-cell-bg: #ffffff;
+    --lw-cell-border: #d3d6da;
+    --lw-cell-selected: #538d4e;
+    --lw-btn-border: #121213;
+    --lw-btn-disabled: #787c7e;
+    --arrow-bg: #e5e7eb;
+  }
 }
 
 [data-theme="light"] {
@@ -60,12 +77,28 @@ body {
 }
 
 /* ==========================================================================
-   LAYOUT - Centered column (~420px)
+   LAYOUT - Centered column; wider on desktop so not always mobile strip
    ========================================================================== */
 
 .wrap {
   width: 100%;
   max-width: 420px;
+}
+
+@media screen and (min-width: 640px) {
+  .wrap {
+    max-width: 520px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .wrap {
+    max-width: 560px;
+  }
+  :root {
+    --cell-size: 36px;
+    --arrow-size: 32px;
+  }
 }
 
 /* ==========================================================================
@@ -234,7 +267,7 @@ body {
   background: var(--arrow-bg);
   color: var(--lw-muted);
   border: 1px solid var(--lw-border);
-  border-radius: 4px;
+  border-radius: 2px;
   font-size: 12px;
   cursor: pointer;
   font-family: inherit;
@@ -274,10 +307,11 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--lw-cell-bg);
-  border: 2px solid var(--lw-cell-border);
-  border-radius: 4px;
+  border: 1px solid var(--lw-cell-border);
+  border-radius: 2px;
   font-weight: 700;
-  font-size: clamp(10px, 2.8vw, 14px);
+  font-size: clamp(12px, 3.2vw, 17px);
+  text-transform: uppercase;
   color: var(--lw-text);
   cursor: pointer;
   user-select: none;
@@ -658,16 +692,17 @@ input[type="text"] {
 
 @media screen and (max-width: 480px) {
   body {
-    padding: 16px 12px;
+    padding: 16px 4px;
   }
 
   .wrap {
     max-width: 100%;
   }
 
+  /* Fill width with ~4px margin (same as cell-gap); 2*arrow + 8*cell + 9*gap = 100vw - 16 */
   :root {
-    --cell-size: 28px;
-    --arrow-size: 26px;
+    --cell-size: max(24px, min(32px, calc((100vw - 52px) / 10)));
+    --arrow-size: var(--cell-size);
   }
 
   .header-center .title {
@@ -675,7 +710,7 @@ input[type="text"] {
   }
 
   .board-outer {
-    padding: 8px;
+    padding: 4px;
   }
 
   .selected-word {
@@ -694,11 +729,6 @@ input[type="text"] {
 }
 
 @media screen and (max-width: 360px) {
-  :root {
-    --cell-size: 24px;
-    --arrow-size: 24px;
-  }
-
   .grid-container {
     width: calc(var(--cell-size) * 8 + var(--cell-gap) * 7);
     height: calc(var(--cell-size) * 8 + var(--cell-gap) * 7);

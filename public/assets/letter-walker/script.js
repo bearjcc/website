@@ -32,7 +32,11 @@ const gameState = {
   selectionStart: null,
   activePointerId: null,
   dictionaryLoaded: false,
-  theme: localStorage.getItem('lw-theme') || 'light',
+  theme: (function(){
+    var s = localStorage.getItem('lw-theme');
+    if (s) return s;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  })(),
   lastMoveType: null // Tracks {type: 'row'|'col', index: number, direction: string}
 };
 
