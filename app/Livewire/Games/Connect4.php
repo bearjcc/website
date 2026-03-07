@@ -16,28 +16,40 @@ class Connect4 extends Component
 
     public Game $game;
 
+    public ?string $initialMode = null;
+
+    public string $entryMode = 'friend';
+
     public array $state = [];
 
     public bool $showRules = false;
 
     public function mount(): void
     {
-        $this->game = Game::where('slug', 'connect-4')->firstOrFail();
+        if (! isset($this->game->slug)) {
+            $this->game = Game::where('slug', 'connect-4')->firstOrFail();
+        }
+
+        if (in_array($this->initialMode, ['computer', 'friend', 'solo'], true)) {
+            $this->entryMode = $this->initialMode;
+        }
+
         $this->newGame();
     }
 
-    public function newGame()
+    public function newGame(): void
     {
         $game = new Connect4Game();
         $this->state = $game->newGameState();
+        $this->state['mode'] = $this->resolvedStateMode();
         $this->showRules = false;
         $this->resetGame();
         $this->clearSavedState();
     }
 
-    public function dropPiece(int $column)
+    public function dropPiece(int $column): void
     {
-        if ($this->state['gameOver']) {
+        if (($this->state['gameOver'] ?? false) || ! $this->canAcceptMove()) {
             return;
         }
 
@@ -46,32 +58,16 @@ class Connect4 extends Component
             $this->startTimer();
         }
 
-        $game = new Connect4Game();
-        $move = ['column' => $column];
+        if (! $this->applyMove($column)) {
+            return;
+        }
 
-        if ($game->validateMove($this->state, $move)) {
-            $this->state = $game->applyMove($this->state, $move);
-            $this->incrementMoveCount();
-            $this->saveState();
-
-            // Check for game completion
-            if ($this->state['gameOver']) {
-                $this->completeGame();
-
-                // Dispatch completion event for celebration
-                $this->dispatch('game-completed', [
-                    'winner' => $this->state['winner'] === 'draw' ? 'draw' : 'player',
-                    'score' => $this->state['score'] ?? [],
-                    'moves' => $this->moveCount,
-                    'time' => $this->getElapsedTime(),
-                    'winningLine' => $this->state['winningLine'] ?? null,
-                    'isWon' => $this->state['winner'] !== 'draw' && $this->state['winner'] !== null,
-                ]);
-            }
+        if ($this->shouldComputerMove()) {
+            $this->makeComputerMove();
         }
     }
 
-    public function toggleRules()
+    public function toggleRules(): void
     {
         $this->showRules = ! $this->showRules;
     }
@@ -100,10 +96,37 @@ class Connect4 extends Component
         return Connect4Engine::canDropInColumn($this->state, $column);
     }
 
+    public function currentTurnLabel(): string
+    {
+        if (($this->state['gameOver'] ?? false) === true) {
+            return ($this->state['winner'] ?? null) === 'draw'
+                ? 'Draw'
+                : ucfirst((string) $this->state['winner']).' wins';
+        }
+
+        if ($this->entryMode === 'computer') {
+            return ($this->state['currentPlayer'] ?? Connect4Engine::RED) === Connect4Engine::RED
+                ? 'Your turn'
+                : 'Computer turn';
+        }
+
+        return ucfirst((string) ($this->state['currentPlayer'] ?? Connect4Engine::RED)).' to move';
+    }
+
+    public function modeLabel(): string
+    {
+        return match ($this->entryMode) {
+            'computer' => 'vs Computer',
+            'solo' => 'Practice',
+            default => 'Pass and Play',
+        };
+    }
+
     protected function getCurrentState(): array
     {
         return [
             'state' => $this->state,
+            'entryMode' => $this->entryMode,
             'showRules' => $this->showRules,
             'moveCount' => $this->moveCount,
             'startTime' => $this->startTime,
@@ -113,6 +136,7 @@ class Connect4 extends Component
     protected function syncFromState(array $state): void
     {
         $this->state = $state['state'];
+        $this->entryMode = $state['entryMode'] ?? 'friend';
         $this->showRules = $state['showRules'] ?? false;
         $this->moveCount = $state['moveCount'] ?? 0;
         $this->startTime = $state['startTime'] ?? null;
@@ -122,6 +146,7 @@ class Connect4 extends Component
     {
         return [
             'state' => $this->state,
+            'entryMode' => $this->entryMode,
             'showRules' => $this->showRules,
             'moveCount' => $this->moveCount,
             'startTime' => $this->startTime,
@@ -131,9 +156,81 @@ class Connect4 extends Component
     protected function restoreFromState(array $state): void
     {
         $this->state = $state['state'] ?? [];
+        $this->entryMode = $state['entryMode'] ?? 'friend';
         $this->showRules = $state['showRules'] ?? false;
         $this->moveCount = $state['moveCount'] ?? 0;
         $this->startTime = $state['startTime'] ?? null;
+    }
+
+    protected function resolvedStateMode(): string
+    {
+        return $this->entryMode === 'computer' ? 'vs_ai' : 'pass_and_play';
+    }
+
+    protected function canAcceptMove(): bool
+    {
+        if ($this->entryMode !== 'computer') {
+            return true;
+        }
+
+        return ($this->state['currentPlayer'] ?? Connect4Engine::RED) === Connect4Engine::RED;
+    }
+
+    protected function shouldComputerMove(): bool
+    {
+        return $this->entryMode === 'computer'
+            && ! ($this->state['gameOver'] ?? false)
+            && ($this->state['currentPlayer'] ?? Connect4Engine::RED) === Connect4Engine::YELLOW;
+    }
+
+    protected function applyMove(int $column): bool
+    {
+        $game = new Connect4Game();
+        $move = ['column' => $column];
+
+        if (! $game->validateMove($this->state, $move)) {
+            return false;
+        }
+
+        $this->state = $game->applyMove($this->state, $move);
+        $this->state['mode'] = $this->resolvedStateMode();
+        $this->incrementMoveCount();
+        $this->finishTurn();
+
+        return true;
+    }
+
+    protected function makeComputerMove(): void
+    {
+        $column = Connect4Engine::chooseComputerMove($this->state, Connect4Engine::YELLOW);
+
+        if ($column === null) {
+            return;
+        }
+
+        $this->applyMove($column);
+    }
+
+    protected function finishTurn(): void
+    {
+        $this->saveState();
+
+        if (! ($this->state['gameOver'] ?? false)) {
+            return;
+        }
+
+        $this->completeGame();
+
+        $winner = $this->state['winner'] ?? null;
+
+        $this->dispatch('game-completed', [
+            'winner' => $winner === 'draw' ? 'draw' : ($this->entryMode === 'computer' && $winner === Connect4Engine::YELLOW ? 'computer' : 'player'),
+            'score' => $this->state['score'] ?? [],
+            'moves' => $this->moveCount,
+            'time' => $this->getElapsedTime(),
+            'winningLine' => $this->state['winningLine'] ?? null,
+            'isWon' => $winner !== 'draw' && $winner !== null,
+        ]);
     }
 
     public function render(): \Illuminate\Contracts\View\View

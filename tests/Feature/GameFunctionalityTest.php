@@ -309,6 +309,43 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
+    public function connect_four_computer_mode_responds_with_ai_move(): void
+    {
+        $game = Game::where('slug', 'connect-4')->firstOrFail();
+
+        $component = Livewire::test(\App\Livewire\Games\Connect4::class, [
+            'game' => $game,
+            'initialMode' => 'computer',
+        ]);
+
+        $component->assertSet('entryMode', 'computer');
+        $component->assertSet('state.mode', 'vs_ai');
+
+        $component->call('dropPiece', 0);
+
+        $component->assertSet('state.moves', 2);
+        $component->assertSet('state.currentPlayer', 'red');
+        $this->assertSame('red', $component->get('state')['board'][5][0]);
+        $this->assertSame('yellow', $component->get('state')['board'][5][3]);
+    }
+
+    #[Test]
+    public function connect_four_friend_mode_does_not_trigger_ai_move(): void
+    {
+        $game = Game::where('slug', 'connect-4')->firstOrFail();
+
+        $component = Livewire::test(\App\Livewire\Games\Connect4::class, [
+            'game' => $game,
+            'initialMode' => 'friend',
+        ]);
+
+        $component->call('dropPiece', 0);
+
+        $component->assertSet('state.moves', 1);
+        $component->assertSet('state.currentPlayer', 'yellow');
+    }
+
+    #[Test]
     public function sudoku_game_functionality_works(): void
     {
         $component = Livewire::test(\App\Livewire\Games\Sudoku::class);

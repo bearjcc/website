@@ -202,6 +202,42 @@ class Connect4Engine
         return $validMoves;
     }
 
+    public static function chooseComputerMove(array $state, string $player = self::YELLOW): ?int
+    {
+        $validMoves = self::getValidMoves($state);
+
+        if ($validMoves === []) {
+            return null;
+        }
+
+        $opponent = $player === self::RED ? self::YELLOW : self::RED;
+
+        foreach ($validMoves as $column) {
+            $simulated = self::dropPiece($state, $column);
+            if (($simulated['winner'] ?? null) === $player) {
+                return $column;
+            }
+        }
+
+        foreach ($validMoves as $column) {
+            $threatState = $state;
+            $threatState['currentPlayer'] = $opponent;
+            $simulated = self::dropPiece($threatState, $column);
+            if (($simulated['winner'] ?? null) === $opponent) {
+                return $column;
+            }
+        }
+
+        $preferredColumns = [3, 2, 4, 1, 5, 0, 6];
+        foreach ($preferredColumns as $column) {
+            if (in_array($column, $validMoves, true)) {
+                return $column;
+            }
+        }
+
+        return $validMoves[0];
+    }
+
     /**
      * Calculate game score
      */

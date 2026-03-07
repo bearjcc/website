@@ -28,7 +28,8 @@
         @if($gameStarted)
             <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-4">
                 <div class="flex items-center justify-center gap-4 text-sm">
-                    <span>Turn: <strong class="text-ink">{{ ucfirst($state['currentPlayer']) }}</strong></span>
+                    <span>Mode: <strong class="text-ink">{{ $this->modeLabel() }}</strong></span>
+                    <span>Turn: <strong class="text-ink">{{ $this->currentTurnLabel() }}</strong></span>
                     <span>Moves: <strong class="text-ink">{{ $moveCount }}</strong></span>
                     <span>Time:
                         @php
@@ -51,7 +52,9 @@
                         <x-heroicon-o-scale class="w-5 h-5 text-ink" />
                     @else
                         <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" />
-                        <p class="text-lg font-semibold text-star">{{ ucfirst($state['winner']) }} wins!</p>
+                        <p class="text-lg font-semibold text-star">
+                            {{ $entryMode === 'computer' && $state['winner'] === 'yellow' ? 'Computer wins!' : ucfirst($state['winner']) . ' wins!' }}
+                        </p>
                         <x-heroicon-o-star class="w-5 h-5 text-star animate-pulse" style="animation-delay: 0.5s" />
                     @endif
                 </div>
@@ -71,7 +74,10 @@
                         <div class="flex items-center justify-center gap-4">
                             @foreach(['red', 'yellow'] as $player)
                                 @if(isset($state['score'][$player]))
-                                    <span>{{ ucfirst($player) }}: {{ $state['score'][$player] }}</span>
+                                    <span>
+                                        {{ $entryMode === 'computer' && $player === 'yellow' ? 'Computer' : ucfirst($player) }}:
+                                        {{ $state['score'][$player] }}
+                                    </span>
                                 @endif
                             @endforeach
                         </div>

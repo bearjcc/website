@@ -88,6 +88,9 @@
             $childProps['initialGameMode'] = $this->resolvedGameMode();
             $childProps['initialPlayerSymbol'] = $playerSymbol;
         }
+        if ($game->slug === 'connect-4') {
+            $childProps['initialMode'] = $mode;
+        }
     @endphp
     @livewire($componentName, $childProps, key('game-' . $game->slug . '-' . $game->id))
 @endif
