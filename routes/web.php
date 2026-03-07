@@ -13,6 +13,9 @@ use App\Livewire\Pages\LoreShow;
 use App\Models\Game;
 use Illuminate\Support\Facades\Route;
 
+$standalonePlayRedirectSlugs = Game::standalonePlayRedirectSlugs();
+$legacyRedirects = array_unique(array_merge(Game::knownSlugs(), ['2048']));
+
 // Health check for Railway deployment
 Route::get('/health', function () {
     return response()->json([
@@ -34,19 +37,30 @@ Route::middleware('guest')->group(function () {
 // Games index (must be before /{game:slug} so /games is not matched as a slug)
 Route::get('/games', \App\Livewire\Pages\GamesIndex::class)->name('games.index');
 
-// Letter Walker: load game directly at /letter-walker (no intro); redirect /play to base
-Route::get('/letter-walker/play', fn () => redirect('/letter-walker', 301));
+// Standalone-themed games bypass Livewire entirely.
+foreach ($standalonePlayRedirectSlugs as $slug) {
+    Route::get('/'.$slug, function () use ($slug) {
+        $game = Game::published()
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        return response()->view($game->showView(), [
+            'game' => $game,
+        ]);
+    });
+}
+
+// Standalone-themed games load directly at their show route; /play permanently redirects.
+foreach ($standalonePlayRedirectSlugs as $slug) {
+    Route::get('/'.$slug.'/play', fn () => redirect('/'.$slug, 301));
+}
 
 // Game page (hero + Play) at /{slug}; play at /{slug}/play
 Route::get('/{game:slug}', GameShow::class)->name('games.show');
 Route::get('/{game:slug}/play', GamePlay::class)->name('games.play');
 
 // Legacy /games/* redirects (301 to game page or play URL)
-Route::prefix('games')->group(function () {
-    $legacyRedirects = [
-        'tic-tac-toe', 'connect-4', 'sudoku', 'twenty-forty-eight',
-        'minesweeper', 'snake', 'checkers', 'chess', 'letter-walker',
-    ];
+Route::prefix('games')->group(function () use ($legacyRedirects) {
     foreach ($legacyRedirects as $slug) {
         Route::get('/'.$slug, function () use ($slug) {
             return redirect('/'.$slug, 301);

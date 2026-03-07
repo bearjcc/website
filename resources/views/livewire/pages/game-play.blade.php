@@ -1,17 +1,3 @@
-@php
-    $componentMap = [
-        'tic-tac-toe' => 'games.tic-tac-toe',
-        'sudoku' => 'games.sudoku',
-        'twenty-forty-eight' => 'games.twenty-forty-eight',
-        'minesweeper' => 'games.minesweeper',
-        'snake' => 'games.snake',
-        'connect-4' => 'games.connect4',
-        'checkers' => 'games.checkers',
-        'chess' => 'games.chess',
-    ];
-    $componentName = $componentMap[$game->slug] ?? null;
-@endphp
-
 @if(!$componentName)
     @include('livewire.pages.game-not-found')
 @elseif(!$started)
@@ -36,7 +22,7 @@
                         </button>
                     @endforeach
                 </div>
-                @if($game->slug === 'tic-tac-toe' && in_array($mode, ['computer', 'solo'], true))
+                @if($game->supportsPlayerSymbolChoice() && in_array($mode, ['computer', 'solo'], true))
                     <div class="mb-6">
                         <p class="text-sm font-medium text-ink/80 mb-2">Choose your symbol</p>
                         <div class="flex gap-3">
@@ -82,15 +68,5 @@
         </div>
     </section>
 @else
-    @php
-        $childProps = ['game' => $game];
-        if ($game->slug === 'tic-tac-toe') {
-            $childProps['initialGameMode'] = $this->resolvedGameMode();
-            $childProps['initialPlayerSymbol'] = $playerSymbol;
-        }
-        if ($game->slug === 'connect-4') {
-            $childProps['initialMode'] = $mode;
-        }
-    @endphp
     @livewire($componentName, $childProps, key('game-' . $game->slug . '-' . $game->id))
 @endif

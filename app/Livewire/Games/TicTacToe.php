@@ -54,6 +54,7 @@ class TicTacToe extends Component
         }
         if ($this->initialGameMode !== null && $this->initialGameMode !== '') {
             $this->setGameMode($this->initialGameMode, $this->initialPlayerSymbol ?? 'X');
+
             return;
         }
         $this->newGame();
@@ -209,14 +210,15 @@ class TicTacToe extends Component
     public function getChromeTurnText(): string
     {
         if ($this->winner !== null) {
-            return $this->winner === 'X' ? "Moon wins" : "Star wins";
+            return $this->winner === 'X' ? 'Moon wins' : 'Star wins';
         }
         if ($this->isDraw) {
-            return "Draw";
+            return 'Draw';
         }
         if ($this->gameMode === 'pvp') {
             return $this->currentPlayer === 'X' ? "Moon's turn" : "Star's turn";
         }
+
         return $this->currentPlayer === $this->playerSymbol ? 'Your turn' : 'AI thinking...';
     }
 

@@ -4,7 +4,7 @@
     'showControls' => true,
 ])
 
-<div class="section py-12 md:py-16">
+<div {{ $attributes->merge(['class' => 'section py-12 md:py-16']) }}>
     <div class="max-w-2xl mx-auto space-y-8">
         {{-- Back navigation --}}
         <div class="flex items-center gap-4">

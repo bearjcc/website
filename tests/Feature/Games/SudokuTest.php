@@ -25,7 +25,8 @@ class SudokuTest extends TestCase
         // Component auto-starts with medium difficulty by default
         Livewire::test(Sudoku::class)
             ->assertSet('difficulty', 'medium')
-            ->assertSet('showDifficultySelector', false);
+            ->assertSet('showDifficultySelector', false)
+            ->assertSet('gameStarted', true);
     }
 
     public function test_can_select_difficulty_and_start_game(): void
@@ -34,7 +35,16 @@ class SudokuTest extends TestCase
             ->call('selectDifficulty', 'easy')
             ->assertSet('difficulty', 'easy')
             ->assertSet('showDifficultySelector', false)
-            ->assertSet('gameStarted', false); // Game starts on first move
+            ->assertSet('gameStarted', true);
+    }
+
+    public function test_can_reopen_and_close_puzzle_selector(): void
+    {
+        Livewire::test(Sudoku::class)
+            ->call('openDifficultySelector')
+            ->assertSet('showDifficultySelector', true)
+            ->call('closeDifficultySelector')
+            ->assertSet('showDifficultySelector', false);
     }
 
     public function test_can_select_cell(): void

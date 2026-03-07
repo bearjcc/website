@@ -28,6 +28,7 @@ class SudokuGameTest extends TestCase
                 if ($original[$r][$c] === 0) {
                     $component->call('selectCell', $r, $c)->call('placeNumber', 5);
                     $this->assertEquals(5, $component->get('board')[$r][$c]);
+
                     return;
                 }
             }
@@ -49,6 +50,7 @@ class SudokuGameTest extends TestCase
                     $component->call('selectCell', $r, $c);
                     $component->call('placeNumber', 9);
                     $this->assertSame($expected, $component->get('board')[$r][$c], 'Original puzzle cell must not change');
+
                     return;
                 }
             }

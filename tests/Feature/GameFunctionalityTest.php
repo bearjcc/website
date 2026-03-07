@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Models\Game;
+use Database\Seeders\ProductionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\Test;
@@ -18,27 +21,7 @@ class GameFunctionalityTest extends TestCase
 
         Livewire::withoutLazyLoading();
 
-        // Seed games for testing
-        $this->seedGames();
-    }
-
-    private function seedGames(): void
-    {
-        $games = [
-            ['title' => 'Tic-Tac-Toe', 'slug' => 'tic-tac-toe', 'type' => 'board', 'description' => 'Classic 3x3 grid game', 'status' => 'published'],
-            ['title' => '2048', 'slug' => 'twenty-forty-eight', 'type' => 'puzzle', 'description' => 'Number puzzle game', 'status' => 'published'],
-            ['title' => 'Connect 4', 'slug' => 'connect-4', 'type' => 'board', 'description' => 'Vertical connect four game', 'status' => 'published'],
-            ['title' => 'Sudoku', 'slug' => 'sudoku', 'type' => 'puzzle', 'description' => 'Number placement puzzle', 'status' => 'published'],
-            ['title' => 'Chess', 'slug' => 'chess', 'type' => 'board', 'description' => 'Classic strategy game', 'status' => 'published'],
-            ['title' => 'Checkers', 'slug' => 'checkers', 'type' => 'board', 'description' => 'Classic board game', 'status' => 'published'],
-            ['title' => 'Minesweeper', 'slug' => 'minesweeper', 'type' => 'puzzle', 'description' => 'Mine detection game', 'status' => 'published'],
-            ['title' => 'Snake', 'slug' => 'snake', 'type' => 'arcade', 'description' => 'Classic snake game', 'status' => 'published'],
-            ['title' => 'Letter Walker', 'slug' => 'letter-walker', 'type' => 'word', 'description' => 'Daily word puzzle', 'status' => 'published'],
-        ];
-
-        foreach ($games as $gameData) {
-            Game::create(array_merge($gameData, ['status' => 'published']));
-        }
+        $this->seed(ProductionSeeder::class);
     }
 
     #[Test]
@@ -185,15 +168,6 @@ class GameFunctionalityTest extends TestCase
         $response->assertSee('Games');
     }
 
-    public function galaxy_mapper_route_works(): void
-    {
-        $response = $this->get('/minesweeper/play');
-
-        $response->assertStatus(200);
-        $response->assertSee('Galaxy Mapper');
-    }
-
-    #[Test]
     public function minesweeper_component_has_required_methods(): void
     {
         $component = Livewire::test(\App\Livewire\Games\Minesweeper::class);

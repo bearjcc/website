@@ -33,9 +33,18 @@
         </div>
 
         {{-- Difficulty Selection --}}
-        @if($showDifficultySelector && !$gameStarted)
+        @if($showDifficultySelector)
             <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
-                <h3 class="text-lg font-semibold text-ink">Select Difficulty</h3>
+                <div class="flex items-start justify-between gap-4">
+                    <div>
+                        <h3 class="text-lg font-semibold text-ink">Select Difficulty</h3>
+                        <p class="text-sm text-ink/70 mt-1">Choose a fresh puzzle or load one of your own.</p>
+                    </div>
+                    <button wire:click="closeDifficultySelector"
+                            class="px-3 py-2 rounded-lg border border-[hsl(var(--border)/.3)] text-sm text-ink/80 hover:text-ink hover:border-star transition-all">
+                        Resume
+                    </button>
+                </div>
                 
                 <div class="flex flex-wrap gap-2">
                     @foreach(\App\Games\Sudoku\SudokuEngine::DIFFICULTIES as $key => $info)
@@ -82,7 +91,7 @@
         @endif
 
         {{-- Game Status --}}
-        @if($gameStarted && !$showDifficultySelector)
+        @if(!$showDifficultySelector)
             <div class="flex flex-wrap justify-center gap-4 text-sm">
                 <div class="px-4 py-2 glass rounded-lg border border-[hsl(var(--border)/.1)]">
                     <span class="text-ink/60">Difficulty:</span>
@@ -96,6 +105,10 @@
                     <span class="text-ink/60">Mistakes:</span>
                     <strong class="text-ink ml-2">{{ $mistakes }}/{{ $maxMistakes }}</strong>
                 </div>
+                <button wire:click="openDifficultySelector"
+                        class="px-4 py-2 glass rounded-lg border border-[hsl(var(--border)/.1)] text-ink/80 hover:text-ink hover:border-star transition-all">
+                    Change Puzzle
+                </button>
             </div>
         @endif
 
@@ -147,7 +160,7 @@
         @endif
 
         {{-- Sudoku Board --}}
-        @if($gameStarted || !$showDifficultySelector)
+        @if(!$showDifficultySelector)
             <div class="sudoku-board-container">
                 <div class="sudoku-board">
                     @for($row = 0; $row < 9; $row++)
@@ -230,9 +243,16 @@
         @endif
 
         {{-- Controls --}}
-        @if($gameStarted && !$gameComplete)
+        @if(!$showDifficultySelector && !$gameComplete)
             <div class="space-y-4">
                 <div class="flex flex-wrap justify-center gap-2">
+                    <button wire:click="openDifficultySelector"
+                            class="px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2 bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-constellation"
+                            aria-label="Choose a different puzzle">
+                        <x-heroicon-o-sparkles class="w-4 h-4" />
+                        <span>Puzzle</span>
+                    </button>
+
                     <button wire:click="useHint"
                             @disabled($hintsUsed >= $maxHints)
                             class="px-4 py-2 rounded-lg border transition-all inline-flex items-center gap-2 {{ $hintsUsed >= $maxHints ? 'opacity-40 cursor-not-allowed' : 'hover:border-star hover:bg-star/10' }} bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)]"

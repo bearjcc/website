@@ -7,6 +7,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Arr;
 
 class Game extends Model
 {
@@ -47,54 +48,101 @@ class Game extends Model
         return $query->where('status', 'published');
     }
 
-    /**
-     * Canonical slug (and optional type) to motif key for game-card and game page hero.
-     * Keys: tictactoe, connect4, sudoku, chess, checkers, minesweeper, snake, 2048, board, puzzle, cards, sparkles.
-     */
-    public static function motifKeyForSlug(string $slug, ?string $type = null): string
+    public function catalogConfig(): array
     {
-        $bySlug = match ($slug) {
-            'tic-tac-toe' => 'tictactoe',
-            'connect-4' => 'connect4',
-            'twenty-forty-eight', '2048' => '2048',
-            'sudoku' => 'sudoku',
-            'minesweeper' => 'minesweeper',
-            'snake' => 'snake',
-            'checkers' => 'checkers',
-            'chess' => 'chess',
-            'letter-walker' => 'board',
-            default => null,
-        };
-        if ($bySlug !== null) {
-            return $bySlug;
-        }
-        if ($type !== null) {
-            $byType = match ($type) {
-                'board' => 'board',
-                'puzzle' => 'puzzle',
-                'card' => 'cards',
-                default => null,
-            };
-            if ($byType !== null) {
-                return $byType;
-            }
-        }
-        return 'sparkles';
+        return config('games.catalog.'.$this->slug, []);
     }
 
     public function getMotifKey(): string
     {
-        return self::motifKeyForSlug($this->slug, $this->type);
-    }
-
-    /** Slugs that show full game entry (opponent + rules + Start). Others get minimal entry (rules + Start). */
-    public static function slugsWithOpponentChoice(): array
-    {
-        return ['tic-tac-toe', 'connect-4', 'chess', 'checkers'];
+        return $this->catalogValue('motif', $this->fallbackMotifKey());
     }
 
     public function hasOpponentChoice(): bool
     {
-        return in_array($this->slug, self::slugsWithOpponentChoice(), true);
+        return (bool) $this->catalogValue('supports_opponent_choice', false);
+    }
+
+    public function supportsPlayerSymbolChoice(): bool
+    {
+        return (bool) $this->catalogValue('supports_player_symbol', false);
+    }
+
+    public function livewireComponentName(): ?string
+    {
+        return $this->catalogValue('livewire_component');
+    }
+
+    public function showView(): string
+    {
+        return $this->catalogValue('show_view', 'livewire.pages.game-show');
+    }
+
+    public function playView(): string
+    {
+        return $this->catalogValue('play_view', 'livewire.pages.game-play');
+    }
+
+    public function layoutView(): string
+    {
+        return $this->catalogValue('layout', 'components.layouts.app');
+    }
+
+    public function redirectsPlayToShow(): bool
+    {
+        return (bool) $this->catalogValue('redirect_play_to_show', false);
+    }
+
+    public function usesAstronomicalTheme(): bool
+    {
+        return $this->catalogValue('theme', 'astronomical') === 'astronomical';
+    }
+
+    public function playComponentProps(string $mode = 'computer', string $playerSymbol = 'X'): array
+    {
+        $props = ['game' => $this];
+
+        if ($this->slug === 'tic-tac-toe') {
+            $props['initialGameMode'] = match ($mode) {
+                'friend' => 'pvp',
+                'solo' => 'ai-easy',
+                default => 'ai-medium',
+            };
+            $props['initialPlayerSymbol'] = $playerSymbol;
+        }
+
+        if ($this->slug === 'connect-4') {
+            $props['initialMode'] = $mode;
+        }
+
+        return $props;
+    }
+
+    public static function knownSlugs(): array
+    {
+        return array_keys(config('games.catalog', []));
+    }
+
+    public static function standalonePlayRedirectSlugs(): array
+    {
+        return collect(config('games.catalog', []))
+            ->filter(fn (array $game): bool => (bool) Arr::get($game, 'redirect_play_to_show', false))
+            ->keys()
+            ->all();
+    }
+
+    private function catalogValue(string $key, mixed $default = null): mixed
+    {
+        return Arr::get($this->catalogConfig(), $key, $default);
+    }
+
+    private function fallbackMotifKey(): string
+    {
+        return match ($this->type) {
+            'board' => 'board',
+            'puzzle' => 'puzzle',
+            'card' => 'cards',
+            default => 'sparkles',
+        };
     }
 }

@@ -108,7 +108,7 @@ class Sudoku extends Component
                 'gameComplete' => false,
                 'conflicts' => [],
                 'notesMode' => false,
-                'gameStarted' => false,
+                'gameStarted' => true,
             ];
 
             $this->syncFromState($state);
@@ -120,9 +120,25 @@ class Sudoku extends Component
             $this->syncFromState($state);
         }
 
+        $this->gameStarted = true;
         $this->showDifficultySelector = false;
+        $this->showCustomInput = false;
         $this->lastHint = null;
         $this->hintStep = null;
+    }
+
+    public function openDifficultySelector(): void
+    {
+        $this->showDifficultySelector = true;
+        $this->showCustomInput = false;
+        $this->lastHint = null;
+        $this->hintStep = null;
+    }
+
+    public function closeDifficultySelector(): void
+    {
+        $this->showDifficultySelector = false;
+        $this->showCustomInput = false;
     }
 
     public function selectDifficulty(string $difficulty)
@@ -261,8 +277,11 @@ class Sudoku extends Component
 
     public function toggleCustomInput()
     {
+        $this->showDifficultySelector = true;
         $this->showCustomInput = ! $this->showCustomInput;
-        $this->customPuzzleInput = '';
+        if (! $this->showCustomInput) {
+            $this->customPuzzleInput = '';
+        }
     }
 
     public function loadCustomPuzzle()
@@ -340,7 +359,7 @@ class Sudoku extends Component
                 'gameComplete' => false,
                 'conflicts' => [],
                 'notesMode' => false,
-                'gameStarted' => false,
+                'gameStarted' => true,
             ];
 
             $this->syncFromState($state);
@@ -348,6 +367,8 @@ class Sudoku extends Component
             $this->showCustomInput = false;
             $this->showDifficultySelector = false;
             $this->customPuzzleInput = '';
+            $this->lastHint = null;
+            $this->hintStep = null;
 
             $this->dispatch('success', 'Custom puzzle loaded successfully!');
         } catch (\Exception $e) {

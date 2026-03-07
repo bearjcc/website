@@ -15,20 +15,17 @@ class GameShow extends Component
 
     public function render(): \Illuminate\Contracts\View\View
     {
-        if ($this->game->slug === 'letter-walker') {
-            return view('games.letter-walker')->layout('layouts.blank');
-        }
-
         $otherGames = Game::published()
             ->where('id', '!=', $this->game->id)
             ->orderBy('title')
             ->limit(5)
             ->get();
 
-        return view('livewire.pages.game-show', [
+        return view($this->game->showView(), [
+            'game' => $this->game,
             'motif' => $this->game->getMotifKey(),
             'otherGames' => $otherGames,
-            'title' => $this->game->title . ' - Ursa Minor',
-        ]);
+        ])->layout($this->game->layoutView())
+            ->title($this->game->title.' - Ursa Minor');
     }
 }

@@ -15,33 +15,12 @@ class Home extends Component
 {
     public function render(): \Illuminate\Contracts\View\View
     {
-        // Get all published games for carousel
-        $games = $this->getGamesSafely();
-
-        // Get first published game for hero CTA
-        $firstPublishedGameSlug = $this->getFirstGameSlugSafely();
+        $games = Game::published()->latest()->get();
+        $firstPublishedGameSlug = Game::published()->orderBy('id')->value('slug');
 
         return view('livewire.pages.home', [
             'games' => $games,
             'firstPublishedGameSlug' => $firstPublishedGameSlug,
         ]);
-    }
-
-    private function getGamesSafely()
-    {
-        try {
-            return Game::published()->latest()->get();
-        } catch (\Exception $e) {
-            return collect();
-        }
-    }
-
-    private function getFirstGameSlugSafely()
-    {
-        try {
-            return Game::published()->orderBy('id')->value('slug');
-        } catch (\Exception $e) {
-            return;
-        }
     }
 }

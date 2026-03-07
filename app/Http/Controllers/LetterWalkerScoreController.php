@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\LetterWalkerScore;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,15 +24,22 @@ class LetterWalkerScoreController extends Controller
 
         $tz = config('letter_walker.leaderboard_timezone', 'Pacific/Auckland');
 
-        $score = LetterWalkerScore::create([
-            'user_id' => Auth::id(),
-            'player_name' => $validated['player_name'] ?? 'Anonymous',
-            'score' => $validated['score'],
-            'moves' => $validated['moves'],
-            'words_found' => $validated['words_found'],
-            'puzzle_number' => $validated['puzzle_number'],
-            'date_played' => now($tz)->toDateString(),
-        ]);
+        try {
+            $score = LetterWalkerScore::create([
+                'user_id' => Auth::id(),
+                'player_name' => $validated['player_name'] ?? 'Anonymous',
+                'score' => $validated['score'],
+                'moves' => $validated['moves'],
+                'words_found' => $validated['words_found'],
+                'puzzle_number' => $validated['puzzle_number'],
+                'date_played' => now($tz)->toDateString(),
+            ]);
+        } catch (QueryException) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Leaderboard is unavailable right now.',
+            ], 503);
+        }
 
         return response()->json([
             'success' => true,
@@ -41,11 +49,15 @@ class LetterWalkerScoreController extends Controller
 
     public function index(): JsonResponse
     {
-        $scores = LetterWalkerScore::query()
-            ->orderBy('score', 'desc')
-            ->orderBy('date_played', 'desc')
-            ->limit(10)
-            ->get(['id', 'player_name', 'score', 'date_played']);
+        try {
+            $scores = LetterWalkerScore::query()
+                ->orderBy('score', 'desc')
+                ->orderBy('date_played', 'desc')
+                ->limit(10)
+                ->get(['id', 'player_name', 'score', 'date_played']);
+        } catch (QueryException) {
+            $scores = collect();
+        }
 
         return response()->json([
             'success' => true,
@@ -55,13 +67,17 @@ class LetterWalkerScoreController extends Controller
 
     public function daily(): JsonResponse
     {
-        $scores = LetterWalkerScore::query()
-            ->todaysPuzzle()
-            ->orderBy('score', 'desc')
-            ->limit(10)
-            ->get(['id', 'player_name', 'score', 'date_played']);
-
         $tz = config('letter_walker.leaderboard_timezone', 'Pacific/Auckland');
+
+        try {
+            $scores = LetterWalkerScore::query()
+                ->todaysPuzzle()
+                ->orderBy('score', 'desc')
+                ->limit(10)
+                ->get(['id', 'player_name', 'score', 'date_played']);
+        } catch (QueryException) {
+            $scores = collect();
+        }
 
         return response()->json([
             'success' => true,

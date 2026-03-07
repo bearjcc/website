@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Livewire\Pages;
 
 use App\Models\Game;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('components.layouts.app')]
 class GamePlay extends Component
 {
     public Game $game;
@@ -25,24 +27,12 @@ class GamePlay extends Component
         $this->started = true;
     }
 
-    /** Resolve Tic-Tac-Toe (and similar) gameMode from entry mode. */
-    public function resolvedGameMode(): string
-    {
-        return match ($this->mode) {
-            'friend' => 'pvp',
-            'solo' => 'ai-easy',
-            default => 'ai-medium',
-        };
-    }
-
     public function render(): \Illuminate\Contracts\View\View
     {
-        if ($this->game->slug === 'letter-walker') {
-            return view('games.letter-walker')->layout('layouts.blank');
-        }
-
-        return view('livewire.pages.game-play', [
-            'title' => $this->game->title.' - Ursa Minor',
-        ])->layout('components.layouts.app');
+        return view($this->game->playView(), [
+            'componentName' => $this->game->livewireComponentName(),
+            'childProps' => $this->game->playComponentProps($this->mode, $this->playerSymbol),
+        ])->layout($this->game->layoutView())
+            ->title($this->game->title.' - Ursa Minor');
     }
 }

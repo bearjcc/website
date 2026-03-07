@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         // Game slug not found or not published: show wireframe 404 (Laravel converts ModelNotFoundException to NotFoundHttpException)
         $exceptions->render(function (NotFoundHttpException $e, Request $request) {
             if (! $request->isMethod('GET')) {
-                return null;
+                return;
             }
             $path = trim($request->path(), '/');
             $segments = $path === '' ? [] : explode('/', $path);
@@ -30,6 +30,6 @@ return Application::configure(basePath: dirname(__DIR__))
             if ($isGamePath) {
                 return response()->view('errors.game-not-found', [], 404);
             }
-            return null;
+
         });
     })->create();

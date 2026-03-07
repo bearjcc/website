@@ -27,6 +27,11 @@ class TwentyFortyEight extends Component
 
     public array $previousState = [];
 
+    public function getCanUndoProperty(): bool
+    {
+        return ! empty($this->previousState);
+    }
+
     public function mount(): void
     {
         $this->game = Game::where('slug', 'twenty-forty-eight')->firstOrFail();
@@ -132,7 +137,7 @@ class TwentyFortyEight extends Component
             512 => 'hsl(40 80% 65%)',    // Dark gold
             1024 => 'hsl(40 75% 60%)',   // Orange-gold
             2048 => 'hsl(40 70% 55%)',   // Dark orange-gold
-            default => 'hsl(280 60% 40%)', // Purple for higher tiles
+            default => 'hsl(212 72% 72%)', // Constellation blue for higher tiles
         };
     }
 

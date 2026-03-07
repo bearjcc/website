@@ -6,6 +6,7 @@ namespace Tests\Feature;
 
 use App\Models\Game;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class LetterWalkerScoreTest extends TestCase
@@ -49,6 +50,19 @@ class LetterWalkerScoreTest extends TestCase
 
         $this->assertArrayHasKey('scores', $response->json());
         $this->assertArrayHasKey('date', $response->json());
+    }
+
+    public function test_daily_endpoint_gracefully_degrades_when_scores_table_is_missing(): void
+    {
+        Schema::dropIfExists('letter_walker_scores');
+
+        $response = $this->getJson('/api/letter-walker/scores/daily');
+
+        $response->assertOk()
+            ->assertJson([
+                'success' => true,
+                'scores' => [],
+            ]);
     }
 
     public function test_letter_walker_page_loads_and_has_leaderboard_container(): void

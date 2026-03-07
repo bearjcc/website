@@ -7,7 +7,45 @@
         'Game ends when no more moves are possible',
         'Try to achieve the highest score possible!'
     ]"
-    x-data="{ showCelebration: false, celebrationTimer: null }"
+    x-data="{
+        showCelebration: false,
+        celebrationTimer: null,
+        touchStartX: null,
+        touchStartY: null,
+        swipeThreshold: 24,
+        handleTouchStart(event) {
+            const touch = event.changedTouches[0];
+            this.touchStartX = touch.clientX;
+            this.touchStartY = touch.clientY;
+        },
+        handleTouchEnd(event) {
+            if (this.touchStartX === null || this.touchStartY === null) {
+                return;
+            }
+
+            const touch = event.changedTouches[0];
+            const deltaX = touch.clientX - this.touchStartX;
+            const deltaY = touch.clientY - this.touchStartY;
+            const absX = Math.abs(deltaX);
+            const absY = Math.abs(deltaY);
+
+            if (Math.max(absX, absY) < this.swipeThreshold) {
+                this.touchStartX = null;
+                this.touchStartY = null;
+
+                return;
+            }
+
+            if (absX > absY) {
+                $wire.move(deltaX > 0 ? 'right' : 'left');
+            } else {
+                $wire.move(deltaY > 0 ? 'down' : 'up');
+            }
+
+            this.touchStartX = null;
+            this.touchStartY = null;
+        }
+    }"
     x-init="
         $wire.on('game-completed', (event) => {
             showCelebration = true;
@@ -89,7 +127,9 @@
 
     {{-- Game Board --}}
     <div class="flex justify-center">
-        <div class="game-board-2048 relative interactive-glow smooth-transition">
+        <div class="game-board-2048 relative interactive-glow smooth-transition touch-none"
+             @touchstart.passive="handleTouchStart($event)"
+             @touchend.passive="handleTouchEnd($event)">
             @foreach($board as $index => $value)
                 @php
                     $row = intval($index / 4);
@@ -128,11 +168,42 @@
             </button>
         </div>
 
-        {{-- Instructions for mobile users --}}
+        <div class="flex justify-center">
+            <div class="grid grid-cols-3 gap-2" aria-label="Direction controls">
+                <span></span>
+                <button type="button"
+                        wire:click="move('up')"
+                        class="h-11 w-11 rounded-lg border border-[hsl(var(--border)/.2)] bg-[hsl(var(--surface)/.08)] text-ink transition-colors hover:border-star hover:bg-star/10"
+                        aria-label="Move tiles up">
+                    <x-heroicon-o-chevron-up class="mx-auto h-5 w-5" />
+                </button>
+                <span></span>
+
+                <button type="button"
+                        wire:click="move('left')"
+                        class="h-11 w-11 rounded-lg border border-[hsl(var(--border)/.2)] bg-[hsl(var(--surface)/.08)] text-ink transition-colors hover:border-star hover:bg-star/10"
+                        aria-label="Move tiles left">
+                    <x-heroicon-o-chevron-left class="mx-auto h-5 w-5" />
+                </button>
+                <button type="button"
+                        wire:click="move('down')"
+                        class="h-11 w-11 rounded-lg border border-[hsl(var(--border)/.2)] bg-[hsl(var(--surface)/.08)] text-ink transition-colors hover:border-star hover:bg-star/10"
+                        aria-label="Move tiles down">
+                    <x-heroicon-o-chevron-down class="mx-auto h-5 w-5" />
+                </button>
+                <button type="button"
+                        wire:click="move('right')"
+                        class="h-11 w-11 rounded-lg border border-[hsl(var(--border)/.2)] bg-[hsl(var(--surface)/.08)] text-ink transition-colors hover:border-star hover:bg-star/10"
+                        aria-label="Move tiles right">
+                    <x-heroicon-o-chevron-right class="mx-auto h-5 w-5" />
+                </button>
+            </div>
+        </div>
+
         <div class="text-center">
             <p class="text-xs text-ink/60">
-                <span class="hidden md:inline">Use arrow keys or WASD to move tiles</span>
-                <span class="md:hidden">Swipe or tap to move tiles</span>
+                <span class="hidden md:inline">Use arrow keys, WASD, swipe, or the direction pad</span>
+                <span class="md:hidden">Swipe the board or use the direction pad</span>
             </p>
         </div>
     </div>

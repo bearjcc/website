@@ -15,7 +15,7 @@ class TwentyFortyEightGame implements GameInterface
 
     public function slug(): string
     {
-        return '2048';
+        return 'twenty-forty-eight';
     }
 
     public function name(): string
