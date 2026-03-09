@@ -32,13 +32,36 @@ class TwentyFortyEight extends Component
         return ! empty($this->previousState);
     }
 
+    public function getMaxTileProperty(): int
+    {
+        return empty($this->board) ? 0 : max($this->board);
+    }
+
+    public function getChromeSummaryProperty(): string
+    {
+        return sprintf(
+            'Score %s  Best %s',
+            number_format($this->score),
+            number_format($this->bestScore)
+        );
+    }
+
+    public function getElapsedClockProperty(): string
+    {
+        $elapsed = $this->getElapsedTime();
+        $minutes = intdiv($elapsed, 60);
+        $seconds = $elapsed % 60;
+
+        return sprintf('%d:%02d', $minutes, $seconds);
+    }
+
     public function mount(): void
     {
         $this->game = Game::where('slug', 'twenty-forty-eight')->firstOrFail();
         $this->newGame();
     }
 
-    public function newGame()
+    public function newGame(): void
     {
         $game = new TwentyFortyEightGame();
         $state = $game->newGameState();
@@ -51,7 +74,7 @@ class TwentyFortyEight extends Component
         $this->clearSavedState();
     }
 
-    public function move(string $direction)
+    public function move(string $direction): void
     {
         if ($this->isOver) {
             return;
@@ -62,12 +85,13 @@ class TwentyFortyEight extends Component
             $this->startTimer();
         }
 
-        // Save state for undo
-        $this->previousState = [
+        $currentState = [
             'board' => $this->board,
             'score' => $this->score,
             'isWon' => $this->isWon,
             'isOver' => $this->isOver,
+            'moveCount' => $this->moveCount,
+            'startTime' => $this->startTime,
         ];
 
         $game = new TwentyFortyEightGame();
@@ -80,6 +104,7 @@ class TwentyFortyEight extends Component
 
         // Only update if board changed
         if ($state['board'] !== $this->board) {
+            $this->previousState = $currentState;
             $this->board = $state['board'];
             $this->score = $state['score'];
             $this->isWon = $state['isWon'];
@@ -107,16 +132,20 @@ class TwentyFortyEight extends Component
                     'isWon' => $state['isWon'],
                 ]);
             }
+        } else {
+            $this->previousState = [];
         }
     }
 
-    public function undo()
+    public function undo(): void
     {
         if (! empty($this->previousState)) {
             $this->board = $this->previousState['board'];
             $this->score = $this->previousState['score'];
             $this->isWon = $this->previousState['isWon'];
             $this->isOver = $this->previousState['isOver'];
+            $this->moveCount = $this->previousState['moveCount'] ?? $this->moveCount;
+            $this->startTime = $this->previousState['startTime'] ?? $this->startTime;
             $this->previousState = [];
             $this->saveState();
         }

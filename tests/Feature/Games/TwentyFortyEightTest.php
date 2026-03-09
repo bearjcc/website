@@ -73,6 +73,34 @@ class TwentyFortyEightTest extends TestCase
             ->assertSet('canUndo', false);
     }
 
+    public function test_no_op_move_does_not_create_undo_state(): void
+    {
+        Livewire::test(TwentyFortyEight::class)
+            ->set('board', [2, 4, 8, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            ->set('score', 32)
+            ->set('isWon', false)
+            ->set('isOver', false)
+            ->call('move', 'left')
+            ->assertSet('moveCount', 0)
+            ->assertSet('score', 32)
+            ->assertSet('canUndo', false);
+    }
+
+    public function test_undo_restores_move_count_and_timer_context(): void
+    {
+        Livewire::test(TwentyFortyEight::class)
+            ->set('board', [2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+            ->set('score', 0)
+            ->set('isWon', false)
+            ->set('isOver', false)
+            ->set('moveCount', 4)
+            ->set('startTime', time() - 15)
+            ->call('move', 'left')
+            ->call('undo')
+            ->assertSet('moveCount', 4)
+            ->assertSet('canUndo', false);
+    }
+
     public function test_play_route_loads_successfully(): void
     {
         $response = $this->get(route('games.play', $this->game));
