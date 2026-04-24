@@ -17,7 +17,7 @@ class GamesIndexTest extends TestCase
         $response = $this->get(route('games.index'));
 
         $response->assertStatus(200);
-        $response->assertSee('Find the game that fits your evening.');
+        $response->assertSee(__('ui.games_hero'));
     }
 
     public function test_games_index_shows_published_games(): void
@@ -97,7 +97,7 @@ class GamesIndexTest extends TestCase
         $response->assertSee(__('ui.games_quiet_title'));
         $response->assertSee(__('ui.games_steady_title'));
         $response->assertSee(__('ui.games_lively_title'));
-        $response->assertSee('Quiet picks');
+        $this->assertStringContainsString('quiet-picks', $response->getContent());
     }
 
     public function test_games_index_uses_correct_motifs(): void

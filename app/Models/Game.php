@@ -109,7 +109,7 @@ class Game extends Model
 
     public function bestFor(): string
     {
-        return $this->catalogValue('best_for', 'A calm browser game session.');
+        return $this->catalogValue('best_for', 'Browser play, any length.');
     }
 
     public function isRelaxingPick(): bool
@@ -120,10 +120,10 @@ class Game extends Model
     public function paceLabel(): string
     {
         return match ($this->pace()) {
-            'quiet' => 'Quiet start',
-            'steady' => 'Steady focus',
-            'lively' => 'Livelier pace',
-            default => 'Easy to begin',
+            'quiet' => 'Quiet',
+            'steady' => 'Steady',
+            'lively' => 'Lively',
+            default => 'Quiet',
         };
     }
 

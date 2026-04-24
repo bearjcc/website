@@ -24,8 +24,9 @@ class HomepageTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertSee(__('ui.tagline'));
-        $response->assertSee(__('ui.cta_start_relaxing'));
-        $response->assertSee('User story');
+        $response->assertSee(__('ui.cta_quiet_picks'));
+        $response->assertSee(__('ui.home_headline'));
+        $response->assertSee(__('ui.home_kicker'));
 
         $response->assertSee('Ursa Minor Games');
     }
@@ -62,7 +63,7 @@ class HomepageTest extends TestCase
 
         $html = $response->getContent();
 
-        $this->assertStringContainsString('Wander a little.', $html);
+        $this->assertStringContainsString(__('ui.home_all_games_lead'), $html);
 
         foreach ($games as $game) {
             $this->assertStringContainsString('/'.$game->slug, $html, "Homepage should link to game: {$game->slug}");
@@ -78,7 +79,7 @@ class HomepageTest extends TestCase
 
         $response->assertStatus(200);
 
-        $response->assertSee('A relaxing visit should take three quiet steps.');
+        $response->assertSee(__('ui.home_headline'));
     }
 
     // Blog section removed - minimal homepage philosophy
@@ -124,7 +125,7 @@ class HomepageTest extends TestCase
 
         $html = $response->getContent();
 
-        $this->assertStringContainsString('Start relaxing', $html);
+        $this->assertStringContainsString(__('ui.cta_quiet_picks'), $html);
         $this->assertStringContainsString('star', $html);
     }
 

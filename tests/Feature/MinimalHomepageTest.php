@@ -17,7 +17,8 @@ class MinimalHomepageTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertSee('The sky is the limit.');
-        $response->assertSee('Start relaxing');
+        $response->assertSee(__('ui.cta_quiet_picks'));
+        $response->assertSee(__('ui.home_headline'));
     }
 
     public function test_homepage_uses_visual_first_game_cards(): void
@@ -149,7 +150,7 @@ class MinimalHomepageTest extends TestCase
         $response = $this->get('/');
         $html = $response->getContent();
 
-        $this->assertStringContainsString('Wander a little.', $html);
+        $this->assertStringContainsString(__('ui.home_all_games_lead'), $html);
         $this->assertStringContainsString('um-game-card', $html);
     }
 

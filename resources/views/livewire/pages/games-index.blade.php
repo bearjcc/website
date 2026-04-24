@@ -2,17 +2,17 @@
     <section class="section pt-24 md:pt-32 pb-16 md:pb-20">
         <div class="max-w-3xl space-y-6">
             <div class="space-y-4">
-                <p class="kicker">Choose by pace</p>
-                <h1 class="h1">Find the game that fits your evening.</h1>
+                <p class="kicker">{{ __('ui.games_index_kicker') }}</p>
+                <h1 class="h1">{{ __('ui.games_hero') }}</h1>
                 <p class="p mt-4 max-w-prose text-ink/70">
-                    Someone looking to unwind should be able to choose a quiet game in seconds, or browse a little longer if that feels better.
+                    {{ __('ui.games_hero_lead') }}
                 </p>
             </div>
 
             <div class="flex flex-wrap gap-3">
-                <a href="#quiet-picks" class="btn-primary">{{ __('ui.cta_quiet_picks') }}</a>
-                <a href="#steady-picks" class="btn-secondary">Steady focus</a>
-                <a href="#lively-picks" class="btn-secondary">More awake</a>
+                <a href="#quiet-picks" class="btn-primary">{{ __('ui.games_skip_quiet') }}</a>
+                <a href="#steady-picks" class="btn-secondary">{{ __('ui.games_skip_steady') }}</a>
+                <a href="#lively-picks" class="btn-secondary">{{ __('ui.games_skip_lively') }}</a>
             </div>
         </div>
     </section>

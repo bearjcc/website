@@ -29,7 +29,7 @@
                 </div>
                 <div class="header-right">
                     <button id="theme-toggle" class="icon-btn" type="button" title="Toggle light/dark">Theme</button>
-                    <button id="help-btn" class="icon-btn" type="button" title="How to play">?</button>
+                    <button id="help-btn" class="icon-btn text-xs font-medium px-2" type="button" title="{{ __('ui.see_more_rules') }}">{{ __('ui.see_more_rules') }}</button>
                 </div>
             </header>
 

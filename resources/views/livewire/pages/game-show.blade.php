@@ -27,7 +27,7 @@
                 <div class="glass p-5">
                     <p class="text-sm uppercase tracking-[0.16em] text-ink/50">Best for</p>
                     <p class="text-base text-ink mt-3">{{ $game->bestFor() }}</p>
-                    <p class="text-sm text-ink/65 mt-3">No sign-up. Opens in the browser. You can start immediately.</p>
+                    <p class="text-sm text-ink/65 mt-3">{{ __('ui.game_show_play_blurb') }}</p>
                 </div>
 
                 <div class="flex flex-wrap gap-3">
@@ -41,14 +41,17 @@
             </div>
 
             @if($game->rules_md)
-                <div class="pb-6" x-data="{ showRules: false }">
+                <div class="pb-6" x-data="{ showRules: false }" id="rules-block-{{ $game->slug }}">
                     <button type="button"
+                            id="rules-toggle-{{ $game->slug }}"
+                            aria-controls="rules-panel-{{ $game->slug }}"
                             @click="showRules = !showRules"
                             class="text-sm font-medium text-ink/80 hover:text-star transition-colors"
                             :aria-expanded="showRules">
-                        How to play
+                        {{ __('ui.see_more_rules') }}<span class="sr-only">{{ __('ui.see_more_rules_screen_reader') }}</span>
                     </button>
-                    <div x-show="showRules"
+                    <div id="rules-panel-{{ $game->slug }}"
+                         x-show="showRules"
                          x-transition:enter="transition ease-out duration-150"
                          x-transition:enter-start="opacity-0 -translate-y-1"
                          x-transition:enter-end="opacity-100 translate-y-0"
@@ -62,7 +65,7 @@
             @if($game->pace() !== 'quiet' && $calmerGames->isNotEmpty())
                 <div class="pb-8">
                     <div class="glass p-5 md:p-6">
-                        <p class="text-sm uppercase tracking-[0.16em] text-ink/50">Want something softer?</p>
+                        <p class="text-sm uppercase tracking-[0.16em] text-ink/50">{{ __('ui.game_show_slower_paced') }}</p>
                         <div class="mt-4 flex flex-wrap gap-3">
                             @foreach($calmerGames as $calmerGame)
                                 <a href="{{ route('games.play', $calmerGame->slug) }}" class="btn-secondary">{{ $calmerGame->title }}</a>

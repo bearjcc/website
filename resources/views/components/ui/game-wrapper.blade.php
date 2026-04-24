@@ -21,7 +21,7 @@
         @if($rules)
             <details class="glass rounded-xl border border-[hsl(var(--border)/.1)] overflow-hidden">
                 <summary class="px-6 py-3 cursor-pointer text-ink/80 hover:text-ink hover:bg-[hsl(var(--surface)/.08)] transition-colors list-none flex items-center justify-between">
-                    <span>Rules</span>
+                    <span>{{ __('ui.see_more_rules') }}<span class="sr-only">{{ __('ui.see_more_rules_screen_reader') }}</span></span>
                     <x-heroicon-o-chevron-down class="w-5 h-5" />
                 </summary>
                 <div class="px-6 py-4 border-t border-[hsl(var(--border)/.1)] space-y-2 text-ink/70 text-sm">

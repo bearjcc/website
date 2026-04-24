@@ -15,7 +15,7 @@ return [
             'supports_opponent_choice' => true,
             'supports_player_symbol' => true,
             'pace' => 'quiet',
-            'best_for' => 'A short, gentle break.',
+            'best_for' => 'Very short sessions.',
             'relaxing_pick' => true,
         ],
         'connect-4' => [
@@ -28,7 +28,7 @@ return [
             'livewire_component' => 'games.connect4',
             'supports_opponent_choice' => true,
             'pace' => 'steady',
-            'best_for' => 'A little focus without much setup.',
+            'best_for' => 'Medium length, few rules to learn.',
         ],
         'sudoku' => [
             'title' => 'Sudoku',
@@ -39,7 +39,7 @@ return [
             'motif' => 'sudoku',
             'livewire_component' => 'games.sudoku',
             'pace' => 'quiet',
-            'best_for' => 'Settling in for a longer quiet sit.',
+            'best_for' => 'Longer puzzles, one board.',
             'relaxing_pick' => true,
         ],
         'chess' => [
@@ -52,7 +52,7 @@ return [
             'livewire_component' => 'games.chess',
             'supports_opponent_choice' => true,
             'pace' => 'steady',
-            'best_for' => 'A thoughtful session with room to think.',
+            'best_for' => 'Open-ended, slow turns.',
         ],
         'checkers' => [
             'title' => 'Checkers',
@@ -64,7 +64,7 @@ return [
             'livewire_component' => 'games.checkers',
             'supports_opponent_choice' => true,
             'pace' => 'steady',
-            'best_for' => 'Simple rules and an easy rhythm.',
+            'best_for' => 'Quick rules, turn-based.',
         ],
         'minesweeper' => [
             'title' => 'Minesweeper',
@@ -75,7 +75,7 @@ return [
             'motif' => 'minesweeper',
             'livewire_component' => 'games.minesweeper',
             'pace' => 'steady',
-            'best_for' => 'A quiet puzzle with a bit more tension.',
+            'best_for' => 'Logic puzzle, can stall on hard spots.',
         ],
         'snake' => [
             'title' => 'Snake',
@@ -86,7 +86,7 @@ return [
             'motif' => 'snake',
             'livewire_component' => 'games.snake',
             'pace' => 'lively',
-            'best_for' => 'When you want something a little more awake.',
+            'best_for' => 'Steady reflexes, short rounds.',
         ],
         'twenty-forty-eight' => [
             'title' => '2048',
@@ -97,7 +97,7 @@ return [
             'motif' => '2048',
             'livewire_component' => 'games.twenty-forty-eight',
             'pace' => 'quiet',
-            'best_for' => 'A calm loop you can slip into quickly.',
+            'best_for' => 'Short runs, one-handed.',
             'relaxing_pick' => true,
         ],
         'letter-walker' => [
@@ -113,7 +113,7 @@ return [
             'layout' => 'layouts.blank',
             'redirect_play_to_show' => true,
             'pace' => 'steady',
-            'best_for' => 'A thoughtful word puzzle with a daily rhythm.',
+            'best_for' => 'Daily word board, 10–20 minutes.',
         ],
     ],
 ];
