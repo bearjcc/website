@@ -8,109 +8,27 @@ use App\Models\Game;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * Small games live on the dedicated games host (path on ursaminor.games, e.g. /sudoku).
+ * This marketing app only issues 301s to that host; it does not render a local games index.
+ */
 class GamesIndexTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_games_index_renders_successfully(): void
+    public function test_games_index_permanent_redirects_to_apex_index(): void
     {
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-        $response->assertSee(__('ui.games_hero'));
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.index')), '');
     }
 
-    public function test_games_index_shows_published_games(): void
-    {
-        // Create published and draft games
-        $publishedGames = Game::factory()->count(3)->create(['status' => 'published']);
-        Game::factory()->count(2)->create(['status' => 'draft']);
-
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-
-        // Should see published games
-        foreach ($publishedGames as $game) {
-            $response->assertSee($game->title);
-        }
-    }
-
-    public function test_games_index_does_not_show_draft_games(): void
-    {
-        $draftGame = Game::factory()->create([
-            'title' => 'Draft Game Test',
-            'status' => 'draft',
-        ]);
-
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-        $response->assertDontSee('Draft Game Test');
-    }
-
-    public function test_games_index_shows_empty_state_when_no_games(): void
-    {
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-        $response->assertSee(__('ui.games_empty'));
-    }
-
-    public function test_games_index_game_cards_are_links(): void
+    public function test_published_game_show_and_play_routes_redirect_to_apex(): void
     {
         $game = Game::factory()->create([
-            'slug' => 'test-game',
+            'slug' => 'sudoku',
             'status' => 'published',
         ]);
 
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-        $response->assertSee(route('games.show', $game->slug), false);
-    }
-
-    public function test_games_index_has_proper_aria_labels(): void
-    {
-        $game = Game::factory()->create([
-            'title' => 'Test Game',
-            'status' => 'published',
-        ]);
-
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-        $response->assertSee('Play Test Game', false);
-    }
-
-    public function test_games_index_groups_games_by_pace(): void
-    {
-        Game::factory()->create([
-            'slug' => 'snake',
-            'title' => 'Snake',
-            'type' => 'arcade',
-            'status' => 'published',
-        ]);
-
-        $response = $this->get(route('games.index'));
-
-        $response->assertSee(__('ui.games_quiet_title'));
-        $response->assertSee(__('ui.games_steady_title'));
-        $response->assertSee(__('ui.games_lively_title'));
-        $this->assertStringContainsString('quiet-picks', $response->getContent());
-    }
-
-    public function test_games_index_uses_correct_motifs(): void
-    {
-        $tictactoe = Game::factory()->create([
-            'slug' => 'tic-tac-toe',
-            'status' => 'published',
-        ]);
-
-        $response = $this->get(route('games.index'));
-
-        $response->assertStatus(200);
-        // The view should contain SVG motif markup
-        $this->assertStringContainsString('<svg', $response->getContent());
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.show', $game->slug)), $game->slug);
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.play', $game->slug)), $game->slug);
     }
 }

@@ -4,8 +4,6 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Pages\About;
 use App\Livewire\Pages\AdminFeatures;
-use App\Livewire\Pages\GamePlay;
-use App\Livewire\Pages\GameShow;
 use App\Livewire\Pages\Home;
 use App\Livewire\Pages\LoreEdit;
 use App\Livewire\Pages\LoreIndex;
@@ -15,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 
 $standalonePlayRedirectSlugs = Game::standalonePlayRedirectSlugs();
 $legacyRedirects = array_unique(array_merge(Game::knownSlugs(), ['2048']));
+$gamesBaseUrl = rtrim((string) config('services.games.base_url', 'https://ursaminor.games'), '/');
+$gamesRedirectUrl = static fn (string $path = ''): string => $gamesBaseUrl.'/'.ltrim($path, '/');
 
 // Health check for Railway deployment
 Route::get('/health', function () {
@@ -34,46 +34,41 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', Register::class)->name('register');
 });
 
-// Games index (must be before /{game:slug} so /games is not matched as a slug)
-Route::get('/games', \App\Livewire\Pages\GamesIndex::class)->name('games.index');
+// Small games: 301 to apex path URLs, e.g. ursaminor.games/sudoku (see GAMES_BASE_URL). Taverns RPG: separate host (taverns.ursaminor.games).
+Route::get('/games', fn () => redirect()->away($gamesRedirectUrl(), 301))->name('games.index');
 
-// Standalone-themed games bypass Livewire entirely.
+// All game show/play pages redirect to the configured games base URL (path on that origin, not a games. subdomain).
 foreach ($standalonePlayRedirectSlugs as $slug) {
-    Route::get('/'.$slug, function () use ($slug) {
-        $game = Game::published()
-            ->where('slug', $slug)
-            ->firstOrFail();
-
-        return response()->view($game->showView(), [
-            'game' => $game,
-        ]);
-    });
+    Route::get('/'.$slug, fn () => redirect()->away($gamesRedirectUrl($slug), 301));
 }
 
-// Standalone-themed games load directly at their show route; /play permanently redirects.
+// Keep /play redirects so old shared links remain valid.
 foreach ($standalonePlayRedirectSlugs as $slug) {
-    Route::get('/'.$slug.'/play', fn () => redirect('/'.$slug, 301));
+    Route::get('/'.$slug.'/play', fn () => redirect()->away($gamesRedirectUrl($slug), 301));
 }
 
-// Game page (hero + Play) at /{slug}; play at /{slug}/play
-Route::get('/{game:slug}', GameShow::class)->name('games.show');
-Route::get('/{game:slug}/play', GamePlay::class)->name('games.play');
+// Catch any known game slug and redirect to canonical URL.
+Route::get('/{game:slug}', fn (Game $game) => redirect()->away($gamesRedirectUrl($game->slug), 301))->name('games.show');
+Route::get('/{game:slug}/play', fn (Game $game) => redirect()->away($gamesRedirectUrl($game->slug), 301))->name('games.play');
 
 // Legacy /games/* redirects (301 to game page or play URL)
 Route::prefix('games')->group(function () use ($legacyRedirects) {
+    $gamesBaseUrl = rtrim((string) config('services.games.base_url', 'https://ursaminor.games'), '/');
+    $gamesRedirectUrl = static fn (string $path = ''): string => $gamesBaseUrl.'/'.ltrim($path, '/');
+
     foreach ($legacyRedirects as $slug) {
-        Route::get('/'.$slug, function () use ($slug) {
-            return redirect('/'.$slug, 301);
+        Route::get('/'.$slug, function () use ($slug, $gamesRedirectUrl) {
+            return redirect()->away($gamesRedirectUrl($slug), 301);
         });
-        Route::get('/'.$slug.'/play', function () use ($slug) {
-            return redirect('/'.$slug.'/play', 301);
+        Route::get('/'.$slug.'/play', function () use ($slug, $gamesRedirectUrl) {
+            return redirect()->away($gamesRedirectUrl($slug), 301);
         });
     }
-    Route::get('/{game:slug}', function (Game $game) {
-        return redirect('/'.$game->slug, 301);
+    Route::get('/{game:slug}', function (Game $game) use ($gamesRedirectUrl) {
+        return redirect()->away($gamesRedirectUrl($game->slug), 301);
     });
-    Route::get('/{game:slug}/play', function (Game $game) {
-        return redirect('/'.$game->slug.'/play', 301);
+    Route::get('/{game:slug}/play', function (Game $game) use ($gamesRedirectUrl) {
+        return redirect()->away($gamesRedirectUrl($game->slug), 301);
     });
 });
 

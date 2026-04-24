@@ -254,11 +254,11 @@ class CheckersEngine
             // Kings can move in all diagonal directions
             return [[-1, -1], [-1, 1], [1, -1], [1, 1]];
         } elseif ($isRed) {
-            // Red pieces move "up" the board (decreasing row)
-            return [[-1, -1], [-1, 1]];
-        } else {
-            // Black pieces move "down" the board (increasing row)
+            // Red on rows 0-2: advance toward black (increasing row)
             return [[1, -1], [1, 1]];
+        } else {
+            // Black on rows 5-7: advance toward red (decreasing row)
+            return [[-1, -1], [-1, 1]];
         }
     }
 
@@ -332,13 +332,13 @@ class CheckersEngine
             return $piece;
         }
 
-        // Red pieces become kings when reaching row 0
-        if ($piece === self::RED && $row === 0) {
+        // Red pieces become kings when reaching the far rank (opponent's back row)
+        if ($piece === self::RED && $row === self::BOARD_SIZE - 1) {
             return self::RED_KING;
         }
 
-        // Black pieces become kings when reaching row 7
-        if ($piece === self::BLACK && $row === self::BOARD_SIZE - 1) {
+        // Black pieces become kings when reaching the far rank
+        if ($piece === self::BLACK && $row === 0) {
             return self::BLACK_KING;
         }
 

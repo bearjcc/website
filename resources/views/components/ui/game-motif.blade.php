@@ -3,130 +3,224 @@
     'class' => 'opacity-80 text-ink/70 w-full h-full max-w-16 max-h-16 md:max-w-20 md:max-h-20',
 ])
 
-<div {{ $attributes->merge(['class' => 'um-motif grid place-items-center']) }}>
+@php
+    $svg = $class;
+@endphp
+
+{{-- Ursa Minor: crisp puzzle-style game icons. Single source for cards + about rows. --}}
+<div {{ $attributes->merge(['class' => 'um-game-motif flex items-center justify-center w-full h-full min-h-0']) }}>
+
     @switch($motif)
         @case('tictactoe')
-            {{-- Tic-tac-toe: 3 stars in diagonal, 2 moons --}}
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                <g stroke="currentColor" stroke-width="1.5" opacity="0.4">
-                    <line x1="0" y1="33.33" x2="100" y2="33.33" /><line x1="0" y1="66.67" x2="100" y2="66.67" />
-                    <line x1="33.33" y1="0" x2="33.33" y2="100" /><line x1="66.67" y1="0" x2="66.67" y2="100" />
+            {{-- 3x3 grid, five-point star rays on the diagonal, crescent moons in the two off-diagonal corners --}}
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <g stroke="currentColor" stroke-width="1" opacity="0.4" fill="none" stroke-linecap="square">
+                    <line x1="0" y1="33.3" x2="100" y2="33.3" />
+                    <line x1="0" y1="66.6" x2="100" y2="66.6" />
+                    <line x1="33.3" y1="0" x2="33.3" y2="100" />
+                    <line x1="66.6" y1="0" x2="66.6" y2="100" />
                 </g>
-                @foreach([[16.67,16.67],[50,50],[83.33,83.33]] as $p)
-                <g transform="translate({{ $p[0] }}, {{ $p[1] }})">
-                    <circle cx="0" cy="0" r="3" fill="hsl(var(--star))" />
-                    <line x1="0" y1="-12" x2="0" y2="12" stroke="hsl(var(--star))" stroke-width="2" />
-                    <line x1="-12" y1="0" x2="12" y2="0" stroke="hsl(var(--star))" stroke-width="2" />
-                    <line x1="-8.5" y1="-8.5" x2="8.5" y2="8.5" stroke="hsl(var(--star))" stroke-width="1.5" />
-                    <line x1="8.5" y1="-8.5" x2="-8.5" y2="8.5" stroke="hsl(var(--star))" stroke-width="1.5" />
+                @foreach([[16.67,16.67],[50,50],[83.33,83.33]] as $pos)
+                <g transform="translate({{ $pos[0] }},{{ $pos[1] }})" fill="none" stroke="hsl(var(--star))" stroke-width="1.2" stroke-linecap="round">
+                    @for($a = 0; $a < 5; $a++)
+                    <g transform="rotate({{ -90 + $a * 72 }})">
+                        <line x1="0" y1="0" x2="0" y2="-4.2" />
+                    </g>
+                    @endfor
                 </g>
                 @endforeach
-                <g transform="translate(83.33, 16.67)"><circle cx="0" cy="0" r="8" fill="hsl(var(--ink))" /><circle cx="0" cy="0" r="8" fill="hsl(var(--space-900))" clip-path="circle(65% at 35% 50%)" /></g>
-                <g transform="translate(16.67, 83.33)"><circle cx="0" cy="0" r="8" fill="hsl(var(--ink))" /><circle cx="0" cy="0" r="8" fill="hsl(var(--space-900))" clip-path="circle(65% at 35% 50%)" /></g>
+                <g fill="hsl(var(--ink) / 0.95)" transform="translate(83.33,16.67)">
+                    <circle r="5.2" />
+                    <circle cx="0.8" r="4.6" fill="hsl(var(--space-500))" />
+                </g>
+                <g fill="hsl(var(--ink) / 0.95)" transform="translate(16.67,83.33)">
+                    <circle r="5.2" />
+                    <circle cx="0.8" r="4.6" fill="hsl(var(--space-500))" />
+                </g>
             </svg>
             @break
+
         @case('chess')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                @for($row = 0; $row < 8; $row++) @for($col = 0; $col < 8; $col++)
-                <rect x="{{ $col * 12.5 }}" y="{{ $row * 12.5 }}" width="12.5" height="12.5" fill="{{ ($row + $col) % 2 === 0 ? 'hsl(45 25% 85%)' : 'hsl(25 15% 35%)' }}" />
-                @endfor @endfor
-                <g fill="hsl(var(--ink))" transform="translate(50, 50)">
-                    <ellipse cx="0" cy="5" rx="8" ry="12" /><circle cx="0" cy="-8" r="6" />
-                    <path d="M-4,-12 Q0,-16 4,-12 Q2,-10 0,-8 Q-2,-10 -4,-12" />
-                    <ellipse cx="-3" cy="-10" rx="1.5" ry="3" transform="rotate(-20)" />
-                    <ellipse cx="3" cy="-10" rx="1.5" ry="3" transform="rotate(20)" />
-                    <circle cx="1" cy="-9" r="1" fill="hsl(var(--ink))" /><ellipse cx="0" cy="-6" rx="0.8" ry="1.5" />
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <g>
+                    @for($r = 0; $r < 8; $r++)
+                        @for($c = 0; $c < 8; $c++)
+                            <rect x="{{ 6 + $c * 10.5 }}" y="{{ 6 + $r * 10.5 }}" width="10.5" height="10.5" rx="0.5" fill="{{ ($r + $c) % 2 ? 'hsl(26 20% 28%)' : 'hsl(42 32% 88%)' }}" />
+                        @endfor
+                    @endfor
+                </g>
+                {{-- Classic side-view knight, centered on a light cell --}}
+                <g fill="hsl(220 25% 18%)" transform="translate(50, 52) scale(0.85)">
+                    <path d="M-2 14 L-8 6 Q-8 -2 0-10 Q4-12 8-8 L10 0 Q14 2 10 6 L4 4 Q6 8 2 10 Z" />
+                    <path d="M-4 -6 L2-14 Q6-16 10-10" fill="none" stroke="hsl(220 25% 12%)" stroke-width="1" stroke-linecap="round" />
                 </g>
             </svg>
             @break
+
         @case('checkers')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                @for($row = 0; $row < 8; $row++) @for($col = 0; $col < 8; $col++)
-                <rect x="{{ $col * 12.5 }}" y="{{ $row * 12.5 }}" width="12.5" height="12.5" fill="{{ ($row + $col) % 2 === 0 ? 'hsl(45 15% 75%)' : 'hsl(220 15% 25%)' }}" />
-                @endfor @endfor
-                @foreach([[18.75,18.75],[43.75,18.75],[68.75,18.75],[93.75,18.75],[6.25,31.25],[31.25,31.25],[56.25,31.25],[81.25,31.25],[18.75,43.75],[43.75,43.75],[68.75,43.75],[93.75,43.75]] as $p)
-                <circle cx="{{ $p[0] }}" cy="{{ $p[1] }}" r="4" fill="hsl(var(--space-900))" stroke="hsl(var(--border))" stroke-width="0.5" />
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <g>
+                    @for($r = 0; $r < 8; $r++)
+                        @for($c = 0; $c < 8; $c++)
+                            <rect x="{{ 6 + $c * 10.5 }}" y="{{ 6 + $r * 10.5 }}" width="10.5" height="10.5" fill="{{ ($r + $c) % 2 ? 'hsl(28 32% 22%)' : 'hsl(38 20% 78%)' }}" />
+                        @endfor
+                    @endfor
+                </g>
+                @foreach([[6+10.5*1+5.25,6+1*10.5+5.25],[6+3*10.5+5.25,6+1*10.5+5.25],[6+5*10.5+5.25,6+1*10.5+5.25],[6+0*10.5+5.25,6+2*10.5+5.25]] as $p)
+                    <circle cx="{{ $p[0] }}" cy="{{ $p[1] }}" r="3.6" fill="hsl(220 25% 14%)" stroke="hsl(42 20% 40%)" stroke-width="0.5" />
                 @endforeach
-                @foreach([[6.25,56.25],[31.25,56.25],[56.25,56.25],[81.25,56.25],[18.75,68.75],[43.75,68.75],[68.75,68.75],[93.75,68.75],[6.25,81.25],[31.25,81.25],[56.25,81.25],[81.25,81.25]] as $p)
-                <circle cx="{{ $p[0] }}" cy="{{ $p[1] }}" r="4" fill="hsl(0 70% 60%)" stroke="hsl(var(--border))" stroke-width="0.5" />
+                @foreach([[6+0*10.5+5.25,6+5*10.5+5.25],[6+2*10.5+5.25,6+5*10.5+5.25],[6+4*10.5+5.25,6+5*10.5+5.25],[6+1*10.5+5.25,6+6*10.5+5.25]] as $p)
+                    <circle cx="{{ $p[0] }}" cy="{{ $p[1] }}" r="3.6" fill="hsl(var(--game-red))" stroke="hsl(0 0% 100% / 0.25)" stroke-width="0.4" />
                 @endforeach
             </svg>
             @break
+
         @case('connect4')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                @for($row = 0; $row < 4; $row++) @for($col = 0; $col < 4; $col++)
-                <circle cx="{{ 15 + $col * 21 }}" cy="{{ 15 + $row * 21 }}" r="9" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
-                @endfor @endfor
-                <circle cx="15" cy="79" r="7" fill="hsl(var(--star))" stroke="hsl(var(--star))" stroke-width="1" />
-                <circle cx="36" cy="58" r="7" fill="hsl(var(--star))" stroke="hsl(var(--star))" stroke-width="1" />
-                <circle cx="57" cy="37" r="7" fill="hsl(var(--star))" stroke="hsl(var(--star))" stroke-width="1" />
-                <circle cx="78" cy="16" r="7" fill="hsl(var(--star))" stroke="hsl(var(--star))" stroke-width="1" />
-                <circle cx="15" cy="58" r="7" fill="hsl(var(--game-red))" stroke="hsl(var(--game-red))" stroke-width="1" />
-                <circle cx="36" cy="37" r="7" fill="hsl(var(--game-red))" stroke="hsl(var(--game-red))" stroke-width="1" />
-                <circle cx="57" cy="16" r="7" fill="hsl(var(--game-red))" stroke="hsl(var(--game-red))" stroke-width="1" />
-                <line x1="15" y1="79" x2="78" y2="16" stroke="hsl(var(--star))" stroke-width="2" stroke-linecap="round" opacity="0.8" />
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <rect x="4" y="4" width="92" height="86" rx="3" fill="hsl(212 50% 28%)" />
+                <g>
+                    @for($row = 0; $row < 6; $row++)
+                        @for($col = 0; $col < 7; $col++)
+                            <circle
+                                cx="{{ 11.5 + $col * 12.4 }}"
+                                cy="{{ 12 + (5 - $row) * 12.4 }}"
+                                r="4.4"
+                                fill="hsl(212 45% 18%)"
+                                stroke="hsl(0 0% 100% / 0.08)"
+                                stroke-width="0.5" />
+                        @endfor
+                    @endfor
+                </g>
+                {{-- Sample pieces: yellow / red diagonal like "four in a row" --}}
+                <circle cx="11.5" cy="12" r="3.2" fill="hsl(var(--game-yellow))" />
+                <circle cx="11.5" cy="24.4" r="3.2" fill="hsl(var(--game-red))" />
+                <circle cx="23.9" cy="12" r="3.2" fill="hsl(var(--game-red))" />
+                <circle cx="23.9" cy="24.4" r="3.2" fill="hsl(var(--game-yellow))" />
             </svg>
             @break
+
         @case('puzzle')
         @case('sudoku')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                <g stroke="currentColor" stroke-linecap="round">
-                    <g stroke-width="2" opacity="0.8"><line x1="5" y1="5" x2="5" y2="95" /><line x1="95" y1="5" x2="95" y2="95" /><line x1="5" y1="5" x2="95" y2="5" /><line x1="5" y1="95" x2="95" y2="95" /></g>
-                    <g stroke-width="3" opacity="1" stroke="hsl(var(--star))"><line x1="5" y1="5" x2="5" y2="70" /><line x1="70" y1="5" x2="70" y2="70" /><line x1="5" y1="5" x2="70" y2="5" /><line x1="5" y1="70" x2="70" y2="70" /></g>
-                    <g stroke-width="1" opacity="0.4"><line x1="27" y1="5" x2="27" y2="95" /><line x1="48" y1="5" x2="48" y2="95" /><line x1="70" y1="5" x2="70" y2="95" /><line x1="5" y1="27" x2="95" y2="27" /><line x1="5" y1="48" x2="95" y2="48" /><line x1="5" y1="70" x2="95" y2="70" /></g>
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <rect x="2" y="2" width="96" height="96" fill="hsl(220 45% 6% / 0.2)" stroke="hsl(var(--ink) / 0.3)" stroke-width="0.8" rx="1" />
+                <g fill="none" stroke-linecap="round">
+                    @for($i = 1; $i < 9; $i++)
+                    @php
+                        $g = 2 + ($i * 96) / 9;
+                        $thick = ($i % 3 === 0) ? 1.1 : 0.4;
+                        $c = $i % 3 === 0 ? '0.5' : '0.2';
+                    @endphp
+                    <line x1="{{ $g }}" y1="2" x2="{{ $g }}" y2="98" stroke="hsl(var(--ink) / {{ $c }})" stroke-width="{{ $thick }}" />
+                    <line y1="{{ $g }}" x1="2" y2="{{ $g }}" x2="98" stroke="hsl(var(--ink) / {{ $c }})" stroke-width="{{ $thick }}" />
+                    @endfor
                 </g>
-                <g fill="hsl(var(--star))" font-family="monospace" font-size="6" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
-                    <text x="16" y="16">5</text><text x="37" y="16">3</text><text x="59" y="16">2</text><text x="16" y="37">6</text><text x="37" y="37">1</text><text x="59" y="37">9</text><text x="16" y="59">8</text><text x="37" y="59">9</text><text x="59" y="59">8</text>
-                </g>
-                <g fill="currentColor" font-family="monospace" font-size="5" text-anchor="middle" dominant-baseline="middle" opacity="0.4">
-                    <text x="81" y="16">1</text><text x="81" y="37">3</text><text x="16" y="81">1</text><text x="37" y="81">3</text><text x="59" y="81">1</text><text x="81" y="81">1</text>
-                </g>
+                <text x="8" y="20" font-size="9" font-weight="600" font-family="Oswald, system-ui" fill="hsl(var(--star))">1</text>
+                <text x="22" y="20" font-size="9" font-weight="500" font-family="Oswald, system-ui" fill="hsl(var(--ink) / 0.5)">4</text>
+                <text x="8" y="32" font-size="9" font-weight="500" font-family="Oswald, system-ui" fill="hsl(var(--ink) / 0.4)">2</text>
             </svg>
             @break
+
         @case('minesweeper')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                <g stroke="currentColor" stroke-width="1" fill="none" opacity="0.5">
-                    <line x1="0" y1="25" x2="100" y2="25" /><line x1="0" y1="50" x2="100" y2="50" /><line x1="0" y1="75" x2="100" y2="75" />
-                    <line x1="25" y1="0" x2="25" y2="100" /><line x1="50" y1="0" x2="50" y2="100" /><line x1="75" y1="0" x2="75" y2="100" />
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <g stroke="hsl(var(--ink) / 0.2)" fill="hsl(var(--space-700) / 0.4)">
+                    @for($y = 0; $y < 4; $y++)
+                        @for($x = 0; $x < 4; $x++)
+                            <rect x="{{ 4 + $x * 22.5 }}" y="{{ 4 + $y * 22.5 }}" width="21" height="21" rx="1" stroke-width="0.4" />
+                        @endfor
+                    @endfor
                 </g>
-                @for($y = 0; $y < 4; $y++) @for($x = 0; $x < 4; $x++)
-                <rect x="{{ 2 + $x * 25 }}" y="{{ 2 + $y * 25 }}" width="21" height="21" fill="hsl(var(--surface) / .1)" opacity="0.8" />
-                @endfor @endfor
-                <g fill="hsl(210 100% 50%)" font-family="monospace" font-size="7" text-anchor="middle" dominant-baseline="middle" font-weight="bold">
-                    <text x="12.5" y="12.5">1</text><text x="37.5" y="12.5">2</text><text x="62.5" y="12.5">1</text><text x="87.5" y="12.5">1</text>
-                    <text x="12.5" y="37.5">2</text><text x="37.5" y="37.5">3</text><text x="62.5" y="37.5">2</text><text x="87.5" y="37.5">1</text>
-                    <text x="12.5" y="62.5">1</text><text x="37.5" y="62.5">2</text><text x="62.5" y="62.5">1</text><text x="87.5" y="62.5">1</text>
+                <text x="16" y="22" font-size="8" font-weight="700" font-family="ui-monospace, monospace" text-anchor="middle" fill="hsl(var(--game-blue))">1</text>
+                <text x="38" y="22" font-size="8" font-weight="700" font-family="ui-monospace, monospace" text-anchor="middle" fill="hsl(var(--game-green))">2</text>
+                <text x="16" y="45" font-size="8" font-weight="700" font-family="ui-monospace, monospace" text-anchor="middle" fill="hsl(var(--game-red))">3</text>
+                <g transform="translate(60, 38)">
+                    <line x1="0" y1="8" x2="0" y2="0" stroke="hsl(40 20% 35%)" stroke-width="1" />
+                    <path d="M-6 0 L0-8 L6 0 Z" fill="hsl(var(--game-red))" />
                 </g>
-                <g fill="hsl(var(--game-red))" transform="translate(87.5, 37.5)"><polygon points="0,-7.5 0,-15 10,-10" /><rect x="-1" y="-7.5" width="1" height="10"/></g>
-                <g fill="hsl(var(--game-red))" transform="translate(87.5, 87.5)"><circle cx="0" cy="0" r="6" /><g stroke="hsl(var(--game-red))" stroke-width="1.5"><line x1="-4" y1="-4" x2="4" y2="4" /><line x1="4" y1="-4" x2="-4" y2="4" /><line x1="0" y1="-4" x2="0" y2="4" /><line x1="-4" y1="0" x2="4" y2="0" /></g></g>
+                <g transform="translate(82, 60)">
+                    <circle r="4.5" fill="hsl(220 15% 22%)" />
+                    <line x1="-2.2" y1="2.2" x2="2.2" y2="-2.2" stroke="hsl(0 0% 100% / 0.3)" />
+                    <line x1="-2.2" y1="-2.2" x2="2.2" y2="2.2" stroke="hsl(0 0% 100% / 0.3)" />
+                </g>
             </svg>
             @break
+
         @case('snake')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                <path d="M15 50 Q25 30 35 50 Q45 70 55 50 Q65 30 75 50 Q85 70 90 50" stroke="hsl(var(--constellation))" stroke-width="3" fill="none" opacity="0.8" />
-                @foreach([[15,50],[35,50],[55,50],[75,50]] as $p)<circle cx="{{ $p[0] }}" cy="{{ $p[1] }}" r="3" fill="hsl(var(--constellation))" opacity="0.9" />@endforeach
-                <g fill="hsl(var(--star))"><circle cx="90" cy="50" r="4" /><circle cx="92" cy="47" r="1" fill="hsl(var(--ink))" /><circle cx="92" cy="53" r="1" fill="hsl(var(--ink))" /></g>
-                <g fill="hsl(var(--game-red))"><circle cx="25" cy="25" r="3" /><circle cx="85" cy="75" r="3" /><rect x="24" y="22" width="1" height="3" fill="hsl(var(--ink))" /><rect x="84" y="72" width="1" height="3" fill="hsl(var(--ink))" /></g>
-            </svg>
-            @break
-        @case('2048')
-            <svg width="100" height="100" viewBox="0 0 100 100" class="{{ $class }}" aria-hidden="true">
-                <g stroke="currentColor" stroke-width="1.5" fill="none" opacity="0.6">
-                    <rect x="8" y="8" width="42" height="42" rx="3"/><rect x="50" y="8" width="42" height="42" rx="3"/>
-                    <rect x="8" y="50" width="42" height="42" rx="3"/><rect x="50" y="50" width="42" height="42" rx="3"/>
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <rect x="6" y="6" width="88" height="88" rx="2" fill="hsl(220 45% 8% / 0.4)" stroke="hsl(var(--ink) / 0.1)" />
+                <path
+                    d="M18 50h18v16h20v-16h18v16H56v16H36V66H18V50Z"
+                    fill="none" stroke="hsl(var(--constellation))" stroke-width="3.2" stroke-linejoin="round" />
+                <circle cx="30" cy="50" r="2.2" fill="hsl(var(--constellation))" />
+                <circle cx="50" cy="50" r="2.2" fill="hsl(var(--constellation))" />
+                <g transform="translate(74,50)">
+                    <rect x="-4" y="-4" width="8" height="8" rx="1" fill="hsl(var(--star))" />
+                    <circle cx="1.2" cy="-0.5" r="0.5" fill="hsl(220 25% 12%)" />
                 </g>
-                <rect x="10" y="10" width="38" height="38" rx="2" fill="hsl(var(--surface) / .15)" />
-                <text x="29" y="29" fill="hsl(var(--ink-muted))" font-family="monospace" font-size="8" text-anchor="middle" dominant-baseline="middle" font-weight="bold">2</text>
-                <rect x="10" y="52" width="38" height="38" rx="2" fill="hsl(var(--surface) / .25)" />
-                <text x="29" y="71" fill="hsl(var(--ink-muted))" font-family="monospace" font-size="8" text-anchor="middle" dominant-baseline="middle" font-weight="bold">4</text>
-                <rect x="52" y="52" width="38" height="38" rx="2" fill="hsl(var(--star) / .4)" />
-                <text x="71" y="71" fill="hsl(var(--ink))" font-family="monospace" font-size="8" text-anchor="middle" dominant-baseline="middle" font-weight="bold">8</text>
+                <circle cx="20" cy="20" r="2.4" fill="hsl(var(--game-red))" />
             </svg>
             @break
-        @case('board')
-            <x-heroicon-o-rectangle-group class="w-20 h-20 text-ink/70" />
+
+        @case('2048')
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <rect x="6" y="6" width="88" height="88" rx="4" fill="hsl(25 20% 14% / 0.5)" />
+                <g>
+                    <rect x="10" y="10" width="19" height="19" rx="2" fill="hsl(38 40% 72% / 0.3)" />
+                    <text x="19.5" y="25" text-anchor="middle" font-size="7" font-weight="700" font-family="ui-sans-serif" fill="hsl(var(--ink) / 0.85)">2</text>
+                </g>
+                <g>
+                    <rect x="33" y="10" width="19" height="19" rx="2" fill="hsl(38 40% 60% / 0.2)" />
+                </g>
+                <g>
+                    <rect x="10" y="33" width="19" height="19" rx="2" fill="hsl(28 100% 68% / 0.4)" />
+                    <text x="19.5" y="48" text-anchor="middle" font-size="7" font-weight="700" font-family="ui-sans-serif" fill="hsl(var(--ink) / 0.9)">4</text>
+                </g>
+                <g>
+                    <rect x="33" y="33" width="19" height="19" rx="2" fill="hsl(var(--star) / 0.55)" />
+                    <text x="42.5" y="48" text-anchor="middle" font-size="7" font-weight="700" font-family="ui-sans-serif" fill="hsl(220 25% 8%)">8</text>
+                </g>
+            </svg>
             @break
+
+        @case('cards')
+        @case('solitaire')
+            <svg viewBox="0 0 100 120" class="{{ $svg }} max-h-full w-full" aria-hidden="true">
+                <g stroke="currentColor" fill="hsl(var(--surface) / 0.2)" stroke-width="1" stroke-linejoin="round" opacity="0.85">
+                    <rect x="20" y="32" width="50" height="70" rx="3" />
+                    <rect x="30" y="20" width="50" height="70" rx="3" fill="hsl(var(--surface) / 0.1)" />
+                    <rect x="40" y="8" width="50" height="70" rx="3" fill="hsl(var(--star) / 0.1)" />
+                </g>
+                <text x="65" y="26" text-anchor="middle" font-size="9" font-weight="600" fill="hsl(var(--star) / 0.75)">A</text>
+            </svg>
+            @break
+
+        @case('memory')
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <g stroke="currentColor" fill="hsl(var(--ink) / 0.04)" stroke-width="1.2" opacity="0.9">
+                    <rect x="8" y="28" width="26" height="40" rx="2" />
+                    <rect x="40" y="28" width="26" height="40" rx="2" fill="hsl(var(--constellation) / 0.15)" />
+                    <rect x="72" y="28" width="26" height="40" rx="2" />
+                </g>
+                <circle cx="20" cy="18" r="2.5" fill="hsl(var(--star))" />
+                <circle cx="80" cy="18" r="2.5" fill="hsl(var(--constellation) / 0.8)" />
+            </svg>
+            @break
+
+        @case('board')
+            <svg viewBox="0 0 100 100" class="{{ $svg }}" aria-hidden="true">
+                <g stroke="hsl(var(--ink) / 0.25)" fill="none" stroke-width="0.4">
+                    @for($c = 0; $c < 5; $c++)
+                        @for($r = 0; $r < 4; $r++)
+                            <rect x="{{ 10 + $c * 16 }}" y="{{ 20 + $r * 16 }}" width="16" height="16" />
+                        @endfor
+                    @endfor
+                </g>
+                <text x="20" y="32" font-size="8" font-weight="600" fill="hsl(var(--star) / 0.9)">A</text>
+                <text x="36" y="32" font-size="8" font-weight="600" fill="hsl(var(--ink) / 0.45)">B</text>
+                <text x="20" y="50" font-size="8" font-weight="600" fill="hsl(var(--constellation) / 0.8)">D</text>
+            </svg>
+            @break
+
         @default
-            <x-heroicon-o-sparkles class="w-20 h-20 text-ink/70" />
+            <x-heroicon-o-sparkles class="w-20 h-20 text-ink/70 shrink-0" />
     @endswitch
 </div>

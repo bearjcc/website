@@ -65,24 +65,14 @@ class ErrorHandlingTest extends TestCase
             'status' => 'published',
         ]);
 
-        $response = $this->get(route('games.play', $game));
-
-        $response->assertStatus(200);
-        $response->assertSee('Game Not Available');
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.play', $game)), $game->slug);
     }
 
     public function test_all_navigation_links_work(): void
     {
-        $routes = [
-            'home' => '/',
-            'games.index' => '/games',
-            'about' => '/about',
-        ];
-
-        foreach ($routes as $name => $path) {
-            $response = $this->get($path);
-            $response->assertStatus(200);
-        }
+        $this->get('/')->assertStatus(200);
+        $this->assertRedirectsToSmallGamesApex($this->get('/games'), '');
+        $this->get('/about')->assertStatus(200);
     }
 
     public function test_handles_xhr_requests(): void

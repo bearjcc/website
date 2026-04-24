@@ -23,10 +23,56 @@ class Home extends Component
 
         $featuredGame = $relaxingGames->first() ?? $games->first();
 
+        $sisterSites = self::sisterSiteCards();
+
         return view('livewire.pages.home', [
             'games' => $games,
             'relaxingGames' => $relaxingGames,
             'featuredGame' => $featuredGame,
+            'sisterSites' => $sisterSites,
         ]);
+    }
+
+    /**
+     * @return list<array{key: string, href: string, title: string, blurb: string, variant: string}>
+     */
+    public static function sisterSiteCards(): array
+    {
+        $useProduction = app()->isProduction();
+        $out = [];
+
+        foreach (self::sisterSiteDefinitions() as $site) {
+            $url = $useProduction ? (string) $site['production'] : (string) $site['local'];
+            $out[] = [
+                'key' => (string) $site['key'],
+                'href' => $url,
+                'title' => __($site['title']),
+                'blurb' => __($site['blurb']),
+                'variant' => (string) $site['variant'],
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private static function sisterSiteDefinitions(): array
+    {
+        $sites = config('ursa_sites.sister_sites');
+        if (is_array($sites) && $sites !== []) {
+            return $sites;
+        }
+        if (! is_file($path = config_path('ursa_sites.php'))) {
+            return [];
+        }
+
+        $loaded = require $path;
+        if (! is_array($loaded) || ! is_array($fromFile = $loaded['sister_sites'] ?? null)) {
+            return [];
+        }
+
+        return $fromFile;
     }
 }

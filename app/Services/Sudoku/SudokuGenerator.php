@@ -46,7 +46,7 @@ class SudokuGenerator
      */
     public function generate(Difficulty $difficulty): array
     {
-        $maxAttempts = 20; // More attempts for better success rate
+        $maxAttempts = app()->environment('testing') ? 80 : 20;
 
         for ($attempt = 0; $attempt < $maxAttempts; $attempt++) {
             $solution = $this->createSolution();

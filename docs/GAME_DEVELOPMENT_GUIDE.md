@@ -56,7 +56,9 @@ Game State (Data Structure)
 - **Game entry** (`route('games.play', $slug)`): Shown when `$started === false`. Breadcrumb, optional "Who do you want to play?" (for games with opponent choice), rules, [Start game]. Games without opponent choice (e.g. 2048, Sudoku, Minesweeper, Snake) get minimal entry (breadcrumb + rules + Start game).
 - **Play view**: Same URL as entry; after [Start game], `$started === true` and the game component is mounted. Use chrome bar (game name + turn/score), play-main wrapper (~28rem), instruction, board, info bubbles, action row (New game, optional Hint), controls hint.
 
-**Routes**: `games.index` = `/games`; `games.show` = `/{game:slug}`; `games.play` = `/{game:slug}/play`. Link cards to `games.show`, not `games.play`. Legacy `/games/tic-tac-toe` etc. redirect 301 to `/{slug}`.
+**Where pages live (production):** canonical small-game pages are served on the **games host** with **paths on the apex origin**, e.g. `https://ursaminor.games/sudoku` and `https://ursaminor.games/sudoku/play` (set `GAMES_BASE_URL` in the marketing app). The large Taverns and Treasures game is its own app at `https://taverns.ursaminor.games`. This repository’s routes still define `games.*` for links and old URLs, but the marketing site **301 redirects** to `GAMES_BASE_URL` (see `routes/web.php`).
+
+**Routes (named, this repo):** `games.index` = `/games`; `games.show` = `/{game:slug}`; `games.play` = `/{game:slug}/play`. Use these in Blade and tests; in production the HTTP response is a 301 to the same path under `GAMES_BASE_URL`. Link cards to `games.show`, not `games.play`, where the UX calls for the about page first. Legacy `/games/tic-tac-toe` etc. also redirect 301 to the games host, not to another subdomain.
 
 **Adding a new game**: DB entry (slug, title, status, etc.) → add to `$componentMap` in `game-play.blade.php` → create Livewire component and optional engine. If the game has opponent/mode choice, add its slug to `Game::slugsWithOpponentChoice()`.
 
@@ -111,7 +113,7 @@ class ChessEngine
 
     /**
      * Apply a move and return new state.
-     * 
+     *
      * Engine methods are PURE - no side effects.
      */
     public static function applyMove(array $state, array $move): array
@@ -198,7 +200,7 @@ class Chess extends Component
     {
         // Try to load saved state, or start new
         $savedState = $this->loadSavedState();
-        
+
         if ($savedState) {
             $this->restoreFromState($savedState);
         } else {
@@ -227,7 +229,7 @@ class Chess extends Component
 
         $move = ['from' => $from, 'to' => $to];
         $newState = ChessEngine::applyMove($this->getCurrentState(), $move);
-        
+
         $this->syncFromEngine($newState);
         $this->incrementMoveCount();
         $this->saveState();
@@ -329,7 +331,7 @@ Create `resources/views/livewire/games/chess.blade.php`:
     {{-- Controls --}}
     <x-slot:controls>
         <div class="control-buttons">
-            <button wire:click="newGame" 
+            <button wire:click="newGame"
                     class="control-btn new-game"
                     aria-label="Start new game">
                 <x-heroicon-o-arrow-path class="w-4 h-4" />
@@ -382,13 +384,13 @@ public function newGame(?string $difficulty = null): void
 {
     // 1. Get initial state from engine
     $state = GameEngine::newGame(['difficulty' => $difficulty ?? $this->difficulty]);
-    
+
     // 2. Sync to component
     $this->syncFromEngine($state);
-    
+
     // 3. Reset lifecycle
     $this->resetGame(); // From trait
-    
+
     // 4. Start timer if needed
     $this->startTimer(); // From trait
 }
@@ -406,19 +408,19 @@ public function makeMove($moveData): void
 
     // 2. Get current state
     $current = $this->getCurrentState();
-    
+
     // 3. Delegate to engine
     $newState = GameEngine::applyMove($current, $moveData);
-    
+
     // 4. Sync back
     $this->syncFromEngine($newState);
-    
+
     // 5. Track move
     $this->incrementMoveCount();
-    
+
     // 6. Save state
     $this->saveState();
-    
+
     // 7. Check completion
     if ($newState['gameOver']) {
         $this->completeGame();
@@ -571,24 +573,24 @@ Standard pattern for all games:
 ```blade
 <div class="game-controls">
     <div class="control-buttons">
-        <button wire:click="newGame" 
+        <button wire:click="newGame"
                 class="control-btn new-game"
                 aria-label="Start new game">
             <x-heroicon-o-arrow-path class="w-4 h-4" />
             <span>New</span>
         </button>
-        
+
         {{-- Optional: Undo --}}
-        <button wire:click="undo" 
+        <button wire:click="undo"
                 class="control-btn"
                 @disabled(!$canUndo)
                 aria-label="Undo last move">
             <x-heroicon-o-arrow-uturn-left class="w-4 h-4" />
             <span>Undo</span>
         </button>
-        
+
         {{-- Optional: Hint --}}
-        <button wire:click="useHint" 
+        <button wire:click="useHint"
                 class="control-btn"
                 @disabled($hintsRemaining === 0)
                 aria-label="Use hint - {{ $hintsRemaining }} remaining">
@@ -611,7 +613,7 @@ Apply subtle starfield to boards:
 
 ```css
 .chess-board {
-    background: 
+    background:
         radial-gradient(1px 1px at 20% 30%, hsl(var(--ink) / .08), transparent),
         radial-gradient(1px 1px at 80% 70%, hsl(var(--ink) / .06), transparent),
         hsl(var(--space-900));
@@ -636,12 +638,12 @@ window.gameStorage = {
     save(key, state) {
         localStorage.setItem(key, JSON.stringify(state));
     },
-    
+
     load(key) {
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : null;
     },
-    
+
     clear(key) {
         localStorage.removeItem(key);
     }
@@ -652,7 +654,7 @@ document.addEventListener('livewire:init', () => {
     Livewire.on('save-game-state', ({ key, state }) => {
         gameStorage.save(key, state);
     });
-    
+
     Livewire.on('clear-game-state', ({ key }) => {
         gameStorage.clear(key);
     });
@@ -801,12 +803,12 @@ class ChessTest extends TestCase
 Use for consistent structure:
 
 ```blade
-<x-ui.game-wrapper 
+<x-ui.game-wrapper
     title="Game Name"
     :rules="['Rule 1', 'Rule 2']">
-    
+
     {{-- Game content --}}
-    
+
     <x-slot:controls>
         {{-- Control buttons --}}
     </x-slot:controls>
@@ -843,9 +845,9 @@ For consistency, could create:
 Usage:
 
 ```blade
-<x-ui.game-complete 
+<x-ui.game-complete
     message="Puzzle complete."
-    :stats="[ucfirst($difficulty), $hintsUsed . ' hints', $mistakes . ' mistakes']" 
+    :stats="[ucfirst($difficulty), $hintsUsed . ' hints', $mistakes . ' mistakes']"
 />
 ```
 
@@ -866,7 +868,7 @@ public function makeMove($move): void
     // Before applying move
     $this->stateHistory[] = $this->getCurrentState();
     $this->historyIndex = count($this->stateHistory) - 1;
-    
+
     // Apply move...
 }
 
@@ -933,7 +935,7 @@ class YourGameEngine
     public static function aiEasy(array $state, string $player): int
     {
         $availableMoves = self::getAvailableMoves($state);
-        
+
         // 1. Always try to win (100%)
         foreach ($availableMoves as $move) {
             $testState = self::applyMove($state, ['move' => $move, 'player' => $player]);
@@ -941,7 +943,7 @@ class YourGameEngine
                 return $move;
             }
         }
-        
+
         // 2. Sometimes block opponent (30-50%)
         if (mt_rand(1, 100) <= 40) {
             $opponent = self::getOpponent($player);
@@ -952,7 +954,7 @@ class YourGameEngine
                 }
             }
         }
-        
+
         // 3. Otherwise random
         return $availableMoves[array_rand($availableMoves)];
     }
@@ -964,7 +966,7 @@ class YourGameEngine
     {
         $opponent = self::getOpponent($player);
         $availableMoves = self::getAvailableMoves($state);
-        
+
         // 1. Always try to win
         foreach ($availableMoves as $move) {
             $testState = self::applyMove($state, ['move' => $move, 'player' => $player]);
@@ -972,7 +974,7 @@ class YourGameEngine
                 return $move;
             }
         }
-        
+
         // 2. Usually block opponent (80-90%)
         if (mt_rand(1, 100) <= 85) {
             foreach ($availableMoves as $move) {
@@ -982,20 +984,20 @@ class YourGameEngine
                 }
             }
         }
-        
+
         // 3. Take strategic positions
         $strategicMoves = self::getStrategicMoves($state, $availableMoves);
         if (!empty($strategicMoves)) {
             return $strategicMoves[array_rand($strategicMoves)];
         }
-        
+
         // 4. Fallback to random
         return $availableMoves[array_rand($availableMoves)];
     }
 
     /**
      * Impossible AI: Perfect minimax play.
-     * 
+     *
      * This is a reference implementation for Tic-Tac-Toe.
      * Adapt the logic for your specific game.
      */
@@ -1003,20 +1005,20 @@ class YourGameEngine
     {
         // Implement minimax with alpha-beta pruning
         // See TicTacToe\Engine::bestMoveMinimax() for full example
-        
+
         $bestMove = -1;
         $bestValue = -1000;
-        
+
         foreach (self::getAvailableMoves($state) as $move) {
             $newState = self::applyMove($state, ['move' => $move, 'player' => $player]);
             $moveValue = self::minimax($newState, self::getOpponent($player), 0, -1000, 1000, $player);
-            
+
             if ($moveValue > $bestValue) {
                 $bestValue = $moveValue;
                 $bestMove = $move;
             }
         }
-        
+
         return $bestMove;
     }
 
@@ -1029,9 +1031,9 @@ class YourGameEngine
         if (self::isGameOver($state)) {
             return self::evaluateState($state, $maximizingPlayer, $depth);
         }
-        
+
         $availableMoves = self::getAvailableMoves($state);
-        
+
         if ($currentPlayer === $maximizingPlayer) {
             // Maximizing player
             $maxEval = -1000;
@@ -1063,15 +1065,15 @@ class YourGameEngine
     private static function evaluateState(array $state, string $player, int $depth): int
     {
         $winner = self::getWinner($state);
-        
+
         if ($winner === $player) {
             return 10 - $depth; // Prefer faster wins
         }
-        
+
         if ($winner !== null) {
             return $depth - 10; // Prefer slower losses
         }
-        
+
         return 0; // Draw
     }
 }
@@ -1117,7 +1119,7 @@ class YourGame extends Component
     public function makeMove($position): void
     {
         if ($this->gameOver) return;
-        
+
         // Prevent moves during AI turn
         if ($this->isAIMode() && $this->currentPlayer !== $this->playerSymbol) {
             return;
@@ -1128,7 +1130,7 @@ class YourGame extends Component
             $this->getCurrentState(),
             ['move' => $position, 'player' => $this->currentPlayer]
         );
-        
+
         $this->syncFromEngine($state);
         $this->incrementMoveCount();
 
@@ -1150,7 +1152,7 @@ class YourGame extends Component
     protected function makeAiMove(): void
     {
         $engine = new YourGameEngine();
-        
+
         // Select AI difficulty
         $aiMove = match ($this->getAIDifficulty()) {
             'easy' => $engine::aiEasy($this->board, $this->currentPlayer),
@@ -1164,7 +1166,7 @@ class YourGame extends Component
             $this->getCurrentState(),
             ['move' => $aiMove, 'player' => $this->currentPlayer]
         );
-        
+
         $this->syncFromEngine($state);
         $this->incrementMoveCount();
 
@@ -1217,24 +1219,24 @@ class YourGame extends Component
 @if($moveCount === 0)
     <div class="glass rounded-xl border border-[hsl(var(--border)/.1)] p-6 space-y-4">
         <h3 class="text-lg font-semibold text-ink">Mode</h3>
-        
+
         <div class="flex flex-wrap gap-2">
-            <button wire:click="setGameMode('pvp')" 
+            <button wire:click="setGameMode('pvp')"
                     class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'pvp' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
                 Pass & Play
             </button>
-            
-            <button wire:click="setGameMode('ai-easy', 'X')" 
+
+            <button wire:click="setGameMode('ai-easy', 'X')"
                     class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-easy' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
                 Easy
             </button>
-            
-            <button wire:click="setGameMode('ai-medium', 'X')" 
+
+            <button wire:click="setGameMode('ai-medium', 'X')"
                     class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-medium' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
                 Medium
             </button>
-            
-            <button wire:click="setGameMode('ai-impossible', 'X')" 
+
+            <button wire:click="setGameMode('ai-impossible', 'X')"
                     class="px-4 py-2 rounded-lg border transition-all {{ $gameMode === 'ai-impossible' ? 'bg-star text-space-900 border-star' : 'bg-[hsl(var(--surface)/.1)] text-ink border-[hsl(var(--border)/.3)] hover:border-star' }}">
                 Impossible
             </button>
@@ -1346,26 +1348,26 @@ When building a game, use the verification guide: **.cursor/rules/verification-g
 
 ### Simple Game (Tic-Tac-Toe)
 
-**Complexity**: Low  
-**Pattern**: Board array, turn-based, win detection  
+**Complexity**: Low
+**Pattern**: Board array, turn-based, win detection
 **Reference**: `app/Livewire/Games/TicTacToe.php`
 
 ### Medium Complexity (Sudoku)
 
-**Complexity**: Medium  
-**Pattern**: Constraint validation, hints, notes mode  
+**Complexity**: Medium
+**Pattern**: Constraint validation, hints, notes mode
 **Reference**: `app/Livewire/Games/Sudoku.php`
 
 ### Animation-Heavy (Snake)
 
-**Complexity**: Medium  
-**Pattern**: Real-time game loop, collision detection, growth  
+**Complexity**: Medium
+**Pattern**: Real-time game loop, collision detection, growth
 **Reference**: `app/Livewire/Games/Snake.php`
 
 ### Physics (Connect 4)
 
-**Complexity**: Medium  
-**Pattern**: Gravity simulation, win pattern detection  
+**Complexity**: Medium
+**Pattern**: Gravity simulation, win pattern detection
 **Reference**: `app/Livewire/Games/Connect4.php`
 
 ---
@@ -1395,7 +1397,7 @@ class Chess extends Component
     {
         // Apply move locally
         // ...
-        
+
         // Broadcast to opponent
         $this->dispatch('player-moved', $move)->to('chess.'.$this->gameId);
     }
@@ -1413,7 +1415,7 @@ public static function calculateScore(array $state): int
     $movePenalty = count($state['moves']) * 5;
     $timePenalty = ($state['timeElapsed'] ?? 0) * 2;
     $hintsUsed = ($state['hintsUsed'] ?? 0) * 50;
-    
+
     return max(0, $baseScore - $movePenalty - $timePenalty - $hintsUsed);
 }
 ```
@@ -1432,4 +1434,3 @@ When building a new game:
 7. Document any new patterns
 
 **Remember**: Each game should improve the framework for the next one.
-

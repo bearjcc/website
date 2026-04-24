@@ -50,29 +50,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function games_index_page_loads_successfully(): void
+    public function games_index_redirects_to_canonical_small_games_host(): void
     {
-        $response = $this->get('/games');
-
-        $response->assertStatus(200);
-        $response->assertSee(__('ui.games_hero'));
-        $response->assertSee(__('ui.games_index_kicker'));
-    }
-
-    #[Test]
-    public function games_index_shows_all_games(): void
-    {
-        $response = $this->get('/games');
-
-        $response->assertSee('Tic-Tac-Toe');
-        $response->assertSee('2048');
-        $response->assertSee('Connect 4');
-        $response->assertSee('Sudoku');
-        $response->assertSee('Chess');
-        $response->assertSee('Checkers');
-        $response->assertSee('Minesweeper');
-        $response->assertSee('Snake');
-        $response->assertSee('Letter Walker');
+        $this->assertRedirectsToSmallGamesApex($this->get('/games'), '');
     }
 
     #[Test]
@@ -86,12 +66,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function tic_tac_toe_game_loads_successfully(): void
+    public function tic_tac_toe_path_redirects_to_apex(): void
     {
-        $response = $this->get('/tic-tac-toe');
-
-        $response->assertStatus(200);
-        $response->assertSee('Tic-Tac-Toe');
+        $this->assertRedirectsToSmallGamesApex($this->get('/tic-tac-toe'), 'tic-tac-toe');
     }
 
     #[Test]
@@ -104,12 +81,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function twenty_forty_eight_game_loads_successfully(): void
+    public function twenty_forty_eight_path_redirects_to_apex(): void
     {
-        $response = $this->get('/twenty-forty-eight');
-
-        $response->assertStatus(200);
-        $response->assertSee('2048');
+        $this->assertRedirectsToSmallGamesApex($this->get('/twenty-forty-eight'), 'twenty-forty-eight');
     }
 
     #[Test]
@@ -122,12 +96,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function connect_four_game_loads_successfully(): void
+    public function connect_four_path_redirects_to_apex(): void
     {
-        $response = $this->get('/connect-4');
-
-        $response->assertStatus(200);
-        $response->assertSee('Connect 4');
+        $this->assertRedirectsToSmallGamesApex($this->get('/connect-4'), 'connect-4');
     }
 
     #[Test]
@@ -140,12 +111,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function sudoku_game_loads_successfully(): void
+    public function sudoku_path_redirects_to_apex(): void
     {
-        $response = $this->get('/sudoku');
-
-        $response->assertStatus(200);
-        $response->assertSee('Sudoku');
+        $this->assertRedirectsToSmallGamesApex($this->get('/sudoku'), 'sudoku');
     }
 
     #[Test]
@@ -158,15 +126,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function minesweeper_game_loads_successfully(): void
+    public function minesweeper_play_path_redirects_to_apex(): void
     {
-        $response = $this->get('/minesweeper/play');
-
-        $response->assertStatus(200);
-        // Minesweeper has minimal entry (no opponent choice)
-        $response->assertSee('Minesweeper');
-        $response->assertSee('Start game');
-        $response->assertSee('Games');
+        $this->assertRedirectsToSmallGamesApex($this->get('/minesweeper/play'), 'minesweeper');
     }
 
     public function minesweeper_component_has_required_methods(): void
@@ -196,12 +158,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function checkers_game_loads_successfully(): void
+    public function checkers_path_redirects_to_apex(): void
     {
-        $response = $this->get('/checkers');
-
-        $response->assertStatus(200);
-        $response->assertSee('Checkers');
+        $this->assertRedirectsToSmallGamesApex($this->get('/checkers'), 'checkers');
     }
 
     #[Test]
@@ -213,12 +172,9 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function twenty_forty_eight_game_works(): void
+    public function twenty_forty_eight_path_still_redirects_to_apex(): void
     {
-        $response = $this->get('/twenty-forty-eight');
-
-        $response->assertStatus(200);
-        $response->assertSee('2048');
+        $this->assertRedirectsToSmallGamesApex($this->get('/twenty-forty-eight'), 'twenty-forty-eight');
     }
 
     #[Test]
@@ -395,14 +351,11 @@ class GameFunctionalityTest extends TestCase
     }
 
     #[Test]
-    public function game_play_component_maps_games_correctly(): void
+    public function game_play_routes_redirect_to_apex_for_seeded_games(): void
     {
         $game = Game::where('slug', 'connect-4')->first();
 
-        $response = $this->get(route('games.play', $game));
-
-        $response->assertStatus(200);
-        $response->assertSee('Connect 4');
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.play', $game)), 'connect-4');
     }
 
     #[Test]

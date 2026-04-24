@@ -103,10 +103,6 @@ class TwentyFortyEightTest extends TestCase
 
     public function test_play_route_loads_successfully(): void
     {
-        $response = $this->get(route('games.play', $this->game));
-
-        $response->assertStatus(200);
-        $response->assertSee('2048');
-        $response->assertSee('Start game');
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.play', $this->game)), $this->game->slug);
     }
 }

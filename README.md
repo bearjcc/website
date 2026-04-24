@@ -1,16 +1,15 @@
 # Ursa Minor Games
 
-A Laravel-based website for **Ursa Minor Games**, featuring browser-based games, F1 predictions, and more.
+A Laravel (TALL) app for the **Ursa Minor Games** site: night-sky marketing pages, about, auth, contributor lore, Sudoku and Letter Walker score APIs, and **301 redirects** to the public **small games** host. In production, those games use **path URLs** on the apex (for example `https://ursaminor.games/sudoku`). The **Taverns and Treasures** RPG is a **separate** product on `https://taverns.ursaminor.games`. This repo still contains Livewire game components and tests used in the pipeline and for integration.
 
 ## About
 
 Ursa Minor is a gaming brand focused on:
-- **Browser Games**: Free-to-play classic games (sudoku, chess, etc.)
-- **F1 Predictions**: Community-driven F1 race predictions and leaderboards
-- **Board Games**: Digital versions of custom board game designs
-- **Video Game Development**: Future ambitious video game projects
+- **Browser games**: Free-to-play classics; public play is on the host set by `GAMES_BASE_URL` (see [docs/GAME_DEVELOPMENT_GUIDE.md](docs/GAME_DEVELOPMENT_GUIDE.md)).
+- **F1 predictions**: Sister experience (separate local and production URL; see the home “sister sites” grid and `config/ursa_sites.php`).
+- **Board games and video work**: Ongoing and announced when ready.
 
-This repository contains the main homepage and will serve as the hub for all Ursa Minor gaming experiences.
+This repository is the **main marketing site and supporting APIs**, not a single build that hosts every product at the same origin.
 
 ## Current Features
 
@@ -96,7 +95,7 @@ website/
 ├── database/
 │   ├── migrations/    # Database schema
 │   └── seeders/       # Data seeders
-├── tests/             # Test suite (33 tests passing)
+├── tests/             # PHPUnit (run `php artisan test`)
 │   ├── Feature/       # Feature tests
 │   └── Unit/          # Unit tests
 ├── docs/              # Project documentation
@@ -224,9 +223,9 @@ See [DEPLOYMENT_GUIDE.md](docs/DEPLOYMENT_GUIDE.md) for detailed instructions an
 
 ### Current Status
 
-**Phase 1** Foundation complete — Homepage, design system, deployment  
-**Phase 2** Browser games — 7+ games (Sudoku, 2048, Snake, Minesweeper, Connect 4, Tic-Tac-Toe, Letter Walker, Chess/Checkers placeholders)  
-**Next** See [docs/TODO.md](docs/TODO.md)
+**Phase 1** Foundation: homepage, design system, deployment, Herd and Railway.
+**Phase 2** Browser games: many titles ship on the small-games host; this repo may still run engines in Livewire for build and test, while HTTP game routes on this app redirect to `GAMES_BASE_URL`.
+**Next** [docs/TODO.md](docs/TODO.md) and your usual tracker; [docs/ROADMAP.md](docs/ROADMAP.md) for the high-level split.
 
 ## Contributing
 

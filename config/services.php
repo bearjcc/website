@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // Small browser games: path on apex, e.g. GAMES_BASE_URL + /sudoku (not games.* or per-game subdomains). Taverns: taverns.ursaminor.games
+    'games' => [
+        'base_url' => env('GAMES_BASE_URL', 'https://ursaminor.games'),
+    ],
+
 ];

@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class StarfieldTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_homepage_includes_starfield_script(): void
     {
         $response = $this->get('/');

@@ -70,6 +70,35 @@ class HomepageTest extends TestCase
         }
     }
 
+    public function test_homepage_shows_sister_site_cards_before_games_in_non_production(): void
+    {
+        $this->assertFalse(app()->isProduction());
+
+        $game = Game::factory()->published()->create(['slug' => 'zzz-order-check']);
+
+        $response = $this->get('/');
+        $html = $response->getContent();
+
+        $this->assertStringContainsString('um-sister-site-card', $html);
+        $this->assertStringContainsString(__('ui.sister_f1_title'), $html);
+        $this->assertStringContainsString('http://formula1predictions.test', $html);
+        $this->assertStringContainsString('http://tavernsandtreasures.test', $html);
+        $this->assertStringContainsString('http://website.test', $html);
+
+        $start = strpos($html, 'id="home-sites-and-games-grid"');
+        $this->assertNotFalse($start, 'home-sites-and-games-grid not found in homepage');
+        $grid = substr($html, $start, 40000);
+        $sister = strpos($grid, 'http://formula1predictions.test');
+        $firstGame = strpos($grid, '/'.$game->slug);
+        $this->assertNotFalse($sister);
+        $this->assertNotFalse($firstGame);
+        $this->assertLessThan(
+            $firstGame,
+            $sister,
+            'Sister site links should appear before game cards in the home grid'
+        );
+    }
+
     public function test_homepage_handles_empty_game_state(): void
     {
         // Ensure no games exist

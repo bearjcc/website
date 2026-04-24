@@ -35,6 +35,38 @@
         </div>
     </section>
 
+    <section id="sites-and-games" class="scroll-mt-24 py-8 md:py-12">
+        <div class="section">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center max-w-2xl mx-auto mb-8 space-y-3">
+                    <p class="kicker">{{ __('ui.home_all_games_heading') }}</p>
+                    <h2 class="h3 text-ink">{{ __('ui.home_all_games_heading') }}</h2>
+                    <p class="p text-ink/70">{{ __('ui.home_all_games_lead') }}</p>
+                </div>
+
+                <div
+                    id="home-sites-and-games-grid"
+                    class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
+                    @foreach($sisterSites as $site)
+                        <x-ui.sister-site-card
+                            :href="$site['href']"
+                            :title="$site['title']"
+                            :blurb="$site['blurb']"
+                            :variant="$site['variant']"
+                        />
+                    @endforeach
+                    @foreach($games as $game)
+                        <x-ui.game-card
+                            :href="route('games.show', $game->slug)"
+                            :title="$game->title"
+                            :motif="$game->getMotifKey()"
+                        />
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+
     @if($relaxingGames->isNotEmpty())
         <section class="pb-16 md:pb-20">
             <div class="section">
@@ -73,26 +105,4 @@
             </div>
         </section>
     @endif
-
-    <section class="py-12 md:py-16 pb-20">
-        <div class="section">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center max-w-2xl mx-auto mb-8 space-y-3">
-                    <p class="kicker">{{ __('ui.home_all_games_heading') }}</p>
-                    <h2 class="h3 text-ink">{{ __('ui.home_all_games_heading') }}</h2>
-                    <p class="p text-ink/70">{{ __('ui.home_all_games_lead') }}</p>
-                </div>
-
-                <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 md:gap-4">
-                    @foreach($games as $game)
-                        <x-ui.game-card
-                            :href="route('games.show', $game->slug)"
-                            :title="$game->title"
-                            :motif="$game->getMotifKey()"
-                        />
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </section>
 </div>

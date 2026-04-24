@@ -18,16 +18,9 @@ class SiteCohesionTest extends TestCase
 
     public function test_all_public_routes_are_accessible(): void
     {
-        $routes = [
-            'Home' => '/',
-            'Games Index' => '/games',
-            'About' => '/about',
-        ];
-
-        foreach ($routes as $name => $path) {
-            $response = $this->get($path);
-            $response->assertStatus(200, "{$name} page should be accessible");
-        }
+        $this->get('/')->assertStatus(200);
+        $this->assertRedirectsToSmallGamesApex($this->get('/games'), '');
+        $this->get('/about')->assertStatus(200);
     }
 
     public function test_all_navigation_links_are_present_and_functional(): void
@@ -43,37 +36,33 @@ class SiteCohesionTest extends TestCase
         $this->assertStringContainsString('Home', $html);
     }
 
-    public function test_all_published_games_are_accessible(): void
+    public function test_published_games_routes_redirect_to_apex(): void
     {
         $games = Game::factory()->count(6)->create(['status' => 'published']);
 
         foreach ($games as $game) {
-            $response = $this->get(route('games.play', $game->slug));
-            $response->assertStatus(200);
+            $this->assertRedirectsToSmallGamesApex($this->get(route('games.play', $game->slug)), $game->slug);
         }
     }
 
     public function test_all_pages_load_without_errors(): void
     {
-        $pages = ['/', '/games', '/about'];
-
-        foreach ($pages as $page) {
+        foreach (['/', '/about'] as $page) {
             $response = $this->get($page);
 
             $response->assertStatus(200);
 
-            // Should have proper structure
             $html = $response->getContent();
             $this->assertStringContainsString('<!DOCTYPE html>', $html);
             $this->assertStringContainsString('</html>', $html);
         }
+
+        $this->assertRedirectsToSmallGamesApex($this->get('/games'), '');
     }
 
     public function test_all_pages_have_back_to_top(): void
     {
-        $pages = ['/', '/games', '/about'];
-
-        foreach ($pages as $page) {
+        foreach (['/', '/about'] as $page) {
             $response = $this->get($page);
             $response->assertStatus(200);
             $response->assertSee(__('ui.back_to_top'), false);
@@ -102,7 +91,7 @@ class SiteCohesionTest extends TestCase
 
     public function test_all_pages_have_proper_semantic_structure(): void
     {
-        $pages = ['/', '/games', '/about'];
+        $pages = ['/', '/about'];
 
         foreach ($pages as $page) {
             $response = $this->get($page);
@@ -121,7 +110,6 @@ class SiteCohesionTest extends TestCase
 
         $pages = [
             '/',
-            '/games',
             '/about',
         ];
 
@@ -136,6 +124,8 @@ class SiteCohesionTest extends TestCase
                 $this->assertStringNotContainsString($emoji, $html, 'No emojis allowed in output');
             }
         }
+
+        $this->get('/games')->assertStatus(301);
     }
 
     public function test_all_pages_use_calm_professional_copy(): void

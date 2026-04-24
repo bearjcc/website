@@ -131,12 +131,9 @@ class TicTacToeTest extends TestCase
             ->assertSet('playerSymbol', 'X');
     }
 
-    public function test_game_view_is_accessible(): void
+    public function test_game_play_url_redirects_to_apex_on_marketing_host(): void
     {
-        $response = $this->get(route('games.play', $this->game));
-
-        $response->assertStatus(200);
-        $response->assertSee('Tic-Tac-Toe');
+        $this->assertRedirectsToSmallGamesApex($this->get(route('games.play', $this->game)), $this->game->slug);
     }
 
     public function test_game_mode_initialization_works(): void
